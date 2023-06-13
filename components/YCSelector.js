@@ -18,7 +18,7 @@ const YCSelector = ({ routerPath }) => {
   const handleChange = (event) => {
     router.push({
       pathname: routerPath,
-      query: { ycId: event.target.value.id }
+      query: { ycIdToVisit: event.target.value.id }
     })
   }
 
