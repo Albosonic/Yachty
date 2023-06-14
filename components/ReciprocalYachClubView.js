@@ -75,7 +75,6 @@ const ReciprocalYachtClubView = () => {
     
     if (!usingOwnVessel) {
       const unafilliatedVesselId = uuidv4();
-      console.log('what ========', unafilliatedVesselId)
       await insertReciprocalRequestNewVessel({
         variables: {
           homeYCId,
