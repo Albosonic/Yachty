@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useMutation, useQuery } from "@apollo/client";
@@ -17,9 +17,9 @@ const ReciprocalYachtClubView = () => {
 
   const { loading, error, data } = useQuery(GET_YACHT_CLUB_AND_VESSEL_INFO, { variables: { ycId: visitingYCId, ownerId: member?.id }});
 
-  const [insertReciprocalRequestNewVessel, {data: reciprocalData, loading: reciprocalLoading, error: reciprocalError}] = useMutation(INSERT_RECIPROCAL_REQUEST_NEW_VESSEL);
+  const [insertReciprocalRequestNewVessel, {data: reciprocalData, loading: reciprocalLoadingNewVessel, error: reciprocalErrorNewVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST_NEW_VESSEL);
   const [insertReciprocalRequestOwnVessel, {data: reciprocalDataOwnVessel, loading: reciprocalLoadingOwnVessel, error: reciprocalErrorOwnVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST);
-
+  
   const cleanForm = {
     visitDate: '',
     requestingSlip: false,
@@ -27,20 +27,17 @@ const ReciprocalYachtClubView = () => {
     specialNotes: '',
     vessel: {
       vesselName: '',
-      draft: null,
-      beam: null,
-      length: null,
+      draft: undefined,
+      beam: undefined,
+      length: undefined,
       hullMaterial: '',
       type: '',
-      id: null,
+      id: undefined,
       insuranceCompany: '',
       insuranceNum: '',
       insuranceExpiry: ''
-  
     } 
   }
-
-  //  un nest the insurance info. to fix the bug.
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [showRequestSlip, setShowRequestSlip] = useState(false);
@@ -53,8 +50,8 @@ const ReciprocalYachtClubView = () => {
   }
 
   const handleClose = () => {
-    setShowSuccess(false);
-    setFormData({...cleanForm})
+    router.push('/yachty');
+    // setShowSuccess(false);
   }
 
   const handleSubmit = async () => {
@@ -77,13 +74,14 @@ const ReciprocalYachtClubView = () => {
       }} = formData;
     
     if (!usingOwnVessel) {
-      const unafiliatedVesselId = uuidv4();
+      const unafilliatedVesselId = uuidv4();
+      console.log('what ========', unafilliatedVesselId)
       await insertReciprocalRequestNewVessel({
         variables: {
           homeYCId,
           memberId,
           requestingSlip,
-          unafiliatedVesselId,
+          unafilliatedVesselId,
           visitingDate,
           visitingYCId,
           beam,
@@ -95,6 +93,8 @@ const ReciprocalYachtClubView = () => {
           vesselName,
           insuranceInfo: { no: insuranceNum, company: insuranceCompany, expires: insuranceExpiry },
         }
+      }).then(resp => {
+        if (!reciprocalErrorOwnVessel) setShowSuccess(true);
       })
     } else {
       await insertReciprocalRequestOwnVessel({
@@ -107,6 +107,9 @@ const ReciprocalYachtClubView = () => {
           vesselId,
           specialNotes,
         }
+      }).then(resp => {
+        console.log('resp ===', resp)
+        if (!reciprocalErrorOwnVessel) setShowSuccess(true);
       })
     }
   } 
@@ -118,7 +121,7 @@ const ReciprocalYachtClubView = () => {
   const { yacht_clubs, vessels } = data;
   const desiredYC = yacht_clubs[0];
   const { name, id } = desiredYC;
-  console.log('formData =======', formData)
+
   return (
     <div>
       <div>
@@ -132,7 +135,7 @@ const ReciprocalYachtClubView = () => {
         <Typography variant='h6'>
           When would you like to visit { name }
         </Typography>
-        <DatePicker onChange={(event) => setFormData({...formData, visitDate: event.target.value})} />
+        <DatePicker value={formData.visitDate} onChange={(event) => setFormData({...formData, visitDate: event.target.value})} />
         <>
           <Typography variant='h6'>
             Do you need an overnight slip?
@@ -155,7 +158,6 @@ const ReciprocalYachtClubView = () => {
             />
             {usingOwnVessel ? (
               vessels.map(profileVessel => {
-                console.log('profileVessel ===', profileVessel)
                 const {
                   vesselName,
                   id,
@@ -167,7 +169,8 @@ const ReciprocalYachtClubView = () => {
                   insuranceInfo,
                   specialNotes
                 } = profileVessel;
-                const {company, no, expires} = insuranceInfo;
+
+                const { company, no, expires } = insuranceInfo;
                 
                 return (
                   <Paper key={id}>
@@ -225,7 +228,7 @@ const ReciprocalYachtClubView = () => {
                   label="vessel name"
                   type="name"
                   variant="standard"
-                  value={formData.vessel?.vesselName}
+                  value={formData.vessel.vesselName}
                   onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, vesselName: event.target.value }})}
                   sx={{ m: 0, width: '40ch' }}
                   required
@@ -235,7 +238,7 @@ const ReciprocalYachtClubView = () => {
                   label="draft"
                   type="number"
                   variant="standard"
-                  value={formData.vessel?.draft}
+                  value={formData.vessel.draft}
                   onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, draft: event.target.value }})}
                   sx={{ m: 1, width: '40ch' }}
                   required
@@ -245,7 +248,7 @@ const ReciprocalYachtClubView = () => {
                   label="beam"
                   type="number"
                   variant="standard"
-                  value={formData.vessel?.beam}
+                  value={formData.vessel.beam}
                   onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, beam: event.target.value }})}
                   sx={{ m: 1, width: '40ch' }}
                   required
@@ -260,29 +263,28 @@ const ReciprocalYachtClubView = () => {
                   sx={{ width: '40ch' }}
                   required
                 />
-                {/* <FormControl required> */}
-                  <FormLabel id="radio-hull-material">Hull Material</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="radio-buttons-hull-material-label"
-                    name="row-radio-buttons-hull-material-label"
-                    onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, hullMaterial: event.target.value }})}
-                  >
-                    <FormControlLabel value="fiber-glass" control={<Radio />} label="Fiber Glass" />
-                    <FormControlLabel value="metal" control={<Radio />} label="Metal" />
-                    <FormControlLabel value="wood" control={<Radio />} label="Wood" />
-                  </RadioGroup>
-                  <FormLabel id="radio-hull-material">Vessel Type</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="radio-buttons-vessel-type"
-                    name="row-radio-buttons-vessel-type"
-                    onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, type: event.target.value }})}
-                  >
-                    <FormControlLabel value="Sail" control={<Radio />} label="Sail" />
-                    <FormControlLabel value="Power" control={<Radio />} label="Power" />
-                  </RadioGroup>
-                {/* </FormControl> */}
+                
+                <FormLabel id="radio-hull-material">Hull Material</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="radio-buttons-hull-material-label"
+                  name="row-radio-buttons-hull-material-label"
+                  onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, hullMaterial: event.target.value }})}
+                >
+                  <FormControlLabel value="fiber-glass" control={<Radio />} label="Fiber Glass" />
+                  <FormControlLabel value="metal" control={<Radio />} label="Metal" />
+                  <FormControlLabel value="wood" control={<Radio />} label="Wood" />
+                </RadioGroup>
+                <FormLabel id="radio-hull-material">Vessel Type</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="radio-buttons-vessel-type"
+                  name="row-radio-buttons-vessel-type"
+                  onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, type: event.target.value }})}
+                >
+                  <FormControlLabel value="Sail" control={<Radio />} label="Sail" />
+                  <FormControlLabel value="Power" control={<Radio />} label="Power" />
+                </RadioGroup>
                 <TextField
                   id="vessel-insurance-provider"
                   label="vessel insurance provider"

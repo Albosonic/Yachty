@@ -1,3 +1,3 @@
-const DatePicker = ({ onChange }) => <input type="date" onChange={onChange} />
+const DatePicker = ({ onChange, value }) => <input type="date" value={value} onChange={onChange} />
 
 export default DatePicker;
