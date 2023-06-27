@@ -9,7 +9,8 @@ import styles from '@/styles/YCApplicants.module.css'
 const YCSelector = ({ routerPath }) => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_ALL_YC_BY_REGION, { variables: { regionId: router.query.regionId } });
-  
+  const homeYcId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  console.log('home ===', homeYcId)
   // do this in a useEffect
   if (loading) return <CircularProgress />
   if (error || !data) router.push('/login');
@@ -18,7 +19,7 @@ const YCSelector = ({ routerPath }) => {
   const handleChange = (event) => {
     router.push({
       pathname: routerPath,
-      query: { ycIdToVisit: event.target.value.id }
+      query: { ycId: event.target.value.id }
     })
   }
 
@@ -36,6 +37,7 @@ const YCSelector = ({ routerPath }) => {
             onChange={handleChange}
           >
             {yachtClubs.map((yc, index) => {
+              if (yc.id === homeYcId) return null;
               return <MenuItem key={`${yc.id}${index}`} value={yc}>{yc.name}</MenuItem>
             })}
           </Select>

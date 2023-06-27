@@ -11,7 +11,7 @@ import { GET_ALL_MEMBER_APPLICANTS } from './addMemberGQL';
 
 const AddMember = () => {
   const router = useRouter();
-
+  // TODO: move the data fetching into the component instead of here.
   const {data, loading, error, refetch} = useQuery(GET_ALL_MEMBER_APPLICANTS, { variables: { ycId: router.query.ycId } });
   if (loading) return <div className={styles.center}><CircularProgress /></div>
   if (error) router.push('/login');

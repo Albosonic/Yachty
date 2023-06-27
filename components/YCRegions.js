@@ -27,7 +27,6 @@ const YCRegions = ({ routerPath }) => {
 
   return (
     <div className={styles.center}>
-      <h1 className={styles.titleSection}>Welcome new member Applicant</h1>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="regions-selector-label">Regions</InputLabel>

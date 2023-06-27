@@ -13,10 +13,10 @@ import { CheckCircle } from "@mui/icons-material";
 const ReciprocalYachtClubView = () => {
   const router = useRouter();
   const member = useSelector(state => state?.auth?.member);
-  const visitingYCId = router.query.ycIdToVisit
-
+  const visitingYCId = router.query.ycId
+  console.log('wtfwtfwtfwt =====', router.query.visitingYCId);
   const { loading, error, data } = useQuery(GET_YACHT_CLUB_AND_VESSEL_INFO, { variables: { ycId: visitingYCId, ownerId: member?.id }});
-
+  console.log('data ==========+>', data)
   const [insertReciprocalRequestNewVessel, {data: reciprocalData, loading: reciprocalLoadingNewVessel, error: reciprocalErrorNewVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST_NEW_VESSEL);
   const [insertReciprocalRequestOwnVessel, {data: reciprocalDataOwnVessel, loading: reciprocalLoadingOwnVessel, error: reciprocalErrorOwnVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST);
   
@@ -113,9 +113,9 @@ const ReciprocalYachtClubView = () => {
     }
   } 
 
-  if (loading) return <CircularProgress />;
+  if (loading || data === undefined) return <CircularProgress />;
   if (error) return router.push('/login');
-
+  console.log('data ====', data)
   const { vesselConfirmed } = formData;
   const { yacht_clubs, vessels } = data;
   const desiredYC = yacht_clubs[0];

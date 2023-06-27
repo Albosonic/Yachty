@@ -17,7 +17,7 @@ const CommodoreView = () => {
       <Button onClick={() => router.push({pathname:'yachty/add_member', query: { ycId: id }})} variant="outlined">
         Add New Members
       </Button>
-      <Button onClick={() => router.push({pathname: 'yachty/reciprocal_requests', query: { YcId:id }})} variant="outlined">
+      <Button onClick={() => router.push({pathname: 'yachty/reciprocal_requests', query: { ycId:id }})} variant="outlined">
         Review Reciprocal Requests
       </Button>
     </Stack>

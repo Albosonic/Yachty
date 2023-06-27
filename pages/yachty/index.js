@@ -33,7 +33,8 @@ const Yachty = () => {
     
   dispatch(addMember(memberData)); // stores member in redux.
 
-  const userIsCommodore = memberData?.commodore?.active;
+  const userIsCommodore = memberData.id === memberData.yachtClubByYachtClub.commodore.id;
+  console.log('memberData ====', userIsCommodore)
   return (
     <div>
       <NavBar />
