@@ -13,10 +13,8 @@ import { CheckCircle } from "@mui/icons-material";
 const ReciprocalYachtClubView = () => {
   const router = useRouter();
   const member = useSelector(state => state?.auth?.member);
-  const visitingYCId = router.query.ycId
-  console.log('wtfwtfwtfwt =====', router.query.visitingYCId);
-  const { loading, error, data } = useQuery(GET_YACHT_CLUB_AND_VESSEL_INFO, { variables: { ycId: visitingYCId, ownerId: member?.id }});
-  console.log('data ==========+>', data)
+  const ycId = router.query.ycId;
+  const { loading, error, data } = useQuery(GET_YACHT_CLUB_AND_VESSEL_INFO, { variables: { ycId, ownerId: member?.id }});
   const [insertReciprocalRequestNewVessel, {data: reciprocalData, loading: reciprocalLoadingNewVessel, error: reciprocalErrorNewVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST_NEW_VESSEL);
   const [insertReciprocalRequestOwnVessel, {data: reciprocalDataOwnVessel, loading: reciprocalLoadingOwnVessel, error: reciprocalErrorOwnVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST);
   
@@ -82,7 +80,7 @@ const ReciprocalYachtClubView = () => {
           requestingSlip,
           unafilliatedVesselId,
           visitingDate,
-          visitingYCId,
+          visitingYCId: ycId,
           beam,
           draft, 
           length, 
@@ -102,7 +100,7 @@ const ReciprocalYachtClubView = () => {
           memberId, 
           requestingSlip,
           visitingDate, 
-          visitingYCId,
+          visitingYCId: ycId,
           vesselId,
           specialNotes,
         }
@@ -168,7 +166,7 @@ const ReciprocalYachtClubView = () => {
                   insuranceInfo,
                   specialNotes
                 } = profileVessel;
-
+                console.log('profile vessel ====', profileVessel)
                 const { company, no, expires } = insuranceInfo;
                 
                 return (
