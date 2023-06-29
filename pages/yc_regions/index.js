@@ -1,8 +1,4 @@
-import { useState } from 'react';
 import NavBar from '@/components/NavBar';
-import styles from '@/styles/YCApplicants.module.css'
-import { CircularProgress } from '@mui/material';
-import { useRouter } from 'next/router';
 import YCRegions from '@/components/YCRegions';
 
 const YCApplicants = () => {

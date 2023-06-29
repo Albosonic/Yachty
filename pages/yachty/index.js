@@ -32,8 +32,9 @@ const Yachty = () => {
   const memberData = data.yc_members[0];
     
   dispatch(addMember(memberData)); // stores member in redux.
-
-  const userIsCommodore = memberData.id === memberData.yachtClubByYachtClub.commodore.id;
+  console.log('wild ====', memberData.yachtClubByYachtClub.commodore.member_id)
+  console.log('crazy ====', memberData.id)
+  const userIsCommodore = memberData.id === memberData.yachtClubByYachtClub.commodore.member_id;
   console.log('memberData ====', userIsCommodore)
   return (
     <div>

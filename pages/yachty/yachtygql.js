@@ -7,6 +7,7 @@ export const GET_YC_MEMBER = gql`
       name
       region
       commodore {
+        member_id
         name
         id
       }
