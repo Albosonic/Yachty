@@ -23,7 +23,7 @@ const YCApplicantForm = () => {
   const [insertNewApplicant, { data, loading, error }] = useMutation(INSERT_NEW_YC_APPLICANT);
   const [showSuccess, setShowSuccess] = useState(false);
   
-  const yacht_club = router.query.ycId;
+  const yacht_club = router.query.ycid;
 
   useEffect(() => {
     setFormData({
@@ -73,7 +73,8 @@ const YCApplicantForm = () => {
       if (resp.data) setShowSuccess(true);
     })
   }
-
+  
+  const yachClubName = router.query.ycname;
   return (
     <div>
       <NavBar />
@@ -85,6 +86,7 @@ const YCApplicantForm = () => {
           </Snackbar>
         </div>
         <Stack spacing={2} alignItems="center">
+          <Typography variant='h6'>Apply for membership to {yachClubName}</Typography>
           <Typography variant='h4'>
             Primary Member
           </Typography>

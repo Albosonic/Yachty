@@ -36,7 +36,7 @@ const Yachty = () => {
     }
   }, [memberData, logo])
   
-  if (!user || loading || isLoading || !data || !memberData) return <CircularProgress />
+  if (!user || loading || isLoading || !data) return <CircularProgress />
   if (data.yc_members.length === 0) router.push('/yc_regions');
   if (!data || error) router.push('/login');
 

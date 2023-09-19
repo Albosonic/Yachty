@@ -100,9 +100,8 @@ const buildEverything = () => {
       })
       roundone = false;
     });
-
   }
-  const showMakeMembers = (ycIds.length > 0);
+
   return (
     <Grid 
       sx={{
@@ -124,23 +123,3 @@ const buildEverything = () => {
 }
 
 export default buildEverything;
-
-// {showMakeMembers && (
-//   <Grid 
-//     item 
-//     xs
-//     container
-//     direction="column"
-//     justifyContent="center"
-//     alignItems="center"
-//   >
-//     <MakeMembers ycIds={ycIds} />
-//     <MakeComodores />
-//     {/* <MakeMemberAplicants ycIds={ycIds} /> */}
-//   </Grid>
-// )}
-
-// Experienced software engineer with a strong emphasis on Front End technologies such as, but not limited to React, Redux, Node.js. I am obsessed with the user experience, and building beautiful, performant user interfaces that facilitate the most optimized user experience possible for meeting business goals, and requirements.
-// With 7 years of UX and Front End experience at top enterprise companies, as well as start up. I bring perspective on Front End Architecture, team Work flow, project scoping and estimating, as well as team building and mentorship.
-
-// A passion for building software that serves the user while also fulling business requirements and goals is what drives me towards excellence. My fondest work memories are building software from scratch on small team, and seeing these products and features go to market.
