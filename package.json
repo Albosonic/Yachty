@@ -1,0 +1,42 @@
+{
+  "name": "yachty",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"next dev\" \"node api-server\"",
+    "dev:https": "next-dev-https --https --qr --port 4430",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.10",
+    "@auth0/nextjs-auth0": "^2.2.2",
+    "@aws-sdk/client-s3": "^3.391.0",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@fontsource/roboto": "^4.5.8",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.12",
+    "@reduxjs/toolkit": "^1.9.3",
+    "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1",
+    "graphql": "^16.6.0",
+    "helmet": "^6.0.1",
+    "jwks-rsa": "^3.0.1",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "next": "13.2.3",
+    "next-dev-https": "^0.1.1",
+    "next-redux-wrapper": "^8.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-image-file-resizer": "^0.4.8",
+    "react-redux": "^8.0.5",
+    "uuid": "^9.0.0",
+    "uuid4": "^2.0.3"
+  }
+}

@@ -1,0 +1,20 @@
+.center {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 4rem 0;
+  /* width: 80% */
+}
+  
+.buttonContainer {
+  margin: 20px;
+}
+
+.useProfileVessel {
+  width: 100%;
+  border: 2px solid black;
+  /* min-width: none; */
+}

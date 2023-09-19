@@ -1,0 +1,13 @@
+import { S3Client } from "@aws-sdk/client-s3";
+const region = "us-west-1";
+
+const s3Client = new S3Client({ 
+    region: region,
+    credentials: {
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    }
+});
+
+export { s3Client };
+export const IMG_BUCKET = process.env.PUBLIC_IMG_BUCKET;
