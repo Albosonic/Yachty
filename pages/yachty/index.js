@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_YC_MEMBER } from './yachtygql';
-import { addMember } from '@/slices/actions/authActions';
+import { addMember, addNewMemberApplication, addNonMember } from '@/slices/actions/authActions';
 import { useEffect } from 'react';
 
 const Yachty = () => {
@@ -37,7 +37,11 @@ const Yachty = () => {
   }, [memberData, logo])
   
   if (!user || loading || isLoading || !data) return <CircularProgress />
-  if (data.yc_members.length === 0) router.push('/yc_regions');
+  if (data.yc_members.length === 0) {
+    dispatch(addNonMember(user))
+    router.push('/yc_regions');
+    return null;
+  }
   if (!data || error) router.push('/login');
 
   const welcomText = userIsCommodore ? `Welcome Comodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;

@@ -11,24 +11,33 @@ export const INSERT_NEW_YC_APPLICANT = gql`
     $referredBy: String, 
     $yacht_club: uuid
   ) {
-    insert_potential_members(objects: {
-      email: $email,
-      firstName: $firstName,
-      lastName: $lastName,
-      secondEmail: $secondEmail,
-      secondFirstName: $secondFirstName,
-      secondLastName: $secondLastName,
-      referredBy: $referredBy,
-      yacht_club: $yacht_club
-    }) {
+    insert_potential_members(
+      objects: {
+        email: $email,
+        firstName: $firstName,
+        lastName: $lastName,
+        secondEmail: $secondEmail,
+        secondFirstName: $secondFirstName,
+        secondLastName: $secondLastName,
+        referredBy: $referredBy,
+        yacht_club: $yacht_club
+      }) {
       returning {
+        yacht_club
+        secondLastName
+        secondFirstName
+        secondEmail
+        referredBy
+        membershipDenied
         firstName
+        lastName
+        email
       }
     }
   }
 `;
 
-export  const GET_MEMBER_BY_ID = gql`
+export const GET_MEMBER_BY_ID = gql`
   query getMemberById {
   yc_members(where: {id: {_eq: "fbf64755-e7e7-4593-b4b5-12bf5f210f94"}}) {
     email
@@ -36,5 +45,13 @@ export  const GET_MEMBER_BY_ID = gql`
     id
     name
   }
-}
-`
+}`;
+
+export const GET_NEW_MEMBER_APPLICATIONS = gql`
+  query getNewMemberApplications($email: String) {
+    potential_members(where: {email: {_eq: $email}}) {
+      membershipDenied
+      yacht_club
+    }
+  }
+`;

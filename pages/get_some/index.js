@@ -49,9 +49,11 @@ const buildEverything = () => {
 
       mockMembers.forEach(async (member, memberIndex) => {
         const {email, firstName, lastName, name, secondEmail, secondFirstName, secondLastName, secondName} = member;
-        const memberEmail = roundone ? email : `${email}${uuid4()}`;
+        const fakeEmail = email.split('');
+        fakeEmail.splice(0, 1, uuid4())
+        console.log('fake email :', fakeEmail)
+        const memberEmail = roundone ? email : fakeEmail.join('');
         
-        console.log('memberEmail :', memberEmail)
         
         const memResp = await makeNewMember({
           variables: {
@@ -87,7 +89,9 @@ const buildEverything = () => {
         });
         console.log('vesselResp :', vesselResp);
         // Make Yacht Club Commodores
-        if (ycName.includes(firstName + email)) {
+        if (ycName.includes(email)) {
+          console.log('ycName', ycName)
+          console.log('email', email)
           // TODO: display commodores on browser
           const comRes = await makeCommodore({
             variables: {
