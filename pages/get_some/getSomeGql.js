@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
-
+export const Club_Madueno = 'Madueno';
+export const Club_Blue = 'Blue';
+const Club_Haatveit = 'Haatveit';
 
 export const mockClubs = [
   {
-    clubName: 'Club Madueno',
+    clubName: Club_Madueno,
     region: 'f58dc1cc-2ddb-4e59-8599-e4136f5b1d6e',
     members: [
       {isCommodore: true, email: 'albertomadueno@gmail.com', firstName: "Alberto", lastName: "Madueno", name: "Alberto Madueno", secondEmail: null, secondFirstName: null, secondLastName: null, secondName: null},
@@ -24,8 +26,8 @@ export const mockClubs = [
     ]
   },
   {
-    clubName: 'Club Haatveit',
-    region: 'ef8edbe3-aab1-4b19-9f50-a369c8e0a8cf',
+    clubName: Club_Haatveit,
+    region: 'f58dc1cc-2ddb-4e59-8599-e4136f5b1d6e',
     members: [
       {isCommodore: true, email: 'khaatveit@gmail.com', firstName: "Kersti", lastName: "Haatveit", name: "Kersti Haatveit", secondEmail: null, secondFirstName: null, secondLastName: null, secondName: null},
       {isCommodore: false, email: 'john@gmail.com', firstName: "Alberto", lastName: "Madueno", name: "Alberto Madueno", secondEmail: null, secondFirstName: null, secondLastName: null, secondName: null},
@@ -44,7 +46,7 @@ export const mockClubs = [
     ]
   },
   {
-    clubName: 'Club Blue',
+    clubName: Club_Blue,
     region: 'f58dc1cc-2ddb-4e59-8599-e4136f5b1d6e',
     members: [
       {isCommodore: true, email: 'snipeboatblue@gmail.com', firstName: "Alberto", lastName: "Madueno", name: "Alberto Madueno", secondEmail: null, secondFirstName: null, secondLastName: null, secondName: null},
@@ -167,8 +169,43 @@ export const INSERT_VESSEL = gql`
     vesselName: $vesselName
   }) {
     returning {
-      vesselName
+      unafilliatedVesselId
+      id
+      beam
+      draft
+      hullMaterial
       img
+      insuranceInfo
+      length
+      ownerId
+      specialNotes
+      type
+      vesselName
     }
   }
+}`;
+
+export const INSERT_MEMBER_APPLICANT = gql`
+mutation insertPotentialMembers(
+  $email: String,
+  $firstName: String,
+  $lastName: String,
+  $secondEmail: String,
+  $secondFirstName: String,
+  $secondLastName: String,
+  $yacht_club: uuid,
+  $referredBy: String,
+) {
+insert_potential_members(objects: {
+  email: $email,
+  firstName: $firstName,
+  lastName: $lastName,
+  secondEmail: $secondEmail,
+  secondFirstName: $secondFirstName,
+  secondLastName: $secondLastName,
+  yacht_club: $yacht_club,
+  referredBy: $referredBy
+}) {
+  affected_rows
+}
 }`;
