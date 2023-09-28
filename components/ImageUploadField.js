@@ -28,7 +28,7 @@ const ImageUploadField = () => {
       logo: `${IMG_BUCKET}${imgKey}`,
     }
   });
-  console.log('`${IMG_BUCKET}${imgKey}`', `${IMG_BUCKET}${imgKey}`)
+  
   const handleChange = (e) => {
     const {files} = e.target;
     const file = files[0];

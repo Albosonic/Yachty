@@ -30,7 +30,7 @@ const VisitingMemberRequests = () => {
           <Stack spacing={2} alignItems="center" divider={<Divider orientation="horizontal" width="400px"/>}>
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
               <Typography spacing={2} variant="h2">Reciprocal Requests</Typography>
-              <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
+              <Typography spacing={2} variant="h4">MEMBERS VISITING YOUR CLUB</Typography>
               <Button variant="outlined" onClick={() => router.replace({ pathname: '/yachty/reciprocal_requests', query: {ycId} })}>back to member requests</Button>
             </div>
             {requests.map((req, index) => {
@@ -67,7 +67,7 @@ const VisitingMemberRequests = () => {
                       variant="outlined"
                       onClick={() => console.log("clicked")}
                       >
-                        Send Letter
+                        Send Letter YO
                     </Button>
                     <Button color="error"
                       variant="outlined"

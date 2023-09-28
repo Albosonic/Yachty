@@ -14,12 +14,13 @@ const MemberRequests = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const { APPROVED, DENIED, PENDING } = REICPROCAL_REQEST_DATA_STRINGS;
   const handleClose = () => console.log('closed')
-  
-  const handleApproveMemberRequest = (id) => {
+  // router.push({pathname: 'yachty/reciprocal_requests/create_letter', query: { reqId: id }})}
+  const handleApproveMemberRequest = (id, visitingYCId) => {
     console.log('approved ===', APPROVED)
-    
-    updateRequest({variables: {id, status: APPROVED}});
-    refetch();
+    router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
+    router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {visiting_yc_id: visitingYCId}})
+    // updateRequest({variables: {id, status: APPROVED}}); 
+    // refetch();
   }
 
   const handleDenyMemberRequest = (requestId) => {
@@ -49,6 +50,7 @@ const MemberRequests = () => {
             {requests.map((req, index) => {          
               const {
                 yacht_club: reciprocalClub,
+                visitingYCId,
                 visitingDate,
                 status,
                 id,
@@ -63,8 +65,7 @@ const MemberRequests = () => {
               if (status === DENIED) return null;
               const activeMemberText = active ? {text: 'Active Member', color: "primary"} : {text:'Inactive Member', color: "secondary"};
 
-              return status === PENDING ? (
-
+              return (
                 <Item key={`${req}${index}`}>
                   <div>
                     <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -81,7 +82,7 @@ const MemberRequests = () => {
                     <Button
                       color="success"
                       variant="outlined"
-                      onClick={() => handleApproveMemberRequest(id)}
+                      onClick={() => handleApproveMemberRequest(id, visitingYCId)}
                     >
                       Create Letter
                     </Button>
@@ -91,10 +92,6 @@ const MemberRequests = () => {
                         Deny
                     </Button>
                   </div>
-                </Item>
-              ) : (
-                <Item>
-                  {status}
                 </Item>
               )          
             })}

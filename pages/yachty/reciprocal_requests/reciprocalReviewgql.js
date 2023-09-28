@@ -20,6 +20,7 @@ export const GET_RECIPROCAL_REQUESTS_BY_YC = gql`
     unafilliatedVesselId
     vesselId
     homeYCId
+    visitingYCId
     requestingSlip
     visitingDate
     status
