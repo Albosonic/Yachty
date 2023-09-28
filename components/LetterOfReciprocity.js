@@ -63,7 +63,6 @@ const LetterOfReciprocity = ({ reqId }) => {
     <>
       <PaperLetter square elevation={10}>
         {logo && <img src={logo} />}
-        <img src={logo} />
         <Typography>
           March 19, 2023
         </Typography>
