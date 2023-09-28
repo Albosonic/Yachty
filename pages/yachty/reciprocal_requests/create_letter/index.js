@@ -1,16 +1,20 @@
 import LetterOfReciprocity from "@/components/LetterOfReciprocity";
+import NavBar from "@/components/NavBar";
 import { Divider, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 
 const CreateLetterOfReciprocity = () => {
-    const router = useRouter()
+    const router = useRouter();
     const reqId = router.query.reqid;
 
     return (
       <>
-        <Stack spacing={2} alignItems="center" divider={<Divider orientation="horizontal" width="400px"/>}>
-          <LetterOfReciprocity reqId={reqId} />
-        </Stack>
+        <NavBar />
+        <div style={{border: '2px solid red', padding: 70}}>
+          <Stack spacing={10} alignItems="center">
+            <LetterOfReciprocity reqId={reqId} />
+          </Stack>
+        </div>
       </>
     )
   };
