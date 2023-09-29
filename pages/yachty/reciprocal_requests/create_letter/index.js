@@ -10,7 +10,7 @@ const CreateLetterOfReciprocity = () => {
     return (
       <>
         <NavBar />
-        <div style={{border: '2px solid red', padding: 70}}>
+        <div style={{padding: 70}}>
           <Stack spacing={10} alignItems="center">
             <LetterOfReciprocity reqId={reqId} />
           </Stack>

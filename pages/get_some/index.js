@@ -28,7 +28,7 @@ const buildEverything = () => {
         Blue: null,
       }
     };
-    
+
     mockClubs.forEach(async club => {
 
       const { clubName, region, members, applicants } = club;
@@ -39,7 +39,7 @@ const buildEverything = () => {
          }
       });
       console.log('ycResp :', ycResp);
-      
+
       const ycId = ycResp.data.insert_yacht_clubs.returning[0].id;
 
       memIdsByClub.ycIds[clubName] = ycId;
@@ -52,47 +52,47 @@ const buildEverything = () => {
             email,
             firstName,
             lastName,
-            name, 
-            secondEmail, 
-            secondFirstName, 
-            secondLastName, 
+            name,
+            secondEmail,
+            secondFirstName,
+            secondLastName,
             secondName,
             yacht_club: ycId,
           }
         });
         console.log('memResp', memResp)
         let memberId = memResp.data.insert_yc_members.returning[0].id;
-        
+
         memIdsByClub[clubName].push(memberId);
 
         if (isCommodore) {
           const comRes = await makeCommodore({
             variables: {
-              name, 
-              yacht_club: ycId, 
+              name,
+              yacht_club: ycId,
               member_id: memberId
             }
           });
           console.log('comRes :', comRes)
         }
-        
+
       });
 
       applicants.forEach(async (applicant) => {
         const {email, firstName, lastName, secondEmail, secondFirstName, secondLastName } = applicant;
         const applicantResp = await makeApplicants({
           variables: {
-            email: `${email}${uuid4()}`, 
-            firstName, 
-            lastName, 
-            secondEmail, 
-            secondFirstName, 
+            email: `${email}${uuid4()}`,
+            firstName,
+            lastName,
+            secondEmail,
+            secondFirstName,
             secondLastName,
             yacht_club: ycId,
           }
         });
       });
-  
+
     });
     console.log('mems ==', memIdsByClub)
     setMemberIdsByClub(memIdsByClub);
@@ -107,7 +107,7 @@ const buildEverything = () => {
         let memberIds = memberIdsByClub[key];
         memberIds.forEach(async (memId, index) => {
           console.log('memId :', memId)
-          
+
           const vesselResp = await makeVessel({
             variables: {
               beam,
@@ -125,37 +125,37 @@ const buildEverything = () => {
           });
 
           const { id: savedVesselId } = vesselResp.data.insert_vessels.returning[0];
-          
+
           console.log('vessel response :', vesselResp)
-          // let vesselId = id || unafilliatedVesselId;
+
           if (key === Club_Blue || key === Club_Madueno) {
             const visitingYCId = key === Club_Blue? ycIds[Club_Madueno] : ycIds[Club_Blue];
             const REQUESTING_SLIP = true;
             console.log('yvids :', ycIds)
-            console.log('yvids key:', ycIds[key])
-            
+
+            let date = new Date().toDateString();
+
             await insertReciprocalRequestOwnVessel({
               variables: {
-                homeYCId: ycIds[key], 
-                memberId: memId, 
+                homeYCId: ycIds[key],
+                memberId: memId,
                 requestingSlip: REQUESTING_SLIP,
-                visitingDate: new Date(), 
+                visitingDate: date,
                 visitingYCId: visitingYCId,
                 vesselId: savedVesselId,
                 specialNotes,
               }
-            }); 
+            });
           }
-        });   
+        });
       }
     }
   }
 
   return (
-    <Grid 
+    <Grid
       sx={{
-        margin: '50',
-        border: '2px solid red'
+        margin: '50'
       }}
       container
       direction="column"
