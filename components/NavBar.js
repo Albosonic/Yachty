@@ -43,7 +43,6 @@ export default function NavBar() {
     }
     setOpenDrawer(!openDrawer);
   };
-  console.log('open', openDrawer)
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

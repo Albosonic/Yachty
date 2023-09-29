@@ -10,16 +10,16 @@ const YCSelector = ({ routerPath }) => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_ALL_YC_BY_REGION, { variables: { regionId: router.query.regionId } });
   const homeYcId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
-  console.log('home ===', homeYcId)
   // do this in a useEffect
   if (loading) return <CircularProgress />
   if (error || !data) router.push('/login');
 
   const yachtClubs = data.yacht_clubs;
   const handleChange = (event) => {
+    const { id, name } = event.target.value;
     router.push({
       pathname: routerPath,
-      query: { ycId: event.target.value.id }
+      query: { ycid: id, ycname: name }
     })
   }
 

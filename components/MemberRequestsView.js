@@ -8,19 +8,16 @@ import { Pending } from "@mui/icons-material";
 const MemberRequests = () => {
   const router = useRouter();
   const ycId = router.query.ycId;
-  const { data, loading, error, refetch } = useQuery(GET_RECIPROCAL_REQUESTS_BY_YC, { variables : { ycId: router.query.ycId }});
   const [updateRequest, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_RECIPROCAL_REQUEST);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
-  const { APPROVED, DENIED, PENDING } = REICPROCAL_REQEST_DATA_STRINGS;
+  const { data, loading, error, refetch } = useQuery(GET_RECIPROCAL_REQUESTS_BY_YC, { 
+    variables : { ycId: router.query.ycId },
+    fetchPolicy: "no-cache"
+  });
+  const { APPROVED, DENIED, PENDING, AWAITING_RESPONSE } = REICPROCAL_REQEST_DATA_STRINGS;
   const handleClose = () => console.log('closed')
-  
-  const handleApproveMemberRequest = (id) => {
-    console.log('approved ===', APPROVED)
-    
-    updateRequest({variables: {id, status: APPROVED}});
-    refetch();
-  }
+  const handleApproveMemberRequest = (id) => router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
 
   const handleDenyMemberRequest = (requestId) => {
     updateRequest(id, DENIED);
@@ -46,9 +43,10 @@ const MemberRequests = () => {
               <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
               <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>
             </div>
-            {requests.map((req, index) => {          
+            {requests.map((req, index) => {       
               const {
                 yacht_club: reciprocalClub,
+                visitingYCId,
                 visitingDate,
                 status,
                 id,
@@ -60,11 +58,10 @@ const MemberRequests = () => {
                 }
               } = req;
 
-              if (status === DENIED) return null;
+              if (status === DENIED || status === AWAITING_RESPONSE) return null;
               const activeMemberText = active ? {text: 'Active Member', color: "primary"} : {text:'Inactive Member', color: "secondary"};
 
-              return status === PENDING ? (
-
+              return (
                 <Item key={`${req}${index}`}>
                   <div>
                     <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -77,11 +74,12 @@ const MemberRequests = () => {
                   <Typography spacing={2} variant="h5">{`${firstName} ${lastName}`}</Typography>
                   <Typography spacing={2} variant="h6">{`is requesting reciprocity to ${reciprocalClub.name}`}</Typography>
                   <Typography spacing={2} variant="h6">{`on: ${visitingDate}`}</Typography>
+                  <Typography spacing={2} variant="h6">{`status : ${status}`}</Typography>
                   <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                     <Button
                       color="success"
                       variant="outlined"
-                      onClick={() => handleApproveMemberRequest(id)}
+                      onClick={() => handleApproveMemberRequest(id, visitingYCId)}
                     >
                       Create Letter
                     </Button>
@@ -91,10 +89,6 @@ const MemberRequests = () => {
                         Deny
                     </Button>
                   </div>
-                </Item>
-              ) : (
-                <Item>
-                  {status}
                 </Item>
               )          
             })}

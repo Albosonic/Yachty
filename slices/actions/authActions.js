@@ -1,4 +1,6 @@
 export const MEMBER_OBJECT = 'MEMBER_OBJECT';
+export const NEW_MEMBER_APPLICATION = 'NEW_MEMBER_APPLICATION';
+export const NON_MEMBER_OBJECT = 'NON_MEMBER_OBJECT';
 export const UPDATE_LOGO = 'UPDATE_LOGO';
 
 export const addMember = (member) => {
@@ -7,6 +9,16 @@ export const addMember = (member) => {
     payload: { member },
   }
 }
+
+export const addNewMemberApplication = (newMemberApplications) => ({
+  type: NEW_MEMBER_APPLICATION,
+  payload: newMemberApplications,
+});
+
+export const addNonMember = (nonMember) => ({
+  type: NON_MEMBER_OBJECT,
+  payload: nonMember,
+});
 
 export const updateLogo = (logo) => {
   return {
