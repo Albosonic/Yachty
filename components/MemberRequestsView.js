@@ -14,14 +14,7 @@ const MemberRequests = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const { APPROVED, DENIED, PENDING } = REICPROCAL_REQEST_DATA_STRINGS;
   const handleClose = () => console.log('closed')
-  // router.push({pathname: 'yachty/reciprocal_requests/create_letter', query: { reqId: id }})}
-  const handleApproveMemberRequest = (id, visitingYCId) => {
-    console.log('approved ===', APPROVED)
-    router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
-    router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {visiting_yc_id: visitingYCId}})
-    // updateRequest({variables: {id, status: APPROVED}}); 
-    // refetch();
-  }
+  const handleApproveMemberRequest = (id) => router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
 
   const handleDenyMemberRequest = (requestId) => {
     updateRequest(id, DENIED);

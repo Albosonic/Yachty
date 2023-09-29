@@ -1,4 +1,4 @@
-import { MEMBER_OBJECT, NON_MEMBER_OBJECT } from "./actions/authActions"
+import { MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO } from "./actions/authActions"
 
 const initialState = {
   email: '',
@@ -28,14 +28,28 @@ const initialState = {
 export default function authReducer(state = {}, action) {
   const {payload, type} = action;
   switch (type) {
-    case MEMBER_OBJECT:
+    case MEMBER_OBJECT: {
       payload.userIsCommodore = payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id;
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
-      payload.logo = payload?.member?.yachtClubByYachtClub?.logo;
+      // payload.logo = payload?.member?.yachtClubByYachtClub?.logo;
       return {...state, ...payload};
+    }
     case NON_MEMBER_OBJECT: {
       console.log('payload :', payload)
       return {...state, nonMemberObject: {...payload}}
+    }
+    case UPDATE_LOGO: {
+      console.log('payload :', payload);
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          yachtClubByYachtClub: {
+            ...state.member.yachtClubByYachtClub,
+            logo: payload
+          }
+        }
+      }
     }
     default:
       return state

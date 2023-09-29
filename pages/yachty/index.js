@@ -16,7 +16,7 @@ const Yachty = () => {
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
 
-  const logo = useSelector(state => state.auth.logo);
+  const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const userIsCommodore = useSelector(state => state.auth.userIsCommodore);
   
   const { loading, error, data, refetch } = useQuery(
