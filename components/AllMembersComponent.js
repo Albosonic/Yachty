@@ -1,4 +1,3 @@
-import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,32 +20,11 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-
-function createData(name, calories, fat, carbs, protein) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
+import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_YC_MEMBERS } from '@/pages/yachty/view_all_members/allMembersgql';
+import { useRouter } from 'next/router';
+import { CircularProgress } from '@mui/material';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -85,37 +63,41 @@ const headCells = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'name',
   },
   {
-    id: 'calories',
+    id: 'email',
     numeric: true,
     disablePadding: false,
-    label: 'Calories',
+    label: 'email',
   },
   {
-    id: 'fat',
+    id: 'status',
     numeric: true,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'acitve member',
   },
   {
-    id: 'carbs',
+    id: 'dues',
     numeric: true,
     disablePadding: false,
-    label: 'Carbs (g)',
+    label: 'dues owed',
   },
   {
-    id: 'protein',
+    id: 'vessel',
     numeric: true,
     disablePadding: false,
-    label: 'Protein (g)',
+    label: 'vessel',
+  },
+  {
+    id: 'type',
+    numeric: true,
+    disablePadding: false,
+    label: 'vessel type',
   },
 ];
 
-function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
+const EnhancedTableHead = ({ onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort }) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -159,15 +141,6 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
 
 const EnhancedTableToolbar = ({ numSelected }) => {
   const handleIconClick = () => {
@@ -221,18 +194,19 @@ const EnhancedTableToolbar = ({ numSelected }) => {
   );
 }
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
 const AllMembersTable = () => {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const router = useRouter();
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const ycId = router.query.ycId;
+  const  { error, loading,  data } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } })
+  console.log('data :', data)
+  if (loading || !data) return <CircularProgress />
+  // if (loading || !data) return <CircularProgress />
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -286,14 +260,10 @@ const AllMembersTable = () => {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage],
+  
+  const visibleRows = stableSort(data.yc_members, getComparator(order, orderBy)).slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
   );
 
   return (
@@ -312,10 +282,13 @@ const AllMembersTable = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={visibleRows.length}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
+                const {name, email, duesOwed, active, vessels } = row;
+                const { length, type, vesselName } = vessels[0];
+                console.log('row :', row)
                 const isItemSelected = isSelected(row.name);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -326,7 +299,7 @@ const AllMembersTable = () => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
+                    key={row.name + index}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
@@ -345,12 +318,15 @@ const AllMembersTable = () => {
                       scope="row"
                       padding="none"
                     >
-                      {row.name}
+                      {name}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    
+                    {/* <TableCell align="right">{name}</TableCell> */}
+                    <TableCell align="right">{email}</TableCell>
+                    <TableCell align="right">{active.toString()}</TableCell>
+                    <TableCell align="right">{duesOwed}</TableCell>
+                    <TableCell align="right">{vesselName}</TableCell>
+                    <TableCell align="right">{type}</TableCell>
                   </TableRow>
                 );
               })}
@@ -369,7 +345,7 @@ const AllMembersTable = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={visibleRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

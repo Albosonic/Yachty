@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.API_PORT || 3001;
 const baseUrl = process.env.AUTH0_BASE_URL;
 // const issuerBaseUrl = process.env.AUTH0_ISSUER_BASE_URL;
-const issuerBaseUrl = 'https://dev-4wm1otogtazxicdn.us.auth0.com';
+const issuerBaseUrl = process.env.AUTH0_ISSUER_BASE_URL;
 const audience = process.env.AUTH0_AUDIENCE;
 
 if (!baseUrl || !issuerBaseUrl) {
