@@ -23,6 +23,24 @@ export default function AppDrawer({ open, toggleDrawer }) {
     >
       <List>
         {userIsCommodore && <ListItem disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Edit Club Profile" />
+          </ListItemButton >
+        </ListItem>}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => {
+            router.replace({pathname:'/yachty', query: { ycId: ycId }})
+          }}>
+          <ListItemIcon>
+              <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+        {userIsCommodore && <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/reciprocal_requests', query: { ycId: ycId }})}>
             <ListItemIcon>
               <InboxIcon />
@@ -38,24 +56,17 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="New Member Applicants" />
           </ListItemButton>
         </ListItem>
-        {userIsCommodore && <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/view_all_members', query: { ycId: ycId }})}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="Edit Club Profile" />
-          </ListItemButton >
-        </ListItem>}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => {
-            router.replace({pathname:'/yachty', query: { ycId: ycId }})
-          }}>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="View All Members" />
           </ListItemButton>
         </ListItem>
+
+        
+
       </List>
     </Box>
   );
