@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import NavBar from "./NavBar";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { REICPROCAL_REQEST_DATA_STRINGS } from "@/pages/yachty/reciprocal_requests/reciprocalReviewgql";
 
 const GET_RECIPROCAL_REQUEST = gql`
   query getReciprocalRequest($reqId: uuid) {
@@ -54,18 +55,24 @@ const LetterOfReciprocity = ({ reqId }) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
-  const [updateReciprocalStatus, {data: mutData, loading: mutLoading, error: muteError }] = useMutation(UPDATE_RECIPROCAL_STATUS);
+  let letterDate = new Date().toDateString();
+  const [updateReciprocalStatus, {data: mutData, loading: mutLoading, error: muteError }] = useMutation(UPDATE_RECIPROCAL_STATUS, {
+    variables: {
+      id: reqId,
+      letterSent: letterDate,
+      status: REICPROCAL_REQEST_DATA_STRINGS.AWAITING_RESPONSE,
+    }
+  });
   const {data, loading, error} = useQuery(GET_RECIPROCAL_REQUEST, {
     variables: {
       reqId
     }
   });
-  let letterDate = new Date().toDateString();
-  const handleSendLetter = async (id) => {
-    console.log('id :', id)
+  const handleSendLetter = async () => {
+    console.log('id :', reqId)
     console.log('string :', letterDate)
-    // await updateReciprocalStatus({variables: {id, letterDate}});
-    // setShowSuccess(true);
+    await updateReciprocalStatus();
+    setShowSuccess(true);
   }
   const handleClose = () => router.back();
 
@@ -84,7 +91,7 @@ const LetterOfReciprocity = ({ reqId }) => {
     <>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} sx={{ width: '100%' }}>
-          {snackBarContent}
+          {snackBarContent.msg}
         </Alert>
       </Snackbar>
       <PaperLetter square elevation={10}>

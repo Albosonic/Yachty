@@ -12,7 +12,7 @@ const MemberRequests = () => {
   const [updateRequest, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_RECIPROCAL_REQUEST);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
-  const { APPROVED, DENIED, PENDING } = REICPROCAL_REQEST_DATA_STRINGS;
+  const { APPROVED, DENIED, PENDING, AWAITING_RESPONSE } = REICPROCAL_REQEST_DATA_STRINGS;
   const handleClose = () => console.log('closed')
   const handleApproveMemberRequest = (id) => router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
 
@@ -40,7 +40,7 @@ const MemberRequests = () => {
               <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
               <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>
             </div>
-            {requests.map((req, index) => {          
+            {requests.map((req, index) => {       
               const {
                 yacht_club: reciprocalClub,
                 visitingYCId,
@@ -55,7 +55,7 @@ const MemberRequests = () => {
                 }
               } = req;
 
-              if (status === DENIED) return null;
+              if (status === DENIED || status === AWAITING_RESPONSE) return null;
               const activeMemberText = active ? {text: 'Active Member', color: "primary"} : {text:'Inactive Member', color: "secondary"};
 
               return (
