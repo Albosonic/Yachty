@@ -50,7 +50,7 @@ const PaperLetter = styled(Paper)(({ theme }) => ({
 }));
 
 
-const LetterOfReciprocity = ({ reqId }) => {
+const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
   const router = useRouter();
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
@@ -75,6 +75,14 @@ const LetterOfReciprocity = ({ reqId }) => {
     setShowSuccess(true);
   }
   const handleClose = () => router.back();
+
+  const handleApprove = () => {
+    console.log('approve')
+  }
+
+  const handleDeny = () => {
+    console.log('deny')
+  }
 
 
   if (loading || !data) return <CircularProgress />
@@ -123,19 +131,22 @@ const LetterOfReciprocity = ({ reqId }) => {
                 Best regards,
               </Typography>
               <Typography sx={{marginTop: 2}}>
-                { commodoereName }
-              </Typography>
-              <Typography sx={{marginTop: 2}}>
-                Commodore
-                Benicia Yacht Club
+                Commodore { commodoereName }
               </Typography>
               <Grid container justifyContent="space-between">
                 <Typography sx={{marginTop: 2}}>
                   707 208-4498
                 </Typography>
-                <Button onClick={handleSendLetter}>
-                  Send Letter
-                </Button>
+                {!awaitingResponse && <Button onClick={handleSendLetter}>Send Letter</Button>}
+                {awaitingResponse && (
+                  <>
+                    <Button onClick={handleApprove}>Approve</Button>
+                    <Button onClick={handleDeny}>Deny</Button>
+                  </>
+                  )
+                }
+
+                
               </Grid>
             </Grid>
           </Grid>

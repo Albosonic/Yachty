@@ -8,10 +8,13 @@ import { Pending } from "@mui/icons-material";
 const MemberRequests = () => {
   const router = useRouter();
   const ycId = router.query.ycId;
-  const { data, loading, error, refetch } = useQuery(GET_RECIPROCAL_REQUESTS_BY_YC, { variables : { ycId: router.query.ycId }});
   const [updateRequest, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_RECIPROCAL_REQUEST);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
+  const { data, loading, error, refetch } = useQuery(GET_RECIPROCAL_REQUESTS_BY_YC, { 
+    variables : { ycId: router.query.ycId },
+    fetchPolicy: "no-cache"
+  });
   const { APPROVED, DENIED, PENDING, AWAITING_RESPONSE } = REICPROCAL_REQEST_DATA_STRINGS;
   const handleClose = () => console.log('closed')
   const handleApproveMemberRequest = (id) => router.push({pathname: '/yachty/reciprocal_requests/create_letter', query: {reqid: id}})
@@ -71,6 +74,7 @@ const MemberRequests = () => {
                   <Typography spacing={2} variant="h5">{`${firstName} ${lastName}`}</Typography>
                   <Typography spacing={2} variant="h6">{`is requesting reciprocity to ${reciprocalClub.name}`}</Typography>
                   <Typography spacing={2} variant="h6">{`on: ${visitingDate}`}</Typography>
+                  <Typography spacing={2} variant="h6">{`status : ${status}`}</Typography>
                   <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                     <Button
                       color="success"

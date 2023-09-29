@@ -9,7 +9,6 @@ import '@/styles/globals.css';
 
 let persistor = persistStore(store);
 
-
 const App = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client} >
