@@ -2,7 +2,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Alert, Box, Button, CircularProgress, Grid, Paper, Snackbar, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import NavBar from "./NavBar";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { REICPROCAL_REQEST_DATA_STRINGS } from "@/pages/yachty/reciprocal_requests/reciprocalReviewgql";
@@ -114,8 +113,6 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
                   height: 90,
                   width: 120,
                   marginBottom: 10,
-                  // maxHeight: { xs: 100, md: 100 },
-                  // maxWidth: { xs: 100, md: 100 },
                 }}
                 alt="The house from the offer."
                 src={logo}

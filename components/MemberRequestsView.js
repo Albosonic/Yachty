@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useMutation, useQuery } from "@apollo/client";
 import { Alert, Box, Button, CircularProgress, Divider, Paper, Snackbar, Stack, Typography, styled } from "@mui/material";
 import { GET_RECIPROCAL_REQUESTS_BY_YC, REICPROCAL_REQEST_DATA_STRINGS, UPDATE_RECIPROCAL_REQUEST } from "@/pages/yachty/reciprocal_requests/reciprocalReviewgql";
-import { Pending } from "@mui/icons-material";
 
 const MemberRequests = () => {
   const router = useRouter();
