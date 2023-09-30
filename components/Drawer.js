@@ -22,14 +22,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
       role="presentation"
     >
       <List>
-        {userIsCommodore && <ListItem disablePadding>
-        <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Edit Club Profile" />
-          </ListItemButton >
-        </ListItem>}
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             router.replace({pathname:'/yachty', query: { ycId: ycId }})
@@ -38,6 +30,30 @@ export default function AppDrawer({ open, toggleDrawer }) {
               <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+        {userIsCommodore && <ListItem disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Edit Club Profile" />
+          </ListItemButton >
+        </ListItem>}
+        {userIsCommodore && <ListItem disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_yc_event', query: { ycId: ycId }})}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Create Yacht Club Event" />
+          </ListItemButton >
+        </ListItem>}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/today_at_the_club', query: { ycId: ycId }})}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Today at the Club" />
           </ListItemButton>
         </ListItem>
         {userIsCommodore && <ListItem disablePadding>
@@ -64,7 +80,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="View All Members" />
           </ListItemButton>
         </ListItem>
-
         
 
       </List>
