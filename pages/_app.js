@@ -5,6 +5,8 @@ import store from '@/store';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import '@/styles/globals.css';
 
 let persistor = persistStore(store);
@@ -15,7 +17,9 @@ const App = ({ Component, pageProps }) => {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <UserProvider>
-            <Component {...pageProps} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Component {...pageProps} />
+            </LocalizationProvider>
           </UserProvider>
         </PersistGate>
       </Provider>
