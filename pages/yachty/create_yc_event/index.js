@@ -38,46 +38,48 @@ const CreateYCEvent = () => {
       Body: fileDatum,
       ContentType: 'image/png'
     };
-    
+
     await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
     const {entertainment, eventName, startDate, endDate, specialHoursStart, specialHoursEnd, specialNotes } = eventData;
     const startDay = startDate.slice(0, 10);
     const startDayHours = startDate.slice(11);
-    
+
     const endDay = endDate.slice(0, 10);
     const endDayHours = endDate.slice(11);
-    
+
     // console.log('whooo', eventData)
     console.log('start', startDayHours)
     console.log('endDay', endDayHours)
 
     let date = startDay === endDay? startDay : `${startDay} to ${endDay}`;
+    let specialHours = specialHoursStart === '' || specialHoursEnd === ''? '' : `${specialHoursStart} to ${specialHoursEnd}`;
+    let hours = startDayHours === endDayHours? startDayHours : `${startDayHours} to ${endDayHours}`;
 
     let variables = {
       ycId,
       image: imgPath,
-      specialClubHours: `${specialHoursStart} to ${specialHoursEnd}`,
+      specialClubHours: specialHours,
       entertainment,
       eventName,
-      hours: `${startDayHours} to ${endDayHours}`,
+      hours,
       date,
       eventName
     }
     console.log('variables', variables);
     const resp = await createYCEvent({
       variables
-    });  
+    });
     const eventId = resp.data.insert_yc_events.returning[0].id;
     console.log('resp', resp);
     console.log('eventId', eventId);
     // TODO:  snackbar and handle close.
-    // router.push({
-    //   pathname: '/yachty/create_yc_event/create_event_ticket', 
-    //   query: { 
-    //     eventId
-    //   }
-    // });    
+    router.push({
+      pathname: '/yachty/create_yc_event/create_event_ticket',
+      query: {
+        eventId
+      }
+    });
   }
   const stackStyles = {
     paddingBottom: 1,
@@ -93,10 +95,10 @@ const CreateYCEvent = () => {
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto'}} elevation={3}>
         <Stack sx={stackStyles} spacing={5} alignItems="center" >
           <Typography variant='h5'>Create Event</Typography>
-          <TextField 
-            multiline 
-            variant="standard" 
-            label="Event Name" 
+          <TextField
+            multiline
+            variant="standard"
+            label="Event Name"
             size="normal"
             onChange={(e) => setEventData({...eventData, eventName: e.target.value })}
           />
@@ -108,7 +110,7 @@ const CreateYCEvent = () => {
                 onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
                 variant="standard"
                 id="location"
-                label="eg: ballroom..." 
+                label="eg: ballroom..."
                 multiline
                 value={eventData.location}
               />
@@ -129,7 +131,7 @@ const CreateYCEvent = () => {
           <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>From</Typography>
-              <DateTimeField onBlur={(e) => setEventData({...eventData, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
+              <DateTimeField onBlur={(e) => setEventData({...eventData, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
             </Grid>
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>To</Typography>
@@ -144,7 +146,7 @@ const CreateYCEvent = () => {
           {showSpecialHours && <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>From</Typography>
-              <DateTimeField onBlur={(e) => setEventData({...eventData, specialHoursStart: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
+              <DateTimeField onBlur={(e) => setEventData({...eventData, specialHoursStart: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
             </Grid>
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>To</Typography>
@@ -153,7 +155,7 @@ const CreateYCEvent = () => {
           </Grid>}
           <TextField
             onChange={(e) => setEventData({...eventData, specialNotes: e.target.value })}
-            variant="standard" 
+            variant="standard"
             label="Special Notes"
             multiline
             maxRows={4}
