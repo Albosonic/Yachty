@@ -13,16 +13,6 @@ import { YC_EVENT } from '@/slices/actions/authActions';
 import { IMG_BUCKET, s3Client } from '@/pages/s3-client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
-// import DatePicker from '@/components/DatePicker';
-
-// $ycId: uuid, 
-// $specialClubHours: String, 
-// entertainment: String, 
-// $eventName: String, 
-// $hours: String, 
-// $hours: String, 
-// $date: String
-
 const CreateYCEvent = () => {
   const router = useRouter();
   const ycId = router.query.ycId;
@@ -39,7 +29,7 @@ const CreateYCEvent = () => {
     specialHoursEnd: '',
     specialNotes: '',
   });
-  
+  console.log('eventData', eventData);
   const handleSubmit = async (e) => {
     const {fileDatum, src, imgKey} = imageObj;
     const params = {
@@ -48,8 +38,8 @@ const CreateYCEvent = () => {
       Body: fileDatum,
       ContentType: 'image/png'
     };
-    const results = await s3Client.send(new PutObjectCommand(params));
-
+    
+    await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
     const {entertainment, eventName, startDate, endDate, specialHoursStart, specialHoursEnd, specialNotes } = eventData;
     const startDay = startDate.slice(0, 10);
@@ -58,20 +48,37 @@ const CreateYCEvent = () => {
     const endDay = endDate.slice(0, 10);
     const endDayHours = endDate.slice(11);
     
-    await createYCEvent({
-      variables: {
-        ycId,
-        image: imgPath,
-        specialClubHours: `${specialHoursStart} - ${specialHoursEnd}`,
-        entertainment,
-        eventName,
-        hours: `${startDayHours} - ${endDayHours}`,
-        date: `${startDay} - ${endDay}`,
-        eventName
-      },
-    });  
-  }
+    // console.log('whooo', eventData)
+    console.log('start', startDayHours)
+    console.log('endDay', endDayHours)
 
+    let date = startDay === endDay? startDay : `${startDay} to ${endDay}`;
+
+    let variables = {
+      ycId,
+      image: imgPath,
+      specialClubHours: `${specialHoursStart} to ${specialHoursEnd}`,
+      entertainment,
+      eventName,
+      hours: `${startDayHours} to ${endDayHours}`,
+      date,
+      eventName
+    }
+    console.log('variables', variables);
+    const resp = await createYCEvent({
+      variables
+    });  
+    const eventId = resp.data.insert_yc_events.returning[0].id;
+    console.log('resp', resp);
+    console.log('eventId', eventId);
+    // TODO:  snackbar and handle close.
+    // router.push({
+    //   pathname: '/yachty/create_yc_event/create_event_ticket', 
+    //   query: { 
+    //     eventId
+    //   }
+    // });    
+  }
   const stackStyles = {
     paddingBottom: 1,
     textAlign: 'center',
@@ -85,7 +92,6 @@ const CreateYCEvent = () => {
     <NavBar />
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto'}} elevation={3}>
         <Stack sx={stackStyles} spacing={5} alignItems="center" >
-          
           <Typography variant='h5'>Create Event</Typography>
           <TextField 
             multiline 
@@ -123,11 +129,11 @@ const CreateYCEvent = () => {
           <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>From</Typography>
-              <DateTimeField onClick={(e) => setEventData({...eventData, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
+              <DateTimeField onBlur={(e) => setEventData({...eventData, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
             </Grid>
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>To</Typography>
-              <DateTimeField onClick={(e) => setEventData({...eventData, endDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+              <DateTimeField onBlur={(e) => setEventData({...eventData, endDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
             </Grid>
           </Grid>
           <ImageUploadField type={YC_EVENT} setImageObjToParent={setImageObj} img={imageObj} />
@@ -138,15 +144,15 @@ const CreateYCEvent = () => {
           {showSpecialHours && <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>From</Typography>
-              <DateTimeField onClick={(e) => setEventData({...eventData, specialHoursStart: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
+              <DateTimeField onBlur={(e) => setEventData({...eventData, specialHoursStart: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} /> 
             </Grid>
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>To</Typography>
-              <DateTimeField onClick={(e) => setEventData({...eventData, specialHoursEnd: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+              <DateTimeField onBlur={(e) => setEventData({...eventData, specialHoursEnd: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
             </Grid>
           </Grid>}
           <TextField
-            onClick={(e) => setEventData({...eventData, specialNotes: e.target.value })}
+            onChange={(e) => setEventData({...eventData, specialNotes: e.target.value })}
             variant="standard" 
             label="Special Notes"
             multiline

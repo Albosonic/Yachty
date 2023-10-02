@@ -16,9 +16,29 @@ mutation insertYCEvent(
     entertainment: $entertainment, 
     event_name: $eventName, 
     hours: $hours, 
-    date: $hours,
+    date: $date,
     image: $image,
   }) {
-    affected_rows
+    returning {
+      id
+      event_name
+      entertainment
+      date
+      image
+    }
+  }
+}`;
+
+export const GET_YC_EVENT = gql`
+  query getYachtClubEvent($id: uuid!) {
+  yc_events(where: {id: {_eq: $id}}) {
+    date
+    entertainment
+    event_name
+    hours
+    id
+    image
+    raceId
+    special_club_hours
   }
 }`;
