@@ -7,7 +7,8 @@ mutation insertYCEvent(
     $entertainment: String, 
     $eventName: String, 
     $hours: String, 
-    $date: String
+    $date: String,
+    $image: String,
 ) {
   insert_yc_events(objects: {
     ycId: $ycId, 
@@ -16,6 +17,7 @@ mutation insertYCEvent(
     event_name: $eventName, 
     hours: $hours, 
     date: $hours,
+    image: $image,
   }) {
     affected_rows
   }

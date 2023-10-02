@@ -2,6 +2,7 @@ export const MEMBER_OBJECT = 'MEMBER_OBJECT';
 export const NEW_MEMBER_APPLICATION = 'NEW_MEMBER_APPLICATION';
 export const NON_MEMBER_OBJECT = 'NON_MEMBER_OBJECT';
 export const UPDATE_LOGO = 'UPDATE_LOGO';
+export const YC_EVENT = 'YC_EVENT';
 
 export const addMember = (member) => {
   return {

@@ -9,16 +9,12 @@ import { useRouter } from "next/router";
 import { resizeLetterHead } from "@/pages/utils/imgResizer";
 import { useDispatch } from "react-redux";
 import { IMG_BUCKET } from "@/pages/s3-client";
-import { updateLogo } from "@/slices/actions/authActions";
+import { UPDATE_LOGO, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 
-const ImageUploadField = () => {
+const ImageUploadField = ({ type, setImageObjToParent, img }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [image, setImage] = useState({
-    src: null,
-    fileDatum: null,
-    imgKey: null,
-  });
+  const [image, setImage] = useState(img || {src: null,fileDatum: null,imgKey: null});
   const [imgEntered, setImgEntered] = useState(false);
   const {fileDatum, src, imgKey} = image;
 
@@ -32,13 +28,22 @@ const ImageUploadField = () => {
   const handleChange = (e) => {
     const {files} = e.target;
     const file = files[0];
-    resizeLetterHead(file, (uri) => {
-      setImage({
-        fileDatum: uri,
-        imgKey: uuid4(),
-        src: URL.createObjectURL(file),
-      });
-    });
+    let imageObject = {
+      fileDatum: file,
+      imgKey: uuid4(),
+      src: URL.createObjectURL(file),
+    }
+    switch(type) {
+      case YC_EVENT: {
+        setImageObjToParent(imageObject)
+      }
+      case UPDATE_LOGO: {
+        resizeLetterHead(file, (uri) => {
+          imageObject.fileDatum = uri;
+          setImage(imageObject);
+        });
+      }
+    }
     setImgEntered(true);
   };
 
@@ -76,7 +81,7 @@ const ImageUploadField = () => {
         />
         <Grid sx={{margin: 2}} >
           {imgEntered && <Button variant="outlined" onClick={resetForm}>Edit</Button>}
-          <Button variant="outlined" onClick={handleSubmit}>Submit Image</Button>
+          {!setImageObjToParent && <Button variant="outlined" onClick={handleSubmit}>Submit Image</Button>}
         </Grid>      
       </form>
     </>
