@@ -22,6 +22,7 @@ const CreateYCEvent = () => {
   const [eventData, setEventData] = useState({
     entertainment: '',
     eventName: '',
+    location: '',
     hours: '',
     startDate: '',
     endDate: '',
@@ -41,16 +42,12 @@ const CreateYCEvent = () => {
 
     await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
-    const {entertainment, eventName, startDate, endDate, specialHoursStart, specialHoursEnd, specialNotes } = eventData;
+    const {entertainment, eventName, startDate, endDate, specialHoursStart, specialHoursEnd, specialNotes, location } = eventData;
     const startDay = startDate.slice(0, 10);
     const startDayHours = startDate.slice(11);
 
     const endDay = endDate.slice(0, 10);
     const endDayHours = endDate.slice(11);
-
-    // console.log('whooo', eventData)
-    console.log('start', startDayHours)
-    console.log('endDay', endDayHours)
 
     let date = startDay === endDay? startDay : `${startDay} to ${endDay}`;
     let specialHours = specialHoursStart === '' || specialHoursEnd === ''? '' : `${specialHoursStart} to ${specialHoursEnd}`;
@@ -64,16 +61,14 @@ const CreateYCEvent = () => {
       eventName,
       hours,
       date,
-      eventName
-    }
-    console.log('variables', variables);
-    const resp = await createYCEvent({
-      variables
-    });
+      eventName,
+      location,
+      specialNotes,
+    };
+
+    const resp = await createYCEvent({ variables });
     const eventId = resp.data.insert_yc_events.returning[0].id;
-    console.log('resp', resp);
-    console.log('eventId', eventId);
-    // TODO:  snackbar and handle close.
+
     router.push({
       pathname: '/yachty/create_yc_event/create_event_ticket',
       query: {
@@ -93,7 +88,7 @@ const CreateYCEvent = () => {
     <>
     <NavBar />
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto'}} elevation={3}>
-        <Stack sx={stackStyles} spacing={5} alignItems="center" >
+        <Stack sx={stackStyles} spacing={5} alignItems="center">
           <Typography variant='h5'>Create Event</Typography>
           <TextField
             multiline

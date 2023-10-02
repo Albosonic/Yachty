@@ -1,17 +1,25 @@
 import NavBar from '@/components/NavBar';
 import { useQuery } from '@apollo/client';
-import { Avatar, Box, Card, CardContent, CardMedia, CircularProgress, IconButton, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import {  useState } from 'react';
 import { GET_YC_EVENT } from '../createYCEventgql';
+
+
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
   const id = router.query.eventId;
   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id}});
+  const [amount, setAmount] = useState(null);
   if (loading) return <CircularProgress />;
   console.log(data);
+  const createTicket = async () => {
 
+  }
 const {
     date,
     entertainment,
@@ -20,7 +28,9 @@ const {
     id: eventId,
     image,
     raceId,
-    special_club_hours
+    special_club_hours,
+    location,
+    specialNotes,
   } = data.yc_events[0];
   console.log(data.yc_events[0]);
   return (
@@ -32,7 +42,7 @@ const {
         display: 'flex',
         maxWidth: 600,
         margin: '0 auto',
-        marginBottom: 20
+        marginBottom: 5
       }}
     >
       <CardMedia
@@ -41,29 +51,38 @@ const {
         image={image}
         alt="Event Image"
       />
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
         <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography component="div" variant="h5">
             {eventName}
           </Typography>
-          {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">
-            Entertainment :{entertainment}
-          </Typography>}
+          {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">Entertainment :{entertainment}</Typography>}
+          {date && <Typography>when: {date}</Typography>}
+          {location && <Typography>where: {location}</Typography>}
+          {specialNotes && <Typography>{specialNotes}</Typography>}
         </CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          {/* <IconButton aria-label="previous">
-            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-          </IconButton>
-          <IconButton aria-label="play/pause">
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-          </IconButton>
-          <IconButton aria-label="next">
-            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-          </IconButton> */}
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
+          <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
+          <Typography sx={{color: 'black', fontSize: "40px", marginRight: 1}}>{ amount }</Typography>
         </Box>
       </Box>
+      <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
+        <Fab size="medium" color='success'  aria-label="add">
+          <AddIcon />
+        </Fab>
+      </Box>
     </Card>
-    {/* </Paper> */}
+    <Grid display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
+      <TextField
+        id="ticket-cost"
+        label="Enter Cost"
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        onChange={(e) => setAmount(e.target.value)}
+      />
+    </Grid>
     </>
   );
 }

@@ -5,7 +5,9 @@ mutation insertYCEvent(
     $ycId: uuid, 
     $specialClubHours: String, 
     $entertainment: String, 
-    $eventName: String, 
+    $eventName: String,
+    $location: String,
+    $specialNotes: String,
     $hours: String, 
     $date: String,
     $image: String,
@@ -15,6 +17,8 @@ mutation insertYCEvent(
     special_club_hours: $specialClubHours, 
     entertainment: $entertainment, 
     event_name: $eventName, 
+    location: $location, 
+    specialNotes: $specialNotes,
     hours: $hours, 
     date: $date,
     image: $image,
@@ -39,6 +43,21 @@ export const GET_YC_EVENT = gql`
     id
     image
     raceId
-    special_club_hours
+    special_club_hours, 
+    location,
+    specialNotes
   }
 }`;
+
+export const CREATE_EVENT_TICKET = gql`
+  mutation upsertYCEventTicket($cost: Int, $eventId: uuid!, $ycId: uuid!) {
+  insert_yc_event_tickets_for_purchase(on_conflict: {
+    constraint: yc_event_tickets_for_purchase_pkey, 
+    update_columns: cost
+  }, objects: {cost: 10, eventId: $eventId, ycId: $ycId}) {
+    returning {
+      cost
+    }
+  }
+}
+`
