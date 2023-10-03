@@ -1,26 +1,24 @@
 import NavBar from '@/components/NavBar';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {  useState } from 'react';
-import { GET_YC_EVENT } from '../createYCEventgql';
-
-
+import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '../createYCEventgql';
+import { useSelector } from 'react-redux';
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
   const id = router.query.eventId;
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id}});
+  const [createYachtClubEventTicket, { loading: ticketLoading, data: ticketData, error: ticketError }] = useMutation(UPSERT_EVENT_TICKET);
   const [amount, setAmount] = useState(null);
   if (loading) return <CircularProgress />;
-  console.log(data);
-  const createTicket = async () => {
-
-  }
-const {
+  
+  const {
     date,
     entertainment,
     event_name: eventName,
@@ -32,7 +30,16 @@ const {
     location,
     specialNotes,
   } = data.yc_events[0];
-  console.log(data.yc_events[0]);
+
+  const createYCEvent = async () => {
+    let variables = {
+      cost: amount,
+      eventId,
+      ycId,
+    }
+    await createYachtClubEventTicket({ variables });
+  }
+
   return (
     <>
     <NavBar />
@@ -56,7 +63,7 @@ const {
           <Typography component="div" variant="h5">
             {eventName}
           </Typography>
-          {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">Entertainment :{entertainment}</Typography>}
+          {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">Entertainment: {entertainment}</Typography>}
           {date && <Typography>when: {date}</Typography>}
           {location && <Typography>where: {location}</Typography>}
           {specialNotes && <Typography>{specialNotes}</Typography>}
@@ -67,12 +74,12 @@ const {
         </Box>
       </Box>
       <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-        <Fab size="medium" color='success'  aria-label="add">
+        <Fab onClick={createYCEvent} size="medium" color='success'  aria-label="add">
           <AddIcon />
         </Fab>
       </Box>
     </Card>
-    <Grid display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
+    <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
       <TextField
         id="ticket-cost"
         label="Enter Cost"

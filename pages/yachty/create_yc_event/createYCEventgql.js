@@ -49,7 +49,7 @@ export const GET_YC_EVENT = gql`
   }
 }`;
 
-export const CREATE_EVENT_TICKET = gql`
+export const UPSERT_EVENT_TICKET = gql`
   mutation upsertYCEventTicket($cost: Int, $eventId: uuid!, $ycId: uuid!) {
   insert_yc_event_tickets_for_purchase(on_conflict: {
     constraint: yc_event_tickets_for_purchase_pkey, 

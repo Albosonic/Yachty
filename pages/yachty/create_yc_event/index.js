@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { YC_EVENT } from '@/slices/actions/authActions';
 import { IMG_BUCKET, s3Client } from '@/pages/s3-client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import YcEvent from '@/components/YcEvent';
 
 const CreateYCEvent = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const CreateYCEvent = () => {
   const [createYCEvent, { loading, data, error }] = useMutation(INSERT_YC_EVENT);
   const [showSpecialHours, setShowSpecialHours] = useState(false);
   const [imageObj, setImageObj] = useState(null);
+  const [newEventId, setNewEventId] = useState(null);
   const [eventData, setEventData] = useState({
     entertainment: '',
     eventName: '',
@@ -68,13 +70,13 @@ const CreateYCEvent = () => {
 
     const resp = await createYCEvent({ variables });
     const eventId = resp.data.insert_yc_events.returning[0].id;
-
-    router.push({
-      pathname: '/yachty/create_yc_event/create_event_ticket',
-      query: {
-        eventId
-      }
-    });
+    setNewEventId(eventId);
+    // router.push({
+    //   pathname: '/yachty/create_yc_event/create_event_ticket',
+    //   query: {
+    //     eventId
+    //   }
+    // });
   }
   const stackStyles = {
     paddingBottom: 1,
@@ -84,9 +86,13 @@ const CreateYCEvent = () => {
     marginBottom: 10
   }
   const buttonText = showSpecialHours ? 'Never Mind' : 'Add Special Hours';
+  // f40b44c7-bfee-4d1a-aef4-a0fdf82717ee
   return (
     <>
     <NavBar />
+      {true ? (
+        <YcEvent eventIdProp={"f40b44c7-bfee-4d1a-aef4-a0fdf82717ee"} />
+      ) : (
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto'}} elevation={3}>
         <Stack sx={stackStyles} spacing={5} alignItems="center">
           <Typography variant='h5'>Create Event</Typography>
@@ -158,7 +164,7 @@ const CreateYCEvent = () => {
           />
           <Button color='success' onClick={handleSubmit}>Create Event</Button>
         </Stack>
-      </Paper>
+      </Paper>)}
     </>
   );
 };
