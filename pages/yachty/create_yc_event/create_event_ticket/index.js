@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
-import { Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import {  useState } from 'react';
 import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '../createYCEventgql';
@@ -16,6 +16,7 @@ const CreateEventTicket = (props) => {
   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id}});
   const [createYachtClubEventTicket, { loading: ticketLoading, data: ticketData, error: ticketError }] = useMutation(UPSERT_EVENT_TICKET);
   const [amount, setAmount] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   if (loading) return <CircularProgress />;
   
   const {
@@ -31,18 +32,26 @@ const CreateEventTicket = (props) => {
     specialNotes,
   } = data.yc_events[0];
 
-  const createYCEvent = async () => {
+  const createYCEventTicket = async () => {
     let variables = {
       cost: amount,
       eventId,
       ycId,
     }
     await createYachtClubEventTicket({ variables });
+    setShowSuccess(true);
   }
+
+  const handleClose = () => router.push({ pathname: '/yachty', query: { ycId } }); 
 
   return (
     <>
     <NavBar />
+    <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+      <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        Success!
+      </Alert>
+    </Snackbar>
     <Card
       elevation={4}
       sx={{
@@ -74,7 +83,7 @@ const CreateEventTicket = (props) => {
         </Box>
       </Box>
       <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-        <Fab onClick={createYCEvent} size="medium" color='success'  aria-label="add">
+        <Fab onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
           <AddIcon />
         </Fab>
       </Box>

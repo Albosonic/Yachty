@@ -61,10 +61,11 @@ const CreateYCEvent = () => {
     const endDay = endDate.slice(0, 10);
     const endDayHours = endDate.slice(11);
 
+    const startIsoDate = new Date(startDate).toISOString().slice(0, 10);
+
     let date = startDay === endDay? startDay : `${startDay} to ${endDay}`;
     let specialHours = specialHoursStart === '' || specialHoursEnd === ''? '' : `${specialHoursStart} to ${specialHoursEnd}`;
     let hours = startDayHours === endDayHours? startDayHours : `${startDayHours} to ${endDayHours}`;
-
     let variables = {
       ycId,
       image: imgPath,
@@ -76,6 +77,7 @@ const CreateYCEvent = () => {
       eventName,
       location,
       specialNotes,
+      startDate: startIsoDate,
     };
 
     if (newEventId) {
@@ -93,7 +95,7 @@ const CreateYCEvent = () => {
     }
   }
   const stackStyles = { paddingBottom: 1, textAlign: 'center', width: '100%', maxWidth: 700 };
-  const buttonText = showSpecialHours ? 'Never Mind' : 'Add Special Hours';
+  // const buttonText = showSpecialHours ? 'Never Mind' : 'Add Special Hours';
   const submittButtonText = newEventId ? 'Update Event' : 'Create Event';
   
   return (
