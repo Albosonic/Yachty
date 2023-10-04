@@ -33,6 +33,42 @@ mutation insertYCEvent(
   }
 }`;
 
+export const UPDATE_YC_EVENT = gql`
+  mutation updateYcEvent(
+    $date: String, 
+    $entertainment: String, 
+    $eventName: String,
+    $location: String,
+    $specialNotes: String,
+    $hours: String,
+    $image: String,
+    $id: uuid,
+  ) {
+  update_yc_events(where: {id: {_eq: $id}}, _set: {
+    date: $date, 
+    entertainment: $entertainment, 
+    event_name: $eventName, 
+    hours: $hours, 
+    image: $image, 
+    location: $location,
+    specialNotes: $specialNotes, 
+    }) {
+    returning {
+      ycId
+      special_club_hours
+      specialNotes
+      raceId
+      location
+      image
+      id
+      hours
+      event_name
+      entertainment
+      date
+    }
+  }
+}`;
+
 export const GET_YC_EVENT = gql`
   query getYachtClubEvent($id: uuid!) {
   yc_events(where: {id: {_eq: $id}}) {
@@ -59,5 +95,4 @@ export const UPSERT_EVENT_TICKET = gql`
       cost
     }
   }
-}
-`
+}`;
