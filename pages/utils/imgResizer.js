@@ -17,4 +17,23 @@ export const resizeLetterHead = (file, callBack) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const resizeYcEventPoster = (file, callBack) => {
+  try {
+    Resizer.imageFileResizer(
+      file,
+      500,
+      300,
+      "PNG",
+      100,
+      0,
+      callBack,
+      "file",
+      200,
+      200
+    );
+  } catch (err) {
+    console.log(err);
+  }
 }

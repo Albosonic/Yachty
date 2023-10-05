@@ -32,6 +32,16 @@ export default function AppDrawer({ open, toggleDrawer }) {
           <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => {
+            router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})
+          }}>
+          <ListItemIcon>
+              <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Club" />
+          </ListItemButton>
+        </ListItem>
         {userIsCommodore && <ListItem disablePadding>
         <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
           <ListItemIcon>
