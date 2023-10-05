@@ -203,9 +203,9 @@ const AllMembersTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const ycId = router.query.ycId;
   const  { error, loading,  data } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } })
-  console.log('data :', data)
+  
   if (loading || !data) return <CircularProgress />
-  // if (loading || !data) return <CircularProgress />
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -285,9 +285,12 @@ const AllMembersTable = () => {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const {name, email, duesOwed, active, vessels } = row;
-                const { length, type, vesselName } = vessels[0];
+                let {name, email, duesOwed, active, vessels } = row;
+                let vesselObj = vessels[0] ? vessels[0] : { length: 'n/a', type: 'n/a', vesselName: 'n/a' };
+                const { length, type, vesselName } = vesselObj;
+
                 console.log('row :', row)
+                console.log('rowvessels :', vessels[0])
                 const isItemSelected = isSelected(row.name);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -320,7 +323,7 @@ const AllMembersTable = () => {
                       {name}
                     </TableCell>
                     
-                    {/* <TableCell align="right">{name}</TableCell> */}
+                    <TableCell align="right">{name}</TableCell>
                     <TableCell align="right">{email}</TableCell>
                     <TableCell align="right">{active.toString()}</TableCell>
                     <TableCell align="right">{duesOwed}</TableCell>

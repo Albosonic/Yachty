@@ -1,10 +1,12 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 const YcEventPoster = ({ eventData }) => {
   const router = useRouter();
   const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
-  console.log('eventData', eventData);
+  const isCommodore = useSelector(state => state.auth.userIsCommodore);
+  console.log('isCommodore', isCommodore);
   return (
     <>
       <Paper sx={{padding: 5, maxWidth: 700, maxHeight: 900, margin: '0 auto', marginBottom: 20}} elevation={3}>
@@ -33,8 +35,11 @@ const YcEventPoster = ({ eventData }) => {
           <Stack sx={{margin: 2}} spacing={.5}>
             <Typography>Featuring special guest: {entertainment}</Typography>
             <Typography>SpecialNotes: { specialNotes }</Typography>
-            <Button onClick={() => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})}>RSVP</Button>
           </Stack>
+          <Grid container justifyContent="space-around">
+            <Button onClick={() => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})}>RSVP</Button>
+            {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>}
+          </Grid>
         </Stack>
       </Paper>
     </>

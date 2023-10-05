@@ -16,15 +16,11 @@ const YachtClubFeed = () => {
   
   if (loading) return <CircularProgress />
   const events = data?.yc_events;
-  console.log('events yo: ', events)
   
   return (
     <>
       <NavBar />
       <Stack justifyContent="center" sx={{margin: '0 auto'}}>
-        <Typography>
-          Yacht Club Feed
-        </Typography>
         <Box
            sx={{
             mb: 2,
@@ -35,10 +31,7 @@ const YachtClubFeed = () => {
             overflowY: "scroll",
           }}
         >
-          {events.map((event, index) => {
-            console.log('event', event);
-            return <YcEventPoster eventData={event} key={`${event.event_name}${index}`} />
-          })}
+          {events.map((event, index) => <YcEventPoster eventData={event} key={`${event.event_name}${index}`} />)}
         </Box>
       </Stack>
     </>

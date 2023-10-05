@@ -28,12 +28,13 @@ const EVENT_TICKET_FOR_PURCHASE = gql`
 
 
 const INSERT_PURCHASED_TICKETS = gql`
-  mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!) {
+  mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!, $eventId: uuid!) {
   insert_yc_event_purchased_tickets(
-  objects: [{memberId: $memberId, ticketForPurchaseId: $ticketForPurchaseId}]) {
+  objects: [{memberId: $memberId, ticketForPurchaseId: $ticketForPurchaseId, eventId: $eventId}]) {
     returning {
       memberId
-      ticketForPurchaseId
+      ticketForPurchaseId,
+      eventId
     }
   }
 }`;
@@ -67,7 +68,7 @@ const EventTicketForPurchase = (props) => {
     // TODO: make this a batch update
     let noTickets = ticketCount;
     while(noTickets > 0) {
-      await insertTickets({variables: {memberId: memberId, ticketForPurchaseId: id}});
+      await insertTickets({variables: { memberId: memberId, ticketForPurchaseId: id, eventId: eventId }});
       noTickets--;
     }
     setTicketCount(0);
