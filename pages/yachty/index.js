@@ -15,9 +15,6 @@ const Yachty = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
-
-  const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const userIsCommodore = useSelector(state => state.auth.userIsCommodore);
   
   const { loading, error, data, refetch } = useQuery(
     GET_YC_MEMBER,
@@ -29,7 +26,10 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
-  
+  console.log('memberData ===', memberData)
+  const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
+  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
+
   useEffect(() => {
     if (memberData) {
       dispatch(addMember(memberData));

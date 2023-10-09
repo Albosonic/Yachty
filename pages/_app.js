@@ -10,8 +10,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import '@/styles/globals.css';
 
 let persistor = persistStore(store);
-
 const App = ({ Component, pageProps }) => {
+  
   return (
     <ApolloProvider client={client} >
       <Provider store={store}>

@@ -1,4 +1,4 @@
-import { MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO } from "./actions/authActions"
+import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO } from "./actions/authActions"
 
 const initialState = {
   email: '',
@@ -25,9 +25,12 @@ const initialState = {
   }
 }
 
-export default function authReducer(state = {}, action) {
+export default function authReducer(state = initialState, action) {
   const {payload, type} = action;
   switch (type) {
+    case CLEAR_STATE: {
+      return {...initialState}
+    }
     case MEMBER_OBJECT: {
       payload.userIsCommodore = payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id;
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
