@@ -8,6 +8,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
+import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import AddHomeIcon from '@mui/icons-material/AddHome';
+import ModeIcon from '@mui/icons-material/Mode';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
@@ -29,7 +36,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
           <ListItemIcon>
               <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Home" />
+          <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -37,7 +44,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
             router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})
           }}>
           <ListItemIcon>
-              <HomeIcon />
+              <BroadcastOnPersonalIcon />
           </ListItemIcon>
           <ListItemText primary="My Club" />
           </ListItemButton>
@@ -45,7 +52,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         {userIsCommodore && <ListItem disablePadding>
         <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
           <ListItemIcon>
-            <InboxIcon />
+            <ModeIcon />
           </ListItemIcon>
           <ListItemText primary="Edit Club Profile" />
           </ListItemButton >
@@ -53,7 +60,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         {userIsCommodore && <ListItem disablePadding>
         <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_yc_event', query: { ycId: ycId }})}>
           <ListItemIcon>
-            <InboxIcon />
+            <AddHomeIcon />
           </ListItemIcon>
           <ListItemText primary="Create Yacht Club Event" />
           </ListItemButton >
@@ -61,7 +68,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/today_at_the_club', query: { ycId: ycId }})}>
             <ListItemIcon>
-              <InboxIcon />
+              <InsertInvitationIcon />
             </ListItemIcon>
             <ListItemText primary="Today at the Club" />
           </ListItemButton>
@@ -69,7 +76,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         {userIsCommodore && <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/reciprocal_requests', query: { ycId: ycId }})}>
             <ListItemIcon>
-              <InboxIcon />
+              <DirectionsBoatFilledIcon />
             </ListItemIcon>
             <ListItemText primary="Reciprocal Requests" />
           </ListItemButton>
@@ -77,7 +84,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/add_member', query: { ycId: ycId }})}>
             <ListItemIcon>
-              <InboxIcon />
+              <PersonAddIcon />
             </ListItemIcon>
             <ListItemText primary="New Member Applicants" />
           </ListItemButton>
@@ -85,7 +92,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/view_all_members', query: { ycId: ycId }})}>
             <ListItemIcon>
-              <InboxIcon />
+              <PersonSearchIcon />
             </ListItemIcon>
             <ListItemText primary="View All Members" />
           </ListItemButton>

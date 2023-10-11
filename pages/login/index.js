@@ -10,8 +10,8 @@ const Login = () => {
   const router = useRouter()
   const member = useSelector(state => state?.auth?.member);
   
-  const {user} = useUser();
-  const dispatch = useDispatch();
+  // const {user} = useUser();
+  // const dispatch = useDispatch();
   // if (!user) dispatch(clearState())
 
   if (member) {
