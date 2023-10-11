@@ -50,7 +50,7 @@ const EventTicketForPurchase = (props) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
   if (loading || !data) return <CircularProgress />;
-  
+  console.log('data: ', data);
   const {id: memberId, yachtClubByYachtClub: {id: ycId}} = member;
 
   const {
@@ -61,8 +61,11 @@ const EventTicketForPurchase = (props) => {
     image,
     location,
     specialNotes,
-    yc_event_tickets_for_purchase: {cost: amount, id},
+    yc_event_tickets_for_purchase,
   } = data.yc_events[0];
+
+  const amount = yc_event_tickets_for_purchase?.cost || 0;
+  const id = yc_event_tickets_for_purchase?.id
   
   const reserveTicket = async () => {
     // TODO: make this a batch update
@@ -72,7 +75,7 @@ const EventTicketForPurchase = (props) => {
       noTickets--;
     }
     setTicketCount(0);
-    setShowSuccess(true)
+    setShowSuccess(true);
   }
   const handleClose = () => router.push({ pathname: '/yachty/yc_feed', query: { ycId } });
 

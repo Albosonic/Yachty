@@ -25,7 +25,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
     }
   });
   
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const {files} = e.target;
     const file = files[0];
     let imageObject = {
@@ -35,10 +35,9 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
     }
     switch(type) {
       case YC_EVENT: {
-        resizeYcEventPoster(file, (uri) => {
-          imageObject.fileDatum = uri;
-          setImageObjToParent(imageObject)
-        });
+        const resizedFile = await resizeYcEventPoster(file);        
+        imageObject.fileDatum = resizedFile;
+        setImageObjToParent(imageObject);
       }
       case UPDATE_LOGO: {
         resizeLetterHead(file, (uri) => {

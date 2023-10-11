@@ -9,7 +9,7 @@ const YcEventPoster = ({ eventData }) => {
   console.log('isCommodore', isCommodore);
   return (
     <>
-      <Paper sx={{padding: 5, maxWidth: 700, maxHeight: 900, margin: '0 auto', marginBottom: 20}} elevation={3}>
+      <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 20}} elevation={3}>
         <Stack display="flex" alignItems="center" sx={{margin: '0 auto', border: '1px solid black'}}>
           <Typography variant="h4" sx={{marginTop: 2}}>{ date }</Typography>
           <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography>

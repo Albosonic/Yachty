@@ -19,21 +19,20 @@ export const resizeLetterHead = (file, callBack) => {
   }
 };
 
-export const resizeYcEventPoster = (file, callBack) => {
-  try {
-    Resizer.imageFileResizer(
-      file,
-      500,
-      300,
-      "PNG",
-      100,
-      0,
-      callBack,
-      "file",
-      200,
-      200
-    );
-  } catch (err) {
-    console.log(err);
-  }
-}
+export const resizeYcEventPoster = (file) =>
+  new Promise((resolve) => {
+  Resizer.imageFileResizer(
+    file,
+    400,
+    500,
+    "JPEG",
+    100,
+    0,
+    (uri) => {
+      resolve(uri);
+    },
+    "base64",
+    200,
+    200
+  );
+});

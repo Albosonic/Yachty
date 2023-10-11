@@ -43,7 +43,7 @@ const Yachty = () => {
   }
   if (!data || error) router.push('/login');
 
-  const welcomText = userIsCommodore ? `Welcome Comodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
+  const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>
       <NavBar refetch={refetch} />
