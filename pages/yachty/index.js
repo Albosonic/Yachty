@@ -15,9 +15,6 @@ const Yachty = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
-
-  const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const userIsCommodore = useSelector(state => state.auth.userIsCommodore);
   
   const { loading, error, data, refetch } = useQuery(
     GET_YC_MEMBER,
@@ -29,7 +26,9 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
-  
+  const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
+  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
+
   useEffect(() => {
     if (memberData) {
       dispatch(addMember(memberData));
@@ -44,7 +43,7 @@ const Yachty = () => {
   }
   if (!data || error) router.push('/login');
 
-  const welcomText = userIsCommodore ? `Welcome Comodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
+  const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>
       <NavBar refetch={refetch} />
