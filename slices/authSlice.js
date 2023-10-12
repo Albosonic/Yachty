@@ -39,7 +39,7 @@ export default function authReducer(state = initialState, action) {
     }
     case NON_MEMBER_OBJECT: {
       console.log('payload :', payload)
-      return {...state, nonMemberObject: {...payload}}
+      return {...state, ...payload}
     }
     case UPDATE_LOGO: {
       console.log('payload :', payload);

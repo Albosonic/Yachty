@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,16 +13,27 @@ import Menu from '@mui/material/Menu';
 import { Avatar, CircularProgress } from '@mui/material';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import AppDrawer from './Drawer';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
   const { user, isLoading } = useUser();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openDrawer, setOpenDrawer] = React.useState(false);
-  if (isLoading) return <CircularProgress />
-  const loggedIn = user?.email_verified;
-  
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const auth = useSelector(state => state?.auth);
+  console.log('auth ===', auth);
+  useEffect(() => {
+    console.log('user ===', user);
+    setUserLoggedIn(user?.email_verified);
+  }, [user]);
+
+  if (isLoading) return <CircularProgress />;
+  console.log('user2 ===', user);
   const handleChange = (event) => {
     if (user) {
+      dispatch(clearState())
       window.location = "/api/auth/logout";
     } else {
       window.location = "/api/auth/login";
@@ -61,7 +72,7 @@ export default function NavBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
           </Typography>
-          {loggedIn && (
+          {userLoggedIn && (
             <div>
               <IconButton
                 size="large"
@@ -99,12 +110,12 @@ export default function NavBar() {
         <FormControlLabel
           control={
             <Switch
-              checked={loggedIn}
+              checked={userLoggedIn}
               onChange={handleChange}
               aria-label="login switch"
             />
           }
-          label={loggedIn ? 'Logout' : 'Login'}
+          label={userLoggedIn ? 'Logout' : 'Login'}
         />
       </FormGroup>
     </Box>

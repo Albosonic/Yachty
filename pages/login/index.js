@@ -9,10 +9,6 @@ import { clearState } from '@/slices/actions/authActions';
 const Login = () => {
   const router = useRouter()
   const member = useSelector(state => state?.auth?.member);
-  
-  // const {user} = useUser();
-  // const dispatch = useDispatch();
-  // if (!user) dispatch(clearState())
 
   if (member) {
     const {yachtClubByYachtClub: { id: ycId } } = member;

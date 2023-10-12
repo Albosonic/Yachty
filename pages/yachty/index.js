@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 const Yachty = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
+  console.log('user ===', user);
   const dispatch = useDispatch();
   
   const { loading, error, data, refetch } = useQuery(
