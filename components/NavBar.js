@@ -17,22 +17,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
-  const { user, isLoading } = useUser();
+  // const { user, isLoading } = useUser();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const auth = useSelector(state => state?.auth);
-  console.log('auth ===', auth);
+  
   useEffect(() => {
-    console.log('user ===', user);
-    setUserLoggedIn(user?.email_verified);
-  }, [user]);
+    // console.log('user ===', user);
+    setUserLoggedIn(auth?.email_verified);
+  }, [auth]);
 
-  if (isLoading) return <CircularProgress />;
-  console.log('user2 ===', user);
+  // if (isLoading) return <CircularProgress />;
+  // console.log('user2 ===', user);
   const handleChange = (event) => {
-    if (user) {
+    if (userLoggedIn) {
       dispatch(clearState())
       window.location = "/api/auth/logout";
     } else {
@@ -82,7 +82,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={user?.picture} />
+                <Avatar alt="Remy Sharp" src={auth?.picture} />
               </IconButton>
               <Menu
                 id="menu-appbar"
