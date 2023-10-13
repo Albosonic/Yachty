@@ -1,44 +1,60 @@
 import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO } from "./actions/authActions"
 
 const initialState = {
-  email: '',
-  firstName: '',
-  id: '',
-  lastName: '',
-  name: '',
-  userIsCommodore: false,
-  ycId: '',
-  logo: '',
-  nonMemberObject: {
-
-  },
-  yachtClubByYachtClub: {
-    id: '',
-    logo: '',
-    name: '',
-    region: '',
-    commodore: {
+  member: {
+    yachtClubByYachtClub: {
       id: '',
-      member_id: '',
       name: '',
-    }
+      region: '',
+      logo: '',
+      commodore: {
+        member_id: '',
+        name: '',
+        id: '',
+      },
+    },
+    email: '',
+    firstName: '',
+    lastName: '',
+    id: '',
+    name: '',
+    profilePic: '',
+  },
+  user: {
+    given_name: '',
+    family_name: '',
+    nickname: '',
+    name: '',
+    picture: '',
+    locale: '',
+    updated_at: '',
+    email: '',
+    email_verified: false,
+    sub: '',
+    sid: ''
   }
-}
+};
 
 export default function authReducer(state = initialState, action) {
   const {payload, type} = action;
   switch (type) {
     case CLEAR_STATE: {
-      return {...initialState}
+      return initialState;
     }
     case MEMBER_OBJECT: {
-      payload.userIsCommodore = payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id;
+      payload.userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
-      // payload.logo = payload?.member?.yachtClubByYachtClub?.logo;
-      return {...state, ...payload};
+      console.log('payload ==== :', payload);
+      return {
+        ...state, 
+        user: {...payload.user},
+        member: {
+          ...payload.member,
+          profilePic: payload.member?.profilePic || payload.user?.picture,
+        }, 
+      };
     }
     case NON_MEMBER_OBJECT: {
-      console.log('payload :', payload)
       return {...state, ...payload}
     }
     case UPDATE_LOGO: {

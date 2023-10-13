@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
-  // const { user, isLoading } = useUser();
+  const { user, isLoading } = useUser();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -25,15 +25,13 @@ export default function NavBar() {
   const auth = useSelector(state => state?.auth);
   
   useEffect(() => {
-    // console.log('user ===', user);
-    setUserLoggedIn(auth?.email_verified);
+    setUserLoggedIn(auth?.email_verified || user?.email_verified);
   }, [auth]);
 
-  // if (isLoading) return <CircularProgress />;
-  // console.log('user2 ===', user);
-  const handleChange = (event) => {
+  const handleChange = () => {
     if (userLoggedIn) {
-      dispatch(clearState())
+      window.localStorage.clear();
+      dispatch(clearState());
       window.location = "/api/auth/logout";
     } else {
       window.location = "/api/auth/login";
@@ -82,7 +80,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={auth?.picture} />
+                <Avatar alt="Remy Sharp" src={auth?.picture || user?.picture} />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -110,7 +108,7 @@ export default function NavBar() {
         <FormControlLabel
           control={
             <Switch
-              checked={userLoggedIn}
+              checked={userLoggedIn || false}
               onChange={handleChange}
               aria-label="login switch"
             />

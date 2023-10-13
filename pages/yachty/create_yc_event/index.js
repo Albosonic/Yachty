@@ -42,7 +42,7 @@ const CreateYCEvent = () => {
   }
 
   const {entertainment, eventName, startDate, endDate, specialHoursStart, specialHoursEnd, specialNotes, location, newEventId, review } = eventData;
-  console.log('eventData', eventData);
+
   const handleSubmit = async (e) => {
     const {fileDatum, src, imgKey} = imageObj;
     const params = {

@@ -9,12 +9,14 @@ import { clearState } from '@/slices/actions/authActions';
 const Login = () => {
   const router = useRouter()
   const member = useSelector(state => state?.auth?.member);
-
-  if (member) {
+  const user = useSelector(state => state?.auth?.user);
+  // const dispatch = useDispatch();
+  // dispatch(clearState());
+  console.log('member?.id ===', member?.id)
+  if (member?.id !== undefined) {
     const {yachtClubByYachtClub: { id: ycId } } = member;
     router.push('/yachty', {query: { ycId }})
   }
-  // member dat is stuck in redux even though the user is not logged in
   
   return (
     <main>

@@ -8,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import EditIcon from '@mui/icons-material/Edit';
 import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
 import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
@@ -20,8 +21,9 @@ import { useRouter } from 'next/router';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
-  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
   const ycId = useSelector(state => state?.auth?.ycId);
+  const memberId = useSelector(state => state?.auth?.member?.id);
+  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
   let anchor = 'left';
   const list = (anchor) => (
     <Box
@@ -29,6 +31,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
       role="presentation"
     >
       <List>
+      <ListItem disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/edit_my_profile', query: { memberId }})}>
+          <ListItemIcon>
+              <EditIcon />
+          </ListItemIcon>
+          <ListItemText primary="Edit My Profile" />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={() => {
             router.replace({pathname:'/yachty', query: { ycId: ycId }})
@@ -97,8 +107,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="View All Members" />
           </ListItemButton>
         </ListItem>
-        
-
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => console.log('build this route next')}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="View All Inbox" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );

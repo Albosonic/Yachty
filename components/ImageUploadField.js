@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { resizeLetterHead, resizeYcEventPoster } from "@/pages/utils/imgResizer";
 import { useDispatch } from "react-redux";
 import { IMG_BUCKET } from "@/pages/s3-client";
-import { UPDATE_LOGO, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
+import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 
 const ImageUploadField = ({ type, setImageObjToParent, img }) => {
   const router = useRouter();
@@ -34,8 +34,18 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
       src: URL.createObjectURL(file),
     }
     switch(type) {
+      case UPDATE_PROFILE_PICTURE: {
+        const resizedFile = await resizeYcEventPoster(file);
+        imageObject.fileDatum = resizedFile;
+        setImageObjToParent(imageObject);
+      }
+      case UPDATE_VESSEL_IMAGE: {
+        const resizedFile = await resizeYcEventPoster(file);
+        imageObject.fileDatum = resizedFile;
+        setImageObjToParent(imageObject);
+      }
       case YC_EVENT: {
-        const resizedFile = await resizeYcEventPoster(file);        
+        const resizedFile = await resizeYcEventPoster(file);
         imageObject.fileDatum = resizedFile;
         setImageObjToParent(imageObject);
       }
