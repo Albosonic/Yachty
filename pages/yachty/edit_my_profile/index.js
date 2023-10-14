@@ -11,9 +11,22 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { IMG_BUCKET, s3Client } from "@/pages/s3-client";
 
+const vessel = {
+  vesselName: '',
+  draft: undefined,
+  beam: undefined,
+  length: undefined,
+  hullMaterial: '',
+  type: '',
+  id: undefined,
+  insuranceCompany: '',
+  insuranceNum: '',
+  insuranceExpiry: ''
+} 
+
 const cleanForm = {
   bio: '',
-  
+  ...vessel
 }
 
 const EditMemberProfile = ({props}) => {
@@ -26,9 +39,9 @@ const EditMemberProfile = ({props}) => {
   const [addingVessel, setAddingVessel] = useState(false);
   const [profileData, setProfileData] = useState({...cleanForm})
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
+  const [vesselData, setVesselData] = useState({...vessel});
 
   const uploadProfilePic = async () => {
-    console.log('here ===', profilePic)
     const {fileDatum, src, imgKey} = profilePic;
     const params = {
       Bucket: 'yachty-letter-heads',
@@ -41,10 +54,6 @@ const EditMemberProfile = ({props}) => {
       const imgPath = `${IMG_BUCKET}${imgKey}`;
       const resp = await updateProfilePic({variables: { profilePic: imgPath, memberId: memberId}});
       const pic = resp.data.update_yc_members.returning[0].profilePic;
-      console.log('wtft ===', pic)
-      console.log('resp.data.update_yc_members.returning[0]', resp.data.update_yc_members.returning[0])
-      console.log('resp.data.update_yc_members.returning[0]', resp.data.update_yc_members.returning[0])
-      console.log('resp.data.update_yc_members.returning', resp.data.update_yc_members.returning)
       dispatch(updateUserProfilePicture(pic));
     } else {
       console.error('error loading profile picture');
@@ -97,7 +106,7 @@ const EditMemberProfile = ({props}) => {
             {addingVessel && (
               <>
                 <ImageUploadField type={UPDATE_VESSEL_IMAGE} setImageObjToParent={setVesselImg} img={vesselImg} />
-                <InsertVesselForm />
+                <InsertVesselForm setVesselToParent={setVesselData} />
               </>
               )
             }

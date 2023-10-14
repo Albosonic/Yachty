@@ -21,7 +21,8 @@ import { useRouter } from 'next/router';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
-  const ycId = useSelector(state => state?.auth?.ycId);
+  const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
+  console.log('ycId', ycId);
   const memberId = useSelector(state => state?.auth?.member?.id);
   const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
   let anchor = 'left';

@@ -17,7 +17,7 @@ const cleanForm = {
   } 
 }
 
-const InsertVesselForm = () => {
+const InsertVesselForm = ({setVesselToParent}) => {
   const [formData, setFormData] = useState({...cleanForm})
   return (
     <>
@@ -29,7 +29,7 @@ const InsertVesselForm = () => {
           type="name"
           variant="standard"
           value={formData.vessel.vesselName}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, vesselName: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, vesselName: event.target.value }})}
           sx={{ m: 0, width: '40ch' }}
           multiline
         />
@@ -39,7 +39,7 @@ const InsertVesselForm = () => {
           type="number"
           variant="standard"
           value={formData.vessel.draft}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, draft: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, draft: event.target.value }})}
           sx={{ m: 1, width: '40ch' }}
           multiline
         />
@@ -49,7 +49,7 @@ const InsertVesselForm = () => {
           type="number"
           variant="standard"
           value={formData.vessel.beam}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, beam: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, beam: event.target.value }})}
           sx={{ m: 1, width: '40ch' }}
           multiline
         />
@@ -59,7 +59,7 @@ const InsertVesselForm = () => {
           type="number"
           variant="standard"
           value={formData.vessel?.length}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, length: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, length: event.target.value }})}
           sx={{ width: '40ch' }}
           multiline
         />
@@ -69,7 +69,7 @@ const InsertVesselForm = () => {
           row
           aria-labelledby="radio-buttons-hull-material-label"
           name="row-radio-buttons-hull-material-label"
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, hullMaterial: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, hullMaterial: event.target.value }})}
         >
           <FormControlLabel value="fiber-glass" control={<Radio />} label="Fiber Glass" />
           <FormControlLabel value="metal" control={<Radio />} label="Metal" />
@@ -80,7 +80,7 @@ const InsertVesselForm = () => {
           row
           aria-labelledby="radio-buttons-vessel-type"
           name="row-radio-buttons-vessel-type"
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, type: event.target.value }})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, type: event.target.value }})}
         >
           <FormControlLabel value="Sail" control={<Radio />} label="Sail" />
           <FormControlLabel value="Power" control={<Radio />} label="Power" />
@@ -91,7 +91,7 @@ const InsertVesselForm = () => {
           type="name"
           variant="standard"
           value={formData.vessel?.insuranceCompany}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, insuranceCompany: event.target.value}})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, insuranceCompany: event.target.value}})}
           sx={{ m: 0, width: '40ch' }}
           multiline
         />
@@ -101,12 +101,12 @@ const InsertVesselForm = () => {
           type="text"
           variant="standard"
           value={formData.vessel?.insuranceNum}
-          onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, insuranceNum: event.target.value}})}
+          onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, insuranceNum: event.target.value}})}
           sx={{ m: 1, width: '40ch' }}
           multiline
         />
         <FormLabel id="datePicker-expiry">Expires</FormLabel>
-        <DatePicker onChange={(event) => setFormData({...formData, vessel: {...formData.vessel, insuranceExpiry: event.target.value}})} />
+        <DatePicker onChange={(event) => setVesselToParent({...formData, vessel: {...formData.vessel, insuranceExpiry: event.target.value}})} />
       </Stack>      
     </>
   );
