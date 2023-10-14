@@ -18,6 +18,7 @@ export const GET_YC_MEMBER = gql`
     lastName
     id
     name
+    profilePic
   }
 }
 `;

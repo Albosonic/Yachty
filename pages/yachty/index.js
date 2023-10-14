@@ -25,11 +25,11 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
+  console.log('memberData', memberData)
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
 
   useEffect(() => {
-    console.log('user :', user)
     let userData = {
       member: memberData,
       user: user,

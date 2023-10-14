@@ -1,4 +1,4 @@
-import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO } from "./actions/authActions"
+import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO, UPDATE_PROFILE_PICTURE } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -44,7 +44,6 @@ export default function authReducer(state = initialState, action) {
     case MEMBER_OBJECT: {
       payload.userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
-      console.log('payload ==== :', payload);
       return {
         ...state, 
         user: {...payload.user},
@@ -58,7 +57,6 @@ export default function authReducer(state = initialState, action) {
       return {...state, ...payload}
     }
     case UPDATE_LOGO: {
-      console.log('payload :', payload);
       return {
         ...state,
         member: {
@@ -67,6 +65,17 @@ export default function authReducer(state = initialState, action) {
             ...state.member.yachtClubByYachtClub,
             logo: payload
           }
+        }
+      }
+    }
+    case UPDATE_PROFILE_PICTURE: {
+      console.log('payload here :', payload.pic);
+      console.log('payload :', payload);
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          profilePic: payload,
         }
       }
     }

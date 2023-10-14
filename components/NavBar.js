@@ -23,6 +23,7 @@ export default function NavBar() {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const auth = useSelector(state => state?.auth);
+  const profilePicture = useSelector(state => state.auth.member?.profilePic);
   
   useEffect(() => {
     setUserLoggedIn(auth?.email_verified || user?.email_verified);
@@ -80,7 +81,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={auth?.picture || user?.picture} />
+                <Avatar alt="Remy Sharp" src={profilePicture} />
               </IconButton>
               <Menu
                 id="menu-appbar"

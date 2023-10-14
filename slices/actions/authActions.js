@@ -36,3 +36,10 @@ export const updateLogo = (logo) => {
     payload: logo
   }
 }
+
+export const updateUserProfilePicture = (pic) => {
+  return {
+    type: UPDATE_PROFILE_PICTURE,
+    payload: pic,
+  }
+}
