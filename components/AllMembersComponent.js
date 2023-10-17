@@ -21,7 +21,6 @@ const columns = [
   { id: 'duesOwed', label: 'Dues Owed', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
-  // { id: 'density', label: 'Density', minWidth: 170, align: 'right', format: (value) => value.toFixed(2) },
 ];
 
 const cleanDialog = {
@@ -69,7 +68,28 @@ const AllMembersTable = ({props}) => {
   const directMessage = async (recipientId) => {
     const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
     let roomId = resp.data.insert_room.returning[0].id;
-    const userRoomsResp = await addUserRooms({variables: {objects: [{memberId: memberId, roomId: roomId}, {memberId: recipientId, roomId: roomId}]}});
+    const userRoomsResp = await addUserRooms({
+      variables: {
+        objects: [
+          {
+            memberId: memberId, 
+            roomId: roomId, 
+            participantId:`${memberId}${roomId}`,
+            recipientId: recipientId
+          }, 
+          {
+            memberId: recipientId, 
+            roomId: roomId, 
+            participantId: `${recipientId}${roomId}`,
+            recipientId: memberId,
+          }
+        ]}
+    });
+    console.log('userRoomsResp :', userRoomsResp.data.insert_user_rooms)
+    router.push({
+      pathname: '/yachty/direct_messages',
+      query: {rid: userRoomsResp.data.insert_user_rooms.returning[0].roomId}, 
+    })
   }
 
   // TODO: make this part of the db.
@@ -134,9 +154,9 @@ const AllMembersTable = ({props}) => {
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>
             </DialogActions>
-            <DialogActions>
+            {targetMemberId !== memberId && <DialogActions>
               <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
-            </DialogActions>
+            </DialogActions>}
             <DialogActions>
               <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>
             </DialogActions>
