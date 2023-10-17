@@ -19,6 +19,7 @@ const initialState = {
     id: '',
     name: '',
     profilePic: '',
+    vessels: []
   },
   user: {
     given_name: '',
@@ -42,11 +43,11 @@ export default function authReducer(state = initialState, action) {
       return initialState;
     }
     case MEMBER_OBJECT: {
-      payload.userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
+      let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
       return {
         ...state, 
-        user: {...payload.user},
+        user: {...payload.user, userIsCommodore: userIsCommodore },
         member: {
           ...payload.member,
           profilePic: payload.member?.profilePic || payload.user?.picture,
@@ -69,8 +70,6 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case UPDATE_PROFILE_PICTURE: {
-      console.log('payload here :', payload.pic);
-      console.log('payload :', payload);
       return {
         ...state,
         member: {

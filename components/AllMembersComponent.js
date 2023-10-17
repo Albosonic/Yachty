@@ -1,6 +1,6 @@
-import { GET_ALL_YC_MEMBERS } from "@/pages/yachty/view_all_members/allMembersgql";
+import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/pages/yachty/view_all_members/allMembersgql";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -12,6 +12,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSelector } from "react-redux";
+import { ROOM_TYPES } from "@/slices/actions/authActions";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -35,19 +37,20 @@ const UPDATE_MEMBER_DUES = gql`
   update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
     affected_rows
   }
-}
-`
+}`;
 
 const AllMembersTable = ({props}) => {
-  const {user} = useUser();
+  const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
+  const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
   const ycId = router.query.ycId;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
-  const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES)
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
-  // const [rows, setRows] = useState([])
+  const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
+  const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
+  const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
+  const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleClose = async () => {
@@ -61,17 +64,25 @@ const AllMembersTable = ({props}) => {
     await payDues({ variables: { newBalance: 0, email: memberEmail }});
     await refetch({ycId: ycId});
     handleClose();
+  };
+
+  const directMessage = async (recipientId) => {
+    const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
+    let roomId = resp.data.insert_room.returning[0].id;
+    const userRoomsResp = await addUserRooms({variables: {objects: [{memberId: memberId, roomId: roomId}, {memberId: recipientId, roomId: roomId}]}});
   }
 
   // TODO: make this part of the db.
   const BENICIA_MEMBER_DUES = 315;
   if (loading || !data) return <CircularProgress />
-  console.log('data', data)
+  
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
   
-  const { open, name: memberName, duesOwed: memberDuesOwed, active: memberActive, email: memberEmail } = openDialog;
+  const { open, name: memberName, duesOwed: memberDuesOwed, active: memberActive, email: memberEmail, bio: memberBio, profilePic: memberPic, vessels, id: targetMemberId } = openDialog;
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
+  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
+  
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Dialog
@@ -81,22 +92,50 @@ const AllMembersTable = ({props}) => {
         onClose={() => setOpenDialog({...cleanDialog})}
       >
         <DialogContent>
-          <Grid container justifyContent="space-between" >
+          <Grid container justifyContent="space-between">
             <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
-            <Avatar alt="Remy Sharp" src={user?.picture} />
+            <Avatar alt="Remy Sharp" src={memberPic} />
           </Grid>
-          <DialogContentText>
+          {userIsCommodore && <DialogContentText>
             {memberDuesText}
-          </DialogContentText>
+          </DialogContentText>}
           <DialogContentText>
             {memberEmail}
           </DialogContentText>
           <DialogContentText>
-            Bio: 
+            Member Bio: {memberBio}
           </DialogContentText>
+          <Grid container>
+            <Stack alignItems="center">
+              <Typography>
+                Vessel: {memberVessel?.vesselName}
+              </Typography>
+              <Box
+                component="img"
+                sx={{
+                  height: 200,
+                  width: 200,
+                  marginBottom: 2,
+                }}
+                alt="The house from the offer."
+                src={memberVessel?.img} 
+              />
+            </Stack>
+            <Stack sx={{marginTop: 5, marginLeft: 2}}>
+              <Typography>
+                hullMaterial: {memberVessel?.type}
+              </Typography>
+              <Typography>
+                length: {memberVessel?.lenght}
+              </Typography>
+            </Stack>
+          </Grid>
           <Grid container justifyContent="space-between" >
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>
+            </DialogActions>
+            <DialogActions>
+              <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
             </DialogActions>
             <DialogActions>
               <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>

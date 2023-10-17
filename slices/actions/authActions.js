@@ -6,6 +6,10 @@ export const YC_EVENT = 'YC_EVENT';
 export const CLEAR_STATE = 'CLEAR_STATE';
 export const UPDATE_VESSEL_IMAGE = 'UPDATE_VESSEL_IMAGE';
 export const UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE';
+export const ROOM_TYPES = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
+}
 
 export const clearState = () => {
  return {
