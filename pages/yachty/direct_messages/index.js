@@ -1,3 +1,5 @@
+// "use client"
+
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { Button, CircularProgress, Grid, Stack, TextField, Typography } from "@mui/material";
 import { DIRECT_MESSAGE_SUBSCRIPTION, GET_ALL_USER_ROOMS, INSERT_MESSAGE } from "./dmgql";
@@ -20,6 +22,7 @@ const directMessageFeed = ({props}) => {
   if (loading) return <CircularProgress />;
   
   console.log('messageData ==', messageData)
+  console.log('messageData ==', messageLoading)
   const sendMessage = async () => {
     const msgResp = await insertMessage({
     variables: {
