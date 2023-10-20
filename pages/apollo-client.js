@@ -8,7 +8,6 @@ const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_HASURA_LINK,
 });
 
-const wsLink = new GraphQLWsLink(createClient({url: process.env.NEXT_PUBLIC_HASURA_WSS_LINK}));
 
 const hasuralink = setContext((_, { headers }) => {
   return {
@@ -20,13 +19,14 @@ const hasuralink = setContext((_, { headers }) => {
   }
 });
 
-const splitLink = ApolloLink.split(({ query }) => {
-    const definition = getMainDefinition(query);  
-    return (definition.kind === 'OperationDefinition' && definition.operation === 'subscription');
-  },
-  hasuralink.concat(wsLink),
-  hasuralink.concat(httpLink),
-);
+// const wsLink = new GraphQLWsLink(createClient({url: process.env.NEXT_PUBLIC_HASURA_WSS_LINK}));
+// const splitLink = ApolloLink.split(({ query }) => {
+//     const definition = getMainDefinition(query);  
+//     return (definition.kind === 'OperationDefinition' && definition.operation === 'subscription');
+//   },
+//   hasuralink.concat(wsLink),
+//   hasuralink.concat(httpLink),
+// );
 
 
 
@@ -35,7 +35,7 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
   // Provide required constructor fields
   cache: cache,
-  link: splitLink,
+  link: hasuralink.concat(httpLink),
   name: 'yachty-apollo-client',
   queryDeduplication: true,
 });

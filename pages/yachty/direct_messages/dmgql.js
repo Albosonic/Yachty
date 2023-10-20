@@ -23,13 +23,30 @@ export const INSERT_MESSAGE = gql`
   }
 }`;
 
-export const DIRECT_MESSAGE_SUBSCRIPTION = gql`
-  subscription MySubscription($roomId: uuid!) {
+// export const DIRECT_MESSAGE_SUBSCRIPTION = gql`
+//   subscription MySubscription($roomId: uuid!) {
+//   messages(where: {roomId: {_eq: $roomId}}, order_by: {created_at: asc}) {
+//     authorId
+//     created_at
+//     id
+//     message
+//     roomId
+//   }
+// }`;
+
+export const POLL_ALL_MESSAGES = gql`
+  query pollAllMessages($roomId: uuid!) {
   messages(where: {roomId: {_eq: $roomId}}, order_by: {created_at: asc}) {
     authorId
     created_at
     id
     message
     roomId
+    yc_member {
+      profilePic
+      firstName
+      id
+    }
   }
 }`;
+
