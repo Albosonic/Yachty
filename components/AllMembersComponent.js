@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useSelector } from "react-redux";
 import { ROOM_TYPES } from "@/slices/actions/authActions";
+import { GET_ALL_USER_ROOMS } from "@/pages/yachty/direct_messages/dmgql";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -47,6 +48,7 @@ const AllMembersTable = ({props}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
   const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {variables: {memberId}});
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
@@ -66,34 +68,41 @@ const AllMembersTable = ({props}) => {
   };
 
   const directMessage = async (recipientId) => {
-    const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
-    let roomId = resp.data.insert_room.returning[0].id;
-    const userRoomsResp = await addUserRooms({
-      variables: {
-        objects: [
-          {
-            memberId: memberId, 
-            roomId: roomId, 
-            participantId:`${memberId}${roomId}`,
-            recipientId: recipientId
-          }, 
-          {
-            memberId: recipientId, 
-            roomId: roomId, 
-            participantId: `${recipientId}${roomId}`,
-            recipientId: memberId,
-          }
-        ]}
-    });
-    console.log('userRoomsResp :', userRoomsResp.data.insert_user_rooms)
+    let roomId = null;
+    userRmData.user_rooms.forEach(room => { if (room.recipientId === recipientId) {
+      roomId = room.roomId
+    } });
+    
+    if (roomId === null) {
+      const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
+      roomId = resp.data.insert_room.returning[0].id;
+      await addUserRooms({
+        variables: {
+          objects: [
+            {
+              memberId: memberId, 
+              roomId: roomId, 
+              participantId:`${memberId}${roomId}`,
+              recipientId: recipientId
+            }, 
+            {
+              memberId: recipientId, 
+              roomId: roomId, 
+              participantId: `${recipientId}${roomId}`,
+              recipientId: memberId,
+            }
+          ]}
+      });
+    }
     router.push({
       pathname: '/yachty/direct_messages',
-      query: {rid: userRoomsResp.data.insert_user_rooms.returning[0].roomId}, 
+      query: {rid: roomId}, 
     })
   }
 
   // TODO: make this part of the db.
   const BENICIA_MEMBER_DUES = 315;
+  
   if (loading || !data) return <CircularProgress />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));

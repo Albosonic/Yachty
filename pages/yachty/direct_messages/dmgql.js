@@ -9,6 +9,11 @@ export const GET_ALL_USER_ROOMS = gql`
     participantId
     recipientId
     roomId
+    yc_member {
+      profilePic
+      firstName
+      id
+    }
   }
 }`;
 

@@ -1,13 +1,11 @@
-// "use client"
-
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { Avatar, Box, Button, CircularProgress, Grid, Stack, TextField, Typography } from "@mui/material";
-import { DIRECT_MESSAGE_SUBSCRIPTION, GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "./dmgql";
+import { useMutation, useQuery } from "@apollo/client";
+import ImageIcon from '@mui/icons-material/Image';
+import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "./dmgql";
 import NavBar from "@/components/NavBar";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Margin } from "@mui/icons-material";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
@@ -15,36 +13,35 @@ const directMessageFeed = ({props}) => {
   const memberId = useSelector(state => state.auth.member.id);
   const [inputMsg, setMessage] = useState('');
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {variables: {memberId}});
-  // const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {variables: {memberId}});
-   
+  // TOD0: poll user rooms as well, so that we can show new direct message initiations.
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {
+    variables: { memberId },
+    fetchPolicy: 'no-cache'
+  });
+
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
     pollInterval: 1500,
   });
 
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
-  // const {data: messageData, loading: messageLoading} = useSubscription(DIRECT_MESSAGE_SUBSCRIPTION, {
-  //   variables: {roomId: currentRmId}
-  // });
-  
-  if (userRmLoading) return <CircularProgress />;
-  if (pollLoading) return <CircularProgress />;
-  
+
+  if (pollLoading || userRmLoading) return <CircularProgress />;
+
   const getMsgFacade = (messages) => {
+    console.log('messages :', messages)
     if (!messages) return [{}];
     return messages.map(msg => {
-      console.log('no:', msg)
-      const { 
-        id: msgId, 
-        authorId, 
-        created_at: createdAt, 
+      const {
+        id: msgId,
+        authorId,
+        created_at: createdAt,
         recipientId,
         message,
-        yc_member: { 
-          firstName, 
-          profilePic 
-        } 
+        yc_member: {
+          firstName,
+          profilePic
+        }
       } = msg;
 
       return {
@@ -55,14 +52,13 @@ const directMessageFeed = ({props}) => {
         firstName,
         profilePic,
         message,
-        onClick: (msgId) => setShowReactionOptions({ msgRef: msgId, showOptions: false }) 
+        onClick: (msgId) => setShowReactionOptions({ msgRef: msgId, showOptions: false })
       }
-
     });
   }
 
   const sendMessage = async () => {
-    const msgResp = await insertMessage({
+    await insertMessage({
     variables: {
       object: {
         roomId: currentRmId,
@@ -71,55 +67,109 @@ const directMessageFeed = ({props}) => {
         created_at: new Date().toISOString()
       }
     }});
+    setMessage('');
   }
+  console.log('userRmData =====', userRmData?.user_rooms)
+
+  const Msg = ({ msg, authorId, profilePic }) => {
+    if (authorId === memberId) {
+      return (
+        <>
+          <Avatar src={profilePic}
+            sx={{
+              width: 20,
+              height: 20,
+              marginRight: -1,
+            }} />
+          <Typography
+            sx={{
+              border: '1px solid grey',
+              borderRadius: 4,
+              padding: .7,
+              opacity: .5
+            }}
+          >
+            {msg}
+          </Typography>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <Typography
+            sx={{
+              border: '1px solid grey',
+              borderRadius: 4,
+              padding: .7,
+              opacity: .5
+            }}
+          >
+            {msg}
+          </Typography>
+          <Avatar src={profilePic}
+            sx={{
+              width: 20,
+              height: 20,
+              marginRight: -1,
+            }}
+          />
+        </>
+      )
+    }
+  }
+
   const msgFacade = getMsgFacade(pollMsgData?.messages);
+  const rooms = userRmData?.user_rooms;
+
   return (
     <>
       <NavBar />
-      <Grid container >
-        <Stack>          
+      <Grid container sx={{border: '2px solid green'}} >
+        <Stack>
+          <List>
+            {rooms.map(room => {
+              const {yc_member: { profilePic }} = room;
+              return (
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar src={profilePic}>
+                      <ImageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                </ListItem>
+              )
+            })}
+          </List>
+        </Stack>
+        <Stack sx={{border: "1px solid red", width: "70%"}}>
           <Stack spacing={10} >
             <Box
               sx={{
                 mb: 2,
                 display: "flex",
                 flexDirection: "column",
-                height: 700,
+                height: 200,            
                 overflow: "hidden",
-                overflowY: "scroll",              
+                overflowY: "scroll"
               }}
             >
             {msgFacade.map(((msg, i) => {
-              const {message, profilePic} = msg;
+              const {message, authorId, profilePic} = msg;
               return (
                 <>
-                  <Grid 
-                    container 
+                  <Grid
+                    container
                     key={msg+i}
-                    margin={3}                
+                    margin={1}
                   >
-                    <Avatar src={profilePic} 
-                    sx={{
-                      width: 20, 
-                      height: 20,
-                      marginRight: -1,
-                    }} />
-                    <Typography
-                      sx={{
-                        border: '1px solid grey',
-                        borderRadius: 4,
-                        padding: .7,
-                        opacity: .5
-                      }} 
-                    >
-                      {message}
-                    </Typography>
+                    <Msg msg={message} authorId={authorId} profilePic={profilePic} />
                   </Grid>
                 </>
               )
             }))}
           </Box>
-          </Stack>          
+          </Stack>
           <TextField
             multiline
             label="message"
