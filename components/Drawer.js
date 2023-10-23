@@ -16,15 +16,24 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import AddHomeIcon from '@mui/icons-material/AddHome';
 import ModeIcon from '@mui/icons-material/Mode';
-import { useSelector } from 'react-redux';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { clearState } from '@/slices/actions/authActions';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
+  const dispatch = useDispatch()
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
-  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
+  const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   let anchor = 'left';
+
+  const logout = () => {
+    dispatch(clearState());
+    window.location = "/api/auth/logout";
+  };
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -113,6 +122,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
               <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="View All Inbox" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={logout}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItemButton>
         </ListItem>
       </List>

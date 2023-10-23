@@ -72,40 +72,10 @@ const directMessageFeed = ({props}) => {
   console.log('userRmData =====', userRmData?.user_rooms)
 
   const Msg = ({ msg, authorId, profilePic }) => {
-    if (authorId === memberId) {
-      return (
-        <>
-          <Avatar src={profilePic}
-            sx={{
-              width: 20,
-              height: 20,
-              marginRight: -1,
-            }} />
-          <Typography
-            sx={{
-              border: '1px solid grey',
-              borderRadius: 4,
-              padding: .7,
-              opacity: .5
-            }}
-          >
-            {msg}
-          </Typography>
-        </>
-      )
-    } else {
-      return (
-        <>
-          <Typography
-            sx={{
-              border: '1px solid grey',
-              borderRadius: 4,
-              padding: .7,
-              opacity: .5
-            }}
-          >
-            {msg}
-          </Typography>
+    return (
+      <Grid container sx={{overflow: 'hidden'}} >
+        {authorId === memberId ? (
+          <>
           <Avatar src={profilePic}
             sx={{
               width: 20,
@@ -113,9 +83,40 @@ const directMessageFeed = ({props}) => {
               marginRight: -1,
             }}
           />
+          <Typography
+            sx={{
+              border: '1px solid grey',
+              borderRadius: 4,
+              padding: .7,
+              opacity: .5
+            }}
+          >
+            {msg}
+          </Typography>
         </>
-      )
-    }
+        ) : (
+          <>
+            <Typography
+              sx={{
+                border: '1px solid grey',
+                borderRadius: 4,
+                padding: .7,
+                opacity: .5
+              }}
+            >
+              {msg}
+            </Typography>
+            <Avatar src={profilePic}
+              sx={{
+                width: 20,
+                height: 20,
+                marginRight: -1,
+              }}
+            />
+          </>
+        )}
+      </Grid>
+    )
   }
 
   const msgFacade = getMsgFacade(pollMsgData?.messages);
@@ -124,63 +125,62 @@ const directMessageFeed = ({props}) => {
   return (
     <>
       <NavBar />
-      <Grid container sx={{border: '2px solid green'}} >
-        <Stack>
-          <List>
-            {rooms.map(room => {
-              const {yc_member: { profilePic }} = room;
-              return (
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar src={profilePic}>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-                </ListItem>
-              )
-            })}
-          </List>
-        </Stack>
-        <Stack sx={{border: "1px solid red", width: "70%"}}>
-          <Stack spacing={10} >
-            <Box
-              sx={{
-                mb: 2,
-                display: "flex",
-                flexDirection: "column",
-                height: 200,            
-                overflow: "hidden",
-                overflowY: "scroll"
-              }}
-            >
-            {msgFacade.map(((msg, i) => {
-              const {message, authorId, profilePic} = msg;
-              return (
-                <>
-                  <Grid
-                    container
-                    key={msg+i}
-                    margin={1}
-                  >
-                    <Msg msg={message} authorId={authorId} profilePic={profilePic} />
-                  </Grid>
-                </>
-              )
-            }))}
-          </Box>
+        <Grid container>
+          <Stack sx={{maxWidth: 500, border: '1px solid grey'}}>
+            <List sx={{
+              overflow: "hidden",
+              overflowY: "scroll",              
+              height: "100%"
+            }}>
+              {rooms.map(room => {
+                const {yc_member: { profilePic }} = room;
+                return (
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar src={profilePic}>
+                        <ImageIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                  </ListItem>
+                )
+              })}
+            </List>
           </Stack>
+          <Stack 
+              sx={{
+              overflow: "hidden",
+              overflowY: "scroll",
+              width: "60%",
+              maxHeight: 650
+            }}>
+            <Grid>
+              {msgFacade.map(((msg, i) => {
+                const {message, authorId, profilePic} = msg;
+                return (
+                  <>
+                    <Grid
+                      container
+                      key={msg.authorId}
+                      margin={1}
+                    >
+                      <Msg msg={message} authorId={authorId} profilePic={profilePic} />
+                    </Grid>
+                  </>
+                )
+              }))}
+            </Grid>
+        </Stack>
+        </Grid>
+        <Grid container>
           <TextField
             multiline
             label="message"
-            rows={5}
             value={inputMsg}
             onChange={(e) => setMessage(e.target.value)}
+            InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
+            fullWidth
           />
-          <Button onClick={sendMessage}>
-            Send
-          </Button>
-        </Stack>
       </Grid>
     </>
   )

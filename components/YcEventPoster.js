@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 const YcEventPoster = ({ eventData }) => {
   const router = useRouter();
   const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
+  console.log('image ===', image)
+  console.log('eventName ===', eventName)
   const isCommodore = useSelector(state => state.auth.userIsCommodore);
   console.log('isCommodore', isCommodore);
   return (

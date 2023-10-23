@@ -29,16 +29,6 @@ export default function NavBar() {
     setUserLoggedIn(auth?.email_verified || user?.email_verified);
   }, [auth]);
 
-  const handleChange = () => {
-    if (userLoggedIn) {
-      window.localStorage.clear();
-      dispatch(clearState());
-      window.location = "/api/auth/logout";
-    } else {
-      window.location = "/api/auth/login";
-    }
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -105,18 +95,6 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={userLoggedIn || false}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={userLoggedIn ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
     </Box>
   );
 }
