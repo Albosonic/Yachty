@@ -5,7 +5,6 @@ import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from
 import { GET_ALL_YC_BY_REGION } from '../pages/yc_regions/regionsgql';
 import styles from '@/styles/YCApplicants.module.css'
 
-
 const YCSelector = ({ routerPath }) => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_ALL_YC_BY_REGION, { variables: { regionId: router.query.regionId } });

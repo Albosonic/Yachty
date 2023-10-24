@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,21 +13,21 @@ import Menu from '@mui/material/Menu';
 import { Avatar, CircularProgress } from '@mui/material';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import AppDrawer from './Drawer';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
   const { user, isLoading } = useUser();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openDrawer, setOpenDrawer] = React.useState(false);
-  if (isLoading) return <CircularProgress />
-  const loggedIn = user?.email_verified;
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const auth = useSelector(state => state?.auth);
+  const profilePicture = useSelector(state => state.auth.member?.profilePic);
   
-  const handleChange = (event) => {
-    if (user) {
-      window.location = "/api/auth/logout";
-    } else {
-      window.location = "/api/auth/login";
-    }
-  };
+  useEffect(() => {
+    setUserLoggedIn(auth?.email_verified || user?.email_verified);
+  }, [auth]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,7 +61,7 @@ export default function NavBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
           </Typography>
-          {loggedIn && (
+          {userLoggedIn && (
             <div>
               <IconButton
                 size="large"
@@ -71,7 +71,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={user?.picture} />
+                <Avatar alt="Remy Sharp" src={profilePicture} />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -95,18 +95,6 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={loggedIn}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={loggedIn ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
     </Box>
   );
 }

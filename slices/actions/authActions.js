@@ -4,6 +4,12 @@ export const NON_MEMBER_OBJECT = 'NON_MEMBER_OBJECT';
 export const UPDATE_LOGO = 'UPDATE_LOGO';
 export const YC_EVENT = 'YC_EVENT';
 export const CLEAR_STATE = 'CLEAR_STATE';
+export const UPDATE_VESSEL_IMAGE = 'UPDATE_VESSEL_IMAGE';
+export const UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE';
+export const ROOM_TYPES = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
+}
 
 export const clearState = () => {
  return {
@@ -11,10 +17,10 @@ export const clearState = () => {
  }
 }
 
-export const addMember = (member) => {
+export const addMember = (userData) => {
   return {
     type: MEMBER_OBJECT,
-    payload: { member },
+    payload: userData,
   }
 }
 
@@ -32,5 +38,12 @@ export const updateLogo = (logo) => {
   return {
     type: UPDATE_LOGO,
     payload: logo
+  }
+}
+
+export const updateUserProfilePicture = (pic) => {
+  return {
+    type: UPDATE_PROFILE_PICTURE,
+    payload: pic,
   }
 }

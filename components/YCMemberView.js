@@ -35,38 +35,3 @@ const YCMemberView = () => {
 }
 
 export default YCMemberView;
-
-// query MyQuery {
-//   reciprocal_request(where: {visitingYCId: {_eq: "cd2d68cb-7eca-44df-8027-66fa36617436"}}) {
-//     unafilliatedVesselId
-//     vesselId
-//     homeYCId
-//     requestingSlip
-//     visitingDate
-//     visitingYCId
-//     specialNotes
-//     status
-//     yc_member {
-//       email
-//       name
-//       vessels {
-//         id
-//         type
-//         vesselName
-//         length
-//         insuranceInfo
-//         hullMaterial
-//         draft
-//         beam
-//       }
-//       id
-//       yachtClubByYachtClub {
-//         name
-//       }
-//     }
-//     yacht_club {
-//       name
-//       id
-//     }
-//   }
-// }

@@ -19,7 +19,7 @@ const YCApplicantForm = () => {
   }
   const router =  useRouter();
   const [insertNewApplicant, { data, loading, error }] = useMutation(INSERT_NEW_YC_APPLICANT);
-  const applicant = useSelector(state => state.auth.nonMemberObject);
+  const applicant = useSelector(state => state.auth);
   const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: applicant.email } });
   const [formData, setFormData] = useState({...cleanForm});
   const [showSuccess, setShowSuccess] = useState(false);
@@ -35,7 +35,7 @@ const YCApplicantForm = () => {
     });
   }, [applicant])
   if (memAppsLoading) return <CircularProgress />;
-  
+
   const memberApp = memAppsData.potential_members;
   if (memberApp.length > 0) {
     const STATUS_TEXT = memberApp[0].membershipDenied ? 'Membership Denied' : 'pending';

@@ -1,4 +1,4 @@
-import CommodoreView from '@/components/commodore/CommodoreView';
+import { useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import styles from '@/styles/yachty.module.css'
 import { useQuery } from '@apollo/client';
@@ -8,8 +8,7 @@ import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_YC_MEMBER } from './yachtygql';
-import { addMember, addNewMemberApplication, addNonMember } from '@/slices/actions/authActions';
-import { useEffect } from 'react';
+import { addMember, addNonMember } from '@/slices/actions/authActions';
 
 const Yachty = () => {
   const router = useRouter();
@@ -26,16 +25,23 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
+  console.log('memberData', memberData)
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
 
   useEffect(() => {
-    if (memberData) {
-      dispatch(addMember(memberData));
+    let userData = {
+      member: memberData,
+      user: user,
     }
-  }, [memberData, logo])
+    dispatch(addMember(userData));
+  }, [memberData, logo, user])
   
-  if (!user || loading || isLoading || !data) return <CircularProgress />
+  if (loading) return <CircularProgress />;
+  if (user === undefined) {
+    router.push('/login');
+    return null;
+  }
   if (data.yc_members.length === 0) {
     dispatch(addNonMember(user))
     router.push('/yc_regions');
