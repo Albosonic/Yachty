@@ -15,6 +15,10 @@ const YcEventPoster = ({ eventData }) => {
   const memberId = useSelector(state => state?.auth?.member?.id);
   const [viewReplies, setViewReplies] = useState({});
 
+  useEffect(() => {
+    console.log('view replies', viewReplies)
+  }, [viewReplies])
+
   const makeCommentsFacade = (data) => {
     let commentArrays = {
       parentComments: []
@@ -68,7 +72,7 @@ const YcEventPoster = ({ eventData }) => {
       setInputComment({...cleanField});
     }
 
-    const sendReply = async () => {
+    const sendReply = async (commentId) => {
       if (inputMsg === '') return;
       await insertEventComment({
         variables: {
@@ -80,8 +84,9 @@ const YcEventPoster = ({ eventData }) => {
             createdAt: new Date().toISOString(),
           }
         }
-      })
+      })      
       setInputComment({...cleanField});
+      setViewReplies({...viewReplies, [commentId]: true});
     };
 
     if (!commentFacadeArrays) return <CircularProgress />
@@ -98,7 +103,7 @@ const YcEventPoster = ({ eventData }) => {
             author,
             commentId
           } = commentFacade;
-
+          
           const childComments = commentFacadeArrays[commentId] ? commentFacadeArrays[commentId] : null;
           
           return (
@@ -109,14 +114,13 @@ const YcEventPoster = ({ eventData }) => {
                     <Typography variant="subtitle2">
                       {comment}
                     </Typography>
-                    <Button sx={{fontSize: 9, padding: 1, marginBottom: 3}} variant="standard" onClick={() => {
+                    <Button sx={{fontSize: 9, padding: 1, margin: 1}} variant="standard" onClick={() => {
                       setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})                      
                     }}>
                       view replies
                     </Button>  
                   </Stack>
-                  <Button sx={{padding: 0, fontSize: 10, margin: 0, maxHeight: 40}} variant="standard" onClick={() => {
-                    // setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})                      
+                  <Button sx={{padding: 1, fontSize: 9, margin: 1, maxHeight: 40}} variant="standard" onClick={() => {
                     setInputComment({ parentIdCommentId: commentId, msg: '', childComment: true })
                   }}>
                     reply
@@ -129,7 +133,7 @@ const YcEventPoster = ({ eventData }) => {
                     label="reply"
                     value={inputMsg}
                     onChange={(e) => setInputComment({parentIdCommentId: parentIdCommentId, msg: e.target.value})}
-                    InputProps={{endAdornment: <Button onClick={sendReply}>Send</Button>}}
+                    InputProps={{endAdornment: <Button onClick={() => sendReply(commentId)}>Send</Button>}}
                     variant="standard"
                   />
                 )}
