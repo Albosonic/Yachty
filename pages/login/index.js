@@ -9,7 +9,6 @@ import { clearState } from '@/slices/actions/authActions';
 const Login = () => {
   const router = useRouter()
   const member = useSelector(state => state?.auth?.member);
-  const user = useSelector(state => state?.auth?.user);
   // const dispatch = useDispatch();
   // dispatch(clearState());
   console.log('member?.id ===', member?.id)
