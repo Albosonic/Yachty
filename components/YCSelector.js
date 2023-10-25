@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { GET_ALL_YC_BY_REGION } from "@/lib/gqlQueries/regionsgql";
-import styles from '@/styles/yCApplicants.module.css'
+import styles from '@/styles/ycApplicants.module.css'
 
 const YCSelector = ({ routerPath }) => {
   const router = useRouter();
