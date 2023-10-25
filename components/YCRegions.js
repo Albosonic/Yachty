@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { setYCRegion } from '@/slices/actions/ycInfoActions';
 import { GET_ALL_REGIONS } from '@/lib/gqlQueries/regionsgql';
-import styles from '@/styles/ycApplicants.module.css';
+import styles from '@/styles/applicants.module.css';
 
 const YCRegions = ({ routerPath }) => {
   const { data, loading, error } = useQuery(GET_ALL_REGIONS);
