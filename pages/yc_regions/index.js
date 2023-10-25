@@ -1,5 +1,5 @@
 import NavBar from '@/components/NavBar';
-import YCRegions from '@/components/YCRegions';
+// import YCRegions from '@/components/YCRegions';
 
 const YCApplicants = () => {
 
