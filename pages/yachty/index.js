@@ -25,7 +25,7 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
-  console.log('memberData', memberData)
+
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
 
@@ -48,7 +48,7 @@ const Yachty = () => {
     return null;
   }
   if (!data || error) router.push('/login');
-  console.log('one small step')
+  console.log('one small step', window.location)
   const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>

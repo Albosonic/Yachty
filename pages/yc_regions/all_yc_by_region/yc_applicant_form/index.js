@@ -70,7 +70,8 @@ const YCApplicantForm = () => {
   const handleClose = () => {
     setShowSuccess(false);
     setFormData({...cleanForm});
-    window.location = "/api/auth/logout";
+    const logoutRoute = `${window.location.origin}/api/auth/logout`;
+    window.location = logoutRoute;
   }
 
   const handleSubmit = async () => {

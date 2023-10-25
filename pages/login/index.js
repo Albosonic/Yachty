@@ -11,12 +11,12 @@ const Login = () => {
   const member = useSelector(state => state?.auth?.member);
   // const dispatch = useDispatch();
   // dispatch(clearState());
-  console.log('member?.id ===', member?.id)
   if (member?.id !== undefined) {
     const {yachtClubByYachtClub: { id: ycId } } = member;
     router.push('/yachty', {query: { ycId }})
   }
   
+  const loginRoute = `${window.location.origin}/api/auth/login`;
   return (
     <main>
       <NavBar />
@@ -32,7 +32,7 @@ const Login = () => {
             alt="The house from the offer."
             src={"https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40 "}
           />
-          <Button onClick={() => window.location = "/api/auth/login"}>
+          <Button onClick={() => window.location = loginRoute}>
             Log in to Yachty
           </Button>
         </Stack>

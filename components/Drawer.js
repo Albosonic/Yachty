@@ -31,7 +31,8 @@ export default function AppDrawer({ open, toggleDrawer }) {
 
   const logout = () => {
     dispatch(clearState());
-    window.location = "/api/auth/logout";
+    const logoutRoute = `${window.location.origin}/api/auth/logout`;
+    window.location = logoutRoute;
   };
 
   const list = (anchor) => (
