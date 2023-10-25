@@ -1,10 +1,10 @@
 
 import { useState } from "react";
 import { Button, Grid } from "@mui/material";
-import { Club_Blue, Club_Madueno, INSERT_COMMODORE, INSERT_MEMBER, INSERT_MEMBER_APPLICANT, INSERT_VESSEL, MAKE_YC, mockClubs, mockMembers, mockVesselData } from "./getSomeGql";
-import { INSERT_RECIPROCAL_REQUEST } from "../yachty/request_reciprocity/requestReciprocitygql";
 import { useMutation } from "@apollo/client";
 import uuid4 from "uuid4";
+import { Club_Blue, Club_Madueno, INSERT_COMMODORE, INSERT_MEMBER, INSERT_MEMBER_APPLICANT, INSERT_VESSEL, MAKE_YC, mockClubs, mockMembers, mockVesselData } from "@/lib/gqlQueries/getSomeGql";
+import { INSERT_RECIPROCAL_REQUEST } from "@/lib/gqlQueries/requestReciprocitygql";
 
 const buildEverything = () => {
   const [makeYc, {error: ycError, data: ycData, loading: ycLoading}] = useMutation(MAKE_YC);

@@ -2,19 +2,18 @@ import { Button, Grid, Paper, Stack, TextField, Typography } from '@mui/material
 import { DateTimeField } from '@mui/x-date-pickers/DateTimeField';
 import dayjs from 'dayjs';
 import { useMutation } from '@apollo/client';
-import { INSERT_YC_EVENT, UPDATE_YC_EVENT } from './createYCEventgql';
+import { INSERT_YC_EVENT, UPDATE_YC_EVENT } from '@/lib/gqlQueries/createYCEventgql';
 import ImageUploadField from '@/components/ImageUploadField';
 import NavBar from '@/components/NavBar';
 import { useState } from 'react';
 import { YC_EVENT } from '@/slices/actions/authActions';
-import { IMG_BUCKET, s3Client } from '@/pages/s3-client';
+import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import YcEvent from '@/components/YcEvent';
 import { useSelector } from 'react-redux';
 
 const CreateYCEvent = () => {
   const ycId = useSelector((state) => state.auth.member.yachtClubByYachtClub.id);
-  console.log('ycId', ycId);
   const [createYCEvent, { loading, data, error }] = useMutation(INSERT_YC_EVENT);
   const [updateEvent, { loading: updateLoading, data: updateData, error: updateError }] = useMutation(UPDATE_YC_EVENT);
   const [showSpecialHours, setShowSpecialHours] = useState(false);

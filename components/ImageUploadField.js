@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { Button, Grid } from "@mui/material";
-import uuid4 from "uuid4";
-import { s3Client } from "@/pages/s3-client";
-import { useMutation } from "@apollo/client";
-import { UPDATE_YC_LOGO_KEY } from "./componentsGql/imagesgql";
-import { useRouter } from "next/router";
-import { resizeLetterHead, resizeYcEventPoster } from "@/pages/utils/imgResizer";
 import { useDispatch } from "react-redux";
-import { IMG_BUCKET } from "@/pages/s3-client";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client, IMG_BUCKET } from "@/lib/clients/s3-client";
+import { Button, Grid } from "@mui/material";
+import { useMutation } from "@apollo/client";
+import uuid4 from "uuid4";
+import { useRouter } from "next/router";
+import { resizeLetterHead, resizeYcEventPoster } from "@/lib/utils/imgResizer";
 import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 
 const ImageUploadField = ({ type, setImageObjToParent, img }) => {

@@ -1,4 +1,7 @@
-import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/pages/yachty/view_all_members/allMembersgql";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { GET_ALL_USER_ROOMS } from "@/lib/gqlQueries/dmgql";
+import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -10,11 +13,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import { useSelector } from "react-redux";
 import { ROOM_TYPES } from "@/slices/actions/authActions";
-import { GET_ALL_USER_ROOMS } from "@/pages/yachty/direct_messages/dmgql";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },

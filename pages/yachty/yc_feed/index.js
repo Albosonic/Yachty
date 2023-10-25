@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useQuery } from "@apollo/client";
-import { GET_YC_EVENTS_FEED } from "./ycFeedgql";
+import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import NavBar from "@/components/NavBar";
 import YcEventPoster from "@/components/YcEventPoster";
-
 
 const YachtClubFeed = () => {
   const router = useRouter();

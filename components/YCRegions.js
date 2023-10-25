@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { setYCRegion } from '@/slices/actions/ycInfoActions';
-import { GET_ALL_REGIONS } from '../pages/yc_regions/regionsgql';
-import styles from '@/styles/YCApplicants.module.css'
+import { GET_ALL_REGIONS } from '@/lib/gqlQueries/regionsgql';
+import styles from '@/styles/YCApplicants.module.css';
 
 const YCRegions = ({ routerPath }) => {
   const { data, loading, error } = useQuery(GET_ALL_REGIONS);

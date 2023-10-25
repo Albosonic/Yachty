@@ -7,8 +7,8 @@ import { CircularProgress, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_YC_MEMBER } from './yachtygql';
 import { addMember, addNonMember } from '@/slices/actions/authActions';
+import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 
 const Yachty = () => {
   const router = useRouter();

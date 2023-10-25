@@ -1,6 +1,6 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { ApolloProvider } from '@apollo/client';
-import client from './apollo-client';
+import client from '@/lib/clients/apollo-client';
 import store from '@/store';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';

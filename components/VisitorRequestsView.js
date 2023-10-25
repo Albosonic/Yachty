@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { Alert, Box, Button, CircularProgress, Divider, Paper, Snackbar, Stack, Typography, styled } from "@mui/material";
-import { GET_RECIPROCAL_AWAITING_RESPONSE } from "@/pages/yachty/reciprocal_requests/reciprocalReviewgql";
+import { GET_RECIPROCAL_AWAITING_RESPONSE } from "@/lib/gqlQueries/reciprocalReviewgql";
 import LetterOfReciprocity from "./LetterOfReciprocity";
 
 const VisitingMemberRequests = () => {

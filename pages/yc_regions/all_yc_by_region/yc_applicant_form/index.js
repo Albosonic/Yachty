@@ -3,7 +3,8 @@ import NavBar from '@/components/NavBar';
 import styles from '@/styles/ycApplicantForm.module.css'
 import { useMutation, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { GET_NEW_MEMBER_APPLICATIONS, INSERT_NEW_YC_APPLICANT } from './ycApplicantgql';
+import { GET_NEW_MEMBER_APPLICATIONS, INSERT_NEW_YC_APPLICANT } from '@/lib/gqlQueries/ycApplicantgql';
+GET_NEW_MEMBER_APPLICATIONS
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 

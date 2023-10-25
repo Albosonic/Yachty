@@ -1,4 +1,4 @@
-import { ADD_NEW_MEMBER, DENY_MEMBERSHIP } from "@/pages/yachty/add_member/addMemberGQL";
+import { ADD_NEW_MEMBER, DENY_MEMBERSHIP } from "@/lib/gqlQueries/addMemberGQL";
 import { Alert, Box, Button, Divider, Paper, Snackbar, Stack, Typography, styled } from "@mui/material";
 import styles from '@/styles/applicantReview.module.css'
 import { useMutation } from "@apollo/client";

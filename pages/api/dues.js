@@ -1,5 +1,5 @@
+import client from "@/lib/clients/apollo-client";
 import { gql } from "@apollo/client"
-import client from "../apollo-client"
 
 const GET_TEST_DATA = gql`
   query getTestDat {

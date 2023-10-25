@@ -4,7 +4,7 @@ import { Alert, Box, Button, CircularProgress, Grid, Paper, Snackbar, Stack, Typ
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { REICPROCAL_REQEST_DATA_STRINGS } from "@/pages/yachty/reciprocal_requests/reciprocalReviewgql";
+import { REICPROCAL_REQEST_DATA_STRINGS } from "@/lib/gqlQueries/reciprocalReviewgql";
 
 const GET_RECIPROCAL_REQUEST = gql`
   query getReciprocalRequest($reqId: uuid) {

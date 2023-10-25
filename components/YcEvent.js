@@ -1,4 +1,4 @@
-import { GET_YC_EVENT } from "@/pages/yachty/create_yc_event/createYCEventgql";
+import { GET_YC_EVENT } from "@/lib/gqlQueries/createYCEventgql";
 import { useQuery } from "@apollo/client";
 import { Box, Button, CircularProgress, Grid, Paper, Stack, Typography } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';

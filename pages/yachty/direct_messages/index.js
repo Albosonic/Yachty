@@ -1,11 +1,12 @@
-import { useMutation, useQuery } from "@apollo/client";
-import ImageIcon from '@mui/icons-material/Image';
-import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
-import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "./dmgql";
-import NavBar from "@/components/NavBar";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
+import ImageIcon from '@mui/icons-material/Image';
+import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import NavBar from "@/components/NavBar";
+
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RecommendIcon from '@mui/icons-material/Recommend';
-import { GET_EVENT_COMMENTS, INSERT_EVENT_COMMENT } from "@/pages/yachty/yc_feed/ycFeedgql";
+import { GET_EVENT_COMMENTS, INSERT_EVENT_COMMENT } from "@/lib/gqlQueries/ycFeedgql";
 import { useMutation, useQuery } from "@apollo/client";
 import { Box, Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
 

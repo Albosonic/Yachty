@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
 import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { GET_ALL_YC_BY_REGION } from '../pages/yc_regions/regionsgql';
+import { GET_ALL_YC_BY_REGION } from "@/lib/gqlQueries/regionsgql";
 import styles from '@/styles/YCApplicants.module.css'
 
 const YCSelector = ({ routerPath }) => {

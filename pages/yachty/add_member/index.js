@@ -1,13 +1,11 @@
-import { Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
-import NavBar from '@/components/NavBar';
-import styles from '@/styles/addMember.module.css'
-
-import { useMutation, useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { CircularProgress, Stack } from '@mui/material';
+import NavBar from '@/components/NavBar';
+import {  useQuery } from '@apollo/client';
 import ApplicantsUnderReview from '@/components/ApplicantsUnderReview';
-import { GET_ALL_MEMBER_APPLICANTS } from './addMemberGQL';
-
+import { GET_ALL_MEMBER_APPLICANTS } from '@/lib/gqlQueries/addMemberGQL';
+import styles from '@/styles/addMember.module.css'
 
 const AddMember = () => {
   const router = useRouter();

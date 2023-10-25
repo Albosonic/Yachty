@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import EditIcon from '@mui/icons-material/Edit';
+import { useMutation, useQuery } from "@apollo/client";
 import ImageUploadField from "@/components/ImageUploadField";
 import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
+import { IMG_BUCKET } from "@/lib/clients/s3-client";
+import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
 import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateUserProfilePicture } from "@/slices/actions/authActions";
-import { Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
-import { GET_MEMBER_VESSEL, GET_YC_MEMBER_AND_VESSEL, INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_BIO } from "./editMemberProfilegql";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { useMutation, useQuery } from "@apollo/client";
-import { useDispatch, useSelector } from "react-redux";
-import { IMG_BUCKET, s3Client } from "@/pages/s3-client";
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
 
 const vessel = {
   vesselName: '',
@@ -139,6 +139,7 @@ const EditMemberProfile = ({props}) => {
             <DialogTitle>Choose a new Photo</DialogTitle>
             <ImageUploadField type={UPDATE_PROFILE_PICTURE} setImageObjToParent={setProfilePic} img={profilePic} />
             <DialogActions>
+              <Button onClick={() => setEditingProfilePicture(!editingProfilePicture)}>Back</Button>
               <Button onClick={uploadProfilePic}>Close and Submit</Button>
             </DialogActions>
           </DialogContent>

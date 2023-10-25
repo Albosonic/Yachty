@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useMutation, useQuery } from "@apollo/client";
 import { v4 as uuidv4 } from 'uuid';
-import { Alert, CircularProgress, Snackbar, Stack, Typography, Button, TextField, Switch, Paper, Box, Grid, Icon, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
-import styles from '@/styles/reciprocalView.module.css';
-import DatePicker from "./DatePicker";
-import { GET_YACHT_CLUB_AND_VESSEL_INFO, INSERT_RECIPROCAL_REQUEST, INSERT_RECIPROCAL_REQUEST_NEW_VESSEL } from "@/pages/yachty/request_reciprocity/requestReciprocitygql";
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import { CheckCircle } from "@mui/icons-material";
+import AddTaskIcon from '@mui/icons-material/AddTask';
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_YACHT_CLUB_AND_VESSEL_INFO, INSERT_RECIPROCAL_REQUEST, INSERT_RECIPROCAL_REQUEST_NEW_VESSEL } from "@/lib/gqlQueries/requestReciprocitygql";
+import { Alert, CircularProgress, Snackbar, Stack, Typography, Button, TextField, Switch, Paper, Box, Grid, Icon, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import DatePicker from "./DatePicker";
+import styles from '@/styles/reciprocalView.module.css';
 
 const ReciprocalYachtClubView = () => {
   const router = useRouter();

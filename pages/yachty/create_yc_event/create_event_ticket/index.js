@@ -1,13 +1,13 @@
-import NavBar from '@/components/NavBar';
+import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import {  useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
-import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import {  useState } from 'react';
-import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '../createYCEventgql';
-import { useSelector } from 'react-redux';
+import NavBar from '@/components/NavBar';
+import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEventgql';
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
