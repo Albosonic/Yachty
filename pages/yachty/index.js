@@ -48,7 +48,7 @@ const Yachty = () => {
     return null;
   }
   if (!data || error) router.push('/login');
-
+  console.log('one small step')
   const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>
