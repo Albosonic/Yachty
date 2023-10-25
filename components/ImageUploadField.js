@@ -5,8 +5,8 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client, IMG_BUCKET } from "@/lib/clients/s3-client";
 import { Button, Grid } from "@mui/material";
 import { useMutation } from "@apollo/client";
-import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/imagesgql";
 import uuid4 from "uuid4";
+import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/logoKey";
 import { resizeLetterHead, resizeYcEventPoster } from "@/lib/utils/imgResizer";
 import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 
