@@ -12,7 +12,6 @@ const YCMemberView = () => {
   const yachtClubByYachtClub = useSelector((state => state?.auth?.member?.yachtClubByYachtClub));
   // const { id: ycId } = yachtClubByYachtClub;
   const ycId = yachtClubByYachtClub?.id
-  console.log('wtf id ====', ycId)
   return (
     <Stack spacing={2}>
       <Typography variant="h3">
