@@ -18,7 +18,6 @@ import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
   const { user, isLoading } = useUser();
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
