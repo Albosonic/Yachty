@@ -24,6 +24,7 @@ export default function NavBar() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const auth = useSelector(state => state?.auth);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
+  const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   
   useEffect(() => {
     setUserLoggedIn(auth?.email_verified || user?.email_verified);
@@ -47,7 +48,7 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar >
-          <IconButton
+          {emailVerrified && <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -57,7 +58,7 @@ export default function NavBar() {
           >
             <MenuIcon />
             <AppDrawer open={openDrawer} toggleDrawer={toggleDrawer} />
-          </IconButton>
+          </IconButton>}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
           </Typography>
