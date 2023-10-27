@@ -126,6 +126,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
+          <ListItemButton onClick={() => console.log('build this route next')}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="All Clubs" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>
               <LogoutIcon />
