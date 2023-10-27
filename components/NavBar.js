@@ -21,13 +21,12 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const auth = useSelector(state => state?.auth);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   
   useEffect(() => {
-    setUserLoggedIn(auth?.email_verified || user?.email_verified);
-  }, [auth]);
+    setUserLoggedIn(emailVerrified);
+  }, [emailVerrified]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

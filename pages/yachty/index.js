@@ -35,9 +35,9 @@ const Yachty = () => {
       user: user,
     }
     dispatch(addMember(userData));
-  }, [memberData, logo, user])
+  }, [memberData, logo, user, isLoading])
   
-  if (loading) return <CircularProgress />;
+  if (loading || isLoading) return <CircularProgress />;
   if (user === undefined) {
     router.push('/login');
     return null;
