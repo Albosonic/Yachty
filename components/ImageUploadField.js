@@ -10,7 +10,7 @@ import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/logoKey";
 import { resizeLetterHead, resizeYcEventPoster } from "@/lib/utils/imgResizer";
 import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 
-const ImageUploadField = ({ type, setImageObjToParent, img }) => {
+const ImageUploadField = ({ type, setImageObjToParent, img, title="Upload Burgee" }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [image, setImage] = useState(img || {src: null,fileDatum: null,imgKey: null});
@@ -84,7 +84,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
     <>
       {/* <form encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> */}
       <Stack alignItems="center">
-        <Typography variant="h4" sx={{margin: 5}}>Upload Burgee</Typography>
+        <Typography variant="h4" sx={{margin: 5}}>{title}</Typography>
         <Paper elevation={4}>
           <input 
             onChange={(e) => handleChange(e)}

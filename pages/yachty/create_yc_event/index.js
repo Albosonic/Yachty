@@ -148,7 +148,7 @@ const CreateYCEvent = () => {
               <DateTimeField onBlur={(e) => setEventData({...eventData, endDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
             </Grid>
           </Grid>
-          <ImageUploadField type={YC_EVENT} setImageObjToParent={setImageObj} img={imageObj} />
+          <ImageUploadField type={YC_EVENT} setImageObjToParent={setImageObj} img={imageObj} title="Event Poster" />
           <Typography sx={{marginBottom: 0}}>
             Add special hours if the yacht clubs regular hours will be different. (optional)
           </Typography>
