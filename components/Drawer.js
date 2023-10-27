@@ -125,13 +125,8 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="View All Members" />
           </ListItemButton>
         </ListItem>
-
-
-
-
-
         <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/direct_messages', query: { memberId }})}>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/direct_messages'})}>
             <ListItemIcon>
               <ChatIcon/>
             </ListItemIcon>

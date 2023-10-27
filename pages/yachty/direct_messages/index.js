@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
-import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 
 
@@ -126,63 +126,64 @@ const directMessageFeed = ({props}) => {
   return (
     <>
       <NavBar />
-        <Grid container>
-          <Stack sx={{maxWidth: 500, border: '1px solid grey'}}>
+        <Grid container direction="row" wrap="nowrap" columns={2}>
+          <Stack sx={{maxWidth: 500, height: '100vh', border: '1px solid grey'}}>
             <List sx={{
               overflow: "hidden",
               overflowY: "scroll",              
-              height: "100%"
+              height: "100%",
             }}>
-              {rooms.map(room => {
-                const {yc_member: { profilePic }} = room;
+              {rooms.map((room,  i) => {
+                const {yc_member: { profilePic, firstName }} = room;
+                console.log('room :', room)
                 return (
-                  <ListItem>
+                  <ListItem key={profilePic + i}>
                     <ListItemAvatar>
                       <Avatar src={profilePic}>
                         <ImageIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                    <ListItemText primary={firstName} />
                   </ListItem>
                 )
               })}
             </List>
           </Stack>
-          <Stack 
-              sx={{
-              overflow: "hidden",
-              overflowY: "scroll",
-              width: "60%",
-              maxHeight: 650
-            }}>
-            <Grid>
-              {msgFacade.map(((msg, i) => {
-                const {message, authorId, profilePic} = msg;
-                return (
-                  <>
+          <Container>
+
+            <Stack sx={{width: '100%', bottom: 0, position: 'sticky'}}>
+              <Grid
+                sx={{
+                  overflow: "hidden",
+                  overflowY: "scroll",
+                  width: "100%",
+                  // maxHeight: 650
+                }}
+              >
+                {msgFacade.map(((msg, i) => {
+                  const {message, authorId, profilePic} = msg;
+                  return (                  
                     <Grid
+                      key={msg.authorId + i + message}                    
                       container
-                      key={msg.authorId}
                       margin={1}
                     >
                       <Msg msg={message} authorId={authorId} profilePic={profilePic} />
                     </Grid>
-                  </>
-                )
-              }))}
-            </Grid>
-        </Stack>
+                  )
+                }))}
+              </Grid>
+              <TextField
+                multiline
+                label="message"
+                value={inputMsg}
+                onChange={(e) => setMessage(e.target.value)}
+                InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
+                fullWidth
+              />
+            </Stack>
+          </Container>
         </Grid>
-        <Grid container>
-          <TextField
-            multiline
-            label="message"
-            value={inputMsg}
-            onChange={(e) => setMessage(e.target.value)}
-            InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
-            fullWidth
-          />
-      </Grid>
     </>
   )
 };
