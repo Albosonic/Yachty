@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client, IMG_BUCKET } from "@/lib/clients/s3-client";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Paper, Stack, Typography } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import uuid4 from "uuid4";
 import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/logoKey";
@@ -76,25 +76,34 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
       resetForm();
       dispatch(updateLogo(`${IMG_BUCKET}${imgKey}`))
     } else {
-      console.error('whoops')
+      console.error('whoops :', results)
     }
   }
   const inputStyle = src ? { background: `url(${src}) no-repeat`, backgroundSize: "600px 400px" } : {};
   return (
     <>
-      <form encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <input 
-          onChange={(e) => handleChange(e)}
-          type="file" 
-          id="fileUpload" 
-          accept=".jpg, .jpeg, .png"
-          style={inputStyle}
-        />
+      {/* <form encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> */}
+      <Stack alignItems="center" sx={{ border: '2px solid red' }}>
+        <Typography variant="h3" sx={{margin: 5}}>Upload Burgee</Typography>
+        <Paper elevation={4}>
+          <input 
+            onChange={(e) => handleChange(e)}
+            type="file" 
+            id="fileUpload" 
+            accept=".jpg, .jpeg, .png"
+            style={{
+              ...inputStyle, 
+              // border: '2px solid green',
+              width: '100%',
+              maxWidth: 500,
+            }}
+          />
+        </Paper>
         <Grid sx={{margin: 2}} >
           {imgEntered && <Button variant="outlined" onClick={resetForm}>Edit</Button>}
           {!setImageObjToParent && <Button variant="outlined" onClick={handleSubmit}>Submit Image</Button>}
         </Grid>      
-      </form>
+      </Stack>
     </>
   )
 }
