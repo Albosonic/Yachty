@@ -84,7 +84,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img }) => {
     <>
       {/* <form encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> */}
       <Stack alignItems="center">
-        <Typography variant="h3" sx={{margin: 5}}>Upload Burgee</Typography>
+        <Typography variant="h4" sx={{margin: 5}}>Upload Burgee</Typography>
         <Paper elevation={4}>
           <input 
             onChange={(e) => handleChange(e)}
