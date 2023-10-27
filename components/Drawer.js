@@ -17,6 +17,7 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import AddHomeIcon from '@mui/icons-material/AddHome';
 import ModeIcon from '@mui/icons-material/Mode';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ChatIcon from '@mui/icons-material/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { clearState } from '@/slices/actions/authActions';
@@ -124,12 +125,17 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="View All Members" />
           </ListItemButton>
         </ListItem>
+
+
+
+
+
         <ListItem disablePadding>
-          <ListItemButton onClick={() => console.log('build this route next')}>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/direct_messages', query: { memberId }})}>
             <ListItemIcon>
-              <InboxIcon />
+              <ChatIcon/>
             </ListItemIcon>
-            <ListItemText primary="View All Inbox" />
+            <ListItemText primary="Direct Messages" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
