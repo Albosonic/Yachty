@@ -40,12 +40,20 @@ export default function AppDrawer({ open, toggleDrawer }) {
       role="presentation"
     >
       <List>
-      <ListItem disablePadding>
+        <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/edit_my_profile', query: { memberId }})}>
           <ListItemIcon>
-              <EditIcon />
-          </ListItemIcon>
-          <ListItemText primary="Edit My Profile" />
+            <EditIcon />
+            </ListItemIcon>
+            <ListItemText primary="Edit My Profile" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/request_reciprocity', query: { memberId }})}>
+          <ListItemIcon>
+            <DirectionsBoatFilledIcon />
+            </ListItemIcon>
+            <ListItemText primary="Request Reciprocity" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
