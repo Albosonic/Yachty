@@ -122,7 +122,7 @@ const AllMembersTable = ({props}) => {
         <DialogContent>
           <Grid container justifyContent="space-between">
             <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
-            <Avatar alt="Remy Sharp" src={memberPic} />
+            <Avatar alt="Profile Pic" src={memberPic} />
           </Grid>
           {userIsCommodore && <DialogContentText>
             {memberDuesText}

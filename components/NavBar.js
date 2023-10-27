@@ -71,7 +71,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={profilePicture} />
+                <Avatar alt="Profile Pic" src={profilePicture} />
               </IconButton>
               <Menu
                 id="menu-appbar"
