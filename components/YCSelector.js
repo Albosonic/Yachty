@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { GET_ALL_YC_BY_REGION } from "@/lib/gqlQueries/regionsgql";
 import styles from '@/styles/applicants.module.css'
 
@@ -24,7 +24,9 @@ const YCSelector = ({ routerPath }) => {
 
   return (
     <div className={styles.center}>
-      <h1 className={styles.titleSection}>Select a Club</h1>
+      <Typography variant="h4">
+        Select a Club
+      </Typography>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="regions-selector-label">yacht clubs</InputLabel>

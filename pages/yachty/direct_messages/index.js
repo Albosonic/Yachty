@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
+import { GET_ALL_USER_ROOMS_BY_ID, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
@@ -18,11 +18,11 @@ const directMessageFeed = ({props}) => {
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   // TOD0: poll user rooms as well, so that we can show new direct message initiations.
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: { memberId },
     fetchPolicy: 'no-cache'
   });
-
+  console.log('user rooms =======', userRmData)
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
     pollInterval: 1500,
@@ -142,10 +142,11 @@ const directMessageFeed = ({props}) => {
               height: "100%",
             }}>
               {moreThan600px && rooms.map((room,  i) => {
-                const {yc_member: { profilePic, firstName }} = room;
-                // console.log('room :', room)
+                const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
+                console.log('rooom', room)
+                if (recipientId === memberId) return null;
                 return (
-                  <ListItem elevation={4} key={profilePic + i}>
+                  <ListItem onClick={() => router.replace({pathname: '/yachty/direct_messages', query: {rid: roomId}})} key={profilePic + i}>
                     <ListItemAvatar>
                       <Avatar src={profilePic}>
                         <ImageIcon />

@@ -21,6 +21,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { clearState } from '@/slices/actions/authActions';
+import { useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
+  const moreThan600px = useMediaQuery('(min-width:600px)');
   let anchor = 'left';
 
   const logout = () => {
@@ -68,9 +70,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => {
-            router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})
-          }}>
+          <ListItemButton onClick={() => { router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
           <ListItemIcon>
               <BroadcastOnPersonalIcon />
           </ListItemIcon>
@@ -126,7 +126,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/direct_messages'})}>
+          <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
             <ListItemIcon>
               <ChatIcon/>
             </ListItemIcon>

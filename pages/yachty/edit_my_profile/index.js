@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import ImageUploadField from "@/components/ImageUploadField";
 import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
-import { IMG_BUCKET } from "@/lib/clients/s3-client";
+import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
 import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateUserProfilePicture } from "@/slices/actions/authActions";
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
