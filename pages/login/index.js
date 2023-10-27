@@ -13,7 +13,7 @@ const Login = () => {
   const {user, isLoading} = useUser()
 
   if (isLoading) return <CircularProgress />
-  if (memberId !== undefined) router.push('/yachty', {query: { ycId }});
+  if (memberId !== undefined || user?.email_verified === true) router.push('/yachty', {query: { ycId }});
   
   return (
     <main>

@@ -47,7 +47,7 @@ const Yachty = () => {
     router.push('/yc_regions');
     return null;
   }
-  if (!data || error) router.push('/login');
+  if (error) router.push('/login');
   console.log('one small step', window.location)
   const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
