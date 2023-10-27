@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 
@@ -14,6 +15,8 @@ const directMessageFeed = ({props}) => {
   const memberId = useSelector(state => state.auth.member.id);
   const [inputMsg, setMessage] = useState('');
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+
   // TOD0: poll user rooms as well, so that we can show new direct message initiations.
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {
     variables: { memberId },
@@ -27,10 +30,14 @@ const directMessageFeed = ({props}) => {
 
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
 
+  const getMessageGridHeight = () => {
+    if (moreThan600px) return '75%';
+    if (!moreThan600px) return '93%';
+  }
+
   if (pollLoading || userRmLoading) return <CircularProgress />;
 
   const getMsgFacade = (messages) => {
-    console.log('messages :', messages)
     if (!messages) return [{}];
     return messages.map(msg => {
       const {
@@ -70,7 +77,8 @@ const directMessageFeed = ({props}) => {
     }});
     setMessage('');
   }
-  console.log('userRmData =====', userRmData?.user_rooms)
+  // console.log('userRmData =====', userRmData?.user_rooms)
+  const messageGridHeight = getMessageGridHeight();
 
   const Msg = ({ msg, authorId, profilePic }) => {
     return (
@@ -126,18 +134,18 @@ const directMessageFeed = ({props}) => {
   return (
     <>
       <NavBar />
-        <Grid container direction="row" wrap="nowrap" columns={2}>
-          <Stack sx={{maxWidth: 500, height: '100vh', border: '1px solid grey'}}>
+        <Grid  container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
+          <Stack sx={{margin: 0, maxWidth: 500, height: '100vh', border: '1px solid grey'}}>
             <List sx={{
               overflow: "hidden",
               overflowY: "scroll",              
               height: "100%",
             }}>
-              {rooms.map((room,  i) => {
+              {moreThan600px && rooms.map((room,  i) => {
                 const {yc_member: { profilePic, firstName }} = room;
-                console.log('room :', room)
+                // console.log('room :', room)
                 return (
-                  <ListItem key={profilePic + i}>
+                  <ListItem elevation={4} key={profilePic + i}>
                     <ListItemAvatar>
                       <Avatar src={profilePic}>
                         <ImageIcon />
@@ -149,15 +157,14 @@ const directMessageFeed = ({props}) => {
               })}
             </List>
           </Stack>
-          <Container>
-
-            <Stack sx={{width: '100%', bottom: 0, position: 'sticky'}}>
+          <Container sx={{margin: 0}} fixed maxWidth="sm">
+            <Stack sx={{width: messageGridHeight, margin: 0, bottom: 0, position: 'fixed'}}>
               <Grid
                 sx={{
                   overflow: "hidden",
                   overflowY: "scroll",
                   width: "100%",
-                  // maxHeight: 650
+                  marginBottom: 5,
                 }}
               >
                 {msgFacade.map(((msg, i) => {
