@@ -1,6 +1,6 @@
 import { ADD_NEW_MEMBER, DENY_MEMBERSHIP } from "@/lib/gqlQueries/addMemberGQL";
-import { Alert, Box, Button, Divider, Paper, Snackbar, Stack, Typography, styled } from "@mui/material";
-import styles from '@/styles/applicantReview.module.css'
+import { Alert, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Fab, Grid, Paper, Snackbar, Stack, Typography, styled } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -33,6 +33,7 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
   }] = useMutation(DENY_MEMBERSHIP);
 
   const handleApproveMember = (variables) => {
+    console.log('wtf =============')
     setSnackBarMsg({msg: 'Member Approved', type: 'success'});
     approveNewMember(variables).then(resp => {
       if (resp.data) setShowSuccess(true);      
@@ -55,34 +56,19 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
     <Box>
       <Stack spacing={2} alignItems="center" divider={<Divider orientation="horizontal" flexItem />}>
         {applicants.map((applicant, index) => {
-          const { firstName, lastName, email, secondFirstName, secondLastName, secondEmail, referredBy } = applicant;
+          const { firstName, lastName, email, secondFirstName, secondLastName, secondEmail, profilePic, bio, referredBy } = applicant;
           const name = `${firstName} ${lastName}`;
           const secondName = `${secondFirstName} ${secondLastName}`;
           return (
-            <Item key={`${applicant}${index}`}>
-              <div>
-                <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+            <Card key={email} sx={{ maxWidth: 345 }}>
+               <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
                   <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
                     {msg}
                   </Alert>
                 </Snackbar>
-              </div>
-              <Typography spacing={2} variant="h4">Primary Member</Typography>
-              <Typography spacing={2} >
-                { `${firstName} ${lastName}` }
-              </Typography>
-              <Typography spacing={2}>{ email }</Typography>
-              <Typography variant="h4">Secondary Member</Typography>
-              <Typography spacing={2}>
-                { `${secondFirstName} ${secondLastName}` }
-              </Typography>
-              <Typography spacing={2}>{ secondEmail }</Typography>
-              <Typography>member referrence: { referredBy }</Typography>
-              <div className={styles.buttonsContainer}>
-                <Button 
-                  color="success"
-                  variant="outlined" 
-                  onClick={() => {
+              <CardActions>
+                <Box display="flex" justifyContent="flex-end" sx={{ '& > :not(style)': { m: 1 }, width: '100%'}}>
+                  <Fab onClick={() => {
                     handleApproveMember({
                       variables: {
                         firstName, 
@@ -93,19 +79,47 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
                         secondLastName, 
                         secondName,
                         secondEmail,
-                        ycId
+                        ycId,
+                        profilePic,
+                        bio,
                       }
+                    })}}
+                    size="medium" color='success'  aria-label="add"
+                  >
+                  <AddIcon />
+                  </Fab>
+                </Box>
+              </CardActions>
+              <CardMedia
+                component="img"
+                alt="green iguana"
+                height="140"
+                image={profilePic || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/936cec81-a508-401a-91f4-624c6f112d8f"}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {name}
+                </Typography>
+                <Typography gutterBottom variant="h5" component="div">
+                  {email}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {bio || "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
+                </Typography>
+              </CardContent>                      
+              <CardActions>
+                <Grid container justifyContent="flex-end" sx={{width: '100%'}}>
+                  <Button color="error"
+                    variant="outlined"
+                    onClick={() => handleDenyMembership({
+                      variables:{email}
                     })}
-                  }>
-                    Approve
-                </Button>
-                <Button color="error"
-                  variant="outlined"
-                  onClick={() => handleDenyMembership({variables:{email}})}>
+                  >
                     Deny
-                </Button>
-              </div>
-            </Item>
+                  </Button>
+                </Grid>
+              </CardActions>
+            </Card>
           )
         })}
       </Stack>

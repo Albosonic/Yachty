@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Box, Button, CircularProgress, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_NEW_MEMBER_APPLICATIONS, GET_YACHT_CLUB_BY_ID, INSERT_NEW_YC_APPLICANT } from '@/lib/gqlQueries/ycApplicantgql';
 import NavBar from '@/components/NavBar';
+import { clearState } from '@/slices/actions/authActions';
 
 const YCApplicantForm = () => {
   const cleanForm = {
@@ -17,16 +18,14 @@ const YCApplicantForm = () => {
     referredBy: '',
   }
   const router =  useRouter();
+  const dispatch = useDispatch();
   const yacht_club = router.query.ycid;
-  console.log('ycid: ', yacht_club)
   const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);
   const applicant = useSelector(state => state.auth);
   const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: applicant.email } });
   const {loading: ycLoading, error: ycError, data: ycData} = useQuery(GET_YACHT_CLUB_BY_ID, { variables: { ycId: yacht_club } });
   const [formData, setFormData] = useState({...cleanForm});
   const [showSuccess, setShowSuccess] = useState(false);
-  
-  
   
   useEffect(() => {
     setFormData({
@@ -37,7 +36,7 @@ const YCApplicantForm = () => {
     });
   }, [applicant])
   if (memAppsLoading || ycLoading) return <CircularProgress />;
-  console.log('memAppsData ===', memAppsData)
+  
   const memberApp = memAppsData.potential_members;
   const { name: ycName, logo: ycLogo } = ycData.yacht_clubs[0];
 
@@ -57,24 +56,18 @@ const YCApplicantForm = () => {
   const { firstName, lastName, primaryEmail, secondFirstName, secondLastName, secondEmail, referredBy } = formData;
 
   const handleFirstName = (event) => setFormData({...formData, firstName: event.target.value})
-
   const handleLastName = (event) => setFormData({...formData, lastName: event.target.value})
-  
   const handleEmail = (event) => setFormData({...formData, primaryEmail: event.target.value})
-
   const handleSecondFirstName = (event) => setFormData({...formData, secondFirstName: event.target.value})
-
   const handleSecondLastName = (event) => setFormData({...formData, secondLastName: event.target.value})
-
   const handleSecondEmail = (event) => setFormData({...formData, secondEmail: event.target.value})
-
   const handleReferredBy = (event) => setFormData({...formData, referredBy: event.target.value})
 
   const handleClose = () => {
     setShowSuccess(false);
     setFormData({...cleanForm});
-    const logoutRoute = `${window.location.origin}/api/auth/logout`;
-    window.location = logoutRoute;
+    dispatch(clearState());
+    window.location = `${window.location.origin}/api/auth/logout`;
   }
 
   const handleSubmit = async () => {
@@ -114,8 +107,6 @@ const YCApplicantForm = () => {
           />   
           <Stack
             sx={{
-              // display: "flex",
-              // flexDirection: "column",
               height: 500,
               overflow: "hidden",
               overflowY: "scroll",

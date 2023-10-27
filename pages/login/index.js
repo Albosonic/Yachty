@@ -8,11 +8,14 @@ import { clearState } from '@/slices/actions/authActions';
 
 const Login = () => {
   const router = useRouter()
+  const dispatch = useDispatch();
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
-  const {user, isLoading} = useUser()
+  const {user, isLoading} = useUser();
 
+  // dispatch(clearState()) for debugging purposes.
   if (isLoading) return <CircularProgress />
+  
   if (memberId !== undefined || user?.email_verified === true) router.push('/yachty', {query: { ycId }});
   
   return (
@@ -28,7 +31,7 @@ const Login = () => {
               width: '100%',
             }}
             alt="The house from the offer."
-            src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40 "
+            src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40"
           />
           <Button onClick={() => window.location = `${window.location.origin}/api/auth/login`}>
             Log in to Yachty

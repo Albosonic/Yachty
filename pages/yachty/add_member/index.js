@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { CircularProgress, Grid, Stack } from '@mui/material';
-import NavBar from '@/components/NavBar';
 import {  useQuery } from '@apollo/client';
-import ApplicantsUnderReview from '@/components/ApplicantsUnderReview';
+import { CircularProgress, Grid, Stack } from '@mui/material';
 import { GET_ALL_MEMBER_APPLICANTS } from '@/lib/gqlQueries/addMemberGQL';
+import NavBar from '@/components/NavBar';
+import ApplicantsUnderReview from '@/components/ApplicantsUnderReview';
 
 const AddMember = () => {
   const router = useRouter();
