@@ -22,7 +22,7 @@ const directMessageFeed = ({props}) => {
     variables: { memberId },
     fetchPolicy: 'no-cache'
   });
-  console.log('user rooms =======', userRmData)
+  
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
     pollInterval: 1500,
@@ -77,12 +77,13 @@ const directMessageFeed = ({props}) => {
     }});
     setMessage('');
   }
-  // console.log('userRmData =====', userRmData?.user_rooms)
+  
   const messageGridHeight = getMessageGridHeight();
 
   const Msg = ({ msg, authorId, profilePic }) => {
+    const leftOrRight = authorId === memberId ? "flex-start" : "flex-end";
     return (
-      <Grid container sx={{overflow: 'hidden'}} >
+      <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
         {authorId === memberId ? (
           <>
           <Avatar src={profilePic}
@@ -177,6 +178,7 @@ const directMessageFeed = ({props}) => {
                       key={msg.authorId + i + message}                    
                       container
                       margin={1}
+                      justifyContent="center"
                     >
                       <Msg msg={message} authorId={authorId} profilePic={profilePic} />
                     </Grid>
