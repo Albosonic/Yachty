@@ -7,11 +7,13 @@ import ImageIcon from '@mui/icons-material/Image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
   const currentRmId =  router.query.rid;
+  const {user, isLoading} = useUser()
   const memberId = useSelector(state => state.auth.member.id);
   const [inputMsg, setMessage] = useState('');
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
@@ -36,6 +38,8 @@ const directMessageFeed = ({props}) => {
   }
 
   if (pollLoading || userRmLoading) return <CircularProgress />;
+  console.log('user =======', user)
+  const userPic = user?.picture;
 
   const getMsgFacade = (messages) => {
     if (!messages) return [{}];
@@ -86,7 +90,7 @@ const directMessageFeed = ({props}) => {
       <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
         {authorId === memberId ? (
           <>
-          <Avatar src={profilePic}
+          <Avatar src={profilePic || userPic}
             sx={{
               width: 20,
               height: 20,
@@ -116,7 +120,7 @@ const directMessageFeed = ({props}) => {
             >
               {msg}
             </Typography>
-            <Avatar src={profilePic}
+            <Avatar src={profilePic || userPic}
               sx={{
                 width: 20,
                 height: 20,
