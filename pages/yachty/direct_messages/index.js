@@ -165,6 +165,8 @@ const directMessageFeed = ({props}) => {
                   overflow: "hidden",
                   overflowY: "scroll",
                   width: "100%",
+                  maxHeight: 600,
+                  marginTop: 20,
                   marginBottom: 5,
                 }}
               >
