@@ -13,6 +13,7 @@ const YcEventPoster = ({ eventData }) => {
   const [insertEventComment, {loading: commentLoading}] = useMutation(INSERT_EVENT_COMMENT);
   const isCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberId = useSelector(state => state?.auth?.member?.id);
+  const [showParents, setShowParents] = useState(false);
   const [viewReplies, setViewReplies] = useState({});
 
   useEffect(() => {
@@ -94,7 +95,9 @@ const YcEventPoster = ({ eventData }) => {
     const { parentComments } = commentFacadeArrays;
     return (
       <Stack>
-        {parentComments.map((commentFacade, i) => {
+        <Typography onClick={() => setShowParents(!showParents)} variant="subtitle2">show comments...</Typography>
+        <Typography variant="subtitle2">{parentComments[parentComments.length - 1].comment}</Typography>
+        { showParents && parentComments.map((commentFacade, i) => {
           const {
             comment,
             createdAt,
