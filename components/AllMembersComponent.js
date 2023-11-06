@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { GET_ALL_USER_ROOMS } from "@/lib/gqlQueries/dmgql";
+import { GET_ALL_USER_ROOMS_BY_ID } from "@/lib/gqlQueries/dmgql";
 import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
@@ -47,7 +47,7 @@ const AllMembersTable = ({props}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
   const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {variables: {memberId}});
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
@@ -122,7 +122,7 @@ const AllMembersTable = ({props}) => {
         <DialogContent>
           <Grid container justifyContent="space-between">
             <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
-            <Avatar alt="Remy Sharp" src={memberPic} />
+            <Avatar alt="Profile Pic" src={memberPic} />
           </Grid>
           {userIsCommodore && <DialogContentText>
             {memberDuesText}

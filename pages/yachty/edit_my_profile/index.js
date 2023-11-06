@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import ImageUploadField from "@/components/ImageUploadField";
 import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
-import { IMG_BUCKET } from "@/lib/clients/s3-client";
+import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
 import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateUserProfilePicture } from "@/slices/actions/authActions";
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
@@ -48,7 +48,6 @@ const EditMemberProfile = ({props}) => {
   const [memberUpdateData, setMemberUpdateData] = useState({...cleanMemberUpdateData})
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
-  console.log('vesselInfo :', vesselInfo)
 
   const uploadProfilePic = async () => {
     const {fileDatum, src, imgKey} = profilePic;
@@ -69,7 +68,6 @@ const EditMemberProfile = ({props}) => {
     }
     setEditingProfilePicture(!editingProfilePicture);
   };
-  console.log('vessel img == :', vesselImg);
 
   const submitMemberBio = async () => {
     const { bio } = memberUpdateData;
@@ -112,7 +110,27 @@ const EditMemberProfile = ({props}) => {
       }})
       if (bio === '') await updateMemberBio({variables:{memberId, bio}})
     } else {
+      console.log('vesselInfo ====', vesselInfo)
+    //   $memberId: uuid,
+    // $vesselId: uuid, 
+    // $bio: String,
+    // $beam: Int, 
+    // $draft: Int, 
+    // $hullMaterial: String, 
+    // $img: String, 
+    // $insuranceInfo: jsonb, 
+    // $length: Int,
+    // $ownerId: uuid,
+    // $specialNotes: String, 
+    // $type: String, 
+    // $unafilliatedVesselId: String, 
+    // $vesselImage: String, 
+    // $vesselName: String, 
       await updateMemberAndVessel({variables: {
+        // TODO: this needs some attention. via vessel Id or not.
+        // Todo: MISSING VESSEL ID
+        // TODO: REVISIT UPDATE VESSEL, MAYBE ONLY INSURANCE INFO ARE REQUIRED. OTHERWISE DELETE, AND ADD NEW.
+        // TODO: ALSO, WHEN DOES VESSEL GET INSERTED??...
         bio: bio,
         ownerId: memberId,
         draft: draft || null,
@@ -172,7 +190,7 @@ const EditMemberProfile = ({props}) => {
             <Button onClick={() => setAddingVessel(!addingVessel)}>Add Vessel Image and info</Button>
             {addingVessel && (
               <>
-                <ImageUploadField type={UPDATE_VESSEL_IMAGE} setImageObjToParent={setVesselImg} img={vesselImg} />
+                <ImageUploadField type={UPDATE_VESSEL_IMAGE} setImageObjToParent={setVesselImg} img={vesselImg} title="Upload Vessel Image" />
                 <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />
               </>
               )

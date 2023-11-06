@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { setYCRegion } from '@/slices/actions/ycInfoActions';
 import { GET_ALL_REGIONS } from '@/lib/gqlQueries/regionsgql';
 import styles from '@/styles/applicants.module.css';
@@ -26,7 +26,8 @@ const YCRegions = ({ routerPath }) => {
   }
 
   return (
-    <div className={styles.center}>
+    <Stack alignItems="center" spacing={2} sx={{margin: 10}} >
+      <Typography variant='h4'>Select a Region</Typography>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="regions-selector-label">Regions</InputLabel>
@@ -43,7 +44,7 @@ const YCRegions = ({ routerPath }) => {
           </Select>
         </FormControl>
       </Box>
-    </div>
+    </Stack>
   );
 }
 

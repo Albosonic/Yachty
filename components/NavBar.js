@@ -18,16 +18,15 @@ import { clearState } from '@/slices/actions/authActions';
 
 export default function NavBar() {
   const { user, isLoading } = useUser();
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const auth = useSelector(state => state?.auth);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
+  const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   
   useEffect(() => {
-    setUserLoggedIn(auth?.email_verified || user?.email_verified);
-  }, [auth]);
+    setUserLoggedIn(emailVerrified);
+  }, [emailVerrified]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,7 +46,7 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar >
-          <IconButton
+          {emailVerrified && <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -57,7 +56,7 @@ export default function NavBar() {
           >
             <MenuIcon />
             <AppDrawer open={openDrawer} toggleDrawer={toggleDrawer} />
-          </IconButton>
+          </IconButton>}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
           </Typography>
@@ -71,7 +70,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt="Remy Sharp" src={profilePicture} />
+                <Avatar alt="Profile Pic" src={profilePicture} />
               </IconButton>
               <Menu
                 id="menu-appbar"

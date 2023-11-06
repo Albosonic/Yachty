@@ -18,7 +18,6 @@ const cleanForm = {
 }
 
 const InsertVesselForm = ({ setVesselToParent, formValues }) => {
-  console.log('formValues: ', formValues)
   return (
     <>
       <Stack spacing={2}>

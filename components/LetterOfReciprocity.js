@@ -91,8 +91,6 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
     yacht_club: { name: visitingYachtClub },
     yachtClubByHomeycid: {name: yachtClubName, commodore: { name: commodoereName } }  
   } = data.reciprocal_request[0];
-  
-  console.log('logo ===', logo)
 
   return (
     <>

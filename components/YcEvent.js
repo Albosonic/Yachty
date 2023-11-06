@@ -34,7 +34,7 @@ const YcEvent = ({eventIdProp, review, edit}) => {
               height: 500,
               width: 400,
             }}
-            alt="The house from the offer."
+            alt="Event Image"
             src={image}
           />
           <Box sx={{margin: 2}}></Box>

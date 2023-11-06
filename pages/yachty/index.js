@@ -25,7 +25,7 @@ const Yachty = () => {
     }
   );
   let memberData = data?.yc_members[0];
-  console.log('memberData', memberData)
+
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
 
@@ -35,9 +35,9 @@ const Yachty = () => {
       user: user,
     }
     dispatch(addMember(userData));
-  }, [memberData, logo, user])
+  }, [memberData, logo, user, isLoading])
   
-  if (loading) return <CircularProgress />;
+  if (loading || isLoading) return <CircularProgress />;
   if (user === undefined) {
     router.push('/login');
     return null;
@@ -47,8 +47,7 @@ const Yachty = () => {
     router.push('/yc_regions');
     return null;
   }
-  if (!data || error) router.push('/login');
-  console.log('one small step')
+  if (error) router.push('/login');
   const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>

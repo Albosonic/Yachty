@@ -117,18 +117,34 @@ const ReciprocalYachtClubView = () => {
   const { vesselConfirmed } = formData;
   const { yacht_clubs, vessels } = data;
   const desiredYC = yacht_clubs[0];
-  const { name, id } = desiredYC;
+  const { name, id, logo } = desiredYC;
 
   return (
-    <div>
-      <div>
-        <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            Success!!
-          </Alert>
-        </Snackbar>
-      </div>
-      <Stack spacing={2} alignItems="center">
+    <Stack
+      alignItems="center"
+      sx={{
+        overflow: "hidden",
+        overflowY: "scroll",
+        height: 600,
+        margin: 5
+      }}
+    >
+      <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Success!!
+        </Alert>
+      </Snackbar>
+      <Box
+        component="img"
+        sx={{
+          height: 300,
+          width: 200,
+        }}
+        alt="The house from the offer."
+        src={logo || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40"}
+      />
+      <Stack spacing={2} alignItems="center">        
+
         <Typography variant='h6'>
           When would you like to visit { name }
         </Typography>
@@ -321,11 +337,9 @@ const ReciprocalYachtClubView = () => {
           minRows={3}
           maxRows={5}
         />
-        <div className={styles.buttonContainer}>
-          <Button disabled={!formData.visitDate} variant="contained" type="submit" onClick={handleSubmit}>Submit Request</Button>
-        </div>
+        <Button disabled={!formData.visitDate} variant="contained" type="submit" onClick={handleSubmit}>Submit Request</Button>
       </Stack>
-    </div>
+    </Stack>
   );
 }
 

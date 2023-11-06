@@ -50,7 +50,6 @@ const EventTicketForPurchase = (props) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
   if (loading || !data) return <CircularProgress />;
-  console.log('data: ', data);
   const {id: memberId, yachtClubByYachtClub: {id: ycId}} = member;
 
   const {

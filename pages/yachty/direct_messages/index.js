@@ -2,24 +2,29 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_USER_ROOMS, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
+import { GET_ALL_USER_ROOMS_BY_ID, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
-import { Avatar, Box, Button, CircularProgress, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
   const currentRmId =  router.query.rid;
+  const {user, isLoading} = useUser()
   const memberId = useSelector(state => state.auth.member.id);
   const [inputMsg, setMessage] = useState('');
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+
   // TOD0: poll user rooms as well, so that we can show new direct message initiations.
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS, {
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: { memberId },
     fetchPolicy: 'no-cache'
   });
-
+  
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
     pollInterval: 1500,
@@ -27,10 +32,16 @@ const directMessageFeed = ({props}) => {
 
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
 
+  const getMessageGridHeight = () => {
+    if (moreThan600px) return '75%';
+    if (!moreThan600px) return '93%';
+  }
+
   if (pollLoading || userRmLoading) return <CircularProgress />;
+  console.log('user =======', user)
+  const userPic = user?.picture;
 
   const getMsgFacade = (messages) => {
-    console.log('messages :', messages)
     if (!messages) return [{}];
     return messages.map(msg => {
       const {
@@ -70,14 +81,16 @@ const directMessageFeed = ({props}) => {
     }});
     setMessage('');
   }
-  console.log('userRmData =====', userRmData?.user_rooms)
+  
+  const messageGridHeight = getMessageGridHeight();
 
   const Msg = ({ msg, authorId, profilePic }) => {
+    const leftOrRight = authorId === memberId ? "flex-start" : "flex-end";
     return (
-      <Grid container sx={{overflow: 'hidden'}} >
+      <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
         {authorId === memberId ? (
           <>
-          <Avatar src={profilePic}
+          <Avatar src={profilePic || userPic}
             sx={{
               width: 20,
               height: 20,
@@ -107,7 +120,7 @@ const directMessageFeed = ({props}) => {
             >
               {msg}
             </Typography>
-            <Avatar src={profilePic}
+            <Avatar src={profilePic || userPic}
               sx={{
                 width: 20,
                 height: 20,
@@ -126,63 +139,67 @@ const directMessageFeed = ({props}) => {
   return (
     <>
       <NavBar />
-        <Grid container>
-          <Stack sx={{maxWidth: 500, border: '1px solid grey'}}>
+        <Grid  container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
+          <Stack sx={{margin: 0, maxWidth: 500, height: '100vh', border: '1px solid grey'}}>
             <List sx={{
               overflow: "hidden",
               overflowY: "scroll",              
-              height: "100%"
+              height: "100%",
             }}>
-              {rooms.map(room => {
-                const {yc_member: { profilePic }} = room;
+              {moreThan600px && rooms.map((room,  i) => {
+                const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
+                console.log('rooom', room)
+                if (recipientId === memberId) return null;
                 return (
-                  <ListItem>
+                  <ListItem onClick={() => router.replace({pathname: '/yachty/direct_messages', query: {rid: roomId}})} key={profilePic + i}>
                     <ListItemAvatar>
                       <Avatar src={profilePic}>
                         <ImageIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                    <ListItemText primary={firstName} />
                   </ListItem>
                 )
               })}
             </List>
           </Stack>
-          <Stack 
-              sx={{
-              overflow: "hidden",
-              overflowY: "scroll",
-              width: "60%",
-              maxHeight: 650
-            }}>
-            <Grid>
-              {msgFacade.map(((msg, i) => {
-                const {message, authorId, profilePic} = msg;
-                return (
-                  <>
+          <Container sx={{margin: 0}} fixed maxWidth="sm">
+            <Stack sx={{width: messageGridHeight, margin: 0, bottom: 0, position: 'fixed'}}>
+              <Grid
+                sx={{
+                  overflow: "hidden",
+                  overflowY: "scroll",
+                  width: "100%",
+                  maxHeight: 600,
+                  marginTop: 20,
+                  marginBottom: 5,
+                }}
+              >
+                {msgFacade.map(((msg, i) => {
+                  const {message, authorId, profilePic} = msg;
+                  return (                  
                     <Grid
+                      key={msg.authorId + i + message}                    
                       container
-                      key={msg.authorId}
                       margin={1}
+                      justifyContent="center"
                     >
                       <Msg msg={message} authorId={authorId} profilePic={profilePic} />
                     </Grid>
-                  </>
-                )
-              }))}
-            </Grid>
-        </Stack>
+                  )
+                }))}
+              </Grid>
+              <TextField
+                multiline
+                label="message"
+                value={inputMsg}
+                onChange={(e) => setMessage(e.target.value)}
+                InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
+                fullWidth
+              />
+            </Stack>
+          </Container>
         </Grid>
-        <Grid container>
-          <TextField
-            multiline
-            label="message"
-            value={inputMsg}
-            onChange={(e) => setMessage(e.target.value)}
-            InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
-            fullWidth
-          />
-      </Grid>
     </>
   )
 };

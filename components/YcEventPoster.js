@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import RecommendIcon from '@mui/icons-material/Recommend';
 import { GET_EVENT_COMMENTS, INSERT_EVENT_COMMENT } from "@/lib/gqlQueries/ycFeedgql";
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 
 const YcEventPoster = ({ eventData }) => {
   const router = useRouter();
@@ -13,7 +13,9 @@ const YcEventPoster = ({ eventData }) => {
   const [insertEventComment, {loading: commentLoading}] = useMutation(INSERT_EVENT_COMMENT);
   const isCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberId = useSelector(state => state?.auth?.member?.id);
+  const [showParents, setShowParents] = useState(false);
   const [viewReplies, setViewReplies] = useState({});
+  const moreThan600px = useMediaQuery('(min-width:600px)');
 
   useEffect(() => {
     console.log('view replies', viewReplies)
@@ -94,7 +96,9 @@ const YcEventPoster = ({ eventData }) => {
     const { parentComments } = commentFacadeArrays;
     return (
       <Stack>
-        {parentComments.map((commentFacade, i) => {
+        <Typography onClick={() => setShowParents(!showParents)} variant="subtitle2">show comments...</Typography>
+        <Typography variant="subtitle2">{parentComments[parentComments.length - 1].comment}</Typography>
+        { showParents && parentComments.map((commentFacade, i) => {
           const {
             comment,
             createdAt,
@@ -182,11 +186,18 @@ const YcEventPoster = ({ eventData }) => {
 
   if (commentsLoading) return <CircularProgress />;
   const allComments = makeCommentsFacade(commentsData);
-
+  const posterWidth = moreThan600px ? 550 : 300;
   return (
     <>
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 5, marginTop: 5 }} elevation={3}>
-        <Stack display="flex" alignItems="center" sx={{margin: '0 auto', border: '1px solid black'}}>
+        <Stack display="flex"
+          alignItems="center"
+          sx={{
+            margin: '0 auto',
+            border: '1px solid black',
+            minWidth: posterWidth,
+          }}
+        >
           <Typography variant="h4" sx={{marginTop: 2}}>{ date }</Typography>
           <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography>
           <Box
@@ -194,6 +205,7 @@ const YcEventPoster = ({ eventData }) => {
             sx={{
               height: '100%',
               width: '100%',
+              // maxWidth: 500,
               padding: 5,
             }}
             alt="The house from the offer."
