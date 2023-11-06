@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import SailingIcon from '@mui/icons-material/Sailing';
 import EditIcon from '@mui/icons-material/Edit';
 import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
 import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
@@ -91,6 +91,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <AddHomeIcon />
           </ListItemIcon>
           <ListItemText primary="Create Yacht Club Event" />
+          </ListItemButton >
+        </ListItem>}
+        {userIsCommodore && <ListItem disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname: '/yachty/racing' })}>
+          <ListItemIcon>
+            <SailingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Racing" />
           </ListItemButton >
         </ListItem>}
         <ListItem disablePadding>
