@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import NavBar from "@/components/NavBar";
@@ -14,15 +14,16 @@ const YachtClubFeed = () => {
   const variables = {ycId, after: dateIso };
   const {error, loading, data} = useQuery(GET_YC_EVENTS_FEED, { variables, fetchPolicy: "no-cache" });
   const yachtClubName = useSelector(state => state.auth.member.yachtClubByYachtClub.name);
+  const moreThan600px = useMediaQuery('(min-width:600px)');
 
   if (loading) return <CircularProgress />
   const events = data?.yc_events;
-  
   return (
     <>
       <NavBar />
       <Grid container justifyContent="center">
-        <Typography variant="h4">{ yachtClubName } Upcoming Events</Typography>
+      <Typography noWrap sx={{padding: 1}} variant="h4">{ yachtClubName }</Typography>
+        <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Events</Typography>
       </Grid>
       <Stack justifyContent="center" sx={{margin: '0 auto'}}>
         <Box

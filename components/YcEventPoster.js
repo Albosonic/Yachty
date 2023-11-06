@@ -190,10 +190,10 @@ const YcEventPoster = ({ eventData }) => {
   return (
     <>
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 5, marginTop: 5 }} elevation={3}>
-        <Stack display="flex" 
-          alignItems="center" 
+        <Stack display="flex"
+          alignItems="center"
           sx={{
-            margin: '0 auto', 
+            margin: '0 auto',
             border: '1px solid black',
             minWidth: posterWidth,
           }}
