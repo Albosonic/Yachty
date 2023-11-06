@@ -15,3 +15,5 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     **Thanks for checking out my app I always appreciate feedback, feel free to message me with Ideas for features or UX**
     
 ### currenly not accepting bug reports since I have a list of known bugs to deal with.
+
+## let me know if you can't login.
