@@ -38,11 +38,22 @@ const UploadRaceCourse = () => {
 
   const { marker, side } = workingLeg;
   const { name: courseTitle, set: titleSet, startFrom } = courseNameInfo;
-  const containerWidth =  moreThan600px ? 700 : 350;
+  const containerWidth = moreThan600px ? 700 : 350;
+  const uploadButtonLocation = moreThan600px ? '30%' : '10%';
   return (
     <>
-      <Stack width="100%" maxWidth={containerWidth} spacing={3} alignContent="center">
-        <Fab sx={{maxWidth: 150, alignSelf: 'flex-end'}} onClick={console.log('upload course')} color="success" variant="extended">
+      <Stack sx={{
+          // paddingBottom: 5,
+          overflow: "hidden",
+          overflowY: "scroll",              
+          height: 600,
+        }} 
+        width="100%" 
+        maxWidth={containerWidth} 
+        spacing={3} 
+        alignContent="center"
+      >
+        <Fab sx={{maxWidth: 150, alignSelf: 'flex-end', position: 'fixed', right: uploadButtonLocation, top: 140}} onClick={console.log('upload course')} color="success" variant="extended">
           <AddIcon />
           upload
         </Fab>
