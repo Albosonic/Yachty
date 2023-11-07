@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, FormControl, FormControlLabel, Grid, IconButton, List, ListItemButton, ListItem, Paper, Radio, RadioGroup, Stack, TextField, Typography, Fab, useMediaQuery, FormLabel } from "@mui/material";
+import { Button, FormControl, FormControlLabel, Grid, IconButton, List, ListItemButton, ListItem, Paper, Radio, RadioGroup, Stack, TextField, Typography, Fab, useMediaQuery, FormLabel, Snackbar, Alert } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -9,15 +9,16 @@ import { useSelector } from "react-redux";
 
 
 const UploadRaceCourse = () => {
-  // const clearWorkingLeg = {marker: null, side: null}
-  const cleanCourseNameInfo = {name: '', set: false, startFrom: null};
+  const clearCourseInfo = {name: '', set: false, startFrom: ''};
   const [userInput, setUserInput] = useState('');
-  const [courseNameInfo, setCourseNameInfo] = useState({name: '', set: false});
+  const [courseNameInfo, setCourseNameInfo] = useState(clearCourseInfo);
   const [workingLeg, setWorkingLeg] = useState({marker: null, side: null});
   const [course, setCourse] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const [insertRaceCourse, {loading: courseLoading}] = useMutation(INSERT_RACE_COURSE);
+  const { name: courseTitle, set: titleSet, startFrom } = courseNameInfo;
 
   const addCourseLeg = () => {
     setCourse([...course, workingLeg]);
@@ -33,17 +34,22 @@ const UploadRaceCourse = () => {
   };
 
   const uploadRaceCourse = async () => {
-    await insertRaceCourse({variables: { courseName: 'bales', ycId: ycId, instructions: course }})
+    await insertRaceCourse({variables: { courseName: courseTitle, ycId: ycId, instructions: course }});
+    setShowSuccess(true);
+  }
+
+  const handleClose = () => {
+    setCourseNameInfo({...clearCourseInfo})
+    setCourse([]);
+    setShowSuccess(false);
   }
 
   const { marker, side } = workingLeg;
-  const { name: courseTitle, set: titleSet, startFrom } = courseNameInfo;
   const containerWidth = moreThan600px ? 700 : 350;
   const uploadButtonLocation = moreThan600px ? '30%' : '10%';
   return (
     <>
       <Stack sx={{
-          // paddingBottom: 5,
           overflow: "hidden",
           overflowY: "scroll",              
           height: 600,
@@ -53,10 +59,15 @@ const UploadRaceCourse = () => {
         spacing={3} 
         alignContent="center"
       >
-        <Fab sx={{maxWidth: 150, alignSelf: 'flex-end', position: 'fixed', right: uploadButtonLocation, top: 140}} onClick={console.log('upload course')} color="success" variant="extended">
+        <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            Success
+          </Alert>
+        </Snackbar>
+        <Fab sx={{maxWidth: 150, alignSelf: 'flex-end', position: 'fixed', right: uploadButtonLocation, top: 140}} onClick={uploadRaceCourse} color="success" variant="extended">
           <AddIcon />
           upload
-        </Fab>
+        </Fab>        
         {!titleSet && <TextField
           placeholder="Enter course name"
           multiline
