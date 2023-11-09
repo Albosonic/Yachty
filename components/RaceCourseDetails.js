@@ -3,43 +3,39 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-const RaceCourseMenu = ({courses, setCourse}) => {
+const RaceCourseDetails = ({ course }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = (course) => {
-    setAnchorEl(null);
-    if (course?.id) setCourse(course);
-  };
-
+  const { instructions } = course;
   return (
     <>
       <Button
-        id="course-select-button"
+        id="course-details-button"
         aria-controls={open ? 'race-course-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        choose a course
+        Details
       </Button>
       <Menu
-        id="course-selector"
+        id="course-details"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'course-select',
+          'aria-labelledby': 'course-details',
         }}
       >
-        {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => handleClose(course)}>{course.courseName}</MenuItem>)}
+        {instructions.map((instruction, i) => {
+          const { marker, side } = instruction;
+          return <MenuItem key={instruction + i} onClick={handleClose}>{`${i + 1}. ${marker} ${side}`}</MenuItem>
+        })}
       </Menu>
     </>
   );
 }
 
-export default RaceCourseMenu;
+export default RaceCourseDetails;
