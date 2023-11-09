@@ -44,6 +44,7 @@ const UploadRaceEvent = () => {
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;    
     const imagePath = `${IMG_BUCKET}${imgKey}`;
+    console.log('race titel:', raceTitle)
 
     const params = {
       Bucket: 'yachty-letter-heads',
@@ -52,8 +53,7 @@ const UploadRaceEvent = () => {
       ContentType: 'image/png'
     };
   
-    await s3Client.send(new PutObjectCommand(params));
-
+    // await s3Client.send(new PutObjectCommand(params));
     const variables = {
       object: {
         eventId: null,
@@ -65,10 +65,10 @@ const UploadRaceEvent = () => {
         ycId: ycId,
       }
     };
-    const resp = await insertRace({variables});    
-    console.log('resp :', resp)
+    // const resp = await insertRace({variables});    
+    // console.log('resp :', resp)
     // get id and pass to RaceEvent component
-    setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
+    // setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
   }
 
   const editRace = () => {    
@@ -82,7 +82,7 @@ const UploadRaceEvent = () => {
   const {chooseCourse} = formErrors;
   return (
     review ? (
-      <RaceEvent raceIdProp={newRaceId} review={review} edit={editRace} />
+      <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
     ) : ( 
     <Stack
       spacing={4} 
@@ -109,7 +109,7 @@ const UploadRaceEvent = () => {
       {raceNameSet &&
         <Grid container justifyContent="center" width="100%" sx={{padding: 3}} >
           <Typography variant="h4">{raceName}</Typography>
-          <Button onClick={() => setRaceInfo({...raceInfo, raceName: '', raceNameSet: false})} >Edit</Button>
+          <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: false})} >Edit</Button>
         </Grid>
       }      
       <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />

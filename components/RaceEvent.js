@@ -3,12 +3,12 @@ import { useQuery } from "@apollo/client";
 import { Box, Button, CircularProgress, Grid, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { GET_YC_EVENT } from "@/lib/gqlQueries/createYCEventgql";
+import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 
-const RaceEvent = ({raceId, edit}) => {
+const RaceEvent = ({newRaceId, edit}) => {
   const router = useRouter();
 //   const eventId = router.query.eventId || eventIdProp;
-//   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id: eventId}});
+  const {data, loading, error} = useQuery(GET_RACE_BY_ID, {variables: { raceId: newRaceId }});
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
 //   const goTocreateEventTicket = () => {
@@ -19,8 +19,10 @@ const RaceEvent = ({raceId, edit}) => {
 //       }
 //     });
 //   };
-  if (loading || !data) return <CircularProgress />;
-
+  if (loading) return <CircularProgress />;
+  
+  const race = data.races[0];
+  const {startDate, endDate, img, raceName, eventId} = race;
   // const { image, event_name: eventName, location, hours, date, entertainment, specialNotes } = data.yc_events[0];
   const posterWidth = moreThan600px ? 550 : 300;
   return (
@@ -35,7 +37,8 @@ const RaceEvent = ({raceId, edit}) => {
             minWidth: posterWidth,
           }}
         >
-          {/* <Typography variant="h4" sx={{marginTop: 2}}>{ date }</Typography> */}
+
+          <Typography variant="h4" sx={{marginTop: 2}}>{ raceName }</Typography>
           {/* <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography> */}
           <Box
             component="img"
