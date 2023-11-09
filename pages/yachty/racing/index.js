@@ -18,11 +18,11 @@ const Racing = () => {
           justifyContent="space-around" 
           width="100%"
         >
-          <Button fullWidth onClick={() => setShowLeftPanel(!showLeftPanel)}>
+          <Button fullWidth onClick={() => setShowLeftPanel(true)}>
             Upload Course
           </Button>
           <Divider orientation="vertical" flexItem></Divider>
-          <Button fullWidth onClick={() => setShowLeftPanel(!showLeftPanel)}>
+          <Button fullWidth onClick={() => setShowLeftPanel(false)}>
             Create Race
           </Button>
         </Grid>

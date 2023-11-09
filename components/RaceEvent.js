@@ -39,7 +39,6 @@ const RaceEvent = ({newRaceId, edit}) => {
         >
 
           <Typography variant="h4" sx={{marginTop: 2}}>{ raceName }</Typography>
-          {/* <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography> */}
           <Box
             component="img"
             sx={{
@@ -48,7 +47,7 @@ const RaceEvent = ({newRaceId, edit}) => {
               width: 400,
             }}
             alt="Event Image"
-            // src={image}
+            src={img} 
           />
           <Stack sx={{margin: 2}} spacing={.5}>        
             <Grid>
