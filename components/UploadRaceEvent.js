@@ -38,7 +38,7 @@ const UploadRaceEvent = () => {
   const [creatingSeries, setCreatingSeries] = useState(false);
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  const [formErrors, setFormErrors] = useState({chooseCourse: false});
+  const [formErrors, setFormErrors] = useState({chooseCourseError: false, raceTitleError: false, seriesError: false});
   const {error, loading, data} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }});
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
@@ -47,14 +47,14 @@ const UploadRaceEvent = () => {
   if (loading || getSeriesLoading) return <CircularProgress />;
   const {raceName: raceTitle, raceCourseId, img, raceNameSet, startDate, endDate, review, newRaceId } = raceInfo;
   const raceSeriesArr = raceSeriesData?.race_series
-  console.log('raceSeriesArr :', raceSeriesArr)
+  
   const submitRace = async () => {
-    if (course === null) return setFormErrors({ ...formErrors, chooseCourse: true })
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitle: true })
+    if (course === null) return setFormErrors({ ...formErrors, chooseCourseError: true });
+    if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
-    console.log('race titel:', raceTitle)
 
     const params = {
       Bucket: 'yachty-letter-heads',
@@ -64,9 +64,10 @@ const UploadRaceEvent = () => {
     };
 
     await s3Client.send(new PutObjectCommand(params));
-
+    console.log('series ===', series)
     const variables = {
       object: {
+        seriesId: series.id,
         eventId: null,
         img: imagePath,
         raceName: raceTitle,
@@ -76,13 +77,13 @@ const UploadRaceEvent = () => {
         ycId: ycId,
       }
     };
-    const resp = await insertRace({variables});
-    // get id and pass to RaceEvent component
+
+    const resp = await insertRace({variables});    
     setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
+
   }
 
   const creatRaceSeries = async () => {
-    console.log('=======', seriesName)
     await insertSeries({variables: {seriesName, ycId}});
     await refetchRaceSeries();
     setShowSuccess(true)
@@ -90,6 +91,7 @@ const UploadRaceEvent = () => {
 
   const snackBarClose = () => {
     setCreatingSeries(false);
+    setShowSuccess(false);
   }
 
   const editRace = () => {
@@ -97,10 +99,15 @@ const UploadRaceEvent = () => {
       ...raceInfo,
       review: false,
     })
+  };
+
+  const creatingAnotherSeries = () => {
+    setCreatingSeries(true);
+    setSeries(null);
   }
 
   const showDatePickers = startDate === null || endDate === null ? true : false;
-  const {chooseCourse} = formErrors;
+  const {chooseCourseError, raceTitleError, seriesError} = formErrors;
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -122,8 +129,19 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       <Grid container justifyContent="space-around">
-        <Button onClick={() => setCreatingSeries(true)} variant="outlined">Create Series</Button>
-        {raceSeriesArr.length > 0 && <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries}/>}
+        {!series && <Button onClick={() => setCreatingSeries(true)} variant="outlined">Create Series</Button>}
+        {series && 
+          <Grid container justifyContent="space-around" width="100%">
+            <Typography variant="h4">{series?.seriesName}</Typography>
+            <Button onClick={() => creatingAnotherSeries() } variant="outlined">Create Another Series</Button>
+          </Grid>
+        }
+        {raceSeriesArr.length > 0 &&
+        <>          
+          <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries}/>
+          {seriesError && <Typography variant="subtitle1" color="error">please choose a race series</Typography>}
+        </>
+        }
       </Grid>
       {creatingSeries &&
         <TextField
@@ -137,15 +155,18 @@ const UploadRaceEvent = () => {
         />
       }
       {!raceNameSet &&
-        <TextField
-          required
-          multiline
-          placeholder="Race Name..."
-          variant="standard"
-          value={raceName}
-          onChange={(e) => setRaceName(e.target.value)}
-          InputProps={{endAdornment: <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: true})}>Set</Button>}}
-        />
+        <>
+          <TextField
+            required
+            multiline
+            placeholder="Race Name..."
+            variant="standard"
+            value={raceName}
+            onChange={(e) => setRaceName(e.target.value)}
+            InputProps={{endAdornment: <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: true})}>Set</Button>}}
+          />
+          {raceTitleError && <Typography variant="subtitle1" color="error">please choose a race name</Typography>}
+        </>
       }
       {raceNameSet &&
         <Grid container justifyContent="center" width="100%" sx={{padding: 3}} >
@@ -154,7 +175,7 @@ const UploadRaceEvent = () => {
         </Grid>
       }
       <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />
-      {chooseCourse && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
+      {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
 
       {course &&
         <Stack>

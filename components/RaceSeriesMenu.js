@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 const RaceSeriesMenu = ({seriesArr, setSeries}) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [buttonText, setButtonText] = useState('Choose Race Series');
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -14,6 +15,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries}) => {
   const handleClose = (series) => {
     setAnchorEl(null);
     if (series?.id) setSeries(series);
+    setButtonText('Switch Race Series');
   };
 
   return (
@@ -26,7 +28,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries}) => {
         onClick={handleClick}
         variant='outlined'
       >
-        choose a course
+        {buttonText}
       </Button>
       <Menu
         id="course-selector"
