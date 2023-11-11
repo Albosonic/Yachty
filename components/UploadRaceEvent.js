@@ -13,19 +13,7 @@ import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
-
-// const UPLOAD_RACE_IMAGE = "UPLOAD_RACE_IMAGE";
-
-const SelectedTimeRange = ({startDate, endDate}) => {
-  if (!startDate) return null;
-  if (!endDate) return null;
-  const startDay = startDate.slice(0, 10);
-  const startHrs = startDate.slice(11);
-  const endDay = endDate.slice(0, 10);
-  const endHrs = endDate.slice(11);
-  if (startDay === endDay) return <Typography variant="h5">{`${startDay} ${startHrs} - ${endHrs}`}</Typography>
-  return  <Typography variant="h5">{`${startDay} ${startDayHours} - ${endDay} ${endHrs}`}</Typography>
-}
+import SelectedTimeRange from "./SelectedTimeRange";
 
 const UploadRaceEvent = () => {
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
@@ -40,14 +28,15 @@ const UploadRaceEvent = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState({chooseCourseError: false, raceTitleError: false, seriesError: false});
   const {error, loading, data} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }});
-  const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }});
+  const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
 
   if (loading || getSeriesLoading) return <CircularProgress />;
+
   const {raceName: raceTitle, raceCourseId, img, raceNameSet, startDate, endDate, review, newRaceId } = raceInfo;
   const raceSeriesArr = raceSeriesData?.race_series
-  
+
   const submitRace = async () => {
     if (course === null) return setFormErrors({ ...formErrors, chooseCourseError: true });
     if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
@@ -64,7 +53,10 @@ const UploadRaceEvent = () => {
     };
 
     await s3Client.send(new PutObjectCommand(params));
-    console.log('series ===', series)
+    console.log('one :', startDate)
+    console.log('two :', endDate)
+    const startTime = startDate.slice(11);
+    const endTime = endDate.slice(11);
     const variables = {
       object: {
         seriesId: series.id,
@@ -75,10 +67,12 @@ const UploadRaceEvent = () => {
         startDate: startDate,
         endDate: endDate,
         ycId: ycId,
+        startTime,
+        endTime,
       }
     };
 
-    const resp = await insertRace({variables});    
+    const resp = await insertRace({variables});
     setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
 
   }
@@ -130,14 +124,14 @@ const UploadRaceEvent = () => {
       </Snackbar>
       <Grid container justifyContent="space-around">
         {!series && <Button onClick={() => setCreatingSeries(true)} variant="outlined">Create Series</Button>}
-        {series && 
+        {series &&
           <Grid container justifyContent="space-around" width="100%">
             <Typography variant="h4">{series?.seriesName}</Typography>
             <Button onClick={() => creatingAnotherSeries() } variant="outlined">Create Another Series</Button>
           </Grid>
         }
         {raceSeriesArr.length > 0 &&
-        <>          
+        <>
           <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries}/>
           {seriesError && <Typography variant="subtitle1" color="error">please choose a race series</Typography>}
         </>

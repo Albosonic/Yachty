@@ -33,7 +33,6 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
   }] = useMutation(DENY_MEMBERSHIP);
 
   const handleApproveMember = (variables) => {
-    console.log('wtf =============')
     setSnackBarMsg({msg: 'Member Approved', type: 'success'});
     approveNewMember(variables).then(resp => {
       if (resp.data) setShowSuccess(true);      
