@@ -29,10 +29,11 @@ const RaceTicketForm = ({raceData}) => {
     startTime,
     endTime,
     raceTicketId,
-    race_tickets_for_purchase: { cost },
+    race_tickets_for_purchase: raceTicket,
   } = raceData;
 
   useEffect(() => {
+    const cost = raceTicket ? raceTicket.cost : 0;
     setAmount(cost);
     setExistingRid(raceTicketId)
   }, [raceTicketId]);

@@ -4,7 +4,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import Fab from '@mui/material/Fab';
-import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import {  useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -62,7 +62,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   }
 
   return (
-    <>
+    <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!
@@ -117,7 +117,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
           <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
           <Button onClick={reserveTicket}>Reserve</Button>
         </Grid>}
-    </>
+    </Stack>
   )
 }
 

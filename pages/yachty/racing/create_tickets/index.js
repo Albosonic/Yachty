@@ -16,7 +16,10 @@ const CreateRaceEventTickets = () => {
   const raceId = router.query.raceId;
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const [chosenEventToLink, setChosenEventToLink] = useState(null);
-  const {error, loading, data, refetch: refetchRace} = useQuery(GET_RACE_BY_ID, {variables:{raceId}});  
+  console.log('raceId =========', raceId)
+  const {error, loading, data, refetch: refetchRace} = useQuery(GET_RACE_BY_ID, {
+    variables: { raceId }
+  });  
   const {error: eventError, loading: eventLoading, data: eventData} = useQuery(GET_YC_EVENTS_FEED, {
     variables: {ycId, after: getIsoDate()},
     fetchPolicy: "no-cache",
@@ -24,7 +27,7 @@ const CreateRaceEventTickets = () => {
   // TODO: tickets created and then ad edit or delete funcionality
   const [linkToRace, {loading: linkLoading}] = useMutation(LINK_EVENT_TO_RACE);
 
-  if (loading|| eventLoading) return <CircularProgress />;
+  if (loading|| eventLoading || raceId === undefined) return <CircularProgress />;
 
   const linkEventDinnerToRace = async () => {
     await linkToRace({variables: {raceId, eventId: chosenEventToLink.id}});
