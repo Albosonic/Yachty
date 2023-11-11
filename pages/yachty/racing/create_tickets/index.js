@@ -2,6 +2,7 @@ import EventTicketForPurchase from "@/components/EventTicketForPurchase";
 import EventsListMenu from "@/components/EventsListMenu";
 import NavBar from "@/components/NavBar";
 import RaceTicketForm from "@/components/RaceTIcketForm";
+import { useSelector } from "react-redux";
 import { GET_RACE_BY_ID, LINK_EVENT_TO_RACE } from "@/lib/gqlQueries/racinggql";
 import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import { getIsoDate } from "@/lib/utils/getters";
@@ -9,9 +10,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-
-
 
 const CreateRaceEventTickets = () => {
   const router = useRouter()
@@ -34,7 +32,7 @@ const CreateRaceEventTickets = () => {
   }
   const race = data.races[0];
   const eventListData = eventData.yc_events;
-  console.log('race ========:', race)
+
   return (
     <>
       <NavBar />
