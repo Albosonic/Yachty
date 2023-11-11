@@ -16,8 +16,6 @@ const EventsListMenu = ({eventData, setEvent}) => {
     if (event?.id) setEvent(event);
   };
   
-  console.log('Events ======', eventData)
-  eventData.map(event => console.log('event :', event))
   return (
     <>
       <Button

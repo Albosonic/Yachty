@@ -106,7 +106,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       {linkToRace && 
       <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
         <Typography variant='h5'>Link To Race Event</Typography>
-        <Button onClick={() => linkToRace(eventId)}>link to race</Button>
+        <Button onClick={() => linkToRace()}>link to race</Button>
       </Grid>}
     </>
   )

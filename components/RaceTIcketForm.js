@@ -27,9 +27,11 @@ const RaceTicketForm = ({raceData}) => {
     img: image,
     raceCourseId,
     raceName,
+    startTime,
+    endTime,
   } = raceData;
-
-  const createYCEventTicket = async () => {
+  console.log('wtfwtfw ==', raceData)
+  const handleCreateRaceTicket = async () => {
     let variables = {
       cost: amount,
       raceId,
@@ -72,7 +74,7 @@ const RaceTicketForm = ({raceData}) => {
           <Typography component="div" variant="h5">
             {raceName}
           </Typography>
-          <SelectedTimeRange startDate={startDate} endDate={endDate} />
+          <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />          
         </CardContent>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
           <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
@@ -80,7 +82,7 @@ const RaceTicketForm = ({raceData}) => {
         </Box>
       </Box>
       <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-        <Fab onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
+        <Fab onClick={handleCreateRaceTicket} size="medium" color='success'  aria-label="add">
           <AddIcon />
         </Fab>
       </Box>
