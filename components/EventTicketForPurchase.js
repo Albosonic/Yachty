@@ -80,7 +80,6 @@ const EventTicketForPurchase = (props) => {
 
   return (
     <>
-    <NavBar />
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 const YachtClubFeed = () => {
   const router = useRouter();
   const ycId = router.query.ycId;
+  // TODO: useIsoDateUtils instead
   const date = new Date();
   const dateIso = date.toISOString().slice(0, 10);
   const variables = {ycId, after: dateIso };

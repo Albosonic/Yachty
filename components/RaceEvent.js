@@ -11,14 +11,14 @@ const RaceEvent = ({newRaceId, edit}) => {
   const {data, loading, error} = useQuery(GET_RACE_BY_ID, {variables: { raceId: newRaceId }});
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
-//   const goTocreateEventTicket = () => {
-//     router.push({
-//       pathname: '/yachty/create_yc_event/create_event_ticket',
-//       query: {
-//         eventId
-//       }
-//     });
-//   };
+  const createRaceEventTickets = () => {
+    router.push({
+      pathname: '/yachty/racing/create_tickets',
+      query: {
+        raceId: newRaceId
+      }
+    });
+  };
   if (loading) return <CircularProgress />;
   
   const race = data.races[0];
@@ -37,7 +37,6 @@ const RaceEvent = ({newRaceId, edit}) => {
             minWidth: posterWidth,
           }}
         >
-
           <Typography variant="h4" sx={{marginTop: 2}}>{ raceName }</Typography>
           <Box
             component="img"
@@ -51,8 +50,16 @@ const RaceEvent = ({newRaceId, edit}) => {
           />
           <Stack sx={{margin: 2}} spacing={.5}>        
             <Grid>
-              <Button sx={{margin: 2}} onClick={edit} startIcon={<ArrowBackIcon />}>Edit Race</Button>
-              <Button sx={{margin: 2}} onClick={console.log('link to event')} endIcon={<ArrowForwardIcon />}>Link To YC Event</Button>
+              <Button 
+                sx={{margin: 2}} 
+                onClick={edit} 
+                startIcon={<ArrowBackIcon />}>Edit Race</Button>
+              <Button 
+              sx={{margin: 2}} 
+              onClick={createRaceEventTickets} 
+              endIcon={<ArrowForwardIcon />}>
+                Create Race Tickets
+              </Button>
             </Grid>
           </Stack>
         </Stack>

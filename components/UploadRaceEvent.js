@@ -13,19 +13,7 @@ import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
-
-// const UPLOAD_RACE_IMAGE = "UPLOAD_RACE_IMAGE";
-
-const SelectedTimeRange = ({startDate, endDate}) => {
-  if (!startDate) return null;
-  if (!endDate) return null;
-  const startDay = startDate.slice(0, 10);
-  const startHrs = startDate.slice(11);
-  const endDay = endDate.slice(0, 10);
-  const endHrs = endDate.slice(11);
-  if (startDay === endDay) return <Typography variant="h5">{`${startDay} ${startHrs} - ${endHrs}`}</Typography>
-  return  <Typography variant="h5">{`${startDay} ${startDayHours} - ${endDay} ${endHrs}`}</Typography>
-}
+import SelectedTimeRange from "./SelectedTimeRange";
 
 const UploadRaceEvent = () => {
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
