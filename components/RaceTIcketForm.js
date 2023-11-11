@@ -1,14 +1,11 @@
-import { useRouter } from 'next/router';
 import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import {  useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
-import NavBar from '@/components/NavBar';
-import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEventgql';
 import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
 import SelectedTimeRange from './SelectedTimeRange';
 

@@ -25,12 +25,13 @@ const CreateRaceEventTickets = () => {
   const [linkToRace, {loading: linkLoading}] = useMutation(LINK_EVENT_TO_RACE);
 
   if (loading|| eventLoading) return <CircularProgress />;
-  const linkEventDinnerToRace = async () => {
-    await linkToRace({variables: {raceId, eventId}});
-    await refetchRace();
 
+  const linkEventDinnerToRace = async () => {
+    await linkToRace({variables: {raceId, eventId: chosenEventToLink.id}});
+    await refetchRace();
   }
   const race = data.races[0];
+  console.log('race ====', race.eventId)
   const eventListData = eventData.yc_events;
 
   return (
@@ -40,7 +41,7 @@ const CreateRaceEventTickets = () => {
         <RaceTicketForm raceData={race} />
         <Typography variant="h5">Add Event Dinner Ticket</Typography>
         <EventsListMenu eventData={eventListData} setEvent={setChosenEventToLink} />
-        {chosenEventToLink && <EventTicketForPurchase eventData={chosenEventToLink} linkToRace={linkEventDinnerToRace} raceId={raceId} />}
+        {chosenEventToLink && <EventTicketForPurchase eventData={chosenEventToLink} linkToRace={linkEventDinnerToRace} raceId={raceId} linked={!!race.eventId} />}
       </Stack>
     </>
   )

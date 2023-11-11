@@ -2,6 +2,7 @@ import NavBar from '@/components/NavBar';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
+import CheckIcon from '@mui/icons-material/Check';
 import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import {  useState } from 'react';
@@ -24,6 +25,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
+  const [eventLinked, setEventLinked] = useState(false);
 
   const {id: memberId, yachtClubByYachtClub: {id: ycId}} = member;
 
@@ -40,19 +42,24 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   } = eventData;
 
   const amount = yc_event_tickets_for_purchase?.cost || 0;
-  const id = yc_event_tickets_for_purchase?.id
+  const ticketId = yc_event_tickets_for_purchase?.id
   
   const reserveTicket = async () => {
     // TODO: make this a batch update
     let noTickets = ticketCount;
     while(noTickets > 0) {
-      await insertTickets({variables: { memberId: memberId, ticketForPurchaseId: id, eventId: eventId }});
+      await insertTickets({variables: { memberId: memberId, ticketForPurchaseId: ticketId, eventId: eventId }});
       noTickets--;
     }
     setTicketCount(0);
     setShowSuccess(true);
   }
   const handleClose = () => router.push({ pathname: '/yachty/yc_feed', query: { ycId } });
+
+  const linkEventTicketToRace = async (ticketId) => {
+    await linkToRace();
+    setEventLinked(true);
+  }
 
   return (
     <>
@@ -85,29 +92,31 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             {date && <Typography>date: {date}</Typography>}
             {location && <Typography>location: {location}</Typography>}
             {specialNotes && <Typography>{specialNotes}</Typography>}
+            {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
           </CardContent>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
             <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
             <Typography sx={{color: 'black', fontSize: "40px", marginRight: 1}}>{ amount }</Typography>
           </Box>
         </Box>
-        {!linkToRace &&
-          <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-            <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
-              <AddIcon />
-            </Fab>
-          </Box>}
+        <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
+        {linkToRace ? (          
+          <Fab variant="extended" onClick={linkEventTicketToRace} size="medium" color='success'  aria-label="add">
+            <AddIcon />
+            Link
+          </Fab>        
+        ) : (          
+          <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
+            <AddIcon />
+          </Fab>
+        )}
+        </Box>
       </Card>
       {!linkToRace && 
         <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
           <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
           <Button onClick={reserveTicket}>Reserve</Button>
         </Grid>}
-      {linkToRace && 
-      <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
-        <Typography variant='h5'>Link To Race Event</Typography>
-        <Button onClick={() => linkToRace()}>link to race</Button>
-      </Grid>}
     </>
   )
 }
