@@ -4,28 +4,8 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
 import {  useState } from 'react';
 import { useSelector } from 'react-redux';
-
-const EVENT_TICKET_FOR_PURCHASE = gql`
-  query getEventTicketForPurchase($eventId: uuid!) {
-    yc_events(where: {id: {_eq: $eventId}}) {
-    entertainment
-    event_name
-    hours
-    image
-    location
-    specialNotes
-    date
-    yc_event_tickets_for_purchase {
-      cost
-      id
-    }
-  }
-}`;
-
-
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!, $eventId: uuid!) {
@@ -39,17 +19,12 @@ const INSERT_PURCHASED_TICKETS = gql`
   }
 }`;
 
-const EventTicketForPurchase = (props) => {
-  const router = useRouter();
-  const eventId = router.query.eventId;
-  // const memberId = useSelector(state => state.auth.member.id);
-  const member = useSelector(state => state.auth.member);
-
-  const {loading, data, error } = useQuery(EVENT_TICKET_FOR_PURCHASE, {variables:{eventId}, fetchPolicy: "no-cache" });
+const EventTicketForPurchase = ({ eventData, linkToRace }) => {  
+  const member = useSelector(state => state.auth.member);  
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
-  if (loading || !data) return <CircularProgress />;
+
   const {id: memberId, yachtClubByYachtClub: {id: ycId}} = member;
 
   const {
@@ -61,7 +36,8 @@ const EventTicketForPurchase = (props) => {
     location,
     specialNotes,
     yc_event_tickets_for_purchase,
-  } = data.yc_events[0];
+    id: eventId
+  } = eventData;
 
   const amount = yc_event_tickets_for_purchase?.cost || 0;
   const id = yc_event_tickets_for_purchase?.id
@@ -115,16 +91,23 @@ const EventTicketForPurchase = (props) => {
             <Typography sx={{color: 'black', fontSize: "40px", marginRight: 1}}>{ amount }</Typography>
           </Box>
         </Box>
-        <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-          <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
-            <AddIcon />
-          </Fab>
-        </Box>
+        {!linkToRace &&
+          <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
+            <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
+              <AddIcon />
+            </Fab>
+          </Box>}
       </Card>
+      {!linkToRace && 
+        <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
+          <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
+          <Button onClick={reserveTicket}>Reserve</Button>
+        </Grid>}
+      {linkToRace && 
       <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
-        <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
-        <Button onClick={reserveTicket}>Reserve</Button>
-      </Grid>
+        <Typography variant='h5'>Link To Race Event</Typography>
+        <Button onClick={() => linkToRace(eventId)}>link to race</Button>
+      </Grid>}
     </>
   )
 }
