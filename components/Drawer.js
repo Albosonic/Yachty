@@ -94,6 +94,14 @@ export default function AppDrawer({ open, toggleDrawer }) {
           </ListItemButton >
         </ListItem>}
         {userIsCommodore && <ListItem disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_races' })}>
+          <ListItemIcon>
+            <SailingIcon />
+          </ListItemIcon>
+          <ListItemText primary="Create Races" />
+          </ListItemButton >
+        </ListItem>}
+        {userIsCommodore && <ListItem disablePadding>
         <ListItemButton onClick={() => router.replace({pathname: '/yachty/racing' })}>
           <ListItemIcon>
             <SailingIcon />
