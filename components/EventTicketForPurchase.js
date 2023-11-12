@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Fab from '@mui/material/Fab';
-import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import {  useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -29,6 +29,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
   const [eventLinked, setEventLinked] = useState(false);
+  const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const {id: memberId, yachtClubByYachtClub: {id: ycId}} = member;
 
@@ -45,7 +46,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   } = eventData;
 
   const amount = yc_event_tickets_for_purchase?.cost || 0;
-  const ticketId = yc_event_tickets_for_purchase?.id
+  const ticketId = yc_event_tickets_for_purchase?.id;
 
   const reserveTicket = async () => {
     // TODO: make this a batch update
@@ -73,6 +74,9 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     setEventLinked(true);
   }
 
+  const cardWidthMin = moreThan600px ? 700 : 200;
+  const cardWidthMax = moreThan600px ? 200 : 700;
+
   return (
     <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -84,9 +88,11 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         elevation={4}
         sx={{
           display: 'flex',
-          maxWidth: 600,
+          maxWidth: cardWidthMax,
+          minWidth: cardWidthMin,
           margin: '0 auto',
-          marginBottom: 5
+          marginBottom: 5,
+          margin: 3,
         }}
       >
         <CardMedia
@@ -103,11 +109,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">Entertainment: {entertainment}</Typography>}
             {date && <Typography>date: {date}</Typography>}
             {location && <Typography>location: {location}</Typography>}
-            {specialNotes && <Typography>{specialNotes}</Typography>}
             {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
             {!linkToRace &&
             <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>
-              <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
+              <Typography variant='h6'>How Many Tickets: {ticketCount}</Typography>
               <Button onClick={reserveTicket}>Reserve</Button>
             </Grid>}
           </CardContent>
