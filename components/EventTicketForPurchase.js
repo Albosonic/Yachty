@@ -47,7 +47,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [puchasedTicketsInfo, setPurchasedTicketInfo] = useState({totalTickets: 0, unpaid: 0});
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  console.log('openDialog: ', openDialog)
+  
   const {
     date,
     entertainment,
@@ -74,7 +74,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   }, [purchasedTicketData]);
 
   if (loading) return <CircularProgress />;
-  console.log('wtfwtfwtfwtfwt', purchasedTicketData)
   const amount = yc_event_tickets_for_purchase?.cost || 0;
   const ticketId = yc_event_tickets_for_purchase?.id;
 
@@ -92,13 +91,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   }
 
   const handleClose = () => {
-    console.log('pathName', router.pathname)
-    if (router.pathname === '/yachty/racing/reservations') {
-      setTicketCount(0);
-      setShowSuccess(false)
-    } else {
-      router.push({ pathname: '/yachty/yc_feed', query: { ycId } })
-    }
+    setTicketCount(0);
+    setShowSuccess(false);
   };
 
   const linkEventTicketToRace = async (ticketId) => {
