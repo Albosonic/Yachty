@@ -20,8 +20,10 @@ const RaceEventPoster = ({ raceData }) => {
     startTime,
     race_tickets_for_purchase,
     yc_event,
+    id: raceId
   } = raceData;
   console.log('raceData', raceData);
+  console.log('raceData =====', raceId);
 
   const raceTicketId = race_tickets_for_purchase?.id;
 
@@ -59,7 +61,7 @@ const RaceEventPoster = ({ raceData }) => {
             <Button 
               onClick={() => router.push({
                 pathname: '/yachty/racing/reservations', 
-                query: {raceTicketId, eventId}
+                query: {raceId, eventId}
               })}
             >
               RSVP
