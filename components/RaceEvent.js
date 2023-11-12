@@ -13,7 +13,7 @@ const RaceEvent = ({newRaceId, edit}) => {
 
   const createRaceEventTickets = () => {
     router.push({
-      pathname: '/yachty/racing/create_tickets',
+      pathname: '/yachty/create_races/create_tickets',
       query: {
         raceId: newRaceId
       }
