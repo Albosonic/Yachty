@@ -16,7 +16,7 @@ const RaceTicketReservations = () => {
   
   const {loading: raceErrror, data: raceData, error: errorLoading } = useQuery(GET_RACE_BY_ID, { variables: { raceId: raceId }});
   
-  if (loading || raceId === undefined) return <CircularProgress />
+  if (loading || raceId === undefined || !raceData) return <CircularProgress />
   const race = raceData?.races;
   return (
     <>

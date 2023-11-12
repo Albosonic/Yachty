@@ -3,6 +3,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
+import RemoveIcon from '@mui/icons-material/Remove';
 import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import {  useState } from 'react';
@@ -21,9 +22,9 @@ const INSERT_PURCHASED_TICKETS = gql`
   }
 }`;
 
-const EventTicketForPurchase = ({ eventData, linkToRace }) => {  
+const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const router = useRouter();
-  const member = useSelector(state => state.auth.member);  
+  const member = useSelector(state => state.auth.member);
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
@@ -42,10 +43,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     yc_event_tickets_for_purchase,
     id: eventId,
   } = eventData;
-  
+
   const amount = yc_event_tickets_for_purchase?.cost || 0;
   const ticketId = yc_event_tickets_for_purchase?.id
-  
+
   const reserveTicket = async () => {
     // TODO: make this a batch update
     let noTickets = ticketCount;
@@ -64,7 +65,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       setShowSuccess(false)
     } else {
       router.push({ pathname: '/yachty/yc_feed', query: { ycId } })
-    }    
+    }
   };
 
   const linkEventTicketToRace = async (ticketId) => {
@@ -104,30 +105,35 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             {location && <Typography>location: {location}</Typography>}
             {specialNotes && <Typography>{specialNotes}</Typography>}
             {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
+            {!linkToRace &&
+            <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>
+              <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
+              <Button onClick={reserveTicket}>Reserve</Button>
+            </Grid>}
           </CardContent>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
             <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
             <Typography sx={{color: 'black', fontSize: "40px", marginRight: 1}}>{ amount }</Typography>
           </Box>
         </Box>
-        <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-        {linkToRace ? (          
-          <Fab variant="extended" onClick={linkEventTicketToRace} size="medium" color='success'  aria-label="add">
-            <AddIcon />
-            Link
-          </Fab>        
-        ) : (          
-          <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
-            <AddIcon />
-          </Fab>
-        )}
-        </Box>
+        {linkToRace ? (
+          <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
+            <Fab variant="extended" onClick={linkEventTicketToRace} size="medium" color='success'  aria-label="add">
+              <AddIcon />
+              Link
+            </Fab>
+          </Box>
+        ) : (
+          <Stack alignItems="center" sx={{ '& > :not(style)': { m: 1 } }}>
+            <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
+              <AddIcon />
+            </Fab>
+            <Fab onClick={() => setTicketCount(ticketCount - 1)} size='small'>
+              <RemoveIcon color="error" />
+            </Fab>
+          </Stack>
+        )}      
       </Card>
-      {!linkToRace && 
-        <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 0}}>
-          <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
-          <Button onClick={reserveTicket}>Reserve</Button>
-        </Grid>}
     </Stack>
   )
 }

@@ -3,11 +3,10 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Remove';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import SelectedTimeRange from './SelectedTimeRange';
+import { GET_RACE_TICKET_RESERVATION } from '@/lib/gqlQueries/racinggql';
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($ticketForPurchaseId: uuid!, $raceId: uuid!, $ycId: uuid!, $memberId: uuid!) {
@@ -22,14 +21,14 @@ const INSERT_PURCHASED_TICKETS = gql`
   }
 }`;
 
-const RaceTicketsForPurchase = ({ raceData, linkToRace }) => {  
-  const router = useRouter();
+const RaceTicketsForPurchase = ({ raceData }) => {  
   const memberId = useSelector(state => state.auth.member.id);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-  const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
+  const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS);
+  const [ticketReserved, setTicketReserved] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
-  if (!raceData) return <CircularProgress />
+  
   const {    
     raceName,
     img: image,
@@ -38,35 +37,37 @@ const RaceTicketsForPurchase = ({ raceData, linkToRace }) => {
     startTime,
     endDate,
     endTime,
-    race_tickets_for_purchase: {cost, id: ticketForPurchaseId }
-
+    race_tickets_for_purchase,
   } = raceData[0];
-
-  // const amount = yc_event_tickets_for_purchase?.cost || 0;
-  // const ticketId = yc_event_tickets_for_purchase?.id
-  console.log('raceData ====', raceData)
   
-  const reserveTicket = async () => {
-    // TODO: make this a batch update
-    let noTickets = ticketCount;
-    while(noTickets > 0) {
-      console.log('debugging no tickets')
-      await insertTickets({variables: { memberId, ticketForPurchaseId, raceId, ycId }});
-      noTickets--;
+  const {error: resError, loading: resLoading, data: resData} = useQuery(GET_RACE_TICKET_RESERVATION, {
+    variables: {raceId, memberId},
+    fetchPolicy: 'no-cache',
+  })
+  
+  useEffect(() => {
+    const reservedRaceTicket = resData?.race_tickets_purchased;
+    if (Array.isArray(reservedRaceTicket)) {
+      setTicketReserved(reservedRaceTicket.length > 0);      
     }
+
+  },[resData])
+
+  const reserveTicket = async () => {
+    await insertTickets({variables: { memberId, ticketForPurchaseId, raceId, ycId }});
     setTicketCount(0);
     setShowSuccess(true);
+    setTicketReserved(true);
   }
 
-  const handleClose = () => {
-    console.log('pathName', router.pathname)
-    if (router.pathname === '/yachty/racing/reservations') {
-      setTicketCount(0);
-      setShowSuccess(false)
-    } else {
-      router.push({ pathname: '/yachty/yc_feed', query: { ycId } })
-    }    
+  const handleClose = () => {    
+    setTicketCount(0);
+    setShowSuccess(false)
   };
+
+  if (!raceData || resLoading) return <CircularProgress />;
+  
+  const {cost, id: ticketForPurchaseId } = race_tickets_for_purchase;
 
   return (
     <Stack sx={{margin: 5}}>
@@ -96,15 +97,10 @@ const RaceTicketsForPurchase = ({ raceData, linkToRace }) => {
               {raceName}
             </Typography>
             <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />
-            <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>
-              <Typography variant='h5'>How Many Tickets: {ticketCount}</Typography>
-              <Button onClick={reserveTicket}>Reserve</Button>
+            {ticketReserved && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
+            <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>              
+              {ticketCount > 0 && <Button onClick={reserveTicket}>Confirm</Button>}
             </Grid>
-            {/* {entertainment && <Typography variant="subtitle1" color="text.secondary" component="div">Entertainment: {entertainment}</Typography>}
-            {date && <Typography>date: {date}</Typography>}
-            {location && <Typography>location: {location}</Typography>}
-            {specialNotes && <Typography>{specialNotes}</Typography>}
-            {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>} */}
           </CardContent>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
             <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
@@ -112,12 +108,10 @@ const RaceTicketsForPurchase = ({ raceData, linkToRace }) => {
           </Box>
         </Box>
         <Stack alignItems="center" sx={{ '& > :not(style)': { m: 1 } }}>
-          <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
+          {!ticketReserved && 
+          <Fab onClick={() => setTicketCount(1)} size="medium" color='success'  aria-label="add">
             <AddIcon />
-          </Fab>
-          <Fab onClick={() => setTicketCount(ticketCount - 1)} size='small'>
-            <RemoveIcon color="error" />
-          </Fab>
+          </Fab>          }
         </Stack>
       </Card>      
     </Stack>
