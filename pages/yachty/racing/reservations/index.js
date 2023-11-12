@@ -17,13 +17,13 @@ const RaceTicketReservations = () => {
   const {loading: raceErrror, data: raceData, error: errorLoading } = useQuery(GET_RACE_BY_ID, { variables: { raceId: raceId }});
   
   if (loading || raceId === undefined) return <CircularProgress />
-  const races = raceData?.races;
+  const race = raceData?.races;
   return (
     <>
       <NavBar />
       <Stack spacing={2} alignItems="center">
         <Typography variant="h5">Reserve your Tickets Now</Typography>
-        <RaceTicketsForPurchase raceData={races} />
+        <RaceTicketsForPurchase raceData={race} />
         <EventTicketForPurchase eventData={data.yc_events[0]} />
       </Stack>
     </>
