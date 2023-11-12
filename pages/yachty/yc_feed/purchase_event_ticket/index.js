@@ -7,6 +7,7 @@ const YcEventTicketForPurchase = () => {
   const router = useRouter();
   const eventId = router.query.eventId;
   const {loading, data, error } = useQuery(EVENT_TICKET_FOR_PURCHASE, {variables:{eventId}, fetchPolicy: "no-cache" });
+  console.log('data ===>', data);
   if (loading) return <CircularProgress />
   const eventData = yc_events[0];
   return (

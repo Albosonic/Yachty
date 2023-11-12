@@ -7,6 +7,7 @@ import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import {  useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!, $eventId: uuid!) {
@@ -21,6 +22,7 @@ const INSERT_PURCHASED_TICKETS = gql`
 }`;
 
 const EventTicketForPurchase = ({ eventData, linkToRace }) => {  
+  const router = useRouter();
   const member = useSelector(state => state.auth.member);  
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
@@ -38,9 +40,9 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     location,
     specialNotes,
     yc_event_tickets_for_purchase,
-    id: eventId
+    id: eventId,
   } = eventData;
-
+  
   const amount = yc_event_tickets_for_purchase?.cost || 0;
   const ticketId = yc_event_tickets_for_purchase?.id
   
@@ -54,7 +56,16 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     setTicketCount(0);
     setShowSuccess(true);
   }
-  const handleClose = () => router.push({ pathname: '/yachty/yc_feed', query: { ycId } });
+
+  const handleClose = () => {
+    console.log('pathName', router.pathname)
+    if (router.pathname === '/yachty/racing/reservations') {
+      setTicketCount(0);
+      setShowSuccess(false)
+    } else {
+      router.push({ pathname: '/yachty/yc_feed', query: { ycId } })
+    }    
+  };
 
   const linkEventTicketToRace = async (ticketId) => {
     await linkToRace();

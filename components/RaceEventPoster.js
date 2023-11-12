@@ -23,15 +23,13 @@ const RaceEventPoster = ({ raceData }) => {
   } = raceData;
   console.log('raceData', raceData);
 
-  const [insertEventComment, {loading: commentLoading}] = useMutation(INSERT_EVENT_COMMENT);
-  const [viewReplies, setViewReplies] = useState({});
+  const raceTicketId = race_tickets_for_purchase?.id;
+
+  console.log('whoooo', raceTicketId)
+  console.log('whoooo', raceTicketId)
   const moreThan600px = useMediaQuery('(min-width:600px)');
-
-  useEffect(() => {
-    console.log('view replies', viewReplies)
-  }, [viewReplies])
-
   const posterWidth = moreThan600px ? 550 : 300;
+
   return (
     <>
       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 5, marginTop: 5 }} elevation={3}>
@@ -57,10 +55,17 @@ const RaceEventPoster = ({ raceData }) => {
             src={image}
           />
           
-          {/* <Grid container justifyContent="space-around">
-            <Button onClick={() => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})}>RSVP</Button>
-            {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>}
-          </Grid> */}
+          <Grid container justifyContent="space-around">
+            <Button 
+              onClick={() => router.push({
+                pathname: '/yachty/racing/reservations', 
+                query: {raceTicketId, eventId}
+              })}
+            >
+              RSVP
+            </Button>
+            {/* {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>} */}
+          </Grid>
         </Stack>
         
           <Typography>
