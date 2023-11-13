@@ -34,7 +34,6 @@ const buildEverything = () => {
           region,
          }
       });
-      console.log('ycResp :', ycResp);
 
       const ycId = ycResp.data.insert_yacht_clubs.returning[0].id;
 
@@ -42,7 +41,7 @@ const buildEverything = () => {
 
       members.forEach(async member => {
         const {email, firstName, lastName, name, secondEmail, secondFirstName, secondLastName, secondName, isCommodore} = member;
-        console.log('email :', email)
+
         const memResp = await makeNewMember({
           variables: {
             email,
@@ -56,7 +55,7 @@ const buildEverything = () => {
             yacht_club: ycId,
           }
         });
-        console.log('memResp', memResp)
+
         let memberId = memResp.data.insert_yc_members.returning[0].id;
 
         memIdsByClub[clubName].push(memberId);
@@ -69,7 +68,6 @@ const buildEverything = () => {
               member_id: memberId
             }
           });
-          console.log('comRes :', comRes)
         }
 
       });
@@ -90,19 +88,18 @@ const buildEverything = () => {
       });
 
     });
-    console.log('mems ==', memIdsByClub)
+
     setMemberIdsByClub(memIdsByClub);
   }
 
   const handleReciprocalRequests = () => {
     const { beam, draft, hullMaterial, img, insuranceInfo, length, specialNotes, type, vesselName, getRandomIndex } = mockVesselData;
     const { ycIds } = memberIdsByClub;
-    console.log('memberIdsByClub =====', memberIdsByClub)
+
     for(let key in memberIdsByClub) {
       if (key !== 'ycIds') {
         let memberIds = memberIdsByClub[key];
         memberIds.forEach(async (memId, index) => {
-          console.log('memId :', memId)
 
           const vesselResp = await makeVessel({
             variables: {
@@ -122,12 +119,9 @@ const buildEverything = () => {
 
           const { id: savedVesselId } = vesselResp.data.insert_vessels.returning[0];
 
-          console.log('vessel response :', vesselResp)
-
           if (key === Club_Blue || key === Club_Madueno) {
             const visitingYCId = key === Club_Blue? ycIds[Club_Madueno] : ycIds[Club_Blue];
             const REQUESTING_SLIP = true;
-            console.log('yvids :', ycIds)
 
             let date = new Date().toDateString();
 

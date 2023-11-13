@@ -54,8 +54,10 @@ const EditMemberProfile = ({props}) => {
   const [vesselData, setVesselData] = useState({...vessel});
   const [racerOn, setRacerOn] = useState(false);
 
+  console.log('vesselInfo :', vesselInfo)
+
   useEffect(() => {
-    console.log()
+    if(vesselInfo.length > 0) setVesselData({...vesselInfo[0]})
     setRacerOn(memberIsRacer);
   }, [memberIsRacer]);
 
@@ -118,8 +120,7 @@ const EditMemberProfile = ({props}) => {
         insuranceInfo: { no: insuranceNum, company: insuranceCompany, expires: insuranceExpiry },
       }})
       if (bio === '') await updateMemberBio({variables:{memberId, bio}})
-    } else {
-      console.log('vesselInfo ====', vesselInfo)
+    } else {      
 
       await updateMemberAndVessel({variables: {
         // TODO: this needs some attention. via vessel Id or not.

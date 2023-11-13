@@ -53,8 +53,7 @@ const UploadRaceEvent = () => {
     };
 
     await s3Client.send(new PutObjectCommand(params));
-    console.log('one :', startDate)
-    console.log('two :', endDate)
+
     const startTime = startDate.slice(11);
     const endTime = endDate.slice(11);
     const variables = {

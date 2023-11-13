@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { GET_RACES_BY_YCID_AFTER_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
 import RaceEventPoster from "@/components/RaceEventPoster";
 import { GET_RACE_MEMBER } from "@/lib/gqlQueries/membersgql";
+import RacerProfileCard from "@/components/RacerProfileCard";
+
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
@@ -21,12 +23,9 @@ const Racing = () => {
   });
 
   if (raceEventsLoading) return <CircularProgress />;
-    console.log('raceMemberData: ', raceMemberData);
     const { yc_members: [member] } = raceMemberData;
     const {firstName, vessels: [vessel]} = member;
-
     const races = raceEventData.races;
-
     const { vesselName, beam, draft, hullMaterial, img, insuranceInfo, type, length } = vessel;    
 
   return (
@@ -50,20 +49,8 @@ const Racing = () => {
         // TODO: EDIT EACH THING INDIVIDUALY
         // TODO: EDIT EACH THING INDIVIDUALY
 
-        <Stack spacing={2} alignItems="center">
-          {img && 
-          <Box
-            component="img"
-            sx={{
-              height: 90,
-              width: 120,
-              marginBottom: 10,
-            }}
-            alt="yacht club logo"
-            src={img}
-          />}
-          <Typography variant="h5">{vesselName}</Typography>
-          <Typography variant="h4">{firstName}</Typography>
+        <Stack spacing={2} alignItems="center">      
+          <RacerProfileCard />
         </Stack>
 
 
