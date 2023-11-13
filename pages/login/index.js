@@ -8,12 +8,12 @@ import { clearState } from '@/slices/actions/authActions';
 
 const Login = () => {
   const router = useRouter()
-  const dispatch = useDispatch();
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
   const {user, isLoading} = useUser();
 
-  // dispatch(clearState()) for debugging purposes.
+  // dispatch(clearState()) //for debugging purposes.
+  
   if (isLoading) return <CircularProgress />
   
   if (memberId !== undefined || user?.email_verified === true) router.push('/yachty', {query: { ycId }});

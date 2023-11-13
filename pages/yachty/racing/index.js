@@ -5,11 +5,12 @@ import NavBar from "@/components/NavBar";
 import { GET_RACES_BY_YCID_AFTER_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
+import RaceEventPoster from "@/components/RaceEventPoster";
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-  console.log('id ======', ycId);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
+
   const {error: raceEventError, loading: raceEventsLoading, data: raceEventData} = useQuery(GET_RACES_BY_YCID_AFTER_DATE, {
     variables: {
       ycId: ycId,
@@ -19,6 +20,7 @@ const Racing = () => {
 
   if (raceEventsLoading) return <CircularProgress />;
     console.log('raceData: ', raceEventData);
+    const races = raceEventData.races;
   return (
     <>
       <NavBar />
@@ -43,10 +45,8 @@ const Racing = () => {
         </Stack>
       ) : (
         <Stack spacing={2} alignItems="center">
-          <Typography>Race Feed</Typography>
-          <Grid container justifyContent="center">
-            {/* <Typography noWrap sx={{padding: 1}} variant="h4">{ yachtClubName }</Typography> */}
-              <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Events</Typography>
+          <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>
+          <Grid container justifyContent="center">            
             </Grid>
             <Stack justifyContent="center" sx={{margin: '0 auto'}}>
               <Box
@@ -60,10 +60,7 @@ const Racing = () => {
                   overflowY: "scroll",
                 }}
               >
-                {/* {raceEventData.map((race, index) => {
-
-                  return <YcEventPoster eventData={event} key={`${event.event_name}${index}`} />
-                })} */}
+                {races.map((race, index) => <RaceEventPoster raceData={race} key={`${race.raceName}${index}`} />)}
               </Box>
             </Stack>
         </Stack>

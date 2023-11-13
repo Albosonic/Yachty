@@ -6,6 +6,8 @@ export const YC_EVENT = 'YC_EVENT';
 export const CLEAR_STATE = 'CLEAR_STATE';
 export const UPDATE_VESSEL_IMAGE = 'UPDATE_VESSEL_IMAGE';
 export const UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE';
+export const UPDATE_IS_RACER = 'UPDATE_IS_RACER';
+
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
   PRIVATE: 'PRIVATE',
@@ -45,5 +47,12 @@ export const updateUserProfilePicture = (pic) => {
   return {
     type: UPDATE_PROFILE_PICTURE,
     payload: pic,
+  }
+}
+
+export const updateIsRacer = (isRacer) => {
+  return {
+    type: UPDATE_IS_RACER,
+    payload: isRacer,
   }
 }
