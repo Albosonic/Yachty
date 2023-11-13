@@ -6,11 +6,13 @@ import { GET_RACES_BY_YCID_AFTER_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
 import RaceEventPoster from "@/components/RaceEventPoster";
+import { GET_RACE_MEMBER } from "@/lib/gqlQueries/membersgql";
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const memberId = useSelector(state => state.auth.member.id);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
-
+  const {error, loading, data: raceMemberData} = useQuery(GET_RACE_MEMBER, {variables: {memberId}}); 
   const {error: raceEventError, loading: raceEventsLoading, data: raceEventData} = useQuery(GET_RACES_BY_YCID_AFTER_DATE, {
     variables: {
       ycId: ycId,
@@ -19,8 +21,14 @@ const Racing = () => {
   });
 
   if (raceEventsLoading) return <CircularProgress />;
-    console.log('raceData: ', raceEventData);
+    console.log('raceMemberData: ', raceMemberData);
+    const { yc_members: [member] } = raceMemberData;
+    const {firstName, vessels: [vessel]} = member;
+
     const races = raceEventData.races;
+
+    const { vesselName, beam, draft, hullMaterial, img, insuranceInfo, type, length } = vessel;    
+
   return (
     <>
       <NavBar />
@@ -31,18 +39,36 @@ const Racing = () => {
         justifyContent="space-around" 
         width="100%"
       >
-        <Button fullWidth onClick={() => setShowLeftPanel(true)}>
-          My Race Profile
-        </Button>
+        <Button fullWidth onClick={() => setShowLeftPanel(true)}>My Race Profile</Button>        
         <Divider orientation="vertical" flexItem></Divider>
-        <Button fullWidth onClick={() => setShowLeftPanel(false)}>
-          Races
-        </Button>
+        <Button fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
+
+        // TODO: EDIT EACH THING INDIVIDUALY
+        // TODO: EDIT EACH THING INDIVIDUALY
+        // TODO: EDIT EACH THING INDIVIDUALY
+        // TODO: EDIT EACH THING INDIVIDUALY
+
         <Stack spacing={2} alignItems="center">
-          <Typography>My Race Profile</Typography>
+          {img && 
+          <Box
+            component="img"
+            sx={{
+              height: 90,
+              width: 120,
+              marginBottom: 10,
+            }}
+            alt="yacht club logo"
+            src={img}
+          />}
+          <Typography variant="h5">{vesselName}</Typography>
+          <Typography variant="h4">{firstName}</Typography>
         </Stack>
+
+
+
+
       ) : (
         <Stack spacing={2} alignItems="center">
           <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>

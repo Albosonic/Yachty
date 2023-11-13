@@ -112,7 +112,7 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
                   width: 120,
                   marginBottom: 10,
                 }}
-                alt="The house from the offer."
+                alt="yacht club logo"
                 src={logo}
               />
             </Grid>
