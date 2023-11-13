@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import EditIcon from '@mui/icons-material/Edit';
@@ -7,9 +7,10 @@ import ImageUploadField from "@/components/ImageUploadField";
 import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
-import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
-import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateUserProfilePicture } from "@/slices/actions/authActions";
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
+import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_AS_RACER, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
+import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateIsRacer, updateUserProfilePicture } from "@/slices/actions/authActions";
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormGroup, Grid, IconButton, Paper, Stack, Switch, TextField, Typography } from "@mui/material";
+import YachtySwitch from "@/components/YachtySwitch";
 
 const vessel = {
   vesselName: '',
@@ -31,6 +32,7 @@ const cleanMemberUpdateData = {
 const EditMemberProfile = ({props}) => {
   const dispatch = useDispatch();
   const memberId = useSelector(state => state.auth.member?.id);
+  const memberIsRacer = useSelector(state => state.auth.member?.isRacer);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const vesselInfo = useSelector(state => state.auth?.member.vessels);
 
@@ -38,6 +40,8 @@ const EditMemberProfile = ({props}) => {
   const [insertMemberVessel, {loading: insertVesselLoading}] = useMutation(INSERT_MEMBER_VESSEL);
   const [updateMemberAndVessel, {loading: updateMemberAndVesselLoading}] = useMutation(UPDATE_MEMBER_AND_VESSEL);
   const [updateMemberBio, {loading: updateMemberLoading}] = useMutation(UPDATE_YC_MEMBER_BIO);
+
+  const [updateMemberRacer, {loading: updateMemberRacerLoading}] = useMutation(UPDATE_YC_MEMBER_AS_RACER);
 
   // query member, and vessel info. If no vessel run insert vessel. if vessel exists 
   // run update vessel info.
@@ -48,6 +52,12 @@ const EditMemberProfile = ({props}) => {
   const [memberUpdateData, setMemberUpdateData] = useState({...cleanMemberUpdateData})
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
+  const [racerOn, setRacerOn] = useState(false);
+
+  useEffect(() => {
+    console.log()
+    setRacerOn(memberIsRacer);
+  }, [memberIsRacer]);
 
   const uploadProfilePic = async () => {
     const {fileDatum, src, imgKey} = profilePic;
@@ -73,7 +83,6 @@ const EditMemberProfile = ({props}) => {
     const { bio } = memberUpdateData;
     await updateMemberBio({variables:{memberId, bio}})
   }
-
 
   const submitVesselAndMemberInfo = async () => {
     let vesselImgPath = '';
@@ -111,21 +120,7 @@ const EditMemberProfile = ({props}) => {
       if (bio === '') await updateMemberBio({variables:{memberId, bio}})
     } else {
       console.log('vesselInfo ====', vesselInfo)
-    //   $memberId: uuid,
-    // $vesselId: uuid, 
-    // $bio: String,
-    // $beam: Int, 
-    // $draft: Int, 
-    // $hullMaterial: String, 
-    // $img: String, 
-    // $insuranceInfo: jsonb, 
-    // $length: Int,
-    // $ownerId: uuid,
-    // $specialNotes: String, 
-    // $type: String, 
-    // $unafilliatedVesselId: String, 
-    // $vesselImage: String, 
-    // $vesselName: String, 
+
       await updateMemberAndVessel({variables: {
         // TODO: this needs some attention. via vessel Id or not.
         // Todo: MISSING VESSEL ID
@@ -143,6 +138,14 @@ const EditMemberProfile = ({props}) => {
       }})
     }
   }
+
+  const changeIsRacer = async () => {
+    const isRacer = !racerOn;
+    await updateMemberRacer({variables: {memberId, isRacer}});
+    dispatch(updateIsRacer(isRacer));
+    setRacerOn(isRacer);
+  }
+
   const submit = addingVessel ? submitVesselAndMemberInfo : submitMemberBio;
   return (
     <>
@@ -163,7 +166,7 @@ const EditMemberProfile = ({props}) => {
           </DialogContent>
         </Dialog>
         <Stack alignItems="center" spacing={2}>
-          <Grid container justifyContent="flex start">
+          <Grid container justifyContent="space-between">
             <IconButton onClick={() => setEditingProfilePicture(!editingProfilePicture)}>
               <Stack>
                 <Grid container justifyContent="space-around">
@@ -176,19 +179,24 @@ const EditMemberProfile = ({props}) => {
             <Typography sx={{marginLeft: 10, marginTop: 4}} variant="h4">
               Edit Member Profile
             </Typography>
+            <FormGroup>
+              <FormControlLabel
+                control={<YachtySwitch onChange={() => changeIsRacer()} sx={{ m: 1 }} checked={racerOn} />}
+                label="Race Profile"
+              />
+            </FormGroup>
           </Grid>
-          
           <TextField 
               label="tell us about yourself"
               multiline
-              defaultValue="Sailed the 7 seas arg....."
+              placeholder="Sailed the 7 seas arg....."
               value={memberUpdateData.bio}
               onChange={(e) => setMemberUpdateData({...memberUpdateData, bio: e.target.value})}
               fullWidth
               rows={5}
           />
             <Button onClick={() => setAddingVessel(!addingVessel)}>Add Vessel Image and info</Button>
-            {addingVessel && (
+            {addingVessel || racerOn && (
               <>
                 <ImageUploadField type={UPDATE_VESSEL_IMAGE} setImageObjToParent={setVesselImg} img={vesselImg} title="Upload Vessel Image" />
                 <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />

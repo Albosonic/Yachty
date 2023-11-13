@@ -1,4 +1,4 @@
-import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO, UPDATE_PROFILE_PICTURE } from "./actions/authActions"
+import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_PROFILE_PICTURE } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -19,7 +19,8 @@ const initialState = {
     id: '',
     name: '',
     profilePic: '',
-    vessels: []
+    vessels: [],
+    isRacer: false,
   },
   user: {
     given_name: '',
@@ -75,6 +76,15 @@ export default function authReducer(state = initialState, action) {
         member: {
           ...state.member,
           profilePic: payload,
+        }
+      }
+    }
+    case UPDATE_IS_RACER: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          isRacer: payload,
         }
       }
     }
