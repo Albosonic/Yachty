@@ -2,18 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import EditIcon from '@mui/icons-material/Edit';
-import PublishIcon from '@mui/icons-material/Publish';
 import { useMutation, useQuery } from "@apollo/client";
 import ImageUploadField from "@/components/ImageUploadField";
 import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_AS_RACER, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
-import { UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, updateIsRacer, updateUserProfilePicture } from "@/slices/actions/authActions";
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, FormGroup, Grid, IconButton, Paper, Stack, Switch, TextField, Typography, useMediaQuery } from "@mui/material";
+import { UPDATE_PROFILE_PICTURE, updateIsRacer, updateUserProfilePicture } from "@/slices/actions/authActions";
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, FormGroup, Grid, IconButton, Paper, Stack, Switch, TextField, Typography, useMediaQuery } from "@mui/material";
 import YachtySwitch from "@/components/YachtySwitch";
 import UpdateMemberBio from "@/components/UpdateMemberBio";
-import { Publish } from "@mui/icons-material";
 import UploadVesselImage from "@/components/UploadVesselImage";
 
 const vessel = {
