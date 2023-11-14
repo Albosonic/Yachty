@@ -15,6 +15,7 @@ import UpdateMemberBio from "@/components/UpdateMemberBio";
 import UploadVesselImage from "@/components/UploadVesselImage";
 import useLess6EditMyProfile from "@/lib/hooks/lessThan600px/useLess6EditMyProfile";
 import RadioGroupHullMaterial from "@/components/RadioGroupHullMaterial";
+import VesselSpecsForm from "@/components/VesselSpecsForm";
 
 const vessel = {
   vesselName: '',
@@ -82,7 +83,6 @@ const EditMemberProfile = ({props}) => {
 
   const { titleVariation } = styles;
 
-  console.log('vesselData =======>', vesselData)
   return (
     <>
     <NavBar />
@@ -125,7 +125,8 @@ const EditMemberProfile = ({props}) => {
           </Grid>
           <UpdateMemberBio />
           <UploadVesselImage />
-          <RadioGroupHullMaterial hullMaterial={vesselData?.hullMaterial} />
+          <RadioGroupHullMaterial />
+          <VesselSpecsForm />
           {/* <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} /> */}
         </Stack>
       </Paper>

@@ -1,4 +1,4 @@
-import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE } from "./actions/authActions"
+import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -97,6 +97,22 @@ export default function authReducer(state = initialState, action) {
           vessels: [{
             ...state.member.vessels[0],
             hullMaterial: payload,
+          }]
+        }
+      }
+    }
+    case UPDATE_VESSEL_SPECS_ACT: {
+      const {vesselName, draft, length, beam} = payload;
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...state.member.vessels[0],
+            vesselName,
+            draft,
+            length,
+            beam,
           }]
         }
       }
