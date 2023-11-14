@@ -11,9 +11,6 @@ const UPDATE_HULL_MATERIAL_BY_OWNER_ID = gql`
   }
 }`;
 
-
-
-
 const RadioGroupHullMaterial = ({ hullMaterial }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const memberId = useSelector(state => state.auth.member.id);

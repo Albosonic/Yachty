@@ -27,10 +27,6 @@ const vessel = {
   insuranceExpiry: ''
 };
 
-const cleanMemberUpdateData = {
-  bio: '',
-};
-
 const EditMemberProfile = ({props}) => {
   const dispatch = useDispatch();
   const memberId = useSelector(state => state.auth.member?.id);
@@ -39,18 +35,14 @@ const EditMemberProfile = ({props}) => {
   const vesselInfo = useSelector(state => state.auth?.member.vessels);
 
   const [updateProfilePic, {loading: loadingProfilePic}] = useMutation(UPDATE_PROFILE_PICTURE_HASURA);
-  // const [insertMemberVessel, {loading: insertVesselLoading}] = useMutation(INSERT_MEMBER_VESSEL);
-  const [updateMemberAndVessel, {loading: updateMemberAndVesselLoading}] = useMutation(UPDATE_MEMBER_AND_VESSEL);
-  const [updateMemberBio, {loading: updateMemberLoading}] = useMutation(UPDATE_YC_MEMBER_BIO);
-
   const [updateMemberRacer, {loading: updateMemberRacerLoading}] = useMutation(UPDATE_YC_MEMBER_AS_RACER);
 
   const [profilePic, setProfilePic] = useState(null);
-  const [memberUpdateData, setMemberUpdateData] = useState({...cleanMemberUpdateData})
+  
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
   const [racerOn, setRacerOn] = useState(false);
-  
+
   useEffect(() => {
     if(vesselInfo.length > 0) setVesselData({...vesselInfo[0]})
     setRacerOn(memberIsRacer);
@@ -82,7 +74,7 @@ const EditMemberProfile = ({props}) => {
     dispatch(updateIsRacer(isRacer));
     setRacerOn(isRacer);
   }
-  
+
   return (
     <>
     <NavBar />
@@ -112,7 +104,7 @@ const EditMemberProfile = ({props}) => {
                 <Avatar sx={{width: 60, height: 60}} alt="member pic" src={profilePicture} />
               </Stack>
             </IconButton>
-            <Typography sx={{marginLeft: 10, marginTop: 4}} variant="h4">
+            <Typography sx={{marginLeft: 10, marginTop: 4}} variant="h5">
               Edit Member Profile
             </Typography>
             <FormGroup>
@@ -123,8 +115,8 @@ const EditMemberProfile = ({props}) => {
             </FormGroup>
           </Grid>
           <UpdateMemberBio />
-          <UploadVesselImage />    
-          <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />            
+          <UploadVesselImage />
+          <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />
         </Stack>
       </Paper>
     </>
