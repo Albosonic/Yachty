@@ -39,7 +39,7 @@ const EditMemberProfile = ({props}) => {
   const vesselInfo = useSelector(state => state.auth?.member.vessels);
 
   const [updateProfilePic, {loading: loadingProfilePic}] = useMutation(UPDATE_PROFILE_PICTURE_HASURA);
-  const [insertMemberVessel, {loading: insertVesselLoading}] = useMutation(INSERT_MEMBER_VESSEL);
+  // const [insertMemberVessel, {loading: insertVesselLoading}] = useMutation(INSERT_MEMBER_VESSEL);
   const [updateMemberAndVessel, {loading: updateMemberAndVesselLoading}] = useMutation(UPDATE_MEMBER_AND_VESSEL);
   const [updateMemberBio, {loading: updateMemberLoading}] = useMutation(UPDATE_YC_MEMBER_BIO);
 
@@ -75,27 +75,6 @@ const EditMemberProfile = ({props}) => {
     }
     setEditingProfilePicture(!editingProfilePicture);
   };
-
-
-  const submitVesselAndMemberInfo = async () => {
-    let vesselImgPath = '';
-    const { bio } = memberUpdateData;
-    const { beam, draft, hullMaterial, insuranceCompany, insuranceExpiry, insuranceNum, length, type, vesselName } = vesselData;
-
-    if(vesselInfo.length === 0) {
-      await insertMemberVessel({variables: {
-        ownerId: memberId,
-        draft: draft || null,
-        beam: beam || null,
-        hullMaterial: hullMaterial || null,
-        length: length || null,
-        type: type || null,
-        vesselName: vesselName || null,
-        img: vesselImgPath || null,
-        insuranceInfo: { no: insuranceNum, company: insuranceCompany, expires: insuranceExpiry },
-      }})
-    } 
-  }
 
   const changeIsRacer = async () => {
     const isRacer = !racerOn;
@@ -145,17 +124,7 @@ const EditMemberProfile = ({props}) => {
           </Grid>
           <UpdateMemberBio />
           <UploadVesselImage />    
-          
-
-
-
-            {/* <Button onClick={() => setAddingVessel(!addingVessel)}>Add Vessel Image and info</Button>
-            {addingVessel || racerOn && (
-              <>
-                <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />
-              </>
-              )
-            } */}          
+          <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />            
         </Stack>
       </Paper>
     </>
