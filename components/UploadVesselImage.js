@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert, Box, Button, CircularProgress, Fab, Snackbar, TextField, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import PublishIcon from '@mui/icons-material/Publish';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import ImageUploadField from "./ImageUploadField";
-import { UPDATE_VESSEL_IMAGE } from "@/slices/actions/authActions";
+import { UPDATE_VESSEL_IMAGE, updateVesselImgAct } from "@/slices/actions/authActions";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useSelector } from "react-redux";
 
 const UPDATE_VESSEL_IMG_BY_OWNER_ID = gql`
   mutation updateVesselImageByOwnerId($ownerId: uuid!, $img: String) {
@@ -24,6 +24,7 @@ const GET_VESSEL_IMG_BY_OWNER_ID = gql`
   }`;
 
 const UploadVesselImage = () => {
+  const dispatch = useDispatch();
   const memberId = useSelector(state => state.auth.member.id);
 
   const [showSuccess, setShowSuccess] = useState(false);
@@ -60,6 +61,7 @@ const UploadVesselImage = () => {
     const results = await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
     await updateVesselImage({variables: {ownerId: memberId, img: imgPath}})
+    dispatch(updateVesselImgAct(imgPath));
     console.log('image path: ', imgPath);
     setShowSuccess(true);
     setEditing(false);
@@ -100,12 +102,10 @@ const UploadVesselImage = () => {
             position: 'relative',
             top: -100,
           }}>
-            {editing ?  <PublishIcon /> : <EditIcon />}
+            {editing ? <PublishIcon /> : <EditIcon />}
           </Fab>
       </>}
-      
       {!vesselImg && <ImageUploadField type={UPDATE_VESSEL_IMAGE} setImageObjToParent={setVesselImg} img={vesselImg} title="Upload Vessel Image" />}
-      
     </>
   )
 }

@@ -7,6 +7,7 @@ export const CLEAR_STATE = 'CLEAR_STATE';
 export const UPDATE_VESSEL_IMAGE = 'UPDATE_VESSEL_IMAGE';
 export const UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE';
 export const UPDATE_IS_RACER = 'UPDATE_IS_RACER';
+export const UPDATE_HULL_MATERIAL_ACT = 'UPDATE_HULL_MATERIAL_ACT';
 
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
@@ -54,5 +55,19 @@ export const updateIsRacer = (isRacer) => {
   return {
     type: UPDATE_IS_RACER,
     payload: isRacer,
+  }
+}
+
+export const updateVesselImgAct = (vesselImage) => {
+  return {
+    type: UPDATE_VESSEL_IMAGE,
+    payload: vesselImage,
+  }
+};
+
+export const updateVesselHullMaterialAct = (hullMaterial) => {
+  return {
+    type: UPDATE_HULL_MATERIAL_ACT,
+    payload: hullMaterial
   }
 }

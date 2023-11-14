@@ -13,6 +13,8 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab,
 import YachtySwitch from "@/components/YachtySwitch";
 import UpdateMemberBio from "@/components/UpdateMemberBio";
 import UploadVesselImage from "@/components/UploadVesselImage";
+import useLess6EditMyProfile from "@/lib/hooks/lessThan600px/useLess6EditMyProfile";
+import RadioGroupHullMaterial from "@/components/RadioGroupHullMaterial";
 
 const vessel = {
   vesselName: '',
@@ -42,6 +44,8 @@ const EditMemberProfile = ({props}) => {
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
   const [racerOn, setRacerOn] = useState(false);
+
+  const pageStyles = useLess6EditMyProfile();
 
   useEffect(() => {
     if(vesselInfo.length > 0) setVesselData({...vesselInfo[0]})
@@ -74,7 +78,11 @@ const EditMemberProfile = ({props}) => {
     dispatch(updateIsRacer(isRacer));
     setRacerOn(isRacer);
   }
+  const styles = useLess6EditMyProfile();
 
+  const { titleVariation } = styles;
+
+  console.log('vesselData =======>', vesselData)
   return (
     <>
     <NavBar />
@@ -93,6 +101,9 @@ const EditMemberProfile = ({props}) => {
             </DialogActions>
           </DialogContent>
         </Dialog>
+
+        {/* TODO: abstract away this edit profile pic into it's own component */}
+
         <Stack alignItems="center" spacing={2}>
           <Grid container justifyContent="space-between">
             <IconButton onClick={() => setEditingProfilePicture(!editingProfilePicture)}>
@@ -104,9 +115,7 @@ const EditMemberProfile = ({props}) => {
                 <Avatar sx={{width: 60, height: 60}} alt="member pic" src={profilePicture} />
               </Stack>
             </IconButton>
-            <Typography sx={{marginLeft: 10, marginTop: 4}} variant="h5">
-              Edit Member Profile
-            </Typography>
+            <Typography variant={titleVariation}>Edit Member Profile</Typography>
             <FormGroup>
               <FormControlLabel
                 control={<YachtySwitch onChange={() => changeIsRacer()} sx={{ m: 1 }} checked={racerOn} />}
@@ -116,7 +125,8 @@ const EditMemberProfile = ({props}) => {
           </Grid>
           <UpdateMemberBio />
           <UploadVesselImage />
-          <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} />
+          <RadioGroupHullMaterial hullMaterial={vesselData?.hullMaterial} />
+          {/* <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} /> */}
         </Stack>
       </Paper>
     </>

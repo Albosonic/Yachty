@@ -1,8 +1,9 @@
 import { HULL_MATERIALS } from "@/lib/utils/settings";
-import { useMutation } from "@apollo/client";
-import { Button, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { updateVesselHullMaterialAct } from "@/slices/actions/authActions";
+import { gql, useMutation } from "@apollo/client";
+import { Alert, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const UPDATE_HULL_MATERIAL_BY_OWNER_ID = gql`
   mutation updateHullMaterial($ownerId: uuid!, $hullMaterial: String) {
@@ -11,18 +12,30 @@ const UPDATE_HULL_MATERIAL_BY_OWNER_ID = gql`
   }
 }`;
 
-const RadioGroupHullMaterial = ({ hullMaterial }) => {
+// TODO: THE VESSEL DETAILS NEED TO GO THROUGH REDUX!!!!!!!!
+
+const RadioGroupHullMaterial = () => {
+  const dispatch = useDispatch();
   const [showSuccess, setShowSuccess] = useState(false);
   const memberId = useSelector(state => state.auth.member.id);
-  // const [hullMaterial, setHullMaterial] = useState() TODO!!!!
-  const [updateVesselHullMaterial, {loading}] = useMutation(UPDATE_HULL_MATERIAL_BY_OWNER_ID)
+  const hullMaterial = useSelector(state => state.auth.member.vessels[0]?.hullMaterial)
+  const [inputHullMaterial, setInputHullMaterial] = useState('');
 
-  const handlehullMaterialUpdate = () => {
-    await updateHullMaterial({variables:{ownerId: memberId})
-  
+  useEffect(() => {
+    setInputHullMaterial(hullMaterial);
+  }, [hullMaterial])
+
+  const [updateVesselHullMaterial, {loading}] = useMutation(UPDATE_HULL_MATERIAL_BY_OWNER_ID)
+  const updateHullMaterial = async () => {
+    await updateVesselHullMaterial({variables:{ownerId: memberId, hullMaterial: inputHullMaterial}});
+    dispatch(updateVesselHullMaterialAct(inputHullMaterial));
+    setShowSuccess(true);
   }
 
-  const hullTypeIndex = HULL_MATERIALS.list.indexOf(hullMaterial);
+  const handleClose = () => {
+    setShowSuccess(false)
+  }
+  
   return (
     <>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -35,13 +48,13 @@ const RadioGroupHullMaterial = ({ hullMaterial }) => {
         row
         aria-labelledby="radio-buttons-hull-material-label"
         name="row-radio-buttons-hull-material-label"
-        defaultValue={HULL_MATERIALS.list[hullTypeIndex]}
-        onChange={() => }
+        value={inputHullMaterial}
+        onChange={(e) => setInputHullMaterial(e.target.value)}
       >
         {HULL_MATERIALS.list.map(hullType => {
-          return <FormControlLabel value={hullType} control={<Radio />} label={hullType} />
+          return <FormControlLabel key={hullType} value={hullType} control={<Radio />} label={hullType} />
         })}
-        <Button>
+        <Button onClick={updateHullMaterial}>
           update
         </Button>
       </RadioGroup>

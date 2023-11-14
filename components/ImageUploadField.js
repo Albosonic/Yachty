@@ -32,6 +32,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img, title="Upload Burgee
       imgKey: uuid4(),
       src: URL.createObjectURL(file),
     }
+    //TODO: refactor all image uploads to handle their own redux operations.
     switch(type) {
       case UPDATE_PROFILE_PICTURE: {
         const resizedFile = await resizeYcEventPoster(file);
