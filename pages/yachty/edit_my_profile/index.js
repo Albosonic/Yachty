@@ -16,6 +16,7 @@ import UploadVesselImage from "@/components/UploadVesselImage";
 import useLess6EditMyProfile from "@/lib/hooks/lessThan600px/useLess6EditMyProfile";
 import RadioGroupHullMaterial from "@/components/RadioGroupHullMaterial";
 import VesselSpecsForm from "@/components/VesselSpecsForm";
+import RadioVesselType from "@/components/RadioVesselType";
 
 const vessel = {
   vesselName: '',
@@ -108,14 +109,13 @@ const EditMemberProfile = ({props}) => {
           <Grid container justifyContent="space-between">
             <IconButton onClick={() => setEditingProfilePicture(!editingProfilePicture)}>
               <Stack>
-                <Grid container justifyContent="space-around">
+                <Grid container justifyContent="space-between">
                   <Typography variant="subtitle2">edit</Typography>
                   <EditIcon sx={{width: 18, height: 18}} />
                 </Grid>
                 <Avatar sx={{width: 60, height: 60}} alt="member pic" src={profilePicture} />
               </Stack>
             </IconButton>
-            <Typography variant={titleVariation}>Edit Member Profile</Typography>
             <FormGroup>
               <FormControlLabel
                 control={<YachtySwitch onChange={() => changeIsRacer()} sx={{ m: 1 }} checked={racerOn} />}
@@ -123,8 +123,11 @@ const EditMemberProfile = ({props}) => {
               />
             </FormGroup>
           </Grid>
+          <Typography sx={{margin: '0 auto', marginBottom: 2}} variant={titleVariation}>Edit Member Profile</Typography>
           <UpdateMemberBio />
+          <Typography variant="h6" >Add or edit vessel image</Typography>
           <UploadVesselImage />
+          <RadioVesselType />
           <RadioGroupHullMaterial />
           <VesselSpecsForm />
           {/* <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} /> */}

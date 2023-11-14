@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Divider, Paper, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Button, Divider, FormLabel, Paper, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { gql, useMutation } from "@apollo/client";
 import { updateVesselSpecsAct } from "@/slices/actions/authActions";
@@ -54,8 +54,8 @@ const VesselSpecsForm = () => {
             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
               Success
             </Alert>
-          </Snackbar>
-          <Typography variant="body1">Vessel Specs</Typography>
+          </Snackbar>          
+          <FormLabel id="radio-vessel-specs">Vessel Spec</FormLabel>
           <TextField
             required
             id="vessel-name"

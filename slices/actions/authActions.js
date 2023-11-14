@@ -9,6 +9,7 @@ export const UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE';
 export const UPDATE_IS_RACER = 'UPDATE_IS_RACER';
 export const UPDATE_HULL_MATERIAL_ACT = 'UPDATE_HULL_MATERIAL_ACT';
 export const UPDATE_VESSEL_SPECS_ACT = 'UPDATE_VESSEL_SPECS_ACT';
+export const UPDATE_VESSEL_TYPE_ACT = 'UPDATE_VESSEL_TYPE_ACT';
 
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
@@ -77,5 +78,12 @@ export const updateVesselSpecsAct = (specs) => {
   return {
     type: UPDATE_VESSEL_SPECS_ACT,
     payload: specs
+  }
+}
+
+export const updateVesselTypeAct = (type) => {  
+  return {
+    type: UPDATE_VESSEL_TYPE_ACT,
+    payload: type,
   }
 }

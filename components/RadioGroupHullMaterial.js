@@ -51,9 +51,7 @@ const RadioGroupHullMaterial = () => {
         onChange={(e) => setInputHullMaterial(e.target.value)}
 
       >
-        {HULL_MATERIALS.list.map(hullType => {
-          return <FormControlLabel key={hullType} value={hullType} control={<Radio />} label={hullType} />
-        })}
+        {HULL_MATERIALS.list.map(hullType => <FormControlLabel key={hullType} value={hullType} control={<Radio />} label={hullType} />)}
         <Button onClick={updateHullMaterial}>
           update
         </Button>
