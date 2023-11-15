@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Alert, Snackbar } from '@mui/material';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -27,21 +28,44 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RacerProfileCard = () => {
+const RacerProfileCard = ({ shareData }) => {
   const [expanded, setExpanded] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const vessels = useSelector(state => state.auth.member.vessels);
   const profilePic = useSelector(state => state.auth.member.profilePic);
   const member = useSelector(state => state.auth.member);
+
+  const handleClose = () => {
+    setShowSuccess(false)
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
   
-  const {vesselName, img} = vessels[0];
-  const {firstName, lastName, bio} = member;
+  const shareClick = async () => {    
+    const resp = await navigator.permissions.query({ name: "clipboard-write" });
+    console.log(resp.state);
+    const origin = window.location.origin;
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${member.id}`).then(
+      (what) => setShowSuccess(true),
+      (the) => console.log("copy text failed"),
+    );
+  }
+  
+  const firstName = shareData?.firstName || member?.firstName;
+  const lastName = shareData?.lastName || member?.lastName;
+  const bio = shareData?.bio || member?.bio;
+  const vesselName = shareData?.vesselName || vessels[0]?.vesselName;
+  const img = shareData?.img || vessels[0]?.img;
   
   return (
     <Card sx={{ maxWidth: 345 }}>
+      <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          url copied to clipboard
+        </Alert>
+      </Snackbar>
       <CardHeader
         avatar={<Avatar src={profilePic} aria-label="racer-img" />}
         action={
@@ -62,10 +86,10 @@ const RacerProfileCard = () => {
         <Typography variant="body2" color="text.secondary">{bio}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
+        </IconButton> */}
+        <IconButton onClick={shareClick} aria-label="share">
           <ShareIcon />
         </IconButton>
         <ExpandMore
@@ -79,12 +103,11 @@ const RacerProfileCard = () => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>Boat Details:</Typography>
           <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-            aside for 10 minutes.
+            Boat Details Here
           </Typography>
-          <Typography paragraph>
+          {/* <Typography paragraph>
             Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
             medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
             occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
@@ -100,10 +123,10 @@ const RacerProfileCard = () => {
             mussels, tucking them down into the rice, and cook again without
             stirring, until mussels have opened and rice is just tender, 5 to 7
             minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
+          </Typography> */}
+          {/* <Typography>
             Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
+          </Typography> */}
         </CardContent>
       </Collapse>
     </Card>
