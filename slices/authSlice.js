@@ -21,6 +21,7 @@ const initialState = {
     profilePic: '',
     vessels: [],
     isRacer: false,
+    bio: '',
   },
   vessels: [
     {
@@ -29,19 +30,18 @@ const initialState = {
       hullMaterial: '',
       id: '',
       img: null,
-      insuranceInfo: {
-        no: '',
-        company: '',
-        expires: ''
-      },
       length: null,
       ownerId: '',
       specialNotes: '',
       type: '',
       unafilliatedVesselId: null,
-      vesselImage: null,
       vesselName: '',
-      __typename: ''
+      __typename: '',
+      insuranceInfo: {
+        no: '',
+        company: '',
+        expires: ''
+      },
     }
   ],
   user: {
@@ -84,7 +84,7 @@ export default function authReducer(state = initialState, action) {
           ...state.member,
           vessels: [{
             ...state.member.vessels[0],
-            vesselImage: payload,
+            img: payload,
           }]
         }
       }

@@ -6,15 +6,15 @@ import { GET_RACES_BY_YCID_AFTER_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
 import RaceEventPoster from "@/components/RaceEventPoster";
-import { GET_RACE_MEMBER } from "@/lib/gqlQueries/membersgql";
+// import { GET_RACE_MEMBER } from "@/lib/gqlQueries/membersgql";
 import RacerProfileCard from "@/components/RacerProfileCard";
-
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const member = useSelector(state => state.auth.member);
   const memberId = useSelector(state => state.auth.member.id);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
-  const {error, loading, data: raceMemberData} = useQuery(GET_RACE_MEMBER, {variables: {memberId}}); 
+  // const {error, loading, data: raceMemberData} = useQuery(GET_RACE_MEMBER, {variables: {memberId}});
   const {error: raceEventError, loading: raceEventsLoading, data: raceEventData} = useQuery(GET_RACES_BY_YCID_AFTER_DATE, {
     variables: {
       ycId: ycId,
@@ -23,43 +23,31 @@ const Racing = () => {
   });
 
   if (raceEventsLoading) return <CircularProgress />;
-    const { yc_members: [member] } = raceMemberData;
-    const {firstName, vessels: [vessel]} = member;
-    const races = raceEventData.races;
-    const { vesselName, beam, draft, hullMaterial, img, insuranceInfo, type, length } = vessel;    
+
+  const races = raceEventData.races;
 
   return (
     <>
       <NavBar />
-      <Grid 
-        sx={{ borderBottom: '1px solid lightGrey', height: '70px'}} 
-        container 
-        flexWrap="nowrap" 
-        justifyContent="space-around" 
+      <Grid
+        sx={{ borderBottom: '1px solid lightGrey', height: '70px'}}
+        container
+        flexWrap="nowrap"
+        justifyContent="space-around"
         width="100%"
       >
-        <Button fullWidth onClick={() => setShowLeftPanel(true)}>My Race Profile</Button>        
+        <Button fullWidth onClick={() => setShowLeftPanel(true)}>My Race Profile</Button>
         <Divider orientation="vertical" flexItem></Divider>
         <Button fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
-
-        // TODO: EDIT EACH THING INDIVIDUALY
-        // TODO: EDIT EACH THING INDIVIDUALY
-        // TODO: EDIT EACH THING INDIVIDUALY
-        // TODO: EDIT EACH THING INDIVIDUALY
-
-        <Stack spacing={2} alignItems="center">      
+        <Stack spacing={2} alignItems="center">
           <RacerProfileCard />
         </Stack>
-
-
-
-
       ) : (
         <Stack spacing={2} alignItems="center">
           <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>
-          <Grid container justifyContent="center">            
+          <Grid container justifyContent="center">
             </Grid>
             <Stack justifyContent="center" sx={{margin: '0 auto'}}>
               <Box

@@ -6,7 +6,7 @@ import { updateVesselSpecsAct } from "@/slices/actions/authActions";
 
 const UPDATE_VESSEL_SPECS = gql`
 mutation updateVesselSpecs($ownerId: uuid, $vesselName: String, $beam: Int, $draft: Int, $length: Int) {
-  update_vessels(where: {ownerId: {_eq: $ownerId}}, _set: {beam: $beam, draft: $draft, length: $length, vesselImage: $vesselName}) {
+  update_vessels(where: {ownerId: {_eq: $ownerId}}, _set: {beam: $beam, draft: $draft, length: $length, vesselName: $vesselName}) {
     affected_rows
   }
 }`;
