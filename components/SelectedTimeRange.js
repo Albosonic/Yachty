@@ -3,8 +3,6 @@ import { Typography } from "@mui/material";
 const SelectedTimeRange = ({startDate, endDate}) => {
   if (!startDate) return null;
   if (!endDate) return null;
-  console.log('startDate :', startDate)
-  console.log('endDate :', endDate)
   const startDay = startDate.slice(0, 10);
   const startHrs = startDate.slice(11);
   const endDay = endDate.slice(0, 10);

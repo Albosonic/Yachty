@@ -24,7 +24,7 @@ const directMessageFeed = ({props}) => {
     variables: { memberId },
     fetchPolicy: 'no-cache'
   });
-  
+
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
     pollInterval: 1500,
@@ -81,7 +81,7 @@ const directMessageFeed = ({props}) => {
     }});
     setMessage('');
   }
-  
+
   const messageGridHeight = getMessageGridHeight();
 
   const Msg = ({ msg, authorId, profilePic }) => {
@@ -143,12 +143,11 @@ const directMessageFeed = ({props}) => {
           <Stack sx={{margin: 0, maxWidth: 500, height: '100vh', border: '1px solid grey'}}>
             <List sx={{
               overflow: "hidden",
-              overflowY: "scroll",              
+              overflowY: "scroll",
               height: "100%",
             }}>
               {moreThan600px && rooms.map((room,  i) => {
                 const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
-                console.log('rooom', room)
                 if (recipientId === memberId) return null;
                 return (
                   <ListItem onClick={() => router.replace({pathname: '/yachty/direct_messages', query: {rid: roomId}})} key={profilePic + i}>
@@ -177,9 +176,9 @@ const directMessageFeed = ({props}) => {
               >
                 {msgFacade.map(((msg, i) => {
                   const {message, authorId, profilePic} = msg;
-                  return (                  
+                  return (
                     <Grid
-                      key={msg.authorId + i + message}                    
+                      key={msg.authorId + i + message}
                       container
                       margin={1}
                       justifyContent="center"

@@ -68,8 +68,6 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
     }
   });
   const handleSendLetter = async () => {
-    console.log('id :', reqId)
-    console.log('string :', letterDate)
     await updateReciprocalStatus();
     setShowSuccess(true);
   }

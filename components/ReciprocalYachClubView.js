@@ -17,7 +17,7 @@ const ReciprocalYachtClubView = () => {
   const { loading, error, data } = useQuery(GET_YACHT_CLUB_AND_VESSEL_INFO, { variables: { ycId, ownerId: member?.id }});
   const [insertReciprocalRequestNewVessel, {data: reciprocalData, loading: reciprocalLoadingNewVessel, error: reciprocalErrorNewVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST_NEW_VESSEL);
   const [insertReciprocalRequestOwnVessel, {data: reciprocalDataOwnVessel, loading: reciprocalLoadingOwnVessel, error: reciprocalErrorOwnVessel}] = useMutation(INSERT_RECIPROCAL_REQUEST);
-  
+
   const cleanForm = {
     visitDate: '',
     requestingSlip: false,
@@ -34,7 +34,7 @@ const ReciprocalYachtClubView = () => {
       insuranceCompany: '',
       insuranceNum: '',
       insuranceExpiry: ''
-    } 
+    }
   }
 
   const [showSuccess, setShowSuccess] = useState(false);
@@ -54,23 +54,23 @@ const ReciprocalYachtClubView = () => {
 
   const handleSubmit = async () => {
     const { yachtClubByYachtClub: { id: homeYCId }, id: memberId } = member;
-    const { 
-      requestingSlip, 
-      specialNotes, 
-      visitDate: visitingDate, 
-      vessel: { 
-        vesselName, 
-        id: vesselId, 
-        beam, 
-        draft, 
-        length, 
-        hullMaterial, 
+    const {
+      requestingSlip,
+      specialNotes,
+      visitDate: visitingDate,
+      vessel: {
+        vesselName,
+        id: vesselId,
+        beam,
+        draft,
+        length,
+        hullMaterial,
         type,
         insuranceCompany,
         insuranceExpiry,
         insuranceNum,
       }} = formData;
-    
+
     if (!usingOwnVessel) {
       const unafilliatedVesselId = uuidv4();
       await insertReciprocalRequestNewVessel({
@@ -82,8 +82,8 @@ const ReciprocalYachtClubView = () => {
           visitingDate,
           visitingYCId: ycId,
           beam,
-          draft, 
-          length, 
+          draft,
+          length,
           hullMaterial,
           specialNotes,
           type,
@@ -96,24 +96,22 @@ const ReciprocalYachtClubView = () => {
     } else {
       await insertReciprocalRequestOwnVessel({
         variables: {
-          homeYCId, 
-          memberId, 
+          homeYCId,
+          memberId,
           requestingSlip,
-          visitingDate, 
+          visitingDate,
           visitingYCId: ycId,
           vesselId,
           specialNotes,
         }
       }).then(resp => {
-        console.log('resp ===', resp)
         if (!reciprocalErrorOwnVessel) setShowSuccess(true);
       })
     }
-  } 
+  }
 
   if (loading || data === undefined) return <CircularProgress />;
   if (error) return router.push('/login');
-  console.log('data ====', data)
   const { vesselConfirmed } = formData;
   const { yacht_clubs, vessels } = data;
   const desiredYC = yacht_clubs[0];
@@ -143,7 +141,7 @@ const ReciprocalYachtClubView = () => {
         alt="The house from the offer."
         src={logo || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40"}
       />
-      <Stack spacing={2} alignItems="center">        
+      <Stack spacing={2} alignItems="center">
 
         <Typography variant='h6'>
           When would you like to visit { name }
@@ -182,9 +180,9 @@ const ReciprocalYachtClubView = () => {
                   insuranceInfo,
                   specialNotes
                 } = profileVessel;
-                console.log('profile vessel ====', profileVessel)
+
                 const { company, no, expires } = insuranceInfo;
-                
+
                 return (
                   <Paper key={id}>
                     <Stack spacing={2} alignItems="center" sx={{ width: 400, p: 5 }}>
@@ -276,7 +274,7 @@ const ReciprocalYachtClubView = () => {
                   sx={{ width: '40ch' }}
                   required
                 />
-                
+
                 <FormLabel id="radio-hull-material">Hull Material</FormLabel>
                 <RadioGroup
                   row

@@ -22,13 +22,9 @@ const RaceEventPoster = ({ raceData }) => {
     yc_event,
     id: raceId
   } = raceData;
-  console.log('raceData', raceData);
-  console.log('raceData =====', raceId);
 
   const raceTicketId = race_tickets_for_purchase?.id;
 
-  console.log('whoooo', raceTicketId)
-  console.log('whoooo', raceTicketId)
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const posterWidth = moreThan600px ? 550 : 300;
 
