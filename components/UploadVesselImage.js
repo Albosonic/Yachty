@@ -80,7 +80,7 @@ const UploadVesselImage = () => {
       dispatch(updateVesselImgAct(imgPath));
     } else {
       const resp = await insertVesselAndImage({variables: {ownerId: memberId, img: imgPath, vesselImg: imgPath}});
-      dispatch(updateNewVesselAct({ownerId: memberId, imgPath, id: resp.data.insert_vessels_one.id}))
+      dispatch(updateNewVesselAct({ownerId: memberId, img: imgPath, id: resp.data.insert_vessels_one.id}))
     }  
     setShowSuccess(true);
     setEditing(false);

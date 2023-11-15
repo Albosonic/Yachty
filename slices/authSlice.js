@@ -1,4 +1,4 @@
-import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
+import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -22,28 +22,28 @@ const initialState = {
     vessels: [],
     isRacer: false,
     bio: '',
+    vessels: [
+      {
+        beam: null,
+        draft: null,
+        hullMaterial: '',
+        id: '',
+        img: null,
+        length: null,
+        ownerId: '',
+        specialNotes: '',
+        type: '',
+        unafilliatedVesselId: null,
+        vesselName: '',
+        __typename: '',
+        insuranceInfo: {
+          no: '',
+          company: '',
+          expires: ''
+        },
+      }
+    ],
   },
-  vessels: [
-    {
-      beam: null,
-      draft: null,
-      hullMaterial: '',
-      id: '',
-      img: null,
-      length: null,
-      ownerId: '',
-      specialNotes: '',
-      type: '',
-      unafilliatedVesselId: null,
-      vesselName: '',
-      __typename: '',
-      insuranceInfo: {
-        no: '',
-        company: '',
-        expires: ''
-      },
-    }
-  ],
   user: {
     given_name: '',
     family_name: '',
@@ -54,6 +54,7 @@ const initialState = {
     updated_at: '',
     email: '',
     email_verified: false,
+    userIsCommodore: false,
     sub: '',
     sid: ''
   }
@@ -78,14 +79,13 @@ export default function authReducer(state = initialState, action) {
       };
     }
     case UPDATE_NEW_VESSEL_ACT: {
-      console.log('state.member.vessels[0]======', state.member.vessels[0])
       const {img, id, ownerId} = payload;
       return {
         ...state,
         member: {
           ...state.member,
           vessels: [{
-            ...state.member.vessels[0],
+            ...initialState.member.vessels[0],
             img: img,
             id: id,
             ownerId: ownerId,
@@ -175,6 +175,16 @@ export default function authReducer(state = initialState, action) {
         member: {
           ...state.member,
           isRacer: payload,
+        }
+      }
+    }
+    case BETA_USER_IS_COMMODORE: {
+
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userIsCommodore: payload,
         }
       }
     }

@@ -137,7 +137,6 @@ const EditMemberProfile = ({props}) => {
               <VesselSpecsForm />
             </>
           }
-          {/* <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} /> */}
         </Stack>
       </Paper>
     </>
