@@ -78,7 +78,7 @@ const MemberRequests = () => {
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                          Lizard
+                          {`${firstName} ${lastName}`}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {bio || "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
