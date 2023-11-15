@@ -74,7 +74,7 @@ const UPSERT_MEMBER = gql`
 }`;
 
 const Yachty = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
   const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
@@ -82,8 +82,12 @@ const Yachty = () => {
   // const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER,{fetchPolicy: "no-cache",variables: { email: user?.email }});
   // let memberData = data?.yc_members[0];
 
+  const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
+  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
+  const memberData = useSelector(state => state?.auth?.member);
+
   useEffect(() => {
-    if (user?.email_verified) {
+    if (user?.email_verified && !memberData?.id) {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
         const resp = await upsertMember({variables: {
@@ -102,10 +106,6 @@ const Yachty = () => {
     }
   }, [user])
 
-  const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
-  const userIsCommodore = useSelector(state => state?.auth?.userIsCommodore);
-  const memberData = useSelector(state => state?.auth?.member);
-
   if (isLoading) return <CircularProgress />;
 
   // if (user === undefined) {
@@ -119,7 +119,7 @@ const Yachty = () => {
   //   return null;
   // }
   // if (error) router.push('/login');
-  
+
   const welcomText = userIsCommodore ? `Welcome Commodore ${memberData.firstName}` : `Welcome ${memberData.firstName}`;
   return (
     <div>
