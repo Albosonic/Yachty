@@ -25,7 +25,8 @@ const Racing = () => {
   if (raceEventsLoading) return <CircularProgress />;
 
   const races = raceEventData.races;
-
+  const left = showLeftPanel ? 1.7 : 1;
+  const right = showLeftPanel ? 1 : 1.7;
   return (
     <>
       <NavBar />
@@ -36,9 +37,9 @@ const Racing = () => {
         justifyContent="space-around"
         width="100%"
       >
-        <Button fullWidth onClick={() => setShowLeftPanel(true)}>My Race Profile</Button>
+        <Button sx={{borderBottom: left, borderRadius: 0}} fullWidth onClick={() => setShowLeftPanel(true)}>My Race Profile</Button>
         <Divider orientation="vertical" flexItem></Divider>
-        <Button fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
+        <Button sx={{borderBottom: right, borderRadius: 0}} fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
         <Stack spacing={2} alignItems="center">
