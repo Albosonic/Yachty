@@ -28,7 +28,7 @@ const VesselSpecsForm = () => {
   const [updateVesselSpecs, {loading: specsLoading}] = useMutation(UPDATE_VESSEL_SPECS);
 
   useEffect(() => {
-    if (!vessel) return;
+    if (!vessel.length === 0) return;
     const { beam, draft, length, vesselName } = vessel[0];
     setFormValues({
       vesselName,

@@ -37,12 +37,15 @@ const EditMemberProfile = ({props}) => {
   const memberIsRacer = useSelector(state => state.auth.member?.isRacer);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const vesselInfo = useSelector(state => state.auth?.member.vessels);
+  const vesselExists = useSelector(state => !!state.auth.member.vessels[0]?.id);
+  console.log('vesselEXIST ====:', vesselExists)
+  console.log('vesselInfo ====:', vesselInfo)
 
   const [updateProfilePic, {loading: loadingProfilePic}] = useMutation(UPDATE_PROFILE_PICTURE_HASURA);
   const [updateMemberRacer, {loading: updateMemberRacerLoading}] = useMutation(UPDATE_YC_MEMBER_AS_RACER);
 
   const [profilePic, setProfilePic] = useState(null);
-  
+
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
   const [racerOn, setRacerOn] = useState(false);
@@ -127,10 +130,13 @@ const EditMemberProfile = ({props}) => {
           <UpdateMemberBio />
           <Typography variant="h6" >Add or edit vessel image</Typography>
           <UploadVesselImage />
-          <RadioVesselType />
-          <RadioGroupHullMaterial />
-          <VesselSpecsForm />
-          {/* <InsertVesselForm setVesselToParent={setVesselData} formValues={vesselData} /> */}
+          {vesselExists &&
+            <>
+              <RadioVesselType />
+              <RadioGroupHullMaterial />
+              <VesselSpecsForm />
+            </>
+          }
         </Stack>
       </Paper>
     </>
