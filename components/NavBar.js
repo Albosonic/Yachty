@@ -5,19 +5,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
+import BugReportIcon from '@mui/icons-material/BugReport';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { Avatar, CircularProgress } from '@mui/material';
+import { Avatar, Fab } from '@mui/material';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import AppDrawer from './Drawer';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearState } from '@/slices/actions/authActions';
+import { useSelector } from 'react-redux';
 
 export default function NavBar() {
-  const { user, isLoading } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -59,7 +55,11 @@ export default function NavBar() {
           </IconButton>}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
-          </Typography>
+          </Typography>        
+          <Fab size='small' variant="extended" sx={{marginRight: 3}}>
+            <BugReportIcon/>
+            Beta
+          </Fab>
           {userLoggedIn && (
             <div>
               <IconButton
