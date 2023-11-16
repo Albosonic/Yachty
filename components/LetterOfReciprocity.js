@@ -68,8 +68,6 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
     }
   });
   const handleSendLetter = async () => {
-    console.log('id :', reqId)
-    console.log('string :', letterDate)
     await updateReciprocalStatus();
     setShowSuccess(true);
   }
@@ -112,7 +110,7 @@ const LetterOfReciprocity = ({ reqId, awaitingResponse }) => {
                   width: 120,
                   marginBottom: 10,
                 }}
-                alt="The house from the offer."
+                alt="yacht club logo"
                 src={logo}
               />
             </Grid>

@@ -43,7 +43,6 @@ const RaceTicketForm = ({raceData}) => {
 
     const ticketResp = await createRaceTicket({ variables: { cost: amount, raceId, ycId } });
     const rtid = ticketResp.data.insert_race_tickets_for_purchase.returning[0].id;
-    console.log('ticketResp.data.race_tickets_for_purchase:', ticketResp.data.insert_race_tickets_for_purchase.returning[0].id)
 
     await updateRace({variables: {raceId, raceTicketId: rtid}});
 
@@ -51,12 +50,8 @@ const RaceTicketForm = ({raceData}) => {
     setShowSuccess(true);
   }
 
-  const handleClose = () => {
-    // router.push({ pathname: '/yachty', query: { ycId } })
-    console.log('closed doing nothing');
-    setShowSuccess(false);
-  };
-  console.log('existing Id', existingRid)
+  const handleClose = () => setShowSuccess(false);
+
   return (
     <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >

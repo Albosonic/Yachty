@@ -21,7 +21,6 @@ const MobileDMRooms = () => {
     fetchPolicy: 'no-cache'
   });
   if (userRmLoading) return <CircularProgress />
-  console.log('userRmData ====', userRmData)
   const rooms = userRmData.user_rooms;
   return (
     <>

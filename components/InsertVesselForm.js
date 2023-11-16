@@ -38,7 +38,7 @@ const InsertVesselForm = ({ setVesselToParent, formValues }) => {
           label="draft"
           type="number"
           variant="standard"
-          value={formValues.draft}
+          value={formValues.draft}          
           onChange={(event) => setVesselToParent({...formValues, draft: event.target.value })}
           sx={{ m: 1, width: '40ch' }}
           multiline

@@ -40,9 +40,7 @@ const MemberRequests = () => {
           <Stack spacing={2} alignItems="center">
             <Typography spacing={2} variant="h2">Reciprocal Requests</Typography>
             <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
-            <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>
-              <Grid container justifyContent="center">
-
+            <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>              
                 {requests.map((req, index) => {
                   const {
                     yacht_club: reciprocalClub,
@@ -80,7 +78,7 @@ const MemberRequests = () => {
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                          Lizard
+                          {`${firstName} ${lastName}`}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {bio || "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
@@ -98,7 +96,6 @@ const MemberRequests = () => {
                     </Card>
                   )
                 })}
-              </Grid>
           </Stack>
         </Box>
       }
@@ -107,15 +104,3 @@ const MemberRequests = () => {
 }
 
 export default MemberRequests;
-
-
-// March 19, 2023
-
-// To Oyster Point Yacht Club board & membership.
-// I am writing to let you know that Ryan Opfer is a member in good standing at the Benicia Yacht
-// Club. I can vouch for him personally. Any questions, please feel free to phone or text me.
-// Best regards,
-// Dena Stults
-// Commodore
-// Benicia Yacht Club
-// 707 208-4498

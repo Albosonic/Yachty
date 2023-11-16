@@ -40,9 +40,9 @@ const YcEvent = ({eventIdProp, review, edit}) => {
           <Box
             component="img"
             sx={{
-              minHeight: 500,
+              padding: 5,
               height: '100%',
-              width: 400,
+              width: '100%',
             }}
             alt="Event Image"
             src={image}

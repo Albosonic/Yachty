@@ -1,4 +1,4 @@
-import { CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_LOGO, UPDATE_PROFILE_PICTURE } from "./actions/authActions"
+import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -19,7 +19,30 @@ const initialState = {
     id: '',
     name: '',
     profilePic: '',
-    vessels: []
+    vessels: [],
+    isRacer: false,
+    bio: '',
+    vessels: [
+      {
+        beam: null,
+        draft: null,
+        hullMaterial: '',
+        id: '',
+        img: null,
+        length: null,
+        ownerId: '',
+        specialNotes: '',
+        type: '',
+        unafilliatedVesselId: null,
+        vesselName: '',
+        __typename: '',
+        insuranceInfo: {
+          no: '',
+          company: '',
+          expires: ''
+        },
+      }
+    ],
   },
   user: {
     given_name: '',
@@ -31,6 +54,7 @@ const initialState = {
     updated_at: '',
     email: '',
     email_verified: false,
+    userIsCommodore: false,
     sub: '',
     sid: ''
   }
@@ -46,13 +70,80 @@ export default function authReducer(state = initialState, action) {
       let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
       return {
-        ...state, 
+        ...state,
         user: {...payload.user, userIsCommodore: userIsCommodore },
         member: {
           ...payload.member,
           profilePic: payload.member?.profilePic || payload.user?.picture,
-        }, 
+        },
       };
+    }
+    case UPDATE_NEW_VESSEL_ACT: {
+      const {img, id, ownerId} = payload;
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...initialState.member.vessels[0],
+            img: img,
+            id: id,
+            ownerId: ownerId,
+          }]
+        }
+      }
+    }
+    case UPDATE_VESSEL_IMAGE: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...state.member.vessels[0],
+            img: payload,
+          }]
+        }
+      }
+    }
+    case UPDATE_HULL_MATERIAL_ACT: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...state.member.vessels[0],
+            hullMaterial: payload,
+          }]
+        }
+      }
+    }
+    case UPDATE_VESSEL_SPECS_ACT: {
+      const {vesselName, draft, length, beam} = payload;
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...state.member.vessels[0],
+            vesselName,
+            draft,
+            length,
+            beam,
+          }]
+        }
+      }
+    }
+    case UPDATE_VESSEL_TYPE_ACT: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          vessels: [{
+            ...state.member.vessels[0],
+            type: payload,
+          }]
+        }
+      }
     }
     case NON_MEMBER_OBJECT: {
       return {...state, ...payload}
@@ -75,6 +166,25 @@ export default function authReducer(state = initialState, action) {
         member: {
           ...state.member,
           profilePic: payload,
+        }
+      }
+    }
+    case UPDATE_IS_RACER: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          isRacer: payload,
+        }
+      }
+    }
+    case BETA_USER_IS_COMMODORE: {
+
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          userIsCommodore: payload,
         }
       }
     }

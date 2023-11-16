@@ -17,6 +17,7 @@ const CreateEventTicket = (props) => {
   const [createYachtClubEventTicket, { loading: ticketLoading, data: ticketData, error: ticketError }] = useMutation(UPSERT_EVENT_TICKET);
   const [amount, setAmount] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   if (loading) return <CircularProgress />;
   
   const {
@@ -38,8 +39,10 @@ const CreateEventTicket = (props) => {
       eventId,
       ycId,
     }
-    await createYachtClubEventTicket({ variables });
+    setShowSpinner(true);
+    await createYachtClubEventTicket({ variables });    
     setShowSuccess(true);
+    setShowSpinner(false);
   }
 
   const handleClose = () => router.push({ pathname: '/yachty', query: { ycId } }); 
@@ -76,6 +79,7 @@ const CreateEventTicket = (props) => {
           {date && <Typography>when: {date}</Typography>}
           {location && <Typography>where: {location}</Typography>}
           {specialNotes && <Typography>{specialNotes}</Typography>}
+          {showSpinner && <CircularProgress />}
         </CardContent>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
           <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
@@ -83,7 +87,7 @@ const CreateEventTicket = (props) => {
         </Box>
       </Box>
       <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
-        <Fab onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
+        <Fab disabled={showSpinner} onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
           <AddIcon />
         </Fab>
       </Box>
