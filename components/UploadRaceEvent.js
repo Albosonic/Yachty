@@ -27,7 +27,7 @@ const UploadRaceEvent = () => {
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState({chooseCourseError: false, raceTitleError: false, seriesError: false});
-  const {error, loading, data} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }});
+  const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }, fetchPolicy: 'no-cache'});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
@@ -94,11 +94,6 @@ const UploadRaceEvent = () => {
     })
   };
 
-  const creatingAnotherSeries = () => {
-    setCreatingSeries(true);
-    setSeries(null);
-  }
-
   const showDatePickers = startDate === null || endDate === null ? true : false;
   const {chooseCourseError, raceTitleError, seriesError} = formErrors;
   return (
@@ -122,19 +117,7 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       <Grid container justifyContent="space-around">
-        {!series && <Button onClick={() => setCreatingSeries(true)} variant="outlined">Create Series</Button>}
-        {series &&
-          <Grid container justifyContent="space-around" width="100%">
-            <Typography variant="h4">{series?.seriesName}</Typography>
-            <Button onClick={() => creatingAnotherSeries() } variant="outlined">Create Another Series</Button>
-          </Grid>
-        }
-        {raceSeriesArr.length > 0 &&
-        <>
-          <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries}/>
-          {seriesError && <Typography variant="subtitle1" color="error">please choose a race series</Typography>}
-        </>
-        }
+        <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/>        
       </Grid>
       {creatingSeries &&
         <TextField

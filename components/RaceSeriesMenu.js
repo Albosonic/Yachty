@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-const RaceSeriesMenu = ({seriesArr, setSeries}) => {
+const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonText, setButtonText] = useState('Choose Race Series');
 
@@ -15,8 +15,12 @@ const RaceSeriesMenu = ({seriesArr, setSeries}) => {
   const handleClose = (series) => {
     setAnchorEl(null);
     if (series?.id) setSeries(series);
-    setButtonText('Switch Race Series');
   };
+
+  const createSeries = (series) => {
+    handleClose();
+    setCreatingSeries(true);
+  }
 
   return (
     <>
@@ -40,6 +44,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries}) => {
         }}
       >
         {seriesArr.map((series, i) => <MenuItem key={series.seriesName + i} onClick={() => handleClose(series)}>{series.seriesName}</MenuItem>)}
+        <MenuItem key="create series" onClick={createSeries}>{'...create series'}</MenuItem>
       </Menu>
     </>
   );
