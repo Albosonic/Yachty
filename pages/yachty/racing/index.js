@@ -8,6 +8,7 @@ import { getIsoDate } from "@/lib/utils/getters";
 import RaceEventPoster from "@/components/RaceEventPoster";
 // import { GET_RACE_MEMBER } from "@/lib/gqlQueries/membersgql";
 import RacerProfileCard from "@/components/RacerProfileCard";
+import RacePoster from "@/components/RacePoster";
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
@@ -62,7 +63,7 @@ const Racing = () => {
                   overflowY: "scroll",
                 }}
               >
-                {races.map((race, index) => <RaceEventPoster raceData={race} key={`${race.raceName}${index}`} />)}
+                {races.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
               </Box>
             </Stack>
         </Stack>

@@ -27,7 +27,7 @@ const UploadRaceEvent = () => {
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState({chooseCourseError: false, raceTitleError: false, seriesError: false});
-  const {error, loading, data} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }});
+  const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }, fetchPolicy: 'no-cache'});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
