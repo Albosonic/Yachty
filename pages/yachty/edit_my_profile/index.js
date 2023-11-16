@@ -90,7 +90,7 @@ const EditMemberProfile = ({props}) => {
   return (
     <>
     <NavBar />
-      <Paper elevation={4} sx={{margin: 5, padding: 5}}>
+      <Paper elevation={4} sx={{ padding: 5}}>
         <Dialog
           fullWidth={true}
           maxWidth='md'
