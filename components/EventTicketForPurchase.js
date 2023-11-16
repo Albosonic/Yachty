@@ -147,10 +147,9 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             <Typography variant='body1'>Already reserved: {totalTickets}</Typography>
             <Grid container>
               <Typography sx={{lineHeight: 2.5}} variant='body1'>unpaid: {unpaid}</Typography>
-              <Button onClick={() =>{ 
-                console.log('wtfwtfwtftw')
-                setOpenDialog(true)
-              }} >Payment Info</Button>
+              <Button onClick={() => setOpenDialog(true)}>
+                Payment Info
+              </Button>
             </Grid>
           </CardContent>
           {/* <Grid sx={{ width: '100%', height: 50, display: 'flex', justifyContent: 'flex-end' }}>
@@ -183,7 +182,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             </Stack>
             <Grid container flexWrap="nowrap" sx={{ width: '100%', height: '100%' }}>
               <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
-              <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, lineHeight: 1}}>{ amount }</Typography>
+              <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, lineHeight: 1}}>{ 20 }</Typography>
             </Grid>            
           </Stack>
         )}
