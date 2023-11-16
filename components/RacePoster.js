@@ -33,9 +33,7 @@ const RacePoster = ({ shareData, race }) => {
     console.log('race ====', race);
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const vessels = useSelector(state => state.auth.member.vessels);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const profilePic = useSelector(state => state.auth.member.profilePic);
   const member = useSelector(state => state.auth.member);
 
   const handleClose = () => {
@@ -56,13 +54,9 @@ const RacePoster = ({ shareData, race }) => {
     );
   }
   
-  const firstName = shareData?.firstName || member?.firstName;
-  const lastName = shareData?.lastName || member?.lastName;
   const bio = shareData?.bio || member?.bio;
-  const vesselName = shareData?.vesselName || vessels[0]?.vesselName;
-  const img = shareData?.img || vessels[0]?.img;
-
-  const { raceName, startDate, startTime } = race;
+  
+  const { raceName, startDate, startTime, img } = race;
   
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -111,13 +105,13 @@ const RacePoster = ({ shareData, race }) => {
           <ExpandMoreIcon />
         </ExpandMore>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Boat Details:</Typography>
           <Typography paragraph>
             Boat Details Here
           </Typography>
-          {/* <Typography paragraph>
+          <Typography paragraph>
             Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
             medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
             occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
@@ -133,12 +127,12 @@ const RacePoster = ({ shareData, race }) => {
             mussels, tucking them down into the rice, and cook again without
             stirring, until mussels have opened and rice is just tender, 5 to 7
             minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography> */}
-          {/* <Typography>
+          </Typography>
+          <Typography>
             Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography> */}
+          </Typography>
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
   );
 }
