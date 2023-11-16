@@ -42,7 +42,7 @@ const Racing = () => {
         <Button sx={{borderBottom: right, borderRadius: 0}} fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
-        <Stack spacing={2} alignItems="center">
+        <Stack sx={{margin: 5 }} spacing={2} alignItems="center">
           <RacerProfileCard />
         </Stack>
       ) : (
