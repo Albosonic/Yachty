@@ -94,11 +94,6 @@ const UploadRaceEvent = () => {
     })
   };
 
-  const creatingAnotherSeries = () => {
-    setCreatingSeries(true);
-    setSeries(null);
-  }
-
   const showDatePickers = startDate === null || endDate === null ? true : false;
   const {chooseCourseError, raceTitleError, seriesError} = formErrors;
   return (
@@ -122,19 +117,7 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       <Grid container justifyContent="space-around">
-        {!series && <Button onClick={() => setCreatingSeries(true)} variant="outlined">Create Series</Button>}
-        {series &&
-          <Grid container justifyContent="space-around" width="100%">
-            <Typography variant="h4">{series?.seriesName}</Typography>
-            <Button onClick={() => creatingAnotherSeries() } variant="outlined">Create Another Series</Button>
-          </Grid>
-        }
-        {raceSeriesArr.length > 0 &&
-        <>
-          <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries}/>
-          {seriesError && <Typography variant="subtitle1" color="error">please choose a race series</Typography>}
-        </>
-        }
+        <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/>        
       </Grid>
       {creatingSeries &&
         <TextField
