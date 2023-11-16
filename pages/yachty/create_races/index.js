@@ -6,7 +6,8 @@ import UploadRaceEvent from "@/components/UploadRaceEvent";
 
 const CreateRaces = () => {
   const [showLeftPanel, setShowLeftPanel] = useState(true);
-  
+  const left = showLeftPanel ? 1.5 : 1;
+  const right = showLeftPanel ? 1 : 1.5;
   return (
     <>
       <NavBar />
@@ -18,11 +19,11 @@ const CreateRaces = () => {
           justifyContent="space-around" 
           width="100%"
         >
-          <Button fullWidth onClick={() => setShowLeftPanel(true)}>
+          <Button sx={{borderBottom: left, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(true)}>
             Upload Course
           </Button>
           <Divider orientation="vertical" flexItem></Divider>
-          <Button fullWidth onClick={() => setShowLeftPanel(false)}>
+          <Button sx={{borderBottom: right, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(false)}>
             Create Race
           </Button>
         </Grid>
