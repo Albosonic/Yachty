@@ -1,14 +1,6 @@
 import { useSelector } from "react-redux";
 import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 
-const cleanDialog = {
-  open: false,
-  active: false,
-  duesOwed: 0,
-  email: '',
-  name: '',
-}
-
 const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog}) => {
   const memberId = useSelector(state => state.auth.member.id);
 
