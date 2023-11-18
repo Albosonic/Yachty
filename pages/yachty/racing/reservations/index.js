@@ -3,8 +3,9 @@ import NavBar from "@/components/NavBar";
 import RaceTicketsForPurchase from "@/components/RaceTicketsForPurchase";
 import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 import { EVENT_TICKET_FOR_PURCHASE, GET_EVENT_BY_EVENT_ID } from "@/lib/gqlQueries/ycFeedgql";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useQuery } from "@apollo/client";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { CircularProgress, Fab, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
 const RaceTicketReservations = () => {
@@ -21,6 +22,12 @@ const RaceTicketReservations = () => {
       <NavBar />
       <Stack spacing={2} alignItems="center">
         <Typography variant="h5">Reserve your Tickets Now</Typography>
+        <Grid width="100%">
+          <Fab size="small" sx={{margin: 2}} color="primary" variant="extended" onClick={() => router.back()}>
+            <ArrowBack/>
+            Back
+          </Fab>
+        </Grid>
         <RaceTicketsForPurchase raceData={race} />
         <EventTicketForPurchase eventData={data.yc_events[0]} />
       </Stack>

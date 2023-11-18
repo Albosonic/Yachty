@@ -123,7 +123,7 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case UPDATE_VESSEL_SPECS_ACT: {
-      const {vesselName, draft, length, beam, model, sailNumber, marina, slip} = payload;
+      const {vesselName, draft, length, beam, model, sailNumber, marina, slip, make} = payload;
       return {
         ...state,
         member: {
@@ -137,7 +137,8 @@ export default function authReducer(state = initialState, action) {
             model, 
             sailNumber, 
             marina, 
-            slip
+            slip,
+            make,
           }]
         }
       }

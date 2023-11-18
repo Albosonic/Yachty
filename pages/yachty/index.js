@@ -46,7 +46,6 @@ const UPSERT_MEMBER = gql`
       profilePic
       vessels {
         vesselName
-        vesselImage
         unafilliatedVesselId
         type
         specialNotes
@@ -96,6 +95,7 @@ const Yachty = () => {
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
   const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
+  const [updateProfilePic, {loading: profilePicLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
 
   // const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER,{fetchPolicy: "no-cache",variables: { email: user?.email }});
@@ -110,7 +110,8 @@ const Yachty = () => {
     if (user?.email_verified && !memberData?.id) {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
-        const resp = await upsertMember({variables: {
+        const resp = await upsertMember({
+        variables: {
           email,
           firstName,
           lastName,

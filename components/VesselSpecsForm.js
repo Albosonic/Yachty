@@ -17,7 +17,19 @@ mutation updateVesselSpecs(
   $marina: String,
   $slip: String,
 ) {
-  update_vessels(where: {ownerId: {_eq: $ownerId}}, _set: {beam: $beam, draft: $draft, length: $length, vesselName: $vesselName}) {
+  update_vessels(where: {
+    ownerId: {_eq: $ownerId}}, 
+    _set: {
+      beam: $beam, 
+      draft: $draft, 
+      length: $length, 
+      vesselName: $vesselName,
+      make: $make,
+      model: $model,
+      sailNumber: $sailNumber,
+      marina: $marina,
+      slip: $slip,
+    }) {
     affected_rows
   }
 }`;
@@ -60,7 +72,8 @@ const VesselSpecsForm = () => {
   },[vessel]);
 
   const handleClick = async () =>{
-    const {vesselName, draft, length, beam, model, sailNumber, marina, slip} = formValues;
+    const {vesselName, draft, length, beam, make, model, sailNumber, marina, slip} = formValues;
+    console.log('formVals =======', formValues)
     await updateVesselSpecs({
       variables: {
         ownerId: memberId, 
@@ -68,6 +81,7 @@ const VesselSpecsForm = () => {
         draft, 
         length, 
         beam,
+        make,
         model, 
         sailNumber, 
         marina,         
@@ -129,6 +143,17 @@ const VesselSpecsForm = () => {
         type="text"
         variant="standard"
         value={formValues?.length}
+        onChange={(event) => setFormValues({...formValues, length: event.target.value })}
+        sx={{ width: '40ch' }}
+        multiline
+      />
+      <TextField
+        required
+        id="vessel-make"
+        label="make"
+        type="text"
+        variant="standard"
+        value={formValues?.make}
         onChange={(event) => setFormValues({...formValues, make: event.target.value })}
         sx={{ width: '40ch' }}
         multiline
