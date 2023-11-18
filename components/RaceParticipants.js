@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { GET_ALL_USER_ROOMS_BY_ID } from "@/lib/gqlQueries/dmgql";
 import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography, colors } from "@mui/material";
 import { useRouter } from "next/router";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -15,12 +15,13 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ROOM_TYPES } from "@/slices/actions/authActions";
 import { GET_MEMBERS_BY_RACE_ID } from "@/lib/gqlQueries/membersgql";
+import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import RacerInfoDialog from "./RacerInfoDialog";
 
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'email', label: 'Email', minWidth: 100 },
+  { id: 'signed_race_releases', label: 'Release', minWidth: 100, isRelease: true },
 ];
 
 const cleanDialog = {
@@ -50,20 +51,18 @@ const RaceParticipants = ({raceId}) => {
 
   const { error, loading,  data, refetch } = useQuery(GET_MEMBERS_BY_RACE_ID, { variables: { raceId, fetchPolicy: 'no-cache' } });
 
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
+  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
+    variables: { 
+      memberId 
+    },
+    pollInterval: 1000,
+  });
 
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
-  const handleClose = async () => {
-    setOpenDialog({...cleanDialog})
-  }
-  const handlePayment = async (memberEmail) => {
-    await payDues({ variables: { newBalance: 0, email: memberEmail }});
-    await refetch({ycId: ycId});
-    handleClose();
-  };
+  const handleClose = async () => setOpenDialog({...cleanDialog})
 
   const directMessage = async (recipientId) => {
     let roomId = null;
@@ -109,7 +108,9 @@ const RaceParticipants = ({raceId}) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column, i) => (
+              {columns.map((column, i) => {
+                console.log('column: ', column)
+                return (
                 <TableCell
                   key={column.id + i}
                   align={column.align}
@@ -117,7 +118,8 @@ const RaceParticipants = ({raceId}) => {
                 >
                   {column.label}
                 </TableCell>
-              ))}
+              )
+            })}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -128,14 +130,24 @@ const RaceParticipants = ({raceId}) => {
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
                     {columns.map((column, i) => {
                       let value = row[column.id];
-                      if (Array.isArray(value)) {
-                        value = value.length > 0 ? value[0][column.nestedKey] : null;
+                      if (column.isRelease && row.signed_race_releases[0]) {
+                        let signed = row.signed_race_releases[0]?.releaseFormId;                        
+
+                        return (
+                          <TableCell key={column + i} align={column.align}>
+                            {signed && <DownloadDoneIcon color="success" />}
+                          </TableCell>
+                        )
+                      }
+                      if (Array.isArray(value)) {                                          
+                        value = value.length > 0 ? value[0][column.nestedKey] : null;                        
                       }
                       return (
                         <TableCell key={column + i} align={column.align}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
+
                         </TableCell>
                       );
                     })}

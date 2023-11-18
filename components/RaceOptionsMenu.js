@@ -5,10 +5,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ReleaseFormDialog from './ReleaseFormDialog';
 
 const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore)
 
   const open = Boolean(anchorEl);
@@ -20,22 +22,21 @@ const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
     setAnchorEl(null);
   };
 
-  const goToRace = (event) => {
-    router.push({
-      pathname: '/yachty/racing/race',
-      query: {raceId}
-    })
-  }
+  // const goToRace = (event) => {
+  //   router.push({
+  //     pathname: '/yachty/racing/race',
+  //     query: {raceId}
+  //   })
+  // }
 
-  const seeParticipants = (event) => {
-    router.push({
-      pathname: '/yachty/racing/race_participants',
-      query: {raceId}
-    })
+  const openDialogAndCloseMenu = () => {
+    handleClose();
+    setOpenDialog(true)
   }
 
   return (
-    <>      
+    <>
+      <ReleaseFormDialog setOpenDialog={setOpenDialog} open={openDialog} />
       <IconButton aria-label="settings" onClick={handleClick}>
         <MoreVertIcon />
       </IconButton>
@@ -47,7 +48,7 @@ const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
         MenuListProps={{'aria-labelledby': 'race-options'}}
       >
         {/* <MenuItem onClick={goToRace}>Go To Race</MenuItem> */}
-        <MenuItem onClick={seeParticipants}>See Participants</MenuItem>
+        <MenuItem onClick={openDialogAndCloseMenu}>Release Form</MenuItem>
         {/* {userIsCommodore && <MenuItem onClick={handleClose}>See Course</MenuItem>} */}
         {/* {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => handleClose(course)}>{course.courseName}</MenuItem>)} */}
       </Menu>

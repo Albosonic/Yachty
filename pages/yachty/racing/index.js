@@ -25,7 +25,7 @@ const Racing = () => {
   });
 
   if (raceEventsLoading) return <CircularProgress />;
-  console.log('racEEVENTDATA', raceEventData)
+
   const races = raceEventData.races;
   const left = showLeftPanel ? 1.7 : 1;
   const right = showLeftPanel ? 1 : 1.7;
