@@ -15,6 +15,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ROOM_TYPES } from "@/slices/actions/authActions";
 import { GET_MEMBERS_BY_RACE_ID } from "@/lib/gqlQueries/membersgql";
+import RacerInfoDialog from "./RacerInfoDialog";
 
 
 const columns = [
@@ -97,104 +98,13 @@ const RaceParticipants = ({raceId}) => {
     })
   }
 
-  // TODO: make this part of the db.
-  const BENICIA_MEMBER_DUES = 315;
-
   if (loading || !data) return <CircularProgress />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
   
-  const { 
-    open, 
-    name: memberName, 
-    duesOwed: memberDuesOwed, 
-    active: memberActive, 
-    email: memberEmail, 
-    bio: memberBio, 
-    profilePic: memberPic, 
-    id: targetMemberId,
-    vessels,
-    yachtClubByYachtClub,
-
-  } = openDialog;
-  const activeMemberText = memberActive ? 'Active' : 'Inactive';
-  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
-  
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Dialog
-        fullWidth={true}
-        maxWidth={'sm'}
-        open={open}
-        onClose={() => setOpenDialog({...cleanDialog})}
-      >
-        <DialogContent>
-          <Grid container justifyContent="space-between">
-            <Box component="img" sx={{ height: 90, width: 120 }} alt="yacht club logo" src={yachtClubByYachtClub?.logo} />
-            <Avatar alt="Profile Pic" src={memberPic} />
-          </Grid>
-          <Stack alignItems="center">
-          <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
-          <DialogTitle>{ memberName }</DialogTitle>
-          </Stack>          
-          <Grid container>
-            <Stack alignItems="center">
-              <Typography>
-                Vessel: {memberVessel?.vesselName}
-              </Typography>
-              <Box
-                component="img"
-                sx={{
-                  height: 200,
-                  width: 200,
-                  marginBottom: 2,
-                }}
-                alt="The house from the offer."
-                src={memberVessel?.img} 
-              />
-            </Stack>
-            <Stack sx={{marginTop: 5, marginLeft: 2}}>
-              <DialogContentText>
-                {memberEmail}
-              </DialogContentText>
-              <DialogContentText>
-                hullMaterial: {memberVessel?.type}
-              </DialogContentText>
-              <DialogContentText>
-                length: {memberVessel?.length}
-              </DialogContentText>
-              <DialogContentText>
-                make: {memberVessel?.make}
-              </DialogContentText>
-              <DialogContentText>
-                model: {memberVessel?.model}
-              </DialogContentText>
-              <DialogContentText>
-                marina: {memberVessel?.marina}
-              </DialogContentText>
-              <DialogContentText>
-                slip: {memberVessel?.slip}
-              </DialogContentText>
-              <DialogContentText>
-                Member Bio: {memberBio}
-              </DialogContentText>
-            </Stack>
-          </Grid>
-          <Grid container justifyContent="space-between" >
-            <DialogActions>
-              <Button onClick={handleClose}>go back</Button>
-            </DialogActions>
-            {targetMemberId !== memberId && <DialogActions>
-              <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
-            </DialogActions>}
-            <DialogActions>
-
-              <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>
-              
-            </DialogActions>
-          </Grid>
-        </DialogContent>
-      </Dialog>
+      <RacerInfoDialog openDialog={openDialog} cleanDialog={cleanDialog} setOpenDialog={setOpenDialog} handleClose={handleClose}/>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -214,7 +124,6 @@ const RaceParticipants = ({raceId}) => {
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => {
-                console.log('row=========: ', row)
                 return (
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
                     {columns.map((column, i) => {

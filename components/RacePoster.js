@@ -88,8 +88,6 @@ const RacePoster = ({ shareData, race }) => {
         onClose={() => setOpenDialog(false)}
       >
         <DialogContent>
-
-
           <Grid container justifyContent="space-between">
             <DialogTitle>Register for Race</DialogTitle>
             <Avatar alt="Profile Pic" src={profilePic} />
