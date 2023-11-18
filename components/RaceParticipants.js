@@ -188,7 +188,9 @@ const RaceParticipants = ({raceId}) => {
               <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
             </DialogActions>}
             <DialogActions>
+
               <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>
+              
             </DialogActions>
           </Grid>
         </DialogContent>
