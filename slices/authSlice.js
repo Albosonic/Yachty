@@ -35,6 +35,11 @@ const initialState = {
         type: '',
         unafilliatedVesselId: null,
         vesselName: '',
+        make: '',
+        model: '',
+        sailNumber: '',
+        marina: '',
+        slip: '',
         __typename: '',
         insuranceInfo: {
           no: '',
@@ -118,7 +123,7 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case UPDATE_VESSEL_SPECS_ACT: {
-      const {vesselName, draft, length, beam} = payload;
+      const {vesselName, draft, length, beam, model, sailNumber, marina, slip} = payload;
       return {
         ...state,
         member: {
@@ -129,6 +134,10 @@ export default function authReducer(state = initialState, action) {
             draft,
             length,
             beam,
+            model, 
+            sailNumber, 
+            marina, 
+            slip
           }]
         }
       }

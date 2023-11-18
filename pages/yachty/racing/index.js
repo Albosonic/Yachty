@@ -17,6 +17,7 @@ const Racing = () => {
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   // const {error, loading, data: raceMemberData} = useQuery(GET_RACE_MEMBER, {variables: {memberId}});
   const {error: raceEventError, loading: raceEventsLoading, data: raceEventData} = useQuery(GET_RACES_BY_YCID_AFTER_DATE, {
+    fetchPolicy: 'no-cache',
     variables: {
       ycId: ycId,
       startDate: getIsoDate(),
@@ -24,7 +25,7 @@ const Racing = () => {
   });
 
   if (raceEventsLoading) return <CircularProgress />;
-
+  console.log('racEEVENTDATA', raceEventData)
   const races = raceEventData.races;
   const left = showLeftPanel ? 1.7 : 1;
   const right = showLeftPanel ? 1 : 1.7;

@@ -10,12 +10,16 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Snackbar, Stack } from '@mui/material';
+import RaceCourseMenu from './RaceCourseMenu';
+import RaceOptionsMenu from './RaceOptionsMenu';
+import { useRouter } from 'next/router';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,12 +33,15 @@ const ExpandMore = styled((props) => {
 }));
 
 const RacePoster = ({ shareData, race }) => {
-
-    console.log('race ====', race);
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const member = useSelector(state => state.auth.member);
+  const profilePic = useSelector(state => state.auth.member.profilePic);
+  const vessel = useSelector(state => state.auth.member.vessels[0]);
 
   const handleClose = () => {
     setShowSuccess(false)
@@ -46,17 +53,23 @@ const RacePoster = ({ shareData, race }) => {
   
   const shareClick = async () => {    
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
-    console.log(resp.state);
     const origin = window.location.origin;
     const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${member.id}`).then(
       (what) => setShowSuccess(true),
       (the) => console.log("copy text failed"),
     );
   }
-  
+
   const bio = shareData?.bio || member?.bio;
   
-  const { raceName, startDate, startTime, img } = race;
+  const { raceName, startDate, startTime, img, id: raceId, eventId } = race;
+
+  const goToReservations = () => {
+    router.push({
+      pathname: '/yachty/racing/reservations',
+      query: {raceId, eventId}
+    })
+  }
   
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -65,18 +78,71 @@ const RacePoster = ({ shareData, race }) => {
           url copied to clipboard
         </Alert>
       </Snackbar>
+
+
+      <Dialog
+        fullWidth={true}
+        maxWidth={'sm'}
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+      >
+        <DialogContent>
+
+
+          <Grid container justifyContent="space-between">
+            <DialogTitle>Register for Race</DialogTitle>
+            <Avatar alt="Profile Pic" src={profilePic} />
+          </Grid>
+
+
+          <DialogContentText> vesse name: {vessel?.vesselName} </DialogContentText>
+          <DialogContentText> hullMaterial: {vessel?.hullMaterial} </DialogContentText>
+          <DialogContentText>length: {vessel?.length}</DialogContentText>
+
+
+          <Grid container>
+            <Stack alignItems="center">
+              <Typography>
+                Vessel: {vessel?.vesselName}
+              </Typography>
+              <Box
+                component="img"
+                sx={{
+                  height: 200,
+                  width: 200,
+                  marginBottom: 2,
+                }}
+                alt="The house from the offer."
+                src={vessel?.img} 
+              />
+            </Stack>
+            <Stack sx={{marginTop: 5, marginLeft: 2}}>
+              <Typography>
+                hullMaterial: {vessel?.type}
+              </Typography>
+              <Typography>
+                length: {vessel?.length}
+              </Typography>
+            </Stack>
+          </Grid>
+          <Grid container justifyContent="space-between" >
+            <DialogActions>
+              <Button onClick={handleClose}>go back</Button>
+            </DialogActions>
+            
+            <DialogActions>
+              <Button onClick={() => console.log('close')}>close</Button>
+            </DialogActions>
+            {/* <DialogActions>
+              <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>
+            </DialogActions> */}
+          </Grid>
+        </DialogContent>
+      </Dialog>
+
       <CardHeader
-    
-
-
-
-
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+        action={<RaceOptionsMenu raceId={raceId} />}
         title={raceName}
         subheader={`${startDate} ${startTime}`}
       />
@@ -87,23 +153,19 @@ const RacePoster = ({ shareData, race }) => {
         alt="Paella dish"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">{bio}</Typography>
+        <Typography variant="body2" color="text.secondary">put a brief race description here maybe</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {/* <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton> */}
         <IconButton onClick={shareClick} aria-label="share">
           <ShareIcon />
-        </IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
+        </IconButton>        
+        <IconButton onClick={ goToReservations } 
+          color="success" 
+          aria-label="add to favorites"
         >
-          <ExpandMoreIcon />
-        </ExpandMore>
+          <HowToRegIcon />
+          <Typography>Register</Typography>
+        </IconButton>
       </CardActions>
       {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
