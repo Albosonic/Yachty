@@ -130,7 +130,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
           image={image}
           alt="Event Image"
         />
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography component="div" variant="h5">
               {eventName}
@@ -156,7 +156,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             <AttachMoneyIcon color='action' sx={{ lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
             <Typography sx={{color: 'black', fontSize: 35, marginRight: 1}}>{ amount }</Typography>
           </Grid> */}
-        </Box>
+        </Stack>
         {linkToRace ? (
           <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
             <Stack spacing={2} alignItems="center">
@@ -165,8 +165,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                 Link
               </Fab>
             </Stack>
-            <Grid container flexWrap="nowrap" sx={{border: '2px solid red', bottom: 0, width: '100%', height: '100%', margin: '0 auto' }}>
-              <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
+            <Grid container flexWrap="nowrap" sx={{bottom: 0, width: '100%', height: '100%', margin: '0 auto' }}>
+              <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', color: 'black', fontSize: 40, marginBottom: 1}} />
               <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, marginRight: 1}}>{ amount }</Typography>
             </Grid>            
           </Box>

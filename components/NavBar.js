@@ -9,7 +9,6 @@ import BugReportIcon from '@mui/icons-material/BugReport';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { Avatar, Fab } from '@mui/material';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import AppDrawer from './Drawer';
 import { useSelector } from 'react-redux';
 
@@ -67,32 +66,12 @@ export default function NavBar() {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
                 color="inherit"
               >
                 <Fab size='small'>
                   <Avatar alt="Profile Pic" src={profilePicture} />
-
                 </Fab>
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
+              </IconButton>              
             </div>
           )}
         </Toolbar>

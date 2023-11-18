@@ -79,8 +79,8 @@ const RacerProfileCard = ({ shareData }) => {
       <CardMedia
         component="img"
         height="194"
-        image={img}
-        alt="Paella dish"
+        image={img || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/db10f677-4c20-49dc-95eb-88d3ff3aae8c"}
+        alt="vessel photo"
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">{bio}</Typography>

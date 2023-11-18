@@ -17,6 +17,7 @@ const Racing = () => {
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   // const {error, loading, data: raceMemberData} = useQuery(GET_RACE_MEMBER, {variables: {memberId}});
   const {error: raceEventError, loading: raceEventsLoading, data: raceEventData} = useQuery(GET_RACES_BY_YCID_AFTER_DATE, {
+    fetchPolicy: 'no-cache',
     variables: {
       ycId: ycId,
       startDate: getIsoDate(),
@@ -51,20 +52,8 @@ const Racing = () => {
           <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>
           <Grid container justifyContent="center">
             </Grid>
-            <Stack justifyContent="center" sx={{margin: '0 auto'}}>
-              <Box
-                sx={{
-                  mb: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  // maxWidth: 600,
-                  height: 700,
-                  overflow: "hidden",
-                  overflowY: "scroll",
-                }}
-              >
-                {races.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
-              </Box>
+            <Stack spacing={4}>              
+              {races.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
             </Stack>
         </Stack>
       )}
