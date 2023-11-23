@@ -21,6 +21,7 @@ import RaceCourseMenu from './RaceCourseMenu';
 import RaceOptionsMenu from './RaceOptionsMenu';
 import { useRouter } from 'next/router';
 import RaceParticipants from './RaceParticipants';
+import EventCommentsList from './EventcommentsList';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -117,7 +118,7 @@ const YcEventPoster = ({ eventData }) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {/* <RaceParticipants raceId={raceId} releaseFormId={releaseFormId} /> */}
+          <EventCommentsList eventId={eventId} />
         </CardContent>
       </Collapse>
     </Card>

@@ -60,9 +60,8 @@ const EventCommentsList = ({ eventId }) => {
 
   return (
     <Stack>
-      <Typography onClick={() => setShowParents(!showParents)} variant="subtitle2">show comments...</Typography>
-      <Typography variant="subtitle2">{parentComments.length > 0 && parentComments[parentComments.length - 1].comment}</Typography>
-      { showParents && parentComments.map((commentFacade, i) => {
+      <Typography variant="body1">{parentComments.length > 0 && parentComments[parentComments.length - 1].comment}</Typography>
+      { parentComments.map((commentFacade, i) => {
         const {
           comment,
           createdAt,
