@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
+import { useRouter } from 'next/router';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ShareIcon from '@mui/icons-material/Share';
@@ -16,12 +17,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Snackbar, Stack, useMediaQuery } from '@mui/material';
-import RaceCourseMenu from './RaceCourseMenu';
-import RaceOptionsMenu from './RaceOptionsMenu';
-import { useRouter } from 'next/router';
-import RaceParticipants from './RaceParticipants';
-import EventCommentsList from './EventcommentsList';
+import { Alert, Snackbar, useMediaQuery } from '@mui/material';
+import EventCommentsList from './EventCommentsList';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
