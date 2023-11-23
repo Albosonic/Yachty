@@ -1,243 +1,263 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import RecommendIcon from '@mui/icons-material/Recommend';
-import { GET_EVENT_COMMENTS, INSERT_EVENT_COMMENT } from "@/lib/gqlQueries/ycFeedgql";
-import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import { useRouter } from 'next/router';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Alert, Snackbar, useMediaQuery } from '@mui/material';
+import EventCommentsList from './EventCommentsList';
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const YcEventPoster = ({ eventData }) => {
+  
   const router = useRouter();
-  const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
-  const {loading: commentsLoading, data: commentsData} = useQuery(GET_EVENT_COMMENTS, { variables: { eventId }, pollInterval: 700, fetchPolicy: 'no-cache' });
-  const [insertEventComment, {loading: commentLoading}] = useMutation(INSERT_EVENT_COMMENT);
+  const [expanded, setExpanded] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  
   const isCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
-  const memberId = useSelector(state => state?.auth?.member?.id);
-  const [showParents, setShowParents] = useState(false);
-  const [viewReplies, setViewReplies] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  
+  
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
+  // const member = useSelector(state => state.auth.member);
+  // const profilePic = useSelector(state => state.auth.member.profilePic);
+  
+  
+  const handleClose = () => {
+    setShowSuccess(false)
+  }
+  
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+  
+  const shareClick = async () => {    
+    const resp = await navigator.permissions.query({ name: "clipboard-write" });
+    const origin = window.location.origin;
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${member.id}`).then(
+      (what) => setShowSuccess(true),
+      (the) => console.log("copy text failed"),
+      );
+    }
+    
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
-  useEffect(() => {
-    console.log('view replies', viewReplies)
-  }, [viewReplies])
-
-  const makeCommentsFacade = (data) => {
-    let commentArrays = {
-      parentComments: []
-    };
-    data.comments.forEach(commentObj => {
-      const { id, comment, createdAt, parentId, yc_member: { profilePic, firstName } } = commentObj;   
-      const facade = {
-        comment,
-        createdAt,
-        parentId,
-        authorPic: profilePic,
-        author: firstName,
-        commentId: id,
-      };
-
-      if (parentId === null) {
-        commentArrays.parentComments.push(facade);
-      } else {
-        if (commentArrays.hasOwnProperty(parentId)) {
-          commentArrays[parentId].push(facade);
-        } else {
-          commentArrays[parentId] = [facade];
-        }
-      }
-    });
-    return commentArrays;
-  }
-
-  const CommentList = ({ commentFacadeArrays }) => {
-    const cleanField = { 
-      msg: '', 
-      parentId: null, 
-      childComment: false
-    };
-    const [inputComment, setInputComment] = useState({ ...cleanField });
-    const { parentIdCommentId, msg: inputMsg, childComment } = inputComment;
-
-    const sendComment = async () => {
-      if (inputMsg === '') return;
-      await insertEventComment({
-        variables: {
-          object: {
-            eventId,
-            memberId,
-            parentId: parentIdCommentId,
-            comment: inputMsg,
-            createdAt: new Date().toISOString(),
-          }
-        }
-      });
-      setInputComment({...cleanField});
-    }
-
-    const sendReply = async (commentId) => {
-      if (inputMsg === '') return;
-      await insertEventComment({
-        variables: {
-          object: {
-            eventId,
-            memberId,
-            parentId: parentIdCommentId,
-            comment: inputMsg,
-            createdAt: new Date().toISOString(),
-          }
-        }
-      })      
-      setInputComment({...cleanField});
-      setViewReplies({...viewReplies, [commentId]: true});
-    };
-
-    if (!commentFacadeArrays) return <CircularProgress />
-
-    const { parentComments } = commentFacadeArrays;
-    return (
-      <Stack>
-        <Typography onClick={() => setShowParents(!showParents)} variant="subtitle2">show comments...</Typography>
-        <Typography variant="subtitle2">{parentComments.length > 0 && parentComments[parentComments.length - 1].comment}</Typography>
-        { showParents && parentComments.map((commentFacade, i) => {
-          const {
-            comment,
-            createdAt,
-            parentId,
-            authorPic,
-            author,
-            commentId
-          } = commentFacade;
-          
-          const childComments = commentFacadeArrays[commentId] ? commentFacadeArrays[commentId] : null;
-          
-          return (
-            <Stack key={comment + i}>
-              <Stack justifyContent="space-between">
-                <Grid  container justifyContent="space-between">
-                  <Stack>
-                    <Typography variant="subtitle2">
-                      {comment}
-                    </Typography>
-                    <Button sx={{fontSize: 9, padding: 1, margin: 1}} variant="standard" onClick={() => {
-                      setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})                      
-                    }}>
-                      view replies
-                    </Button>  
-                  </Stack>
-                  <Button sx={{padding: 1, fontSize: 9, margin: 1, maxHeight: 40}} variant="standard" onClick={() => {
-                    setInputComment({ parentIdCommentId: commentId, msg: '', childComment: true })
-                  }}>
-                    reply
-                  </Button>
-                </Grid>
-                {parentIdCommentId === commentId && (
-                  <TextField
-                    sx={{width: '70%'}}
-                    multiline
-                    label="reply"
-                    value={inputMsg}
-                    onChange={(e) => setInputComment({parentIdCommentId: parentIdCommentId, msg: e.target.value})}
-                    InputProps={{endAdornment: <Button onClick={() => sendReply(commentId)}>Send</Button>}}
-                    variant="standard"
-                  />
-                )}
-              </Stack>
-              {childComments && childComments.map((childCommentFacade, j) => {
-                const {
-                  comment: childComment,
-                  createdAt,
-                  parentId: childParentId,
-                  authorPic,
-                  author,
-                  commentId: childCommentId
-                } = childCommentFacade;
-                const viewRepliesById = viewReplies[childParentId];
-                if (!viewRepliesById) return null;
-                return (
-                  <Stack key={childComment + j + childCommentId} sx={{ marginLeft: 3 }}>
-                    <Grid container justifyContent="space-between">
-                      <Typography variant="subtitle2">
-                        {childComment}
-                      </Typography>                      
-                      <IconButton size="small" sx={{padding: 1, marginRight: 2}} onClick={() => console.log('write the like functionality berto')}>
-                        <RecommendIcon color="primary"/>
-                      </IconButton>
-                    </Grid>
-                  </Stack>
-                )
-              })}
-            </Stack>
-          )
-        })}      
-        {(childComment === false) && <TextField
-          sx={{width: '80%', alignSelf: 'center'}}
-          multiline
-          label="comment"
-          value={inputMsg}
-          onChange={(e) => setInputComment({...inputComment, msg: e.target.value,})}
-          InputProps={{endAdornment: <Button onClick={sendComment}>Send</Button>}}
-          variant="standard"
-        />}
-      </Stack>
-    )
-  };
-
+  const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})
   
+  const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
 
-  if (commentsLoading) return <CircularProgress />;
-  const allComments = makeCommentsFacade(commentsData);
-  const posterWidth = moreThan600px ? 550 : 300;
   return (
-    <>
-      <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 5, marginTop: 5 }} elevation={3}>
-        <Stack display="flex"
-          alignItems="center"
-          sx={{
-            margin: '0 auto',
-            border: '1px solid black',
-            minWidth: posterWidth,
-          }}
+    <Card sx={{ maxWidth: 345 }}>
+      <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          url copied to clipboard
+        </Alert>
+      </Snackbar>      
+      <CardHeader
+        avatar={<Avatar src={burgee} aria-label="burgee" />}
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={eventName}
+        subheader={hours}
+      />
+      <CardMedia
+        component="img"
+        height="194"
+        image={image}
+        alt="Event Image"
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">put a brief race description here maybe</Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton onClick={shareClick} aria-label="share">
+          <ShareIcon />
+        </IconButton>        
+        
+        <IconButton 
+          onClick={goToReservations} 
+          color="success" 
+          aria-label="add to favorites"
         >
-          <Typography variant="h4" sx={{marginTop: 2}}>{ date }</Typography>
-          <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography>
-          <Box
-            component="img"
-            sx={{
-              height: '100%',
-              width: '100%',
-              // maxWidth: 500,
-              padding: 5,
-            }}
-            alt="The house from the offer."
-            src={image}
-          />
-          <Box sx={{margin: 2}}></Box>
-          <Grid container justifyContent="space-around">
-            <Typography variant="h6">
-              Held at: { location }
-            </Typography>
-            <Typography variant="h6">
-              Hours: { hours }
-            </Typography>
-          </Grid>
-          <Stack sx={{margin: 2}} spacing={.5}>
-            <Typography>Featuring special guest: {entertainment}</Typography>
-            <Typography>SpecialNotes: { specialNotes }</Typography>
-          </Stack>
-          <Grid container justifyContent="space-around">
-            <Button onClick={() => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})}>RSVP</Button>
-            {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>}
-          </Grid>
-        </Stack>
-        <>
-          <Typography>
-            members attending: 70
-          </Typography>
-          <CommentList commentFacadeArrays={allComments} />
-        </>
-      </Paper>
-    </>
-  )
-};
+          <HowToRegIcon />
+          <Typography>Register</Typography>
+        </IconButton>
+        <Typography variant='body2'>see comments</Typography>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <EventCommentsList eventId={eventId} />
+        </CardContent>
+      </Collapse>
+    </Card>
+  );
+}
 
 export default YcEventPoster;
+
+
+
+
+
+
+      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>
+            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
+            aside for 10 minutes.
+          </Typography>
+          <Typography paragraph>
+            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
+            medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
+            occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
+            large plate and set aside, leaving chicken and chorizo in the pan. Add
+            pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
+            stirring often until thickened and fragrant, about 10 minutes. Add
+            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+          </Typography>
+          <Typography paragraph>
+            Add rice and stir very gently to distribute. Top with artichokes and
+            peppers, and cook without stirring, until most of the liquid is absorbed,
+            15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
+            mussels, tucking them down into the rice, and cook again without
+            stirring, until mussels have opened and rice is just tender, 5 to 7
+            minutes more. (Discard any mussels that don&apos;t open.)
+          </Typography>
+          <Typography>
+            Set aside off of the heat to let rest for 10 minutes, and then serve.
+          </Typography>
+        </CardContent>
+      </Collapse> */}
+
+
+
+
+//     </Card>
+//   );
+// }
+
+// export default YcEventPoster;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useRouter } from "next/router";
+// import { useSelector } from "react-redux";
+// import { Box, Button, Grid, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+// import EventCommentsList from "./EventcommentsList";
+
+// const YcEventPoster = ({ eventData }) => {
+//   const router = useRouter();
+//   const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
+//   const isCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
+//   const moreThan600px = useMediaQuery('(min-width:600px)');
+
+//   const posterWidth = moreThan600px ? 550 : 300;
+//   return (
+//     <>
+//       <Paper sx={{padding: 5, maxWidth: 700, margin: '0 auto', marginBottom: 5, marginTop: 5 }} elevation={3}>
+//         <Stack display="flex"
+//           alignItems="center"
+//           sx={{
+//             margin: '0 auto',
+//             border: '1px solid black',
+//             minWidth: posterWidth,
+//           }}
+//         >
+//           <Typography variant="h4" sx={{marginTop: 2}}>{ date }</Typography>
+//           <Typography variant="h3" sx={{margin: 3}}>{ eventName }</Typography>
+//           <Box
+//             component="img"
+//             sx={{
+//               height: '100%',
+//               width: '100%',
+//               // maxWidth: 500,
+//               padding: 5,
+//             }}
+//             alt="The house from the offer."
+//             src={image}
+//           />
+//           <Box sx={{margin: 2}}></Box>
+//           <Grid container justifyContent="space-around">
+//             <Typography variant="h6">
+//               Held at: { location }
+//             </Typography>
+//             <Typography variant="h6">
+//               Hours: { hours }
+//             </Typography>
+//           </Grid>
+//           <Stack sx={{margin: 2}} spacing={.5}>
+//             <Typography>Featuring special guest: {entertainment}</Typography>
+//             <Typography>SpecialNotes: { specialNotes }</Typography>
+//           </Stack>
+//           <Grid container justifyContent="space-around">
+//             <Button onClick={() => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}})}>RSVP</Button>
+//             {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>}
+//           </Grid>
+//         </Stack>
+//         <>
+//           <Typography>
+//             members attending: 70
+//           </Typography>
+//           <EventCommentsList eventId={eventId} />
+//         </>
+//       </Paper>
+//     </>
+//   )
+// };
+
+// export default YcEventPoster;
