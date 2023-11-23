@@ -93,7 +93,7 @@ const YcEventPoster = ({ eventData }) => {
           <HowToRegIcon />
           <Typography>RSVP</Typography>
         </IconButton>
-        <Typography variant='body2'>see comments</Typography>
+        <Typography sx={{marginLeft: 12}} variant='body2'>see comments</Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
