@@ -81,7 +81,11 @@ const YcEventPoster = ({ eventData }) => {
       </Snackbar>      
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        // action={<RaceOptionsMenu raceId={raceId} />}
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
         title={eventName}
         subheader={hours}
       />
@@ -107,6 +111,7 @@ const YcEventPoster = ({ eventData }) => {
           <HowToRegIcon />
           <Typography>Register</Typography>
         </IconButton>
+        <Typography variant='body2'>see comments</Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

@@ -87,11 +87,7 @@ const EventCommentsList = ({ eventId }) => {
                     view replies
                   </Button>  
                 </Stack>
-                <Button sx={{padding: 1, fontSize: 9, margin: 1, maxHeight: 40}} variant="standard" onClick={() => {
-                  setInputComment({ parentIdCommentId: commentId, msg: '', childComment: true })
-                }}>
-                  reply
-                </Button>
+                <Button sx={{padding: 1, fontSize: 9, margin: 1, maxHeight: 40}} variant="standard" onClick={() => { setInputComment({ parentIdCommentId: commentId, msg: '', childComment: true })}}>reply</Button>
               </Grid>
               {parentIdCommentId === commentId && (
                 <TextField
@@ -132,7 +128,8 @@ const EventCommentsList = ({ eventId }) => {
           </Stack>
         )
       })}      
-      {(childComment === false) && <TextField
+      {(childComment === false) && 
+      <TextField
         sx={{width: '80%', alignSelf: 'center'}}
         multiline
         label="comment"
