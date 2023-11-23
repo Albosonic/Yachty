@@ -21,6 +21,7 @@ import RaceCourseMenu from './RaceCourseMenu';
 import RaceOptionsMenu from './RaceOptionsMenu';
 import { useRouter } from 'next/router';
 import RaceParticipants from './RaceParticipants';
+import { usePosterStyles } from './componentHooks/usePosterStyles';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,6 +36,7 @@ const ExpandMore = styled((props) => {
 
 const RacePoster = ({ shareData, race }) => {
   const router = useRouter();
+  const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -69,9 +71,9 @@ const RacePoster = ({ shareData, race }) => {
       query: {raceId, eventId}
     })
   }
-  
+  const { posterWidth } = posterStyles;
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: posterWidth }}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           url copied to clipboard
@@ -85,9 +87,9 @@ const RacePoster = ({ shareData, race }) => {
       />
       <CardMedia
         component="img"
-        height="194"
+        height="100%"
         image={img}
-        alt="Paella dish"
+        alt="Race Image"
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">put a brief race description here maybe</Typography>
