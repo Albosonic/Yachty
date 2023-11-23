@@ -26,23 +26,21 @@ const YachtClubFeed = () => {
       <Typography noWrap sx={{padding: 1}} variant="h4">{ yachtClubName }</Typography>
         <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Events</Typography>
       </Grid>
-      <Stack justifyContent="center" sx={{margin: '0 auto'}}>
-        <Box
-           sx={{
-            mb: 2,
-            display: "flex",
-            flexDirection: "column",
-            // maxWidth: 600,
-            height: 700,
-            overflow: "hidden",
-            overflowY: "scroll",
-          }}
-        >
-          {events.map((event, index) => <YcEventPoster eventData={event} key={`${event.event_name}${index}`} />)}
-        </Box>
+      <Stack spacing={2} alignItems="center">
+        {events.map((event, index) => <YcEventPoster eventData={event} key={`${event.event_name}${index}`} />)}
       </Stack>
     </>
   )
 };
 
 export default YachtClubFeed;
+
+// sx={{
+//   mb: 2,
+//   display: "flex",
+//   flexDirection: "column",
+//   // maxWidth: 600,
+//   height: 700,
+//   overflow: "hidden",
+//   overflowY: "scroll",
+// }}
