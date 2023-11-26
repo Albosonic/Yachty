@@ -20,14 +20,14 @@ const RaceTicketReservations = () => {
   return (
     <>
       <NavBar />
-      <Stack spacing={2} alignItems="center">
-        <Typography variant="h5">Reserve your Tickets Now</Typography>
+      <Stack spacing={2} alignItems="center">        
         <Grid width="100%">
           <Fab size="small" sx={{margin: 2}} color="primary" variant="extended" onClick={() => router.back()}>
             <ArrowBack/>
             Back
           </Fab>
         </Grid>
+        <Typography variant="h5">Reserve your Tickets Now</Typography>
         <RaceTicketsForPurchase raceData={race} />
         <EventTicketForPurchase eventData={data.yc_events[0]} />
       </Stack>
