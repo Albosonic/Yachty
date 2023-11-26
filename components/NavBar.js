@@ -57,7 +57,7 @@ export default function NavBar() {
           </Typography>        
           <Fab size='small' variant="extended" sx={{marginRight: 3}}>
             <BugReportIcon/>
-            Beta
+            Test
           </Fab>
           {userLoggedIn && (
             <div>

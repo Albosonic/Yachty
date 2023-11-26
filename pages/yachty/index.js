@@ -156,7 +156,7 @@ const Yachty = () => {
           <Typography variant="h3">Welcome to {yachtClubName}</Typography>
           {logo && <img src={logo} />}
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
-            This App is currently in Beta testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
+            This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
           </Typography>}
           {userIsCommodore && 
           <Stack>
