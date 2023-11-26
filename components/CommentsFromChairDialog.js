@@ -26,25 +26,15 @@ query getRaceChairByYcId($ycId: uuid!) {
   }
 }`;
 
-const CommentsFromChairDialog = ({setOpenDialog, open}) => {
+const CommentsFromChairDialog = ({setOpenDialog, open, commentary}) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-
   const memberId = useSelector(state => state.auth.member.id);
 
-  console.log('=============ycId', ycId)
-
-  const {error, loading, data} = useQuery(GET_RACE_CHAIR, {
-    variables: { ycId }
-  });
+  const {error, loading, data} = useQuery(GET_RACE_CHAIR, { variables: { ycId } });
 
   if (loading) return <CircularProgress />;
-  console.log('data', data.race_chairs[0]  );
   const { yc_member: { profilePic, firstName, lastName } } = data.race_chairs[0];
-
-  // TODO: allow the race chair to attatch a commentary to the race in the DB.
-  // TODO: make necessary queries..
 
   return (
     <Dialog
