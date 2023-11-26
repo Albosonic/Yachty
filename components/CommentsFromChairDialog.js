@@ -1,12 +1,12 @@
-import { Box, Dialog, DialogContent, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, Grid, TextField, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 const CommentsFromChairDialog = ({setOpenDialog, open}) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const memberId = useSelector(state => state.auth.member.id);
 
-
-  // const { id: releaseFormId, content } = data.race_release_forms[0];
+  // TODO: allow the race chair to attatch a commentary to the race in the DB.
+  // TODO: make necessary queries..
 
   return (
     <Dialog
@@ -38,12 +38,14 @@ const CommentsFromChairDialog = ({setOpenDialog, open}) => {
         <TextField
           autoFocus
           multiline
+          minRows={5}
           margin="dense"
-          id="sign release"
-          label="sign"
+          id="race-chair-commentary"
+          label="Comment on Race"
           type="email"
           fullWidth
           variant="standard"
+          InputProps={{endAdornment: <Button sx={{alignSelf: 'flex-end'}} onClick={() => console.log('=== build this mutation ===')}>add</Button>}}
           // value={signature}
           // onChange={(e) => setSignature(e.target.value)}
           inputProps={{
