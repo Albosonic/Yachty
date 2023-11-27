@@ -51,12 +51,12 @@ const UploadRaceCourse = () => {
     <>
       <Stack sx={{
           overflow: "hidden",
-          overflowY: "scroll",              
+          overflowY: "scroll",
           height: 600,
-        }} 
-        width="100%" 
-        maxWidth={containerWidth} 
-        spacing={3} 
+        }}
+        width="100%"
+        maxWidth={containerWidth}
+        spacing={3}
         alignContent="center"
       >
         <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -64,11 +64,23 @@ const UploadRaceCourse = () => {
             Success
           </Alert>
         </Snackbar>
-        <Fab sx={{maxWidth: 150, alignSelf: 'flex-end', position: 'fixed', right: uploadButtonLocation, top: 140}} onClick={uploadRaceCourse} color="success" variant="extended">
+        <Fab
+          size="small"
+          sx={{
+            alignSelf: 'flex-end',
+            position: 'fixed',
+            right: uploadButtonLocation,
+            top: 140
+          }}
+          onClick={uploadRaceCourse}
+          color="success"
+          variant="extended"
+        >
           <AddIcon />
           upload
-        </Fab>        
-        {!titleSet && <TextField
+        </Fab>
+        {!titleSet &&
+        <TextField
           placeholder="Enter course name"
           multiline
           onChange={(e) => setCourseNameInfo({...courseNameInfo, name: e.target.value})}
@@ -79,8 +91,8 @@ const UploadRaceCourse = () => {
         />}
         <List>
           {titleSet &&
-          <>          
-            <ListItem            
+          <>
+            <ListItem
               sx={{width: '100%', display: 'flex', justifyContent: 'center'}}
               secondaryAction={
                 <IconButton onClick={() => setCourseNameInfo({name: '', set: false})} edge="end" aria-label="course-title">
