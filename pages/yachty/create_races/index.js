@@ -23,7 +23,7 @@ const CreateRaces = () => {
             Upload Course
           </Button>
           <Divider orientation="vertical" flexItem></Divider>
-          <Button sx={{borderBottom: right, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(false)}>
+          <Button sx={{ borderBottom: right, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(false)}>
             Create Race
           </Button>
         </Grid>

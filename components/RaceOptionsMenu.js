@@ -6,14 +6,17 @@ import MenuItem from '@mui/material/MenuItem';
 import { IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReleaseFormDialog from './ReleaseFormDialog';
+import CommentsFromTheChairDialog from './CommentsFromChairDialog';
 
 const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openReleaseDialog, setOpenReleaseDialog] = useState(false);
+  const [chairCommentsOpen, setChairCommentsOpen] = useState(false);
   const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore)
 
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,12 +34,18 @@ const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
 
   const openDialogAndCloseMenu = () => {
     handleClose();
-    setOpenDialog(true)
+    setOpenReleaseDialog(true)
+  }
+
+  const openCommentsFromChairDialog = () => {
+    handleClose();
+    setChairCommentsOpen(true);
   }
 
   return (
     <>
-      <ReleaseFormDialog setOpenDialog={setOpenDialog} open={openDialog} />
+      <ReleaseFormDialog setOpenDialog={setOpenReleaseDialog} open={openReleaseDialog} />
+      <CommentsFromTheChairDialog setOpenDialog={setChairCommentsOpen} open={chairCommentsOpen} />
       <IconButton aria-label="settings" onClick={handleClick}>
         <MoreVertIcon />
       </IconButton>
@@ -49,6 +58,7 @@ const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
       >
         {/* <MenuItem onClick={goToRace}>Go To Race</MenuItem> */}
         <MenuItem onClick={openDialogAndCloseMenu}>Release Form</MenuItem>
+        <MenuItem onClick={openCommentsFromChairDialog}>Race Summary</MenuItem>
         {/* {userIsCommodore && <MenuItem onClick={handleClose}>See Course</MenuItem>} */}
         {/* {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => handleClose(course)}>{course.courseName}</MenuItem>)} */}
       </Menu>
