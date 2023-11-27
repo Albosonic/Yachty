@@ -46,7 +46,7 @@ const CreateRaceEventTickets = () => {
     <>
       <NavBar />
       <Stack alignItems="center">
-        <Fab onClick={goBack} variant="extended" sx={{ alignSelf: 'flex-start', margin: 3 }} color="primary">
+        <Fab size="small" onClick={goBack} variant="extended" sx={{ alignSelf: 'flex-start', margin: 3 }} color="primary">
           <ArrowBackIcon /> Back
         </Fab>
         <RaceTicketForm raceData={race} />

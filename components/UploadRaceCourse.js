@@ -53,6 +53,7 @@ const UploadRaceCourse = () => {
           overflow: "hidden",
           overflowY: "scroll",
           height: 600,
+          paddingTop: 5
         }}
         width="100%"
         maxWidth={containerWidth}

@@ -26,7 +26,13 @@ const UploadRaceEvent = () => {
   const [creatingSeries, setCreatingSeries] = useState(false);
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  const [formErrors, setFormErrors] = useState({chooseCourseError: false, raceTitleError: false, seriesError: false});
+  const [formErrors, setFormErrors] = useState({
+    chooseCourseError: false, 
+    raceTitleError: false, 
+    seriesError: false,
+    startDateError: false,
+    endDateError: false,
+  });
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }, fetchPolicy: 'no-cache'});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
@@ -40,6 +46,12 @@ const UploadRaceEvent = () => {
   const submitRace = async () => {
     if (course === null) return setFormErrors({ ...formErrors, chooseCourseError: true });
     if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
+    console.log('here ===========')
+    if (startDate === null) return setFormErrors({ ...formErrors, startDateError: true });
+    if (endDate === null) return setFormErrors({ ...formErrors, endDateError: true });
+
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;
@@ -94,9 +106,9 @@ const UploadRaceEvent = () => {
     })
   };
 
-  const showDatePickers = startDate === null || endDate === null ? true : false;
-  const {chooseCourseError, raceTitleError, seriesError} = formErrors;
-  console.log('series ====', series)
+  const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
+  const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
+  
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -117,12 +129,9 @@ const UploadRaceEvent = () => {
           Success!
         </Alert>
       </Snackbar>
-      <Grid container justifyContent="space-around">
-        {!series && 
-          <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/>        
-        }
-        { series && <Typography variant="h6">{ series?.seriesName }</Typography> }
-      </Grid>
+      { !series && <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/> }
+      { series && <Typography variant="h6">{ series?.seriesName }</Typography> }
+      { seriesError && <Typography variant="subtitle1" color="error">please enter series</Typography> }
       {creatingSeries &&
         <TextField
           required
@@ -172,8 +181,10 @@ const UploadRaceEvent = () => {
         <>
           <Typography variant="subtitle1" >From</Typography>
           <DateTimeField required onBlur={(e) => setRaceInfo({...raceInfo, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+          {startDateError && <Typography color="error">please choose start date</Typography>}
           <Typography variant="subtitle1" >To</Typography>
           <DateTimeField required onBlur={(e) => setRaceInfo({...raceInfo, endDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+          {endDateError && <Typography color="error">please choose end date</Typography>}
         </>
       }
       {!showDatePickers && <SelectedTimeRange startDate={startDate} endDate={endDate} />}
