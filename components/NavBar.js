@@ -18,7 +18,7 @@ export default function NavBar() {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
-  
+
   useEffect(() => {
     setUserLoggedIn(emailVerrified);
   }, [emailVerrified]);
@@ -54,25 +54,15 @@ export default function NavBar() {
           </IconButton>}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
-          </Typography>        
+          </Typography>
           <Fab size='small' variant="extended" sx={{marginRight: 3}}>
             <BugReportIcon/>
             Test
           </Fab>
           {userLoggedIn && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <Fab size='small'>
-                  <Avatar alt="Profile Pic" src={profilePicture} />
-                </Fab>
-              </IconButton>              
-            </div>
+            <Fab size='small'>
+              <Avatar alt="Profile Pic" src={profilePicture} />
+            </Fab>
           )}
         </Toolbar>
       </AppBar>
