@@ -96,6 +96,7 @@ const UploadRaceEvent = () => {
 
   const showDatePickers = startDate === null || endDate === null ? true : false;
   const {chooseCourseError, raceTitleError, seriesError} = formErrors;
+  console.log('series ====', series)
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -117,7 +118,10 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       <Grid container justifyContent="space-around">
-        <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/>        
+        {!series && 
+          <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/>        
+        }
+        { series && <Typography variant="h6">{ series?.seriesName }</Typography> }
       </Grid>
       {creatingSeries &&
         <TextField

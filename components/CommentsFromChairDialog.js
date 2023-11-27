@@ -60,6 +60,9 @@ const CommentsFromChairDialog = ({setOpenDialog, open, commentary}) => {
             <Avatar src={profilePic} aria-aria-label='race chair pic' />
           </Grid>          
         </Grid>
+
+
+
         <TextField
           autoFocus
           multiline
@@ -80,6 +83,9 @@ const CommentsFromChairDialog = ({setOpenDialog, open, commentary}) => {
             },
           }}
         />
+
+
+
       </DialogContent>
       {/* <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
