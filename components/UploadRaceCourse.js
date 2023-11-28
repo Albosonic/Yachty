@@ -22,7 +22,7 @@ const UploadRaceCourse = () => {
 
   const addCourseLeg = () => {
     setCourse([...course, workingLeg]);
-    setWorkingLeg({...workingLeg, marker: null});
+    setWorkingLeg({side: null, marker: null});
     setUserInput('');
   };
 
