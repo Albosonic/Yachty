@@ -131,7 +131,6 @@ const Yachty = () => {
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;
-    console.log('memberData', memberData)
     const resp = await betaGiveCommodoreStatus({variables: {name, memberId, ycId: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"}});
     dispatch(betaUpdateUserIsCommodoreAct(true));
   };
@@ -147,7 +146,7 @@ const Yachty = () => {
   //   return null;
   // }
   // if (error) router.push('/login');
-  console.log('userIsCom :', userIsCommodore)
+  
   return (
     <div>
       <NavBar/>

@@ -33,7 +33,6 @@ const ExpandMore = styled((props) => {
 }));
 
 const RacePoster = ({ shareData, race }) => {
-  console.log('wtfwtfwtf ============', race)
   const router = useRouter();
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);

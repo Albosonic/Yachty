@@ -76,7 +76,6 @@ export const updateVesselHullMaterialAct = (hullMaterial) => {
 }
 
 export const updateVesselSpecsAct = (specs) => {
-  console.log('specs =====', specs);
   return {
     type: UPDATE_VESSEL_SPECS_ACT,
     payload: specs

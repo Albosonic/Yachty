@@ -38,7 +38,6 @@ const directMessageFeed = ({props}) => {
   }
 
   if (pollLoading || userRmLoading) return <CircularProgress />;
-  console.log('user =======', user)
   const userPic = user?.picture;
 
   const getMsgFacade = (messages) => {
