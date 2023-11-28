@@ -49,7 +49,13 @@ const RaceParticipants = ({raceId}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
 
-  const { error, loading,  data, refetch } = useQuery(GET_MEMBERS_BY_RACE_ID, { variables: { raceId, fetchPolicy: 'no-cache' } });
+  const { error, loading,  data } = useQuery(GET_MEMBERS_BY_RACE_ID, { 
+    variables: { 
+      raceId, 
+      fetchPolicy: 'no-cache' ,
+    },
+    pollInterval: 1500,
+  });
 
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: { 
