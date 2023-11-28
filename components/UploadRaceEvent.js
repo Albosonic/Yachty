@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import dayjs from "dayjs";
+import { DateTimeField } from "@mui/x-date-pickers";
 import { useMutation, useQuery } from "@apollo/client";
 import { Alert, Button, CircularProgress, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
+import { YC_EVENT } from "@/slices/actions/authActions";
 import RaceCourseMenu from "./RaceCourseMenu";
 import RaceCourseDetails from "./RaceCourseDetails";
 import ImageUploadField from "./ImageUploadField";
-import { YC_EVENT } from "@/slices/actions/authActions";
-import { DateTimeField } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
 import SelectedTimeRange from "./SelectedTimeRange";
@@ -45,14 +45,13 @@ const UploadRaceEvent = () => {
 
   const submitRace = async () => {
     if (course === null) return setFormErrors({ ...formErrors, chooseCourseError: true });
-    if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
-    console.log('here ===========')
     if (startDate === null) return setFormErrors({ ...formErrors, startDateError: true });
+    if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
     if (endDate === null) return setFormErrors({ ...formErrors, endDateError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
 
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
@@ -130,8 +129,10 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       { !series && <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/> }
-      { series && <Typography variant="h6">{ series?.seriesName }</Typography> }
+
+      { series && <Typography variant="h4">{ series?.seriesName }</Typography> }
       { seriesError && <Typography variant="subtitle1" color="error">please enter series</Typography> }
+
       {creatingSeries &&
         <TextField
           required
@@ -143,6 +144,12 @@ const UploadRaceEvent = () => {
           InputProps={{endAdornment: <Button onClick={ creatRaceSeries }>Create</Button>}}
         />
       }
+
+      {/* TODO: integrate error into component, and do it for every one Here */}
+      <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />
+      {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
+      {/* TODO: integrate error into component, and do it for every one Here */}
+
       {!raceNameSet &&
         <>
           <TextField
@@ -163,8 +170,6 @@ const UploadRaceEvent = () => {
           <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: false})} >Edit</Button>
         </Grid>
       }
-      <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />
-      {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
 
       {course &&
         <Stack>

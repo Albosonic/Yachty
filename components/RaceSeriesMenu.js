@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -31,6 +32,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         variant='outlined'
+        endIcon={<ArrowDropDownIcon />}
       >
         {buttonText}
       </Button>
