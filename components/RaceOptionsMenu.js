@@ -8,7 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReleaseFormDialog from './ReleaseFormDialog';
 import CommentsFromTheChairDialog from './CommentsFromChairDialog';
 
-const RaceOptionsMenu = ({ raceId, refetch, goToReservations }) => {
+const RaceOptionsMenu = ({ raceId, releaseFormId, goToReservations }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openReleaseDialog, setOpenReleaseDialog] = useState(false);
   const [chairCommentsOpen, setChairCommentsOpen] = useState(false);
@@ -39,13 +39,13 @@ const RaceOptionsMenu = ({ raceId, refetch, goToReservations }) => {
     handleClose();
     setChairCommentsOpen(true);
   }
-
+  console.log('releaseId :', releaseFormId)
   return (
     <>
       <ReleaseFormDialog 
         setOpenDialog={setOpenReleaseDialog} 
         open={openReleaseDialog} 
-        refetch={refetch}
+        releaseFormId={releaseFormId}
       />
       <CommentsFromTheChairDialog 
         setOpenDialog={setChairCommentsOpen} 

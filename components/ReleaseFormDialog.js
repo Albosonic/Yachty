@@ -3,12 +3,17 @@ import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogCont
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const GET_RELEASE_FORM_BY_YC_ID = gql`
-query getreleaseFormByYcId($ycId: uuid!) {
-  race_release_forms(where: {yachtClubId: {_eq: $ycId}}) {
+const GET_RELEASE_FORM_BY_ID = gql`
+query getreleaseFormByYcId($releaseFormId: uuid!, $memberId: uuid!) {
+  race_release_forms(where: {id: {_eq: $releaseFormId}}) {
     content
     id
     raceId
+    signed_race_releases(where: {releaseFormId: {_eq: $releaseFormId}, memberId: {_eq: $memberId}}) {
+      memberId
+      signature
+      releaseFormId
+    }
   }
 }`;
 
@@ -20,25 +25,32 @@ const INSERT_SIGNED_RELEASE = gql`
 }
 `
 
-const ReleaseFormDialog = ({setOpenDialog, open}) => {
+const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const [signature, setSignature] = useState('');
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  // const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const memberId = useSelector(state => state.auth.member.id);
   
-  const {error, loading, data} = useQuery(GET_RELEASE_FORM_BY_YC_ID, {variables: {ycId}});
-  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE)
-  if (loading) return <CircularProgress />;
+  const {error, loading, data} = useQuery(GET_RELEASE_FORM_BY_ID, {
+    variables: { 
+      releaseFormId,
+      memberId,
+    },
+  });
 
-  const { id: releaseFormId, content } = data.race_release_forms[0];
+  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
+
+  if (loading) return <CircularProgress />;
+  console.log('data ========', data)
+  // const { content } = data.race_release_forms[0];
 
   const signDoc = async () => {
-    await insertSignedForm({
-      variables: {
-      memberId,
-      releaseFormId,
-      signature
-    }});
+    // await insertSignedForm({
+    //   variables: {
+    //   memberId,
+    //   releaseFormId,
+    //   signature
+    // }});
     setOpenDialog(false);
   }
   
@@ -63,13 +75,13 @@ const ReleaseFormDialog = ({setOpenDialog, open}) => {
               src={logo}
             />
           </Grid>
-          <Grid container direction="column">              
+          {/* <Grid container direction="column">              
             <Typography sx={{marginTop: 2}}>
               {content}
             </Typography>                          
-          </Grid>
+          </Grid> */}
         </Grid>        
-        <TextField
+        {/* <TextField
           autoFocus
           multiline
           margin="dense"
@@ -86,7 +98,7 @@ const ReleaseFormDialog = ({setOpenDialog, open}) => {
               fontSize: 24
             },
           }}
-        />
+        /> */}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>

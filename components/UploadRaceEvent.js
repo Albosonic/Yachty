@@ -6,6 +6,7 @@ import { DateTimeField } from "@mui/x-date-pickers";
 import EditIcon from '@mui/icons-material/Edit';
 import { useMutation, useQuery } from "@apollo/client";
 import { Alert, Button, CircularProgress, Fab, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
 import { YC_EVENT } from "@/slices/actions/authActions";
 import RaceCourseMenu from "./RaceCourseMenu";
@@ -15,6 +16,7 @@ import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
 import SelectedTimeRange from "./SelectedTimeRange";
+import RaceReleaseMenu from "./RaceReleaseMenu";
 
 const UploadRaceEvent = () => {
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
@@ -27,12 +29,14 @@ const UploadRaceEvent = () => {
   const [creatingSeries, setCreatingSeries] = useState(false);
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [releaseForm, setReleaseForm] = useState(null);
   const [formErrors, setFormErrors] = useState({
     chooseCourseError: false,
     raceTitleError: false,
     seriesError: false,
     startDateError: false,
     endDateError: false,
+    releaseFormError: false,
   });
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }, fetchPolicy: 'no-cache'});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
@@ -52,6 +56,7 @@ const UploadRaceEvent = () => {
     if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (releaseForm === null) return setFormErrors({ ...formErrors, releaseFormError: true });
 
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;
@@ -80,12 +85,12 @@ const UploadRaceEvent = () => {
         ycId: ycId,
         startTime,
         endTime,
+        releaseFormId: releaseForm.id,
       }
     };
 
     const resp = await insertRace({variables});
     setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
-
   }
 
   const creatRaceSeries = async () => {
@@ -105,6 +110,11 @@ const UploadRaceEvent = () => {
       review: false,
     })
   };
+
+  const addReleaseForm = (form) => {    
+    setReleaseForm(form);
+    setFormErrors({...formErrors, releaseFormError: false});
+  }
 
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
   const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
@@ -171,7 +181,13 @@ const UploadRaceEvent = () => {
           <RaceCourseDetails course={course} />
         </Stack>
       }
-
+      {!releaseForm && <RaceReleaseMenu addReleaseForm={addReleaseForm} />}
+      {releaseForm && 
+        <Grid container justifyContent="center">
+          <Typography variant="h6">{releaseForm.name}</Typography>
+          <CheckOutlinedIcon color="success" />
+        </Grid>
+      }
       {!raceNameSet &&
         <>
           <TextField

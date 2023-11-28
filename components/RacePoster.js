@@ -61,6 +61,9 @@ const RacePoster = ({ shareData, race }) => {
     })
   }
   const { posterWidth } = posterStyles;
+
+  console.log('releaseformId :', releaseFormId)
+  console.log('race ===== :', race)
   return (
     <Card sx={{ width: posterWidth }}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -70,7 +73,7 @@ const RacePoster = ({ shareData, race }) => {
       </Snackbar>      
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        action={<RaceOptionsMenu raceId={raceId} goToReservations={goToReservations} />}
+        action={<RaceOptionsMenu raceId={raceId} releaseFormId={releaseFormId} goToReservations={goToReservations} />}
         title={raceName}
         subheader={`${startDate} ${startTime}`}
       />
