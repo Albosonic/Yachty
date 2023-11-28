@@ -8,12 +8,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReleaseFormDialog from './ReleaseFormDialog';
 import CommentsFromTheChairDialog from './CommentsFromChairDialog';
 
-const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
-  const router = useRouter()
+const RaceOptionsMenu = ({ raceId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openReleaseDialog, setOpenReleaseDialog] = useState(false);
   const [chairCommentsOpen, setChairCommentsOpen] = useState(false);
-  const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore)
 
   const open = Boolean(anchorEl);
 
@@ -44,8 +42,15 @@ const RaceOptionsMenu = ({courses, setCourse, raceId}) => {
 
   return (
     <>
-      <ReleaseFormDialog setOpenDialog={setOpenReleaseDialog} open={openReleaseDialog} />
-      <CommentsFromTheChairDialog setOpenDialog={setChairCommentsOpen} open={chairCommentsOpen} />
+      <ReleaseFormDialog 
+        setOpenDialog={setOpenReleaseDialog} 
+        open={openReleaseDialog} 
+      />
+      <CommentsFromTheChairDialog 
+        setOpenDialog={setChairCommentsOpen} 
+        open={chairCommentsOpen}
+        raceId={raceId}
+      />
       <IconButton aria-label="settings" onClick={handleClick}>
         <MoreVertIcon />
       </IconButton>

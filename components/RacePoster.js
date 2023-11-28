@@ -13,11 +13,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Snackbar, Stack } from '@mui/material';
-import RaceCourseMenu from './RaceCourseMenu';
+import { Alert, Snackbar } from '@mui/material';
 import RaceOptionsMenu from './RaceOptionsMenu';
 import { useRouter } from 'next/router';
 import RaceParticipants from './RaceParticipants';
@@ -39,20 +37,11 @@ const RacePoster = ({ shareData, race }) => {
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const member = useSelector(state => state.auth.member);
-  const profilePic = useSelector(state => state.auth.member.profilePic);
-  const vessel = useSelector(state => state.auth.member.vessels[0]);
 
-  const handleClose = () => {
-    setShowSuccess(false)
-  }
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleClose = () => setShowSuccess(false);
+  const handleExpandClick = () => setExpanded(!expanded);
   
   const shareClick = async () => {    
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
