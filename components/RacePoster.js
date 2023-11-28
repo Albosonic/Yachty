@@ -70,7 +70,7 @@ const RacePoster = ({ shareData, race }) => {
       </Snackbar>      
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        action={<RaceOptionsMenu raceId={raceId} />}
+        action={<RaceOptionsMenu raceId={raceId} goToReservations={goToReservations} />}
         title={raceName}
         subheader={`${startDate} ${startTime}`}
       />
@@ -87,13 +87,6 @@ const RacePoster = ({ shareData, race }) => {
         <IconButton onClick={shareClick} aria-label="share">
           <ShareIcon />
         </IconButton>        
-        <IconButton onClick={ goToReservations } 
-          color="success" 
-          aria-label="add to favorites"
-        >
-          <HowToRegIcon />
-          <Typography>Register</Typography>
-        </IconButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
