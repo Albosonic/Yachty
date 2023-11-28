@@ -18,7 +18,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
     if (series?.id) setSeries(series);
   };
 
-  const createSeries = (series) => {
+  const createSeries = () => {
     handleClose();
     setCreatingSeries(true);
   }
@@ -31,7 +31,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant='outlined'
+        variant='contained'
         endIcon={<ArrowDropDownIcon />}
       >
         {buttonText}

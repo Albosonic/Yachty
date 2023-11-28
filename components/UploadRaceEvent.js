@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import dayjs from "dayjs";
 import { DateTimeField } from "@mui/x-date-pickers";
+import EditIcon from '@mui/icons-material/Edit';
 import { useMutation, useQuery } from "@apollo/client";
-import { Alert, Button, CircularProgress, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Button, CircularProgress, Fab, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
 import { YC_EVENT } from "@/slices/actions/authActions";
 import RaceCourseMenu from "./RaceCourseMenu";
@@ -27,8 +28,8 @@ const UploadRaceEvent = () => {
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [formErrors, setFormErrors] = useState({
-    chooseCourseError: false, 
-    raceTitleError: false, 
+    chooseCourseError: false,
+    raceTitleError: false,
     seriesError: false,
     startDateError: false,
     endDateError: false,
@@ -107,7 +108,7 @@ const UploadRaceEvent = () => {
 
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
   const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
-  
+
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -130,7 +131,14 @@ const UploadRaceEvent = () => {
       </Snackbar>
       { !series && <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/> }
 
-      { series && <Typography variant="h4">{ series?.seriesName }</Typography> }
+      { series &&
+        <Grid sx={{padding: 2}} container justifyContent="center">
+          <Typography variant="h4">{ series?.seriesName }</Typography>
+          <IconButton onClick={() => setSeries(null)}>
+            <EditIcon sx={{fontSize: 20}} color="primary" />
+          </IconButton>
+        </Grid>
+      }
       { seriesError && <Typography variant="subtitle1" color="error">please enter series</Typography> }
 
       {creatingSeries &&
@@ -146,9 +154,23 @@ const UploadRaceEvent = () => {
       }
 
       {/* TODO: integrate error into component, and do it for every one Here */}
-      <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />
+      {!course && <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />}    
       {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
       {/* TODO: integrate error into component, and do it for every one Here */}
+      {course &&
+        <Stack spacing={2}>
+          <Grid container justifyContent="center">
+            <Typography variant="h5">
+              {course?.courseName}
+            </Typography>
+            <IconButton onClick={() => setCourse(null)}>
+              <EditIcon sx={{fontSize: 20}} color="primary" />
+            </IconButton>
+          </Grid>
+          <Typography variant="subtitle1" >(Course details will not be released until the race admin releases them)</Typography>
+          <RaceCourseDetails course={course} />
+        </Stack>
+      }
 
       {!raceNameSet &&
         <>
@@ -169,18 +191,6 @@ const UploadRaceEvent = () => {
           <Typography variant="h4">{raceName}</Typography>
           <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: false})} >Edit</Button>
         </Grid>
-      }
-
-      {course &&
-        <Stack>
-          <Grid container justifyContent="center">
-            <Typography variant="h5">
-              {course?.courseName}
-            </Typography>
-            <RaceCourseDetails course={course} />
-          </Grid>
-          <Typography variant="subtitle1" >(Course details will not be released until the race admin releases them)</Typography>
-        </Stack>
       }
       {showDatePickers &&
         <>

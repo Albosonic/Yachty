@@ -8,7 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReleaseFormDialog from './ReleaseFormDialog';
 import CommentsFromTheChairDialog from './CommentsFromChairDialog';
 
-const RaceOptionsMenu = ({ raceId }) => {
+const RaceOptionsMenu = ({ raceId, refetch }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openReleaseDialog, setOpenReleaseDialog] = useState(false);
   const [chairCommentsOpen, setChairCommentsOpen] = useState(false);
@@ -45,6 +45,7 @@ const RaceOptionsMenu = ({ raceId }) => {
       <ReleaseFormDialog 
         setOpenDialog={setOpenReleaseDialog} 
         open={openReleaseDialog} 
+        refetch={refetch}
       />
       <CommentsFromTheChairDialog 
         setOpenDialog={setChairCommentsOpen} 
