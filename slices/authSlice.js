@@ -1,4 +1,4 @@
-import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
+import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_MEMBER_BIO_ACT, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
 const initialState = {
   member: {
@@ -82,6 +82,15 @@ export default function authReducer(state = initialState, action) {
           profilePic: payload.member?.profilePic || payload.user?.picture,
         },
       };
+    }
+    case UPDATE_MEMBER_BIO_ACT: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          bio: payload,
+        }
+      }
     }
     case UPDATE_NEW_VESSEL_ACT: {
       const {img, id, ownerId} = payload;
