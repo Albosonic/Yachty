@@ -1,6 +1,6 @@
 import { updateMemberBioAct } from "@/slices/actions/authActions";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Alert, Box, Button, Fab, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Fab, Grid, Paper, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,23 +50,26 @@ const UpdateMemberBio = () => {
         </Alert>
       </Snackbar>
       {editing && 
-      <TextField 
-        label="tell us about yourself"
-        multiline
-        placeholder="Sailed the 7 seas arg....."
-        value={memberBio}
-        onChange={(e) => setMemberBio(e.target.value)}
-        fullWidth
-        rows={5}
-        InputProps={{endAdornment: <Button sx={{alignSelf: "flex-end"}} onClick={handleUpdateBio}>Set</Button>}}
-      />}
+        <TextField 
+          label="tell us about yourself"
+          multiline
+          placeholder="Sailed the 7 seas arg....."
+          value={memberBio}
+          onChange={(e) => setMemberBio(e.target.value)}
+          fullWidth
+          rows={5}
+          InputProps={{endAdornment: <Button sx={{alignSelf: "flex-end"}} onClick={handleUpdateBio}>Set</Button>}}
+        />        
+      }
       {!editing && 
-        <Stack sx={{minWidth: 300}}>
-          <Fab onClick={() => setEditing(true)} size="small" color="primary" sx={{margin: 3, alignSelf: 'flex-end'}}>
-            <EditIcon />
-          </Fab>
-          <Typography variant="body1">{bio}</Typography>              
-        </Stack>
+        <Paper sx={{padding: 5}}>
+          <Stack spacing={2} sx={{minWidth: 300}}>
+            <Fab sx={{margin: 0}} onClick={() => setEditing(true)} size="small" color="primary" sx={{margin: 3, alignSelf: 'flex-end'}}>
+              <EditIcon />
+            </Fab>
+            <Typography variant="body1">{bio}</Typography>              
+          </Stack>
+        </Paper>
       }
     </Stack>
   )
