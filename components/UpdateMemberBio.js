@@ -33,12 +33,13 @@ const UpdateMemberBio = () => {
 
   const handleUpdateBio = async () =>{
     await updateBio({variables: {memberId, bio: memberBio}});    
-    dispatch(updateMemberBioAct(memberBio))
-    setShowSuccess(true);
+    dispatch(updateMemberBioAct(memberBio));
+        setShowSuccess(true);
   }
 
   const handleClose = () => {
     setShowSuccess(false);
+    setEditing(false);
   }
 
   return (
@@ -61,12 +62,11 @@ const UpdateMemberBio = () => {
       />}
       {!editing && 
         <Stack sx={{minWidth: 300}}>
-          <Fab onClick={() => setEditing(true)} size="small" sx={{alignSelf: 'flex-end'}}>
-            <EditIcon color="primary" />
+          <Fab onClick={() => setEditing(true)} size="small" color="primary" sx={{margin: 3, alignSelf: 'flex-end'}}>
+            <EditIcon />
           </Fab>
           <Typography variant="body1">{bio}</Typography>              
         </Stack>
-
       }
     </Stack>
   )
