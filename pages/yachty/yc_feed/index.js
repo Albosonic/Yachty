@@ -18,7 +18,7 @@ const YachtClubFeed = () => {
   const yachtClubName = useSelector(state => state.auth.member.yachtClubByYachtClub.name);
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
-  if (loading || true) return <LoadingYachty />;
+  if (loading) return <LoadingYachty />;
     
   const events = data?.yc_events;
   return (
