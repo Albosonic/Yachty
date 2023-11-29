@@ -117,10 +117,10 @@ const UploadVesselImage = () => {
           <Fab 
             onClick={fabHandler}
             sx={{
-            background: 'white',
-            position: 'relative',
-            top: -100,
-          }}>
+              background: 'white',
+              position: 'relative',
+              top: -100,
+            }}>
             {editing ? <PublishIcon /> : <EditIcon />}
           </Fab>
       </>}

@@ -125,8 +125,7 @@ const EditMemberProfile = ({props}) => {
             </FormGroup>
           </Grid>
           <Typography sx={{margin: '0 auto', marginBottom: 2}} variant={titleVariation}>Edit Member Profile</Typography>
-          <UpdateMemberBio />
-          <Typography variant="h6">Add or edit vessel image</Typography>
+          <UpdateMemberBio />          
           <UploadVesselImage />
           {vesselExists &&
             <>
