@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { gql, useQuery } from '@apollo/client';
 import { CircularProgress } from '@mui/material';
 import LoadingYachty from './LoadingYachty';
+import CreateReleaseDialog from './CreateReleaseDialog';
 
 const GET_RELEASE_FORMS_BY_YC_ID = gql`
   query getReleaseForms($ycId: uuid!) {
@@ -19,8 +20,12 @@ const GET_RELEASE_FORMS_BY_YC_ID = gql`
 const RaceReleaseMenu = ({ addReleaseForm }) => {
 
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-  const {error, loading, data} = useQuery(GET_RELEASE_FORMS_BY_YC_ID, {variables: { ycId }});
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const {error, loading, data, refetch} = useQuery(GET_RELEASE_FORMS_BY_YC_ID, {
+    variables: { ycId },
+    fetchPolicy: 'no-cache'
+  });
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -36,6 +41,7 @@ const RaceReleaseMenu = ({ addReleaseForm }) => {
   const releaseForms = data?.race_release_forms;
   return (
     <>
+      <CreateReleaseDialog open={openDialog} setOpenDialog={setOpenDialog} closeMenu={setAnchorEl} />
       <Button
         id="course-select-button"
         aria-controls={open ? 'race-course-menu' : undefined}
@@ -46,7 +52,7 @@ const RaceReleaseMenu = ({ addReleaseForm }) => {
         endIcon={<ArrowDropDownIcon />}
         sx={{minWidth: 223}}
       >
-        Release Form
+        Release Form 
       </Button>
       <Menu
         id="course-selector"
@@ -58,6 +64,7 @@ const RaceReleaseMenu = ({ addReleaseForm }) => {
         }}
       >
         {releaseForms.map((form, i) => <MenuItem key={form.name + i} onClick={() => handleClose(form)}>{form.name}</MenuItem>)}
+        <MenuItem onClick={() => setOpenDialog(true)}>...Create Release Form</MenuItem>
       </Menu>
     </>
   );

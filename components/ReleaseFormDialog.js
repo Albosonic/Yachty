@@ -41,16 +41,16 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
 
   if (loading) return <CircularProgress />;
-  console.log('data ========', data)
+  console.log('data ======== D', data)
   // const { content } = data.race_release_forms[0];
 
   const signDoc = async () => {
-    // await insertSignedForm({
-    //   variables: {
-    //   memberId,
-    //   releaseFormId,
-    //   signature
-    // }});
+    await insertSignedForm({
+      variables: {
+      memberId,
+      releaseFormId,
+      signature
+    }});
     setOpenDialog(false);
   }
   
@@ -61,7 +61,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
       open={open}
       onClose={() => setOpenDialog(false)}
     >
-      <DialogContent>
+      {/* <DialogContent>
         <Grid alignContent="center">
           <Grid container justifyContent="space-between">              
             <Box
@@ -75,13 +75,13 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
               src={logo}
             />
           </Grid>
-          {/* <Grid container direction="column">              
+          <Grid container direction="column">              
             <Typography sx={{marginTop: 2}}>
               {content}
             </Typography>                          
-          </Grid> */}
+          </Grid>
         </Grid>        
-        {/* <TextField
+        <TextField
           autoFocus
           multiline
           margin="dense"
@@ -98,8 +98,8 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
               fontSize: 24
             },
           }}
-        /> */}
-      </DialogContent>
+        />
+      </DialogContent> */}
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
         <Button onClick={signDoc}>Sign</Button>
