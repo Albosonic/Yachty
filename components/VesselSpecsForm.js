@@ -9,7 +9,7 @@ mutation updateVesselSpecs(
   $ownerId: uuid, 
   $vesselName: String, 
   $beam: Int, 
-  $draft: Int, 
+  $draft: float8, 
   $length: Int,
   $make: String,
   $model: String,

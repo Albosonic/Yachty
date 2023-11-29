@@ -62,7 +62,7 @@ const UpdateMemberBio = () => {
         />        
       }
       {!editing && 
-        <Paper sx={{padding: 5}}>
+        <Paper sx={{padding: 4}}>
           <Stack spacing={2} sx={{minWidth: 300}}>
             <Fab sx={{margin: 0}} onClick={() => setEditing(true)} size="small" color="primary" sx={{margin: 3, alignSelf: 'flex-end'}}>
               <EditIcon />

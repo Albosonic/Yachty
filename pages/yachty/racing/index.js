@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Card, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { GET_RACES_BY_YCID_AFTER_DATE, GET_RACES_BY_YCID_BEFORE_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
@@ -27,6 +27,7 @@ const Racing = () => {
   });
 
   if (pastRraceEventsLoading || raceEventsLoading) return <CircularProgress />;
+  console.log('pastRaceEventData ======>', pastRaceEventData)
   
   const pastRaces = pastRaceEventData.races;
   const races = raceEventData.races;
