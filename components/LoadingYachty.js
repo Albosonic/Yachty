@@ -2,6 +2,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import SailingTwoToneIcon from '@mui/icons-material/SailingTwoTone';
 import { Box, Stack } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import NavBar from './NavBar';
 
 export default function LoadingYachty() {
   const [progress, setProgress] = useState(0);
@@ -33,9 +34,14 @@ export default function LoadingYachty() {
   }, []);
 
   return (
-    <Box sx={{ width: '60%' }}>
-      <SailingTwoToneIcon  sx={{marginLeft: progress}} color="primary" fontSize='large' />
-      <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />  
-    </Box>
+    <>
+      <NavBar />
+      <Stack sx={{ marginTop: 20, alignItems: 'center'}}>
+        <Box sx={{ width: '70%'}}>
+          <SailingTwoToneIcon  sx={{marginLeft: progress}} color="primary" fontSize='large' />
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />  
+        </Box>
+      </Stack>
+    </>
   );
 }

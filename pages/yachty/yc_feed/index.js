@@ -5,6 +5,7 @@ import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import NavBar from "@/components/NavBar";
 import YcEventPoster from "@/components/YcEventPoster";
 import { useSelector } from "react-redux";
+import LoadingYachty from "@/components/LoadingYachty";
 
 const YachtClubFeed = () => {
   const router = useRouter();
@@ -17,7 +18,8 @@ const YachtClubFeed = () => {
   const yachtClubName = useSelector(state => state.auth.member.yachtClubByYachtClub.name);
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
-  if (loading) return <CircularProgress />
+  if (loading || true) return <LoadingYachty />;
+    
   const events = data?.yc_events;
   return (
     <>
