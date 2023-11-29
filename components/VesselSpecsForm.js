@@ -9,7 +9,7 @@ mutation updateVesselSpecs(
   $ownerId: uuid, 
   $vesselName: String, 
   $beam: Int, 
-  $draft: Int, 
+  $draft: float8, 
   $length: Int,
   $make: String,
   $model: String,
@@ -73,7 +73,6 @@ const VesselSpecsForm = () => {
 
   const handleClick = async () =>{
     const {vesselName, draft, length, beam, make, model, sailNumber, marina, slip} = formValues;
-    console.log('formVals =======', formValues)
     await updateVesselSpecs({
       variables: {
         ownerId: memberId, 
@@ -94,7 +93,6 @@ const VesselSpecsForm = () => {
   const handleClose = () => {
     setShowSuccess(false)
   }
-  console.log('formValues ========', formValues);
   return (    
     <Stack alignItems="center">
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >

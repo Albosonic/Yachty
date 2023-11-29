@@ -8,7 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReleaseFormDialog from './ReleaseFormDialog';
 import CommentsFromTheChairDialog from './CommentsFromChairDialog';
 
-const RaceOptionsMenu = ({ raceId }) => {
+const RaceOptionsMenu = ({ raceId, releaseFormId, goToReservations }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openReleaseDialog, setOpenReleaseDialog] = useState(false);
   const [chairCommentsOpen, setChairCommentsOpen] = useState(false);
@@ -39,12 +39,13 @@ const RaceOptionsMenu = ({ raceId }) => {
     handleClose();
     setChairCommentsOpen(true);
   }
-
+  console.log('releaseId :', releaseFormId)
   return (
     <>
       <ReleaseFormDialog 
         setOpenDialog={setOpenReleaseDialog} 
         open={openReleaseDialog} 
+        releaseFormId={releaseFormId}
       />
       <CommentsFromTheChairDialog 
         setOpenDialog={setChairCommentsOpen} 
@@ -61,7 +62,7 @@ const RaceOptionsMenu = ({ raceId }) => {
         onClose={handleClose}
         MenuListProps={{'aria-labelledby': 'race-options'}}
       >
-        {/* <MenuItem onClick={goToRace}>Go To Race</MenuItem> */}
+        <MenuItem onClick={goToReservations}>Register for Race</MenuItem>
         <MenuItem onClick={openDialogAndCloseMenu}>Release Form</MenuItem>
         <MenuItem onClick={openCommentsFromChairDialog}>Race Summary</MenuItem>
         {/* {userIsCommodore && <MenuItem onClick={handleClose}>See Course</MenuItem>} */}

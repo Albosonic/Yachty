@@ -20,7 +20,7 @@ const Race = () => {
   }
 
   if (loading) return <CircularProgress />;
-  console.log('race ======', race)
+
   return (
     <Stack alignItems="center">
       <Typography variant="h4">Race</Typography>

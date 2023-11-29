@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Box, Button, Card, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Divider, Grid, Stack, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { GET_RACES_BY_YCID_AFTER_DATE, GET_RACES_BY_YCID_BEFORE_DATE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
 import RacePoster from "@/components/RacePoster";
+import LoadingYachty from "@/components/LoadingYachty";
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
@@ -26,7 +27,8 @@ const Racing = () => {
     }
   });
 
-  if (pastRraceEventsLoading || raceEventsLoading) return <CircularProgress />;
+  if (pastRraceEventsLoading || raceEventsLoading) return <LoadingYachty />;  
+  
   const pastRaces = pastRaceEventData.races;
   const races = raceEventData.races;
   const left = showLeftPanel ? 1.7 : 0;
@@ -46,15 +48,18 @@ const Racing = () => {
         <Button sx={{borderBottom: right, borderLeft: right, borderRadius: 0}} fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
-        <Stack sx={{margin: 5}} spacing={2} alignItems="center">
-          <Stack spacing={4}>
+        <Stack spacing={2} alignItems="center">
+          <Typography noWrap sx={{padding: 1}} variant="h5">Past Races</Typography>
+          <Stack spacing={4}>            
+            {pastRaces.length === 0 && <Typography>The are no past races at this time.</Typography>}
             {pastRaces.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
           </Stack>
         </Stack>
       ) : (
         <Stack spacing={2} alignItems="center">
-          <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>
+          <Typography noWrap sx={{padding: 1}} variant="h5">Upcoming Races</Typography>
             <Stack spacing={4}>
+              {races.length === 0 && <Typography>The are no upcoming races at this time.</Typography>}
               {races.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
             </Stack>
         </Stack>

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { GET_ALL_USER_ROOMS_BY_ID } from "@/lib/gqlQueries/dmgql";
 import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,6 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ROOM_TYPES } from "@/slices/actions/authActions";
+import LoadingYachty from "./LoadingYachty";
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -102,7 +103,7 @@ const AllMembersTable = ({props}) => {
   // TODO: make this part of the db.
   const BENICIA_MEMBER_DUES = 315;
   
-  if (loading || !data) return <CircularProgress />
+  if (loading || !data) return <LoadingYachty />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
   

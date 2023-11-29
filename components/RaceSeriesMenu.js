@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -17,7 +18,7 @@ const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
     if (series?.id) setSeries(series);
   };
 
-  const createSeries = (series) => {
+  const createSeries = () => {
     handleClose();
     setCreatingSeries(true);
   }
@@ -30,7 +31,8 @@ const RaceSeriesMenu = ({seriesArr, setSeries, setCreatingSeries}) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        variant='outlined'
+        variant='contained'
+        endIcon={<ArrowDropDownIcon />}
       >
         {buttonText}
       </Button>

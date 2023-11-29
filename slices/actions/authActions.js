@@ -12,6 +12,8 @@ export const UPDATE_VESSEL_SPECS_ACT = 'UPDATE_VESSEL_SPECS_ACT';
 export const UPDATE_VESSEL_TYPE_ACT = 'UPDATE_VESSEL_TYPE_ACT';
 export const UPDATE_NEW_VESSEL_ACT = 'UPDATE_NEW_VESSEL_ACT';
 export const BETA_USER_IS_COMMODORE = 'BETA_USER_IS_COMMODORE';
+export const UPDATE_MEMBER_BIO_ACT = 'UPDATE_MEMBER_BIO_ACT';
+
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
   PRIVATE: 'PRIVATE',
@@ -76,7 +78,6 @@ export const updateVesselHullMaterialAct = (hullMaterial) => {
 }
 
 export const updateVesselSpecsAct = (specs) => {
-  console.log('specs =====', specs);
   return {
     type: UPDATE_VESSEL_SPECS_ACT,
     payload: specs
@@ -101,5 +102,13 @@ export const betaUpdateUserIsCommodoreAct = (isCommodore) => {
   return {
     type: BETA_USER_IS_COMMODORE,
     payload: isCommodore,
+  }
+}
+
+export const updateMemberBioAct = (bio) => {
+  console.log('bio =======', bio)
+  return {
+    type: UPDATE_MEMBER_BIO_ACT,
+    payload: bio,
   }
 }

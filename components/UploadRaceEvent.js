@@ -1,19 +1,22 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import dayjs from "dayjs";
+import { DateTimeField } from "@mui/x-date-pickers";
+import EditIcon from '@mui/icons-material/Edit';
 import { useMutation, useQuery } from "@apollo/client";
-import { Alert, Button, CircularProgress, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Button, CircularProgress, Fab, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
+import { YC_EVENT } from "@/slices/actions/authActions";
 import RaceCourseMenu from "./RaceCourseMenu";
 import RaceCourseDetails from "./RaceCourseDetails";
 import ImageUploadField from "./ImageUploadField";
-import { YC_EVENT } from "@/slices/actions/authActions";
-import { DateTimeField } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
 import SelectedTimeRange from "./SelectedTimeRange";
+import RaceReleaseMenu from "./RaceReleaseMenu";
 
 const UploadRaceEvent = () => {
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
@@ -26,12 +29,14 @@ const UploadRaceEvent = () => {
   const [creatingSeries, setCreatingSeries] = useState(false);
   const [seriesName, setSeriesName] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [releaseForm, setReleaseForm] = useState(null);
   const [formErrors, setFormErrors] = useState({
-    chooseCourseError: false, 
-    raceTitleError: false, 
+    chooseCourseError: false,
+    raceTitleError: false,
     seriesError: false,
     startDateError: false,
     endDateError: false,
+    releaseFormError: false,
   });
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {variables: { ycId }, fetchPolicy: 'no-cache'});
   const {error: getSeriesError, loading: getSeriesLoading, data: raceSeriesData, refetch: refetchRaceSeries} = useQuery(GET_RACE_SERIES_BY_YC_ID, {variables: { ycId }, pollInterval: 1500});
@@ -45,14 +50,14 @@ const UploadRaceEvent = () => {
 
   const submitRace = async () => {
     if (course === null) return setFormErrors({ ...formErrors, chooseCourseError: true });
-    if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
-    console.log('here ===========')
     if (startDate === null) return setFormErrors({ ...formErrors, startDateError: true });
+    if (series === null) return setFormErrors({ ...formErrors, seriesError: true });
     if (endDate === null) return setFormErrors({ ...formErrors, endDateError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
+    if (releaseForm === null) return setFormErrors({ ...formErrors, releaseFormError: true });
 
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
-    if (raceTitle === '') return setFormErrors({ ...formErrors, raceTitleError: true });
     const {fileDatum, src, imgKey} = imageObj;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
@@ -80,12 +85,12 @@ const UploadRaceEvent = () => {
         ycId: ycId,
         startTime,
         endTime,
+        releaseFormId: releaseForm.id,
       }
     };
 
     const resp = await insertRace({variables});
     setRaceInfo({ ...raceInfo, review: true, newRaceId: resp.data.insert_races_one.id });
-
   }
 
   const creatRaceSeries = async () => {
@@ -106,9 +111,14 @@ const UploadRaceEvent = () => {
     })
   };
 
+  const addReleaseForm = (form) => {    
+    setReleaseForm(form);
+    setFormErrors({...formErrors, releaseFormError: false});
+  }
+
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
   const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
-  
+
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -130,8 +140,17 @@ const UploadRaceEvent = () => {
         </Alert>
       </Snackbar>
       { !series && <RaceSeriesMenu seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}/> }
-      { series && <Typography variant="h6">{ series?.seriesName }</Typography> }
+
+      { series &&
+        <Grid sx={{padding: 2}} container justifyContent="center">
+          <Typography variant="h4">{ series?.seriesName }</Typography>
+          <IconButton onClick={() => setSeries(null)}>
+            <EditIcon sx={{fontSize: 20}} color="primary" />
+          </IconButton>
+        </Grid>
+      }
       { seriesError && <Typography variant="subtitle1" color="error">please enter series</Typography> }
+
       {creatingSeries &&
         <TextField
           required
@@ -142,6 +161,32 @@ const UploadRaceEvent = () => {
           onChange={(e) => setSeriesName(e.target.value)}
           InputProps={{endAdornment: <Button onClick={ creatRaceSeries }>Create</Button>}}
         />
+      }
+
+      {/* TODO: integrate error into component, and do it for every one Here */}
+      {!course && <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />}    
+      {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
+      {/* TODO: integrate error into component, and do it for every one Here */}
+      {course &&
+        <Stack spacing={2}>
+          <Grid container justifyContent="center">
+            <Typography variant="h5">
+              {course?.courseName}
+            </Typography>
+            <IconButton onClick={() => setCourse(null)}>
+              <EditIcon sx={{fontSize: 20}} color="primary" />
+            </IconButton>
+          </Grid>
+          <Typography variant="subtitle1" >(Course details will not be released until the race admin releases them)</Typography>
+          <RaceCourseDetails course={course} />
+        </Stack>
+      }
+      {!releaseForm && <RaceReleaseMenu addReleaseForm={addReleaseForm} />}
+      {releaseForm && 
+        <Grid container justifyContent="center">
+          <Typography variant="h6">{releaseForm.name}</Typography>
+          <CheckOutlinedIcon color="success" />
+        </Grid>
       }
       {!raceNameSet &&
         <>
@@ -162,20 +207,6 @@ const UploadRaceEvent = () => {
           <Typography variant="h4">{raceName}</Typography>
           <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: false})} >Edit</Button>
         </Grid>
-      }
-      <RaceCourseMenu courses={data.race_courses} setCourse={setCourse} />
-      {chooseCourseError && <Typography variant="subtitle1" color="error">please choose a course</Typography>}
-
-      {course &&
-        <Stack>
-          <Grid container justifyContent="center">
-            <Typography variant="h5">
-              {course?.courseName}
-            </Typography>
-            <RaceCourseDetails course={course} />
-          </Grid>
-          <Typography variant="subtitle1" >(Course details will not be released until the race admin releases them)</Typography>
-        </Stack>
       }
       {showDatePickers &&
         <>

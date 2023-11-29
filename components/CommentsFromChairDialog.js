@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, Fab, Grid, Stack, TextField, Typography } from '@mui/material';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import LoadingYachty from './LoadingYachty';
 
 
 // TODO:
@@ -62,7 +63,7 @@ const CommentsFromChairDialog = ({ setOpenDialog, open, raceId }) => {
     }
   },[data]);
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingYachty />;
 
   const { commentary, yacht_club: { race_chairs }} = data.races[0];
   const { yc_member: { name, profilePic }} = race_chairs[0];
