@@ -8,6 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import LoadingYachty from "@/components/LoadingYachty";
 
 
 const directMessageFeed = ({props}) => {
@@ -37,7 +38,7 @@ const directMessageFeed = ({props}) => {
     if (!moreThan600px) return '93%';
   }
 
-  if (pollLoading || userRmLoading) return <CircularProgress />;
+  if (pollLoading || userRmLoading) return <LoadingYachty />;
   if (userRmData.user_rooms.length === 0) {
     return (
       <>

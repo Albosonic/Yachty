@@ -5,6 +5,7 @@ import { INSERT_EVENT_COMMENT } from "@/lib/gqlQueries/ycFeedgql";
 import {  Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
+import LoadingYachty from "./LoadingYachty";
 
 const cleanField = { 
   msg: '', 
@@ -54,7 +55,7 @@ const EventCommentsList = ({ eventId }) => {
     setViewReplies({...viewReplies, [commentId]: true});
   };
 
-  if (loading) return <CircularProgress />
+  if (loading) return <LoadingYachty />
 
   const { parentComments } = commentFacadeArrays;
 

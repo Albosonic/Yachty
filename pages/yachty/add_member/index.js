@@ -11,7 +11,7 @@ const AddMember = () => {
   const router = useRouter();
   // TODO: move the data fetching into the component instead of here.
   const {data, loading, error, refetch} = useQuery(GET_ALL_MEMBER_APPLICANTS, { variables: { ycId: router.query.ycId } });
-  if (loading) return <Grid container justifyContent="center"><LoadingYachty/></Grid>;
+  if (loading) return <LoadingYachty/>;
   if (error) router.push('/login');
   const { potential_members } = data;
   if (potential_members.length === 0) {

@@ -6,6 +6,7 @@ import { GET_RACES_BY_YCID_AFTER_DATE, GET_RACES_BY_YCID_BEFORE_DATE } from "@/l
 import { useSelector } from "react-redux";
 import { getIsoDate } from "@/lib/utils/getters";
 import RacePoster from "@/components/RacePoster";
+import LoadingYachty from "@/components/LoadingYachty";
 
 const Racing = () => {
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
@@ -26,11 +27,10 @@ const Racing = () => {
     }
   });
 
-  if (pastRraceEventsLoading || raceEventsLoading) return <CircularProgress />;  
+  if (pastRraceEventsLoading || raceEventsLoading) return <LoadingYachty />;  
   
   const pastRaces = pastRaceEventData.races;
   const races = raceEventData.races;
-  console.log('races ======', races)
   const left = showLeftPanel ? 1.7 : 0;
   const right = showLeftPanel ? 0 : 1.7;
   return (
