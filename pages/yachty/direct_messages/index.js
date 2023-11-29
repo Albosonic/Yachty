@@ -24,12 +24,12 @@ const directMessageFeed = ({props}) => {
     variables: { memberId },
     fetchPolicy: 'no-cache'
   });
-
+  
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
-    pollInterval: 1500,
+    // pollInterval: 1500,
   });
-
+  
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
 
   const getMessageGridHeight = () => {
@@ -38,8 +38,18 @@ const directMessageFeed = ({props}) => {
   }
 
   if (pollLoading || userRmLoading) return <CircularProgress />;
+  if (userRmData.user_rooms.length === 0) {
+    return (
+      <>
+        <NavBar/>
+        <Stack sx={{margin: 10}} alignItems="center">
+          <Typography>You have no messages at this time.</Typography>
+        </Stack>
+      </>
+    )
+  }
+  console.log('userRmData =======', userRmData.user_rooms)
   const userPic = user?.picture;
-
   const getMsgFacade = (messages) => {
     if (!messages) return [{}];
     return messages.map(msg => {
@@ -145,7 +155,8 @@ const directMessageFeed = ({props}) => {
               overflowY: "scroll",
               height: "100%",
             }}>
-              {moreThan600px && rooms.map((room,  i) => {
+              {moreThan600px && 
+              rooms.map((room,  i) => {
                 const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
                 if (recipientId === memberId) return null;
                 return (
