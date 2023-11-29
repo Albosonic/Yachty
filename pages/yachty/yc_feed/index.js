@@ -18,6 +18,7 @@ const YachtClubFeed = () => {
   const moreThan600px = useMediaQuery('(min-width:600px)');
   
   if (loading) return <LoadingYachty />;
+
   const events = data?.yc_events;
   if (events.length === 0) {
     return (
@@ -30,7 +31,7 @@ const YachtClubFeed = () => {
       </>
     )
   }
-  console.log('events', events.length);
+
   return (
     <>
       <NavBar />
