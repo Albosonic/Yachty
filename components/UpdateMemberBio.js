@@ -1,6 +1,7 @@
 import { updateMemberBioAct } from "@/slices/actions/authActions";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Alert, Button, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Fab, Grid, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,7 +29,7 @@ const UpdateMemberBio = () => {
       setMemberBio(bio);
       setEditing(false);
     }
-  });
+  },[bio]);
 
   const handleUpdateBio = async () =>{
     await updateBio({variables: {memberId, bio: memberBio}});    
@@ -41,7 +42,7 @@ const UpdateMemberBio = () => {
   }
 
   return (
-    <Grid width="80%">
+    <Stack width="80%" alignItems="center">
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!!
@@ -59,9 +60,15 @@ const UpdateMemberBio = () => {
         InputProps={{endAdornment: <Button sx={{alignSelf: "flex-end"}} onClick={handleUpdateBio}>Set</Button>}}
       />}
       {!editing && 
-        <Typography>{bio}</Typography>
+        <Stack sx={{minWidth: 300}}>
+          <Fab onClick={() => setEditing(true)} size="small" sx={{alignSelf: 'flex-end'}}>
+            <EditIcon color="primary" />
+          </Fab>
+          <Typography variant="body1">{bio}</Typography>              
+        </Stack>
+
       }
-    </Grid>
+    </Stack>
   )
 }
 
