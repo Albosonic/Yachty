@@ -13,7 +13,8 @@ const AddMember = () => {
   const {data, loading, error, refetch} = useQuery(GET_ALL_MEMBER_APPLICANTS, { variables: { ycId: router.query.ycId } });
   if (loading) return <Grid container justifyContent="center"><LoadingYachty/></Grid>;
   if (error) router.push('/login');
-  if (data.potential_members.length === 0) {
+  const { potential_members } = data;
+  if (potential_members.length === 0) {
     return (
       <>
         <NavBar/>
@@ -22,9 +23,7 @@ const AddMember = () => {
         </Stack>
       </>
     )
-  }
-  console.log('data =========', data.potential_members);
-  const { potential_members } = data;
+  }  
   return (
     <>
       <NavBar />
