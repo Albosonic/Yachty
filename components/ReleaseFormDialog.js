@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, Stack, TextField, Typography, styled } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const GET_RELEASE_FORM_BY_ID = gql`
@@ -8,7 +8,6 @@ query getreleaseFormByYcId($releaseFormId: uuid!, $memberId: uuid!) {
   race_release_forms(where: {id: {_eq: $releaseFormId}}) {
     content
     id
-    raceId
     signed_race_releases(where: {releaseFormId: {_eq: $releaseFormId}, memberId: {_eq: $memberId}}) {
       memberId
       signature
@@ -16,7 +15,6 @@ query getreleaseFormByYcId($releaseFormId: uuid!, $memberId: uuid!) {
     }
   }
 }`;
-
 const INSERT_SIGNED_RELEASE = gql`
   mutation insertSignedRelease($memberId: uuid!, $releaseFormId: uuid!, $signature: String) {
   insert_signed_race_release(objects: {memberId: $memberId, releaseFormId: $releaseFormId, signature: $signature}) {
@@ -26,23 +24,24 @@ const INSERT_SIGNED_RELEASE = gql`
 `
 
 const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
-  const [signature, setSignature] = useState('');
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  // const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const memberId = useSelector(state => state.auth.member.id);
-  
-  const {error, loading, data} = useQuery(GET_RELEASE_FORM_BY_ID, {
-    variables: { 
-      releaseFormId,
-      memberId,
-    },
+  const [signature, setSignature] = useState('');
+  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
+  const {error, loading, data, refetch} = useQuery(GET_RELEASE_FORM_BY_ID, {
+    variables: { releaseFormId, memberId },
+    fetchPolicy: 'no-cache'
   });
 
-  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
+  useEffect(() => {
+    if (!loading) {
+      const savedSignature = data.race_release_forms[0].signed_race_releases[0]?.signature
+      setSignature(savedSignature)
+    }
+  })
 
   if (loading) return <CircularProgress />;
-  console.log('data ======== D', data)
-  // const { content } = data.race_release_forms[0];
+  const { content } = data.race_release_forms[0];  
 
   const signDoc = async () => {
     await insertSignedForm({
@@ -51,6 +50,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
       releaseFormId,
       signature
     }});
+    refetch();
     setOpenDialog(false);
   }
   
@@ -61,7 +61,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
       open={open}
       onClose={() => setOpenDialog(false)}
     >
-      {/* <DialogContent>
+      <DialogContent>
         <Grid alignContent="center">
           <Grid container justifyContent="space-between">              
             <Box
@@ -99,7 +99,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
             },
           }}
         />
-      </DialogContent> */}
+      </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
         <Button onClick={signDoc}>Sign</Button>
