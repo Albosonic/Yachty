@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { Alert, Button, Snackbar, Stack, TextField } from "@mui/material";
+import { Alert, Button, Grid, Snackbar, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -27,7 +27,7 @@ const UpdateMemberBio = () => {
   }
 
   return (
-    <Stack>
+    <Grid width="80%">
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!!
@@ -43,7 +43,7 @@ const UpdateMemberBio = () => {
         rows={5}
         InputProps={{endAdornment: <Button sx={{alignSelf: "flex-end"}} onClick={handleUpdateBio}>Set</Button>}}
       />
-    </Stack>
+    </Grid>
   )
 }
 
