@@ -26,11 +26,11 @@ const Racing = () => {
     }
   });
 
-  if (pastRraceEventsLoading || raceEventsLoading) return <CircularProgress />;
-  console.log('pastRaceEventData ======>', pastRaceEventData)
+  if (pastRraceEventsLoading || raceEventsLoading) return <CircularProgress />;  
   
   const pastRaces = pastRaceEventData.races;
   const races = raceEventData.races;
+  console.log('races ======', races)
   const left = showLeftPanel ? 1.7 : 0;
   const right = showLeftPanel ? 0 : 1.7;
   return (
@@ -48,15 +48,18 @@ const Racing = () => {
         <Button sx={{borderBottom: right, borderLeft: right, borderRadius: 0}} fullWidth onClick={() => setShowLeftPanel(false)}>Races</Button>
       </Grid>
       {showLeftPanel ? (
-        <Stack sx={{margin: 5}} spacing={2} alignItems="center">
-          <Stack spacing={4}>
+        <Stack spacing={2} alignItems="center">
+          <Typography noWrap sx={{padding: 1}} variant="h5">Past Races</Typography>
+          <Stack spacing={4}>            
+            {pastRaces.length === 0 && <Typography>The are no past races at this time.</Typography>}
             {pastRaces.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
           </Stack>
         </Stack>
       ) : (
         <Stack spacing={2} alignItems="center">
-          <Typography noWrap sx={{padding: 1}} variant="h4">Upcoming Races</Typography>
+          <Typography noWrap sx={{padding: 1}} variant="h5">Upcoming Races</Typography>
             <Stack spacing={4}>
+              {races.length === 0 && <Typography>The are no upcoming races at this time.</Typography>}
               {races.map((race, index) => <RacePoster race={race} key={`${race.raceName}${index}`} />)}
             </Stack>
         </Stack>
