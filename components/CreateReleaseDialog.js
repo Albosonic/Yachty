@@ -27,8 +27,8 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
   
   const addRelease = async () => {    
     const {content, name} = releaseForm;
-    if (content === '') return setFormErrors({...formErrors, contentError: true})
     if (name === '') return setFormErrors({...formErrors, nameError: true})
+    if (content === '') return setFormErrors({...formErrors, contentError: true})
     
     const resp = await insertRelease({variables: {
       content,
@@ -45,7 +45,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
     closeMenu(null);
     setOpenDialog(false);
   }
-  
+  const {contentError, nameError} = formErrors;
   return (
     <Dialog
       fullWidth={true}
@@ -82,6 +82,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
           value={releaseForm.name}
           onChange={(e) => setReleaseForm({...releaseForm, name: e.target.value})}
         />
+        {nameError && <Typography color="error">Please Enter release form name.</Typography>}
         <TextField
           autoFocus
           multiline
@@ -95,6 +96,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
           value={releaseForm.content}
           onChange={(e) => setReleaseForm({...releaseForm, content: e.target.value})}
         />
+        {contentError && <Typography color="error">Please Enter release form terms.</Typography>}
       </DialogContent>
       <DialogActions>
         <Button onClick={closeDialog}>close</Button>
