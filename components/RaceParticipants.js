@@ -30,6 +30,12 @@ const cleanDialog = {
   duesOwed: 0,
   email: '',
   name: '',
+  bio: '',
+  profilePic: '',
+  id: '',
+  vessels: [],
+  yachtClubByYachtClub: [],
+  signed_race_releases: [],
 }
 
 // const UPDATE_MEMBER_DUES = gql`
