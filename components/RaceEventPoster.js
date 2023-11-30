@@ -52,11 +52,11 @@ const RaceEventPoster = ({ raceData }) => {
             alt="The house from the offer."
             src={image}
           />
-          
+
           <Grid container justifyContent="space-around">
-            <Button 
+            <Button
               onClick={() => router.push({
-                pathname: '/yachty/racing/reservations', 
+                pathname: '/yachty/racing/reservations',
                 query: {raceId, eventId}
               })}
             >
@@ -65,12 +65,6 @@ const RaceEventPoster = ({ raceData }) => {
             {/* {isCommodore && <Button onClick={() => router.push({pathname: '/yachty/yc_feed/see_event_res', query: {eventId}})}>See Member RSVP</Button>} */}
           </Grid>
         </Stack>
-        
-          <Typography>
-            members attending: 70
-          </Typography>
-          
-        
       </Paper>
     </>
   )
