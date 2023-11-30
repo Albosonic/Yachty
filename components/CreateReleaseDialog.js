@@ -16,6 +16,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const profilePic = useSelector(state => state.auth.member.profilePic);
+  const name = useSelector(state => state.auth.member.name);
   const [formErrors, setFormErrors] = useState({
     nameError: false,
     contentError: false,
@@ -34,7 +35,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
       name,
       ycId
     }});
-    
+
     closeMenu(null);
     refetch();
     setOpenDialog(false);    
