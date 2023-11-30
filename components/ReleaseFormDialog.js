@@ -28,6 +28,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const memberId = useSelector(state => state.auth.member.id);
   const [signature, setSignature] = useState('');
+  const [formError, setFormError] = useState(false);
   const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
   const {error, loading, data, refetch} = useQuery(GET_RELEASE_FORM_BY_ID, {
     variables: { releaseFormId, memberId },
@@ -45,7 +46,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const { content } = data.race_release_forms[0];  
 
   const signDoc = async () => {
-    console.log('signature ===', signature)
+    if (!signature)
     await insertSignedForm({
       variables: {
       memberId,
@@ -93,10 +94,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
           fullWidth
           variant="standard"
           value={signature}
-          onChange={(e) => {
-            console.log('e.target.value :', e.target.value)
-            setSignature(e.target.value)
-          }}
+          onChange={(e) => setSignature(e.target.value)}
           inputProps={{
             style: { 
               fontFamily: 'Shadows Into Light, cursive',
@@ -104,10 +102,11 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
             },
           }}
         />
+      {formError && <Typography>Please sign before submitting</Typography>}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-        <Button onClick={signDoc}>Sign</Button>
+        <Button disabled={signedFormLoading} onClick={signDoc}>Sign</Button>
       </DialogActions>
     </Dialog>
   )
