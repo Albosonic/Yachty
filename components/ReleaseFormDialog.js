@@ -46,7 +46,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const { content } = data.race_release_forms[0];  
 
   const signDoc = async () => {
-    if (!signature)
+    if (!signature) return setFormError(true);
     await insertSignedForm({
       variables: {
       memberId,
@@ -102,7 +102,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
             },
           }}
         />
-      {formError && <Typography>Please sign before submitting</Typography>}
+      {formError && <Typography color="error">Please sign before submitting</Typography>}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>

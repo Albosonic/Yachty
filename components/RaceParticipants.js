@@ -56,12 +56,13 @@ const RaceParticipants = ({raceId}) => {
     },
     pollInterval: 1500,
   });
+  console.log('data ========', data)
 
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: { 
       memberId 
     },
-    pollInterval: 1000,
+    // pollInterval: 1000,
   });
 
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
@@ -114,8 +115,7 @@ const RaceParticipants = ({raceId}) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column, i) => {
-                console.log('column: ', column)
+              {columns.map((column, i) => {                
                 return (
                 <TableCell
                   key={column.id + i}
@@ -135,10 +135,11 @@ const RaceParticipants = ({raceId}) => {
                 return (
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
                     {columns.map((column, i) => {
+                      console.log('wtfwtfwtfwt ===========', column)
                       let value = row[column.id];
                       if (column.isRelease && row.signed_race_releases[0]) {
                         let signed = row.signed_race_releases[0]?.releaseFormId;                        
-
+                        console.log('row.signed_race_releases =======', row.signed_race_releases)
                         return (
                           <TableCell key={column + i} align={column.align}>
                             {signed && <DownloadDoneIcon color="success" />}
