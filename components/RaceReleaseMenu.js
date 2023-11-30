@@ -37,7 +37,7 @@ const RaceReleaseMenu = ({ addReleaseForm }) => {
     if (form) addReleaseForm(form)
   };
 
-  if (loading) return <LoadingYachty />;
+  if (loading) return <LoadingYachty isRoot={false} />;
   const releaseForms = data?.race_release_forms;
   return (
     <>

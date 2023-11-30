@@ -25,16 +25,20 @@ const INSERT_PURCHASED_TICKETS = gql`
 
 const GET_PURCHASED_EVENT_TICKETS_BY_IDS = gql`
   query getPurchasedEventTicketsById($eventId: uuid!, $memberId: uuid!) {
-  yc_event_purchased_tickets(where: {eventId: {_eq: $eventId}, memberId: {_eq: $memberId}}) {
-    paid
-    yc_event {
-      event_name
-    }
-    yc_member {
-      name
-    }
+    yc_event_tickets_for_purchase(where: {eventId: {_eq: $eventId}}) {
+    cost
+    id
   }
 }`;
+
+const GET_EVENT_TICKET = gql`
+  query getRaceTicket($eventId: uuid!) {
+  race_tickets_for_purchase(where: {raceId: {_eq: $eventId}}) {
+    cost
+    id
+  }
+}
+`
 
 const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const router = useRouter();
@@ -61,6 +65,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   } = eventData;
 
   const {error, loading, data, refetch} = useQuery(GET_PURCHASED_EVENT_TICKETS_BY_IDS, { variables: {eventId, memberId}});
+  const {error: forPurchaseError, loading: forPurchaseLoading, data: forPurchaseData} = useQuery(GET_EVENT_TICKET, { variables: {eventId}});
   const purchasedTicketData = data?.yc_event_purchased_tickets;
   
   useEffect(() => {
@@ -76,6 +81,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
   if (loading) return <CircularProgress />;
   const amount = yc_event_tickets_for_purchase?.cost || 0;
+  console.log('forP data =========', forPurchaseData)
   const ticketId = yc_event_tickets_for_purchase?.id;
 
   const reserveTicket = async () => {
