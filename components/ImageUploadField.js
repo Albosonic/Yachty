@@ -45,8 +45,8 @@ const ImageUploadField = ({ type, setImageObjToParent, img, title="Upload Burgee
         setImageObjToParent(imageObject);
       }
       case YC_EVENT: {
-        // const resizedFile = await resizeYcEventPoster(file);
-        // imageObject.fileDatum = resizedFile;
+        const resizedFile = await resizeYcEventPoster(file);
+        imageObject.fileDatum = resizedFile;
         setImageObjToParent(imageObject);
       }
       case UPDATE_LOGO: {

@@ -62,6 +62,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
   const {error, loading, data, refetch} = useQuery(GET_PURCHASED_EVENT_TICKETS_BY_IDS, { variables: {eventId, memberId}});
   const purchasedTicketData = data?.yc_event_purchased_tickets;
+  
   useEffect(() => {
     let unpaid = 0;
     let totalTickets = 0;
@@ -182,7 +183,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             </Stack>
             <Grid container flexWrap="nowrap" sx={{ width: '100%', height: '100%' }}>
               <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
-              <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, lineHeight: 1}}>{ 20 }</Typography>
+              <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, lineHeight: 1}}>{ amount }</Typography>
             </Grid>            
           </Stack>
         )}
