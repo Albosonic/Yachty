@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 
 const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, directMessage}) => {
   const memberId = useSelector(state => state.auth.member.id);
-
+  const moreThan600px = useMediaQuery('(min-width:600px)');
   const {
     open,
     name: memberName,
@@ -21,6 +21,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
   const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
   console.log('openDialog ==========', openDialog)
   const signature = signed_race_releases[0]?.signature;
+
   return (
     <Dialog
       fullWidth={true}
@@ -29,11 +30,17 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
       onClose={() => setOpenDialog({...cleanDialog})}
     >
     <DialogContent>
-      <Grid container wrap="nowrap" justifyContent="space-between">
+      <Grid container justifyContent="space-between">
         <Box component="img" sx={{ height: 90, width: 120 }} alt="yacht club logo" src={yachtClubByYachtClub?.logo} />
-        <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
-        <Avatar alt="Profile Pic" src={memberPic} />
+        {moreThan600px && <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>}
+        <Avatar alt="Profile Pic" src={memberPic} sx={{margin: 2}} />
       </Grid>              
+      {!moreThan600px && 
+        <Grid container justifyContent="center">
+          <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
+        </Grid>
+      }
+
         <Stack alignItems="center">
           <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>          
           <Grid container justifyContent="space-around" sx={{width: '100%'}}>            
