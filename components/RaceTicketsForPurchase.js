@@ -26,6 +26,7 @@ const GET_RACE_TICKET = gql`
   query getRaceTicket($raceId: uuid!) {
   race_tickets_for_purchase(where: {raceId: {_eq: $raceId}}) {
     cost
+    id
   }
 }
 `
@@ -40,7 +41,6 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     startTime,
     endDate,
     endTime,
-    race_tickets_for_purchase,
   } = raceData[0];
 
   const memberId = useSelector(state => state.auth.member.id);
@@ -67,6 +67,10 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     }
   },[resData])
 
+  if (!raceData || resLoading || ticketLoading) return <LoadingYachty />;
+  // console.log('ticketData ======:', ticketData.race_tickets_for_purchase )
+  const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
+
   const reserveTicket = async () => {
     await insertTickets({variables: { memberId, ticketForPurchaseId, raceId, ycId }});
     setTicketCount(0);
@@ -79,10 +83,6 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     setShowSuccess(false)
   };
 
-  if (!raceData || resLoading || ticketLoading) return <LoadingYachty />;
-  console.log('ticketData ======:', ticketData.race_tickets_for_purchase
-  )
-  const {cost} = ticketData.race_tickets_for_purchase[0];
   const cardWidthMin = moreThan600px ? 700 : 200;
   const cardWidthMax = moreThan600px ? 200 : 700;
   return (
