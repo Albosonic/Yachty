@@ -12,24 +12,32 @@ const INSERT_RACE_RELEASE = gql`
 }
 `;
 
-const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
+const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const profilePic = useSelector(state => state.auth.member.profilePic);
+  const [formErrors, setFormErrors] = useState({
+    nameError: false,
+    contentError: false,
+  });
+
   const [releaseForm, setReleaseForm] = useState({content: '', name: ''});
   const [insertRelease, {loading}] = useMutation(INSERT_RACE_RELEASE)
-
-
-  const addRelease = async () => {
+  
+  const addRelease = async () => {    
     const {content, name} = releaseForm;
-    console.log('release: ', releaseForm);
+    if (content === '') return setFormErrors({...formErrors, contentError: true})
+    if (name === '') return setFormErrors({...formErrors, nameError: true})
+    
     const resp = await insertRelease({variables: {
       content,
       name,
       ycId
     }});
+    
     closeMenu(null);
-    setOpenDialog(false);
+    refetch();
+    setOpenDialog(false);    
   }
 
   const closeDialog = () => {
@@ -66,9 +74,9 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
           multiline
           minRows={1}
           margin="dense"
-          id="race-chair-commentary"
+          id="release-text-field"
           label="Release Form Name"
-          type="email"          
+          type="name"          
           variant="standard"
           value={releaseForm.name}
           onChange={(e) => setReleaseForm({...releaseForm, name: e.target.value})}
@@ -80,7 +88,7 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
           margin="dense"
           id="race-chair-commentary"
           label="Release Form Text"
-          type="email"
+          type="summary"
           fullWidth
           variant="standard"          
           value={releaseForm.content}
