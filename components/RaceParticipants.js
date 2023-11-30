@@ -49,9 +49,9 @@ const RaceParticipants = ({raceId}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
 
-  const { error, loading,  data } = useQuery(GET_MEMBERS_BY_RACE_ID, { 
-    variables: { 
-      raceId, 
+  const { error, loading,  data } = useQuery(GET_MEMBERS_BY_RACE_ID, {
+    variables: {
+      raceId,
       fetchPolicy: 'no-cache' ,
     },
     pollInterval: 1500,
@@ -59,8 +59,8 @@ const RaceParticipants = ({raceId}) => {
   console.log('data ========', data)
 
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
-    variables: { 
-      memberId 
+    variables: {
+      memberId
     },
     // pollInterval: 1000,
   });
@@ -76,7 +76,7 @@ const RaceParticipants = ({raceId}) => {
     userRmData.user_rooms.forEach(room => { if (room.recipientId === recipientId) {
       roomId = room.roomId
     }});
-    
+
     if (roomId === null) {
       const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
       roomId = resp.data.insert_room.returning[0].id;
@@ -84,14 +84,14 @@ const RaceParticipants = ({raceId}) => {
         variables: {
           objects: [
             {
-              memberId: memberId, 
-              roomId: roomId, 
+              memberId: memberId,
+              roomId: roomId,
               participantId:`${memberId}${roomId}`,
               recipientId: recipientId
-            }, 
+            },
             {
-              memberId: recipientId, 
-              roomId: roomId, 
+              memberId: recipientId,
+              roomId: roomId,
               participantId: `${recipientId}${roomId}`,
               recipientId: memberId,
             }
@@ -100,14 +100,14 @@ const RaceParticipants = ({raceId}) => {
     }
     router.push({
       pathname: '/yachty/direct_messages',
-      query: {rid: roomId}, 
+      query: {rid: roomId},
     })
   }
 
   if (loading || !data) return <CircularProgress />
-  
+
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
-  
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <RacerInfoDialog openDialog={openDialog} cleanDialog={cleanDialog} setOpenDialog={setOpenDialog} handleClose={handleClose}/>
@@ -115,7 +115,7 @@ const RaceParticipants = ({raceId}) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column, i) => {                
+              {columns.map((column, i) => {
                 return (
                 <TableCell
                   key={column.id + i}
@@ -135,19 +135,17 @@ const RaceParticipants = ({raceId}) => {
                 return (
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
                     {columns.map((column, i) => {
-                      console.log('wtfwtfwtfwt ===========', column)
                       let value = row[column.id];
                       if (column.isRelease && row.signed_race_releases[0]) {
-                        let signed = row.signed_race_releases[0]?.releaseFormId;                        
-                        console.log('row.signed_race_releases =======', row.signed_race_releases)
+                        let signed = row.signed_race_releases[0]?.releaseFormId;
                         return (
                           <TableCell key={column + i} align={column.align}>
                             {signed && <DownloadDoneIcon color="success" />}
                           </TableCell>
                         )
                       }
-                      if (Array.isArray(value)) {                                          
-                        value = value.length > 0 ? value[0][column.nestedKey] : null;                        
+                      if (Array.isArray(value)) {
+                        value = value.length > 0 ? value[0][column.nestedKey] : null;
                       }
                       return (
                         <TableCell key={column + i} align={column.align}>
