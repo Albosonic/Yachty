@@ -38,13 +38,6 @@ const cleanDialog = {
   signed_race_releases: [],
 }
 
-// const UPDATE_MEMBER_DUES = gql`
-//   mutation updateMemberDues($newBalance: Int, $email: String) {
-//   update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
-//     affected_rows
-//   }
-// }`;
-
 const RaceParticipants = ({raceId}) => {
   const router = useRouter();
   const ycId = router.query.ycId;
@@ -70,7 +63,6 @@ const RaceParticipants = ({raceId}) => {
     pollInterval: 2000,
   });
 
-  // const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
