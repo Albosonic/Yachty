@@ -40,65 +40,60 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
           <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
         </Grid>
       }
-
-        <Stack alignItems="center">
-          <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>          
-          <Grid container justifyContent="space-around" sx={{width: '100%'}}>            
-            <Box
-              component="img"
-              sx={{
-                height: 200,
-                width: 200,                
-                borderRadius: 3,                
-              }}
-              alt="The house from the offer."
-              src={memberVessel?.img}
-            />            
-            <Stack spacing={1}>
-              {signature &&
-                <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="space-between">
-                  <Typography sx={{color: 'green'}}>Release Signed: </Typography>
-                  <Typography 
-                    color="success"
-                    sx={{fontFamily: 'Shadows Into Light, cursive', color: 'green'}}
-                  >
-                    {signature}
-                  </Typography>
-                </Grid>
-              }
-              <DialogContentText>
-                {memberEmail}
-              </DialogContentText>
-              <DialogContentText>
-                hullMaterial: {memberVessel?.type}
-              </DialogContentText>
-              <DialogContentText>
-                length: {memberVessel?.length}
-              </DialogContentText>
-              <DialogContentText>
-                make: {memberVessel?.make}
-              </DialogContentText>
-              <DialogContentText>
-                model: {memberVessel?.model}
-              </DialogContentText>
-              <DialogContentText>
-                marina: {memberVessel?.marina}
-              </DialogContentText>
-              <DialogContentText>
-                slip: {memberVessel?.slip}
-              </DialogContentText>
-            </Stack>            
-          </Grid>
-        </Stack>
-        
-        <Stack sx={{marginTop: 5, marginLeft: 2}}>
-          
-          
-          <DialogContentText>
-            Member Bio: {memberBio}
-          </DialogContentText>
-        </Stack>
-      
+      <Stack alignItems="center">
+        <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>          
+        <Grid container justifyContent="space-around" sx={{width: '100%'}}>            
+          <Box
+            component="img"
+            sx={{
+              height: 200,
+              width: 200,                
+              borderRadius: 3,                
+            }}
+            alt="The house from the offer."
+            src={memberVessel?.img}
+          />            
+          <Stack spacing={1}>
+            {signature &&
+              <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="space-between">
+                <Typography sx={{color: 'green'}}>Release Signed: </Typography>
+                <Typography 
+                  color="success"
+                  sx={{fontFamily: 'Shadows Into Light, cursive', color: 'green'}}
+                >
+                  {signature}
+                </Typography>
+              </Grid>
+            }
+            <DialogContentText>
+              {memberEmail}
+            </DialogContentText>
+            <DialogContentText>
+              hullMaterial: {memberVessel?.type}
+            </DialogContentText>
+            <DialogContentText>
+              length: {memberVessel?.length}
+            </DialogContentText>
+            <DialogContentText>
+              make: {memberVessel?.make}
+            </DialogContentText>
+            <DialogContentText>
+              model: {memberVessel?.model}
+            </DialogContentText>
+            <DialogContentText>
+              marina: {memberVessel?.marina}
+            </DialogContentText>
+            <DialogContentText>
+              slip: {memberVessel?.slip}
+            </DialogContentText>
+          </Stack>            
+        </Grid>
+      </Stack>      
+      <Stack sx={{marginTop: 5, marginLeft: 2}}>                
+        <DialogContentText>
+          Member Bio: {memberBio}
+        </DialogContentText>
+      </Stack>    
       <Grid container justifyContent="space-between" >
         <DialogActions>
           <Button onClick={handleClose}>go back</Button>
