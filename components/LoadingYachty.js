@@ -4,7 +4,7 @@ import { Box, Stack } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import NavBar from './NavBar';
 
-export default function LoadingYachty() {
+export default function LoadingYachty({isRoot=true}) {
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
 
@@ -35,7 +35,7 @@ export default function LoadingYachty() {
 
   return (
     <>
-      <NavBar />
+      {isRoot && <NavBar />}
       <Stack sx={{ marginTop: 20, alignItems: 'center'}}>
         <Box sx={{ width: '70%'}}>
           <SailingTwoToneIcon  sx={{marginLeft: progress}} color="primary" fontSize='large' />

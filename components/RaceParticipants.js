@@ -30,14 +30,20 @@ const cleanDialog = {
   duesOwed: 0,
   email: '',
   name: '',
+  bio: '',
+  profilePic: '',
+  id: '',
+  vessels: [],
+  yachtClubByYachtClub: [],
+  signed_race_releases: [],
 }
 
-const UPDATE_MEMBER_DUES = gql`
-  mutation updateMemberDues($newBalance: Int, $email: String) {
-  update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
-    affected_rows
-  }
-}`;
+// const UPDATE_MEMBER_DUES = gql`
+//   mutation updateMemberDues($newBalance: Int, $email: String) {
+//   update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
+//     affected_rows
+//   }
+// }`;
 
 const RaceParticipants = ({raceId}) => {
   const router = useRouter();
@@ -49,22 +55,22 @@ const RaceParticipants = ({raceId}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
 
-  const { error, loading,  data } = useQuery(GET_MEMBERS_BY_RACE_ID, { 
-    variables: { 
-      raceId, 
+  const { error, loading,  data } = useQuery(GET_MEMBERS_BY_RACE_ID, {
+    variables: {
+      raceId,
       fetchPolicy: 'no-cache' ,
     },
-    pollInterval: 1500,
-  });
+    pollInterval: 2000,
+  });  
 
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
-    variables: { 
-      memberId 
+    variables: {
+      memberId
     },
-    pollInterval: 1000,
+    pollInterval: 2000,
   });
 
-  const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
+  // const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
@@ -75,7 +81,7 @@ const RaceParticipants = ({raceId}) => {
     userRmData.user_rooms.forEach(room => { if (room.recipientId === recipientId) {
       roomId = room.roomId
     }});
-    
+
     if (roomId === null) {
       const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
       roomId = resp.data.insert_room.returning[0].id;
@@ -83,14 +89,14 @@ const RaceParticipants = ({raceId}) => {
         variables: {
           objects: [
             {
-              memberId: memberId, 
-              roomId: roomId, 
+              memberId: memberId,
+              roomId: roomId,
               participantId:`${memberId}${roomId}`,
               recipientId: recipientId
-            }, 
+            },
             {
-              memberId: recipientId, 
-              roomId: roomId, 
+              memberId: recipientId,
+              roomId: roomId,
               participantId: `${recipientId}${roomId}`,
               recipientId: memberId,
             }
@@ -99,23 +105,28 @@ const RaceParticipants = ({raceId}) => {
     }
     router.push({
       pathname: '/yachty/direct_messages',
-      query: {rid: roomId}, 
+      query: {rid: roomId},
     })
   }
 
   if (loading || !data) return <CircularProgress />
-  
+
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
-  
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <RacerInfoDialog openDialog={openDialog} cleanDialog={cleanDialog} setOpenDialog={setOpenDialog} handleClose={handleClose}/>
+      <RacerInfoDialog 
+        openDialog={openDialog} 
+        cleanDialog={cleanDialog} 
+        setOpenDialog={setOpenDialog} 
+        handleClose={handleClose}
+        directMessage={directMessage}
+      />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               {columns.map((column, i) => {
-                console.log('column: ', column)
                 return (
                 <TableCell
                   key={column.id + i}
@@ -137,23 +148,21 @@ const RaceParticipants = ({raceId}) => {
                     {columns.map((column, i) => {
                       let value = row[column.id];
                       if (column.isRelease && row.signed_race_releases[0]) {
-                        let signed = row.signed_race_releases[0]?.releaseFormId;                        
-
+                        let signed = row.signed_race_releases[0]?.releaseFormId;
                         return (
                           <TableCell key={column + i} align={column.align}>
                             {signed && <DownloadDoneIcon color="success" />}
                           </TableCell>
                         )
                       }
-                      if (Array.isArray(value)) {                                          
-                        value = value.length > 0 ? value[0][column.nestedKey] : null;                        
+                      if (Array.isArray(value)) {
+                        value = value.length > 0 ? value[0][column.nestedKey] : null;
                       }
                       return (
                         <TableCell key={column + i} align={column.align}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
-
                         </TableCell>
                       );
                     })}

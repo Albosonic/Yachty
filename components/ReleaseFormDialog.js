@@ -2,6 +2,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, Stack, TextField, Typography, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import LoadingYachty from './LoadingYachty';
 
 const GET_RELEASE_FORM_BY_ID = gql`
 query getreleaseFormByYcId($releaseFormId: uuid!, $memberId: uuid!) {
@@ -27,6 +28,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const memberId = useSelector(state => state.auth.member.id);
   const [signature, setSignature] = useState('');
+  const [formError, setFormError] = useState(false);
   const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
   const {error, loading, data, refetch} = useQuery(GET_RELEASE_FORM_BY_ID, {
     variables: { releaseFormId, memberId },
@@ -38,12 +40,13 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
       const savedSignature = data.race_release_forms[0].signed_race_releases[0]?.signature
       setSignature(savedSignature)
     }
-  })
+  },[data])
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingYachty isRoot={false} />;
   const { content } = data.race_release_forms[0];  
 
   const signDoc = async () => {
+    if (!signature) return setFormError(true);
     await insertSignedForm({
       variables: {
       memberId,
@@ -99,10 +102,11 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
             },
           }}
         />
+      {formError && <Typography color="error">Please sign before submitting</Typography>}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-        <Button onClick={signDoc}>Sign</Button>
+        <Button disabled={signedFormLoading} onClick={signDoc}>Sign</Button>
       </DialogActions>
     </Dialog>
   )

@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';

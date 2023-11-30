@@ -44,7 +44,7 @@ const UploadRaceEvent = () => {
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
 
-  if (loading || getSeriesLoading) return <LoadingYachty />;
+  if (loading || getSeriesLoading) return <LoadingYachty isRoot={false} />;
 
   const {raceName: raceTitle, raceCourseId, img, raceNameSet, startDate, endDate, review, newRaceId } = raceInfo;
   const raceSeriesArr = raceSeriesData?.race_series
