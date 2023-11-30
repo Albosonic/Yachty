@@ -32,7 +32,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RacePoster = ({ shareData, race }) => {
+const RacePoster = ({ race }) => {
   const router = useRouter();
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);

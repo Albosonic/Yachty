@@ -39,7 +39,7 @@ const RaceOptionsMenu = ({ raceId, releaseFormId, goToReservations }) => {
     handleClose();
     setChairCommentsOpen(true);
   }
-  console.log('releaseId :', releaseFormId)
+
   return (
     <>
       <ReleaseFormDialog 
