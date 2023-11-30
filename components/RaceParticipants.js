@@ -32,12 +32,12 @@ const cleanDialog = {
   name: '',
 }
 
-const UPDATE_MEMBER_DUES = gql`
-  mutation updateMemberDues($newBalance: Int, $email: String) {
-  update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
-    affected_rows
-  }
-}`;
+// const UPDATE_MEMBER_DUES = gql`
+//   mutation updateMemberDues($newBalance: Int, $email: String) {
+//   update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
+//     affected_rows
+//   }
+// }`;
 
 const RaceParticipants = ({raceId}) => {
   const router = useRouter();
@@ -54,18 +54,17 @@ const RaceParticipants = ({raceId}) => {
       raceId,
       fetchPolicy: 'no-cache' ,
     },
-    pollInterval: 1500,
-  });
-  console.log('data ========', data)
+    pollInterval: 2000,
+  });  
 
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: {
       memberId
     },
-    // pollInterval: 1000,
+    pollInterval: 2000,
   });
 
-  const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
+  // const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
@@ -110,7 +109,13 @@ const RaceParticipants = ({raceId}) => {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <RacerInfoDialog openDialog={openDialog} cleanDialog={cleanDialog} setOpenDialog={setOpenDialog} handleClose={handleClose}/>
+      <RacerInfoDialog 
+        openDialog={openDialog} 
+        cleanDialog={cleanDialog} 
+        setOpenDialog={setOpenDialog} 
+        handleClose={handleClose}
+        directMessage={directMessage}
+      />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -152,7 +157,6 @@ const RaceParticipants = ({raceId}) => {
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
-
                         </TableCell>
                       );
                     })}
