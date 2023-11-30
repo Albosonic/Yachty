@@ -23,6 +23,9 @@ const Login = () => {
       <div className={styles.center} >
         <Stack spacing={4} alignItems="center">
           <Typography variant='h2'>Yachty</Typography>
+          <Button onClick={() => window.location = `${window.location.origin}/api/auth/login`}>
+            Log in to Yachty
+          </Button>
           <Box
             component="img"
             sx={{
@@ -32,9 +35,7 @@ const Login = () => {
             alt="Yachty Logo"
             src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/3775947f-3ada-47d6-8f78-f48e5c099e40"
           />
-          <Button onClick={() => window.location = `${window.location.origin}/api/auth/login`}>
-            Log in to Yachty
-          </Button>
+          
         </Stack>
       </div>
     </main>

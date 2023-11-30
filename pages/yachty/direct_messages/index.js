@@ -28,7 +28,7 @@ const directMessageFeed = ({props}) => {
   
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     variables: {roomId: currentRmId},
-    // pollInterval: 1500,
+    pollInterval: 1500,
   });
   
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
