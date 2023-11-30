@@ -2,6 +2,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, Stack, TextField, Typography, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import LoadingYachty from './LoadingYachty';
 
 const GET_RELEASE_FORM_BY_ID = gql`
 query getreleaseFormByYcId($releaseFormId: uuid!, $memberId: uuid!) {
@@ -38,12 +39,13 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
       const savedSignature = data.race_release_forms[0].signed_race_releases[0]?.signature
       setSignature(savedSignature)
     }
-  })
+  },[data])
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingYachty isRoot={false} />;
   const { content } = data.race_release_forms[0];  
 
   const signDoc = async () => {
+    console.log('signature ===', signature)
     await insertSignedForm({
       variables: {
       memberId,
@@ -91,7 +93,10 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
           fullWidth
           variant="standard"
           value={signature}
-          onChange={(e) => setSignature(e.target.value)}
+          onChange={(e) => {
+            console.log('e.target.value :', e.target.value)
+            setSignature(e.target.value)
+          }}
           inputProps={{
             style: { 
               fontFamily: 'Shadows Into Light, cursive',
