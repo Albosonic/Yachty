@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { DateTimeField } from "@mui/x-date-pickers";
 import EditIcon from '@mui/icons-material/Edit';
 import { useMutation, useQuery } from "@apollo/client";
-import { Alert, Button, CircularProgress, Fab, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Button, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
 import { YC_EVENT } from "@/slices/actions/authActions";
@@ -17,6 +17,7 @@ import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
 import SelectedTimeRange from "./SelectedTimeRange";
 import RaceReleaseMenu from "./RaceReleaseMenu";
+import LoadingYachty from "./LoadingYachty";
 
 const UploadRaceEvent = () => {
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
@@ -43,7 +44,7 @@ const UploadRaceEvent = () => {
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
 
-  if (loading || getSeriesLoading) return <CircularProgress />;
+  if (loading || getSeriesLoading) return <LoadingYachty />;
 
   const {raceName: raceTitle, raceCourseId, img, raceNameSet, startDate, endDate, review, newRaceId } = raceInfo;
   const raceSeriesArr = raceSeriesData?.race_series
