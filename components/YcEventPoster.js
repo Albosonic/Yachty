@@ -38,7 +38,6 @@ const YcEventPoster = ({ eventData }) => {
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  // const isCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const handleClose = () => setShowSuccess(false)
   const handleExpandClick = () => setExpanded(!expanded);
   const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}});
@@ -78,7 +77,7 @@ const YcEventPoster = ({ eventData }) => {
         alt="Event Image"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">put a brief race description here maybe</Typography>
+        <Typography variant="body2" color="text.secondary">{specialNotes}</Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton onClick={shareClick} aria-label="share">

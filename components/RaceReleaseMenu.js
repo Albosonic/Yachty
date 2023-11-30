@@ -41,7 +41,7 @@ const RaceReleaseMenu = ({ addReleaseForm }) => {
   const releaseForms = data?.race_release_forms;
   return (
     <>
-      <CreateReleaseDialog open={openDialog} setOpenDialog={setOpenDialog} closeMenu={setAnchorEl} />
+      <CreateReleaseDialog open={openDialog} setOpenDialog={setOpenDialog} closeMenu={setAnchorEl} refetch={refetch} />
       <Button
         id="course-select-button"
         aria-controls={open ? 'race-course-menu' : undefined}

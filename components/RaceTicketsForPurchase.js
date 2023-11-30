@@ -7,6 +7,7 @@ import {  useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import SelectedTimeRange from './SelectedTimeRange';
 import { GET_RACE_TICKET_RESERVATION } from '@/lib/gqlQueries/racinggql';
+import LoadingYachty from './LoadingYachty';
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($ticketForPurchaseId: uuid!, $raceId: uuid!, $ycId: uuid!, $memberId: uuid!) {
@@ -21,16 +22,18 @@ const INSERT_PURCHASED_TICKETS = gql`
   }
 }`;
 
-const RaceTicketsForPurchase = ({ raceData }) => {  
-  const memberId = useSelector(state => state.auth.member.id);
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-  const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS);
-  const [ticketReserved, setTicketReserved] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [ticketCount, setTicketCount] = useState(0);
-  const moreThan600px = useMediaQuery('(min-width:600px)');
-  
-  const {    
+const GET_RACE_TICKET = gql`
+  query getRaceTicket($raceId: uuid!) {
+  race_tickets_for_purchase(where: {raceId: {_eq: $raceId}}) {
+    cost
+    id
+  }
+}
+`
+
+const RaceTicketsForPurchase = ({ raceData }) => {
+
+  const {
     raceName,
     img: image,
     id: raceId,
@@ -38,20 +41,35 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     startTime,
     endDate,
     endTime,
-    race_tickets_for_purchase,
   } = raceData[0];
-  
+
+  const memberId = useSelector(state => state.auth.member.id);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS);
+  const [ticketReserved, setTicketReserved] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [ticketCount, setTicketCount] = useState(0);
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+
   const {error: resError, loading: resLoading, data: resData} = useQuery(GET_RACE_TICKET_RESERVATION, {
     variables: {raceId, memberId},
     fetchPolicy: 'no-cache',
   })
-  
+
+  const {error: ticketError, loading: ticketLoading, data: ticketData} = useQuery(GET_RACE_TICKET, {
+    variables: {raceId}
+  })
+
   useEffect(() => {
     const reservedRaceTicket = resData?.race_tickets_purchased;
     if (Array.isArray(reservedRaceTicket)) {
-      setTicketReserved(reservedRaceTicket.length > 0);      
+      setTicketReserved(reservedRaceTicket.length > 0);
     }
   },[resData])
+
+  if (!raceData || resLoading || ticketLoading) return <LoadingYachty />;
+  // console.log('ticketData ======:', ticketData.race_tickets_for_purchase )
+  const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
 
   const reserveTicket = async () => {
     await insertTickets({variables: { memberId, ticketForPurchaseId, raceId, ycId }});
@@ -60,14 +78,11 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     setTicketReserved(true);
   }
 
-  const handleClose = () => {    
+  const handleClose = () => {
     setTicketCount(0);
     setShowSuccess(false)
   };
 
-  if (!raceData || resLoading) return <CircularProgress />;
-  
-  const {cost, id: ticketForPurchaseId } = race_tickets_for_purchase;
   const cardWidthMin = moreThan600px ? 700 : 200;
   const cardWidthMax = moreThan600px ? 200 : 700;
   return (
@@ -99,7 +114,7 @@ const RaceTicketsForPurchase = ({ raceData }) => {
               {raceName}
             </Typography>
             <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />
-            <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>              
+            <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>
               {ticketReserved && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
               {ticketCount > 0 && <Button onClick={reserveTicket}>Confirm</Button>}
             </Grid>
@@ -110,12 +125,12 @@ const RaceTicketsForPurchase = ({ raceData }) => {
           </Box>
         </Box>
         <Stack alignItems="center" sx={{ '& > :not(style)': { m: 1 } }}>
-          {!ticketReserved && 
+          {!ticketReserved &&
           <Fab onClick={() => setTicketCount(1)} size="medium" color='success'  aria-label="add">
             <AddIcon />
           </Fab>          }
         </Stack>
-      </Card>      
+      </Card>
     </Stack>
   )
 }

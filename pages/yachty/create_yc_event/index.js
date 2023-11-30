@@ -103,7 +103,7 @@ const CreateYCEvent = () => {
       {review ? (
         <YcEvent eventIdProp={newEventId} review={review} edit={editEvent} />
       ) : (
-      <Paper sx={{padding: 5, maxWidth: 700, maxHeight: 1150, margin: '0 auto', marginBottom: 10}} elevation={3}>
+      <Paper sx={{padding: 5, maxWidth: 700, height: '100%', margin: '0 auto', marginTop: 5, marginBottom: 5}} elevation={3}>
         <Stack sx={stackStyles} spacing={5} alignItems="center">
           <Typography variant='h5'>Create Event</Typography>
             <TextField
@@ -149,9 +149,6 @@ const CreateYCEvent = () => {
             </Grid>
           </Grid>
           <ImageUploadField type={YC_EVENT} setImageObjToParent={setImageObj} img={imageObj} title="Event Poster" />
-          <Typography sx={{marginBottom: 0}}>
-            Add special hours if the yacht clubs regular hours will be different. (optional)
-          </Typography>
           {/* <Button color='success' onClick={() => setShowSpecialHours(!showSpecialHours)}>{ buttonText }</Button>
           {showSpecialHours && <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">

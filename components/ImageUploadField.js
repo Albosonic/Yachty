@@ -82,8 +82,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img, title="Upload Burgee
   }
   const inputStyle = src ? { background: `url(${src}) no-repeat`, backgroundSize: "600px 400px" } : {};
   return (
-    <>
-      {/* <form encType="multipart/form-data" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> */}
+    <>      
       <Stack alignItems="center">
         <Typography variant="h6" sx={{margin: 5}}>{title}</Typography>
         <Paper elevation={4}>

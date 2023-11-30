@@ -12,31 +12,40 @@ const INSERT_RACE_RELEASE = gql`
 }
 `;
 
-const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
+const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu, refetch }) => {
   const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const profilePic = useSelector(state => state.auth.member.profilePic);
+  const name = useSelector(state => state.auth.member.name);
+  const [formErrors, setFormErrors] = useState({
+    nameError: false,
+    contentError: false,
+  });
+
   const [releaseForm, setReleaseForm] = useState({content: '', name: ''});
   const [insertRelease, {loading}] = useMutation(INSERT_RACE_RELEASE)
-
-
-  const addRelease = async () => {
+  
+  const addRelease = async () => {    
     const {content, name} = releaseForm;
-    console.log('release: ', releaseForm);
+    if (name === '') return setFormErrors({...formErrors, nameError: true})
+    if (content === '') return setFormErrors({...formErrors, contentError: true})
+    
     const resp = await insertRelease({variables: {
       content,
       name,
       ycId
     }});
+
     closeMenu(null);
-    setOpenDialog(false);
+    refetch();
+    setOpenDialog(false);    
   }
 
   const closeDialog = () => {
     closeMenu(null);
     setOpenDialog(false);
   }
-  
+  const {contentError, nameError} = formErrors;
   return (
     <Dialog
       fullWidth={true}
@@ -66,13 +75,14 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
           multiline
           minRows={1}
           margin="dense"
-          id="race-chair-commentary"
+          id="release-text-field"
           label="Release Form Name"
-          type="email"          
+          type="name"          
           variant="standard"
           value={releaseForm.name}
           onChange={(e) => setReleaseForm({...releaseForm, name: e.target.value})}
         />
+        {nameError && <Typography color="error">Please Enter release form name.</Typography>}
         <TextField
           autoFocus
           multiline
@@ -80,12 +90,13 @@ const CreateReleaseDialog = ({ setOpenDialog, open, closeMenu }) => {
           margin="dense"
           id="race-chair-commentary"
           label="Release Form Text"
-          type="email"
+          type="summary"
           fullWidth
           variant="standard"          
           value={releaseForm.content}
           onChange={(e) => setReleaseForm({...releaseForm, content: e.target.value})}
         />
+        {contentError && <Typography color="error">Please Enter release form terms.</Typography>}
       </DialogContent>
       <DialogActions>
         <Button onClick={closeDialog}>close</Button>

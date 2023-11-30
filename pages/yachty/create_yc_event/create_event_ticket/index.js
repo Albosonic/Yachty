@@ -34,6 +34,7 @@ const CreateEventTicket = (props) => {
   } = data.yc_events[0];
 
   const createYCEventTicket = async () => {
+    console.log('amount ===', amount)
     let variables = {
       cost: amount,
       eventId,
@@ -100,7 +101,10 @@ const CreateEventTicket = (props) => {
         InputLabelProps={{
           shrink: true,
         }}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) => {
+          console.log('e.target.value :', e.target.value)
+          setAmount(e.target.value)
+        }}
       />
     </Grid>
     </>
