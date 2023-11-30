@@ -80,7 +80,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   }, [purchasedTicketData]);
 
   if (loading) return <CircularProgress />;
-  console.log('forP data =========', forPurchaseData?.yc_event_tickets_for_purchase[0])
 
   const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
 
