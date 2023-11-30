@@ -22,7 +22,7 @@ const Login = () => {
       <NavBar />
       <div className={styles.center} >
         <Stack spacing={4} alignItems="center">
-          <Typography variant='h1'>Yachty</Typography>
+          <Typography variant='h2'>Yachty</Typography>
           <Box
             component="img"
             sx={{

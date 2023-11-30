@@ -7,9 +7,9 @@ import { useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
 import LoadingYachty from "./LoadingYachty";
 
-const cleanField = { 
-  msg: '', 
-  parentId: null, 
+const cleanField = {
+  msg: '',
+  parentId: null,
   childComment: false
 };
 
@@ -50,7 +50,7 @@ const EventCommentsList = ({ eventId }) => {
           createdAt: new Date().toISOString(),
         }
       }
-    })      
+    })
     setInputComment({...cleanField});
     setViewReplies({...viewReplies, [commentId]: true});
   };
@@ -60,8 +60,7 @@ const EventCommentsList = ({ eventId }) => {
   const { parentComments } = commentFacadeArrays;
 
   return (
-    <Stack>
-      <Typography variant="body1">{parentComments.length > 0 && parentComments[parentComments.length - 1].comment}</Typography>
+    <Stack>      
       { parentComments.map((commentFacade, i) => {
         const {
           comment,
@@ -71,37 +70,47 @@ const EventCommentsList = ({ eventId }) => {
           author,
           commentId
         } = commentFacade;
-        
+
         const childComments = commentFacadeArrays[commentId] ? commentFacadeArrays[commentId] : null;
-        
+
         return (
           <Stack key={comment + i}>
-            <Stack justifyContent="space-between">
-              <Grid  container justifyContent="space-between">
-                <Stack>
-                  <Typography variant="subtitle2">
-                    {comment}
-                  </Typography>
-                  <Button sx={{fontSize: 9, padding: 1, margin: 1}} variant="standard" onClick={() => {
-                    setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})                      
-                  }}>
-                    view replies
-                  </Button>  
-                </Stack>
-                <Button sx={{padding: 1, fontSize: 9, margin: 1, maxHeight: 40}} variant="standard" onClick={() => { setInputComment({ parentIdCommentId: commentId, msg: '', childComment: true })}}>reply</Button>
-              </Grid>
-              {parentIdCommentId === commentId && (
-                <TextField
-                  sx={{width: '70%'}}
-                  multiline
-                  label="reply"
-                  value={inputMsg}
-                  onChange={(e) => setInputComment({parentIdCommentId: parentIdCommentId, msg: e.target.value})}
-                  InputProps={{endAdornment: <Button onClick={() => sendReply(commentId)}>Send</Button>}}
+            <Grid container justifyContent="space-between">
+              <Stack alignItems="flex-start">
+                <Typography variant="subtitle2">{comment}</Typography>
+                <Button
+                  sx={{
+                    fontSize: 9,                    
+                    margin: 0,
+                  }}                  
                   variant="standard"
-                />
-              )}
-            </Stack>
+                  onClick={() => setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})}>
+                  view replies
+                </Button>
+              </Stack>
+              <Button
+                sx={{
+                  fontSize: 9,
+                  margin: 0,
+                  alignSelf: 'flex-start',
+                }}                
+                                
+                onClick={() => setInputComment({lineHeight: 2, parentIdCommentId: commentId, msg: '', childComment: true })}
+              >
+                reply
+              </Button>
+            </Grid>
+            {parentIdCommentId === commentId && (
+              <TextField
+                sx={{width: '70%'}}
+                multiline
+                label="reply"
+                value={inputMsg}
+                onChange={(e) => setInputComment({parentIdCommentId: parentIdCommentId, msg: e.target.value})}
+                InputProps={{endAdornment: <Button onClick={() => sendReply(commentId)}>Send</Button>}}
+                variant="standard"
+              />
+            )}
             {childComments && childComments.map((childCommentFacade, j) => {
               const {
                 comment: childComment,
@@ -118,7 +127,7 @@ const EventCommentsList = ({ eventId }) => {
                   <Grid container justifyContent="space-between">
                     <Typography variant="subtitle2">
                       {childComment}
-                    </Typography>                      
+                    </Typography>
                     <IconButton size="small" sx={{padding: 1, marginRight: 2}} onClick={() => console.log('write the like functionality berto')}>
                       <RecommendIcon color="primary"/>
                     </IconButton>
@@ -128,8 +137,8 @@ const EventCommentsList = ({ eventId }) => {
             })}
           </Stack>
         )
-      })}      
-      {(childComment === false) && 
+      })}
+      {(childComment === false) &&
       <TextField
         sx={{width: '80%', alignSelf: 'center'}}
         multiline
