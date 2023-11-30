@@ -49,7 +49,7 @@ const directMessageFeed = ({props}) => {
       </>
     )
   }
-  console.log('userRmData =======', userRmData.user_rooms)
+
   const userPic = user?.picture;
   const getMsgFacade = (messages) => {
     if (!messages) return [{}];
