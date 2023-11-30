@@ -68,7 +68,7 @@ const RaceTicketsForPurchase = ({ raceData }) => {
   },[resData])
 
   if (!raceData || resLoading || ticketLoading) return <LoadingYachty />;
-  // console.log('ticketData ======:', ticketData.race_tickets_for_purchase )
+  
   const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
 
   const reserveTicket = async () => {

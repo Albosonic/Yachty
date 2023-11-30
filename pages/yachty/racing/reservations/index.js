@@ -29,7 +29,7 @@ const RaceTicketReservations = () => {
         </Grid>
         <Typography variant="h5">Reserve your Tickets Now</Typography>
         <RaceTicketsForPurchase raceData={race} />
-        {/* {data.yc_events && <EventTicketForPurchase eventData={data.yc_events[0]} />} */}
+        {data.yc_events && <EventTicketForPurchase eventData={data.yc_events[0]} />}
       </Stack>
     </>
   )
