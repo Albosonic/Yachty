@@ -19,7 +19,7 @@ import LoadingYachty from "./LoadingYachty";
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'email', label: 'Email', minWidth: 100 },
-  { id: 'duesOwed', label: 'Dues Owed', minWidth: 170 },
+  { id: 'profilePic', label: 'pic', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
 ];
@@ -219,16 +219,21 @@ const AllMembersTable = ({props}) => {
               .map((row, i) => {
                 return (
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
-                    {columns.map((column, i) => {
+                    {columns.map((column, i) => {                      
                       let value = row[column.id];
                       if (Array.isArray(value)) {
                         value = value.length > 0 ? value[0][column.nestedKey] : null;
                       }
+                      if (column.id === 'profilePic') {
+                        return (
+                          <TableCell key={column + i} align={column.align}>
+                            <Avatar src={value} />
+                          </TableCell>
+                        )
+                      }
                       return (
                         <TableCell key={column + i} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {column.format && typeof value === 'number'? column.format(value) : value}
                         </TableCell>
                       );
                     })}
