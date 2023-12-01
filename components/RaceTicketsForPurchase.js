@@ -67,7 +67,7 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     }
   },[resData])
 
-  if (!raceData || resLoading || ticketLoading) return <LoadingYachty />;
+  if (!raceData || resLoading || ticketLoading) return <LoadingYachty isRoot={false} />;
   
   const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
 

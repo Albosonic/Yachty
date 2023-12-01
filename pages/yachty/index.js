@@ -11,6 +11,7 @@ import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { getIsoDate } from '@/lib/utils/getters';
 import SailingIcon from '@mui/icons-material/Sailing';
+import LoadingYachty from '@/components/LoadingYachty';
 
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
@@ -127,7 +128,7 @@ const Yachty = () => {
     }
   }, [user, userIsCommodore])
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <LoadingYachty isRoot={true} />;
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

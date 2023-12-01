@@ -10,6 +10,7 @@ import {  useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import EventPaymentDialog from './EventPaymentDialog';
+import LoadingYachty from './LoadingYachty';
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!, $eventId: uuid!) {
@@ -79,11 +80,9 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     setPurchasedTicketInfo({totalTickets, unpaid})
   }, [purchasedTicketData]);
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingYachty isRoot={false} />;
 
   const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
-
-  
 
   const reserveTicket = async () => {
     // TODO: make this a batch update
