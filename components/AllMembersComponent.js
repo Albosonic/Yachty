@@ -142,7 +142,7 @@ const AllMembersTable = ({props}) => {
   const specialNotes = memberVessel?.specialNotes;
   const type = memberVessel?.type;
   const slip = memberVessel?.slip;
-  console.log('member vessel =====', memberVessel)
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       {/* TODO: abstract dialog into its own component */}

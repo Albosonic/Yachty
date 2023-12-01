@@ -18,8 +18,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
     signed_race_releases,
   } = openDialog;
 
-  const memberVessel = vessels[0];
-  console.log('memberVessel ======', memberVessel)
+  const memberVessel = vessels[0];  
   const signature = signed_race_releases[0]?.signature;
   const hullMaterial = memberVessel?.hullMaterial
   const length =memberVessel?.length
@@ -35,7 +34,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
       onClose={() => setOpenDialog({...cleanDialog})}
     >
     <DialogContent>
-      <Grid container justifyContent="space-between">
+      <Grid container justifyContent="space-between" sx={{marginTop: 1, marginBottom: 5}}>
         <Box component="img" sx={{ height: 90, width: 120 }} alt="yacht club logo" src={yachtClubByYachtClub?.logo} />
         {moreThan600px && <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>}
         <Avatar alt="Profile Pic" src={memberPic} sx={{margin: 2}} />
@@ -45,8 +44,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
           <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
         </Grid>
       }
-      <Stack alignItems="center">
-        <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>
+      <Stack alignItems="center">        
         <Grid container justifyContent="space-around" sx={{width: '100%'}}>
           <Box
             component="img"
@@ -60,17 +58,13 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
           />
           <Stack spacing={1}>
             {signature &&
-              <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="space-between">
-                <Typography sx={{color: 'green'}}>Release Signed: </Typography>
-                <Typography
-                  color="success"
-                  sx={{fontFamily: 'Shadows Into Light, cursive', color: 'green'}}
-                >
-                  {signature}
-                </Typography>
+              <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="flex-start">
+                <Typography sx={{color: 'green'}}>Release Signed:</Typography>&nbsp;
+                <Typography color="success" sx={{fontFamily: 'Shadows Into Light, cursive', color: 'green'}}>{signature}</Typography>
               </Grid>
-            }
+            }            
             <DialogContentText>{memberEmail}</DialogContentText>
+            <DialogContentText>Vessel Name: {memberVessel?.vesselName}</DialogContentText>
             <DialogContentText>hullMaterial: {hullMaterial}</DialogContentText>
             <DialogContentText>length: {length}</DialogContentText>
             <DialogContentText>make: {make}</DialogContentText>
