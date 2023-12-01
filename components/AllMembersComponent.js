@@ -114,6 +114,7 @@ const AllMembersTable = ({props}) => {
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      {/* TODO: abstract dialog into its own component */}
       <Dialog
         fullWidth={true}
         maxWidth={'sm'}
@@ -125,9 +126,11 @@ const AllMembersTable = ({props}) => {
             <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
             <Avatar alt="Profile Pic" src={memberPic} />
           </Grid>
-          {userIsCommodore && <DialogContentText>
+          {userIsCommodore && 
+          <DialogContentText>
             {memberDuesText}
-          </DialogContentText>}
+          </DialogContentText>
+          }
           <DialogContentText>
             {memberEmail}
           </DialogContentText>
@@ -145,6 +148,7 @@ const AllMembersTable = ({props}) => {
                   height: 200,
                   width: 200,
                   marginBottom: 2,
+                  borderRadius: 3
                 }}
                 alt="The house from the offer."
                 src={memberVessel?.img} 
