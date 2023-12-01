@@ -21,8 +21,9 @@ export default function NavBar() {
   const email = useSelector(state => state.auth?.user?.email);
   
   useEffect(() => {
-    setUserLoggedIn(emailVerrified || email);
-  }, [emailVerrified]);
+    console.log('!!email ===========', !!email)    
+    setUserLoggedIn(!!email || emailVerrified);
+  }, [emailVerrified, email]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,7 +43,7 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar >
-          {emailVerrified || email && 
+          {userLoggedIn && 
           <IconButton
             size="large"
             edge="start"
