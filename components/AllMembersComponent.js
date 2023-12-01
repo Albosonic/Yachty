@@ -30,6 +30,10 @@ const cleanDialog = {
   duesOwed: 0,
   email: '',
   name: '',
+  bio: '',
+  profilePic: '', 
+  vessels: [], 
+  id: '',
 }
 
 const UPDATE_MEMBER_DUES = gql`
@@ -108,7 +112,7 @@ const AllMembersTable = ({props}) => {
   if (loading || !data) return <LoadingYachty isRoot={false} />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
-  console.log('data member data ===============', data)
+  
   const { 
     open, 
     name: memberName, 
@@ -123,7 +127,7 @@ const AllMembersTable = ({props}) => {
   console.log('open d ==========:', openDialog)
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
-  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
+  const memberVessel = vessels[0];
 
   // const {} = memberVessel;
   // console.log('memberVessel ===============', memberVessel)
@@ -138,46 +142,39 @@ const AllMembersTable = ({props}) => {
       >
         <DialogContent>
           <Grid container justifyContent="space-between">
-            <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
+            <DialogTitle>{ memberName }</DialogTitle>
             <Avatar alt="Profile Pic" src={memberPic} />
           </Grid>
-          {userIsCommodore && 
-          <DialogContentText>
-            {memberDuesText}
-          </DialogContentText>
-          }
-          <DialogContentText>
-            {memberEmail}
-          </DialogContentText>
-          <DialogContentText>
-            Member Bio: {memberBio}
-          </DialogContentText>
-          <Grid container>
-            <Stack alignItems="center">
-              <Typography>
-                Vessel: {memberVessel?.vesselName}
-              </Typography>
-              <Box
-                component="img"
-                sx={{
-                  height: 200,
-                  width: 200,
-                  marginBottom: 2,
-                  borderRadius: 3
-                }}
-                alt="The house from the offer."
-                src={memberVessel?.img} 
-              />
-            </Stack>
-            <Stack sx={{marginTop: 5, marginLeft: 2}}>
+                    
+
+
+          <Grid container justifyContent="space-around">            
+            <Box
+              component="img"
+              sx={{
+                height: 200,
+                width: 200,
+                marginBottom: 2,
+                borderRadius: 3
+              }}
+              alt="The house from the offer."
+              src={memberVessel?.img} 
+            />            
+            <Stack spacing={.5}>
               <Typography>
                 hullMaterial: {memberVessel?.hullMaterial}
               </Typography>
               <Typography>
                 length: {memberVessel?.length}
               </Typography>
+              <DialogContentText>
+                {memberEmail}
+              </DialogContentText>              
             </Stack>
           </Grid>
+          <DialogContentText>
+            Member Bio: {memberBio}
+          </DialogContentText>
           <Grid container justifyContent="space-between" >
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>
