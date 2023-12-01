@@ -124,13 +124,11 @@ const AllMembersTable = ({props}) => {
     vessels, 
     id: targetMemberId,
   } = openDialog;
-  console.log('open d ==========:', openDialog)
+  
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
   const memberVessel = vessels[0];
 
-  // const {} = memberVessel;
-  // console.log('memberVessel ===============', memberVessel)
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       {/* TODO: abstract dialog into its own component */}

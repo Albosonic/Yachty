@@ -20,8 +20,7 @@ export default function NavBar() {
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   const email = useSelector(state => state.auth?.user?.email);
   
-  useEffect(() => {
-    console.log('!!email ===========', !!email)    
+  useEffect(() => {    
     setUserLoggedIn(!!email || emailVerrified);
   }, [emailVerrified, email]);
 

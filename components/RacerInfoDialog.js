@@ -18,8 +18,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
     signed_race_releases,
   } = openDialog;
 
-  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
-  console.log('openDialog ==========', openDialog)
+  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;  
   const signature = signed_race_releases[0]?.signature;
 
   return (

@@ -75,12 +75,10 @@ const UploadVesselImage = () => {
 
     const results = await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
-    if (vesselIdExists) {
-      console.log('here ===============', vesselIdExists)
+    if (vesselIdExists) {      
       await updateVesselImage({variables: {ownerId: memberId, img: imgPath}})
       dispatch(updateVesselImgAct(imgPath));
-    } else {
-      console.log('ownerId ===========', memberId);
+    } else {      
       const resp = await insertVesselAndImage({variables: {ownerId: memberId, img: imgPath, vesselImg: imgPath}});
       dispatch(updateNewVesselAct({ownerId: memberId, img: imgPath, id: resp.data.insert_vessels_one.id}))
     }  
