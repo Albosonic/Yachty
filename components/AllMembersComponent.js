@@ -103,7 +103,7 @@ const AllMembersTable = ({props}) => {
   // TODO: make this part of the db.
   const BENICIA_MEMBER_DUES = 315;
   
-  if (loading || !data) return <LoadingYachty />
+  if (loading || !data) return <LoadingYachty isRoot={false} />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
   
