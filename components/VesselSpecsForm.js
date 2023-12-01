@@ -73,6 +73,16 @@ const VesselSpecsForm = () => {
 
   const handleClick = async () =>{
     const {vesselName, draft, length, beam, make, model, sailNumber, marina, slip} = formValues;
+
+    // handle errors ================
+
+
+
+
+
+
+
+
     await updateVesselSpecs({
       variables: {
         ownerId: memberId, 

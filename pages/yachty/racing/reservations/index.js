@@ -2,7 +2,7 @@ import EventTicketForPurchase from "@/components/EventTicketForPurchase";
 import NavBar from "@/components/NavBar";
 import RaceTicketsForPurchase from "@/components/RaceTicketsForPurchase";
 import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
-import { EVENT_TICKET_FOR_PURCHASE, GET_EVENT_BY_EVENT_ID } from "@/lib/gqlQueries/ycFeedgql";
+import { EVENT_TICKET_FOR_PURCHASE } from "@/lib/gqlQueries/ycFeedgql";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useQuery } from "@apollo/client";
 import { Fab, Grid, Stack, Typography } from "@mui/material";

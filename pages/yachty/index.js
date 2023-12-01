@@ -109,8 +109,7 @@ const Yachty = () => {
 
   useEffect(() => {
     // TODO: probably needs more attention.
-    if (user?.email && !memberData?.id) {
-      console.log('user in use effect =============', user)
+    if (user?.email && !memberData?.id) {      
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
 
@@ -135,10 +134,9 @@ const Yachty = () => {
       }
       upsertUser();
     }
-  }, [user, userIsCommodore])
-  console.log('user before ==========', user)
-  if (isLoading) return <LoadingYachty />;
-  console.log('user after ==========', user)
+  }, [user, userIsCommodore])  
+  
+  if (isLoading) return <LoadingYachty />;  
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

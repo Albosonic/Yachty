@@ -30,6 +30,10 @@ const cleanDialog = {
   duesOwed: 0,
   email: '',
   name: '',
+  bio: '',
+  profilePic: '', 
+  vessels: [], 
+  id: '',
 }
 
 const UPDATE_MEMBER_DUES = gql`
@@ -47,7 +51,9 @@ const AllMembersTable = ({props}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
+
   const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
+
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
@@ -107,13 +113,39 @@ const AllMembersTable = ({props}) => {
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
   
-  const { open, name: memberName, duesOwed: memberDuesOwed, active: memberActive, email: memberEmail, bio: memberBio, profilePic: memberPic, vessels, id: targetMemberId } = openDialog;
+  const { 
+    open, 
+    name: memberName, 
+    duesOwed: memberDuesOwed, 
+    active: memberActive, 
+    email: memberEmail, 
+    bio: memberBio, 
+    profilePic: memberPic, 
+    vessels, 
+    id: targetMemberId,
+  } = openDialog;
+  
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
-  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
-  
+
+  const memberVessel = vessels[0];
+
+  const hullMaterial = memberVessel?.hullMaterial;
+  const length = memberVessel?.length;
+  const img = memberVessel?.img;
+  const make = memberVessel?.make;
+  const model = memberVessel?.model;
+  const beam = memberVessel?.beam;
+  const draft = memberVessel?.draft;
+  const marina = memberVessel?.marina;
+  const sailNumber = memberVessel?.sailNumber;
+  const specialNotes = memberVessel?.specialNotes;
+  const type = memberVessel?.type;
+  const slip = memberVessel?.slip;
+  console.log('member vessel =====', memberVessel)
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      {/* TODO: abstract dialog into its own component */}
       <Dialog
         fullWidth={true}
         maxWidth={'sm'}
@@ -122,43 +154,37 @@ const AllMembersTable = ({props}) => {
       >
         <DialogContent>
           <Grid container justifyContent="space-between">
-            <DialogTitle>{ `${activeMemberText} Member ${memberName}` }</DialogTitle>
+            <DialogTitle>{ memberName }</DialogTitle>
             <Avatar alt="Profile Pic" src={memberPic} />
-          </Grid>
-          {userIsCommodore && <DialogContentText>
-            {memberDuesText}
-          </DialogContentText>}
-          <DialogContentText>
-            {memberEmail}
-          </DialogContentText>
-          <DialogContentText>
-            Member Bio: {memberBio}
-          </DialogContentText>
-          <Grid container>
-            <Stack alignItems="center">
-              <Typography>
-                Vessel: {memberVessel?.vesselName}
-              </Typography>
-              <Box
-                component="img"
-                sx={{
-                  height: 200,
-                  width: 200,
-                  marginBottom: 2,
-                }}
-                alt="The house from the offer."
-                src={memberVessel?.img} 
-              />
-            </Stack>
-            <Stack sx={{marginTop: 5, marginLeft: 2}}>
-              <Typography>
-                hullMaterial: {memberVessel?.type}
-              </Typography>
-              <Typography>
-                length: {memberVessel?.lenght}
-              </Typography>
+          </Grid>                    
+          <Grid container justifyContent="space-around">            
+            <Box
+              component="img"
+              sx={{
+                height: 200,
+                width: 200,
+                marginBottom: 2,
+                borderRadius: 3
+              }}
+              alt="The house from the offer."
+              src={img} 
+            />            
+            <Stack spacing={.5}>              
+              <DialogContentText>{`make: ${make}`}</DialogContentText>
+              <DialogContentText>{`email: ${memberEmail}`}</DialogContentText>
+              <DialogContentText>{`make: ${make}`}</DialogContentText>
+              <DialogContentText>{`model: ${model}`}</DialogContentText>
+              <DialogContentText>{`length: ${length}`}</DialogContentText>
+              <DialogContentText>{`beam: ${beam}`}</DialogContentText>
+              <DialogContentText>{`draft: ${draft}`}</DialogContentText>
+              <DialogContentText>{`sail number: ${sailNumber}`}</DialogContentText>
+              <DialogContentText>{`marina: ${marina}`}</DialogContentText>
+              <DialogContentText>{`slip: ${slip}`}</DialogContentText>              
+              <DialogContentText>{`hullMaterial: ${hullMaterial}`}</DialogContentText>
+              <DialogContentText>{`length: ${length}`}</DialogContentText>
             </Stack>
           </Grid>
+          <DialogContentText>{memberBio}</DialogContentText>
           <Grid container justifyContent="space-between" >
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>

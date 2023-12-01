@@ -82,8 +82,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
   if (loading) return <LoadingYachty isRoot={false} />;
 
-  const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
-
+  // const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
+  const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
+  const cost = eventForPurchase?.cost;
+  const ticketId = eventForPurchase?.id;
   const reserveTicket = async () => {
     // TODO: make this a batch update
     if (ticketCount === 0) return;

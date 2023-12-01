@@ -105,8 +105,7 @@ export const betaUpdateUserIsCommodoreAct = (isCommodore) => {
   }
 }
 
-export const updateMemberBioAct = (bio) => {
-  console.log('bio =======', bio)
+export const updateMemberBioAct = (bio) => {  
   return {
     type: UPDATE_MEMBER_BIO_ACT,
     payload: bio,
