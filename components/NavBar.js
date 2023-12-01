@@ -19,9 +19,9 @@ export default function NavBar() {
   const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   const email = useSelector(state => state.auth?.user?.email);
-
+  
   useEffect(() => {
-    setUserLoggedIn(emailVerrified);
+    setUserLoggedIn(emailVerrified || email);
   }, [emailVerrified]);
 
   const handleMenu = (event) => {
