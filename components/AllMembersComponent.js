@@ -47,7 +47,9 @@ const AllMembersTable = ({props}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
+
   const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
+
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
   const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
@@ -106,12 +108,25 @@ const AllMembersTable = ({props}) => {
   if (loading || !data) return <LoadingYachty isRoot={false} />
   
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
-  
-  const { open, name: memberName, duesOwed: memberDuesOwed, active: memberActive, email: memberEmail, bio: memberBio, profilePic: memberPic, vessels, id: targetMemberId } = openDialog;
+  console.log('data member data ===============', data)
+  const { 
+    open, 
+    name: memberName, 
+    duesOwed: memberDuesOwed, 
+    active: memberActive, 
+    email: memberEmail, 
+    bio: memberBio, 
+    profilePic: memberPic, 
+    vessels, 
+    id: targetMemberId,
+  } = openDialog;
+  console.log('open d ==========:', openDialog)
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
   const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;
-  
+
+  // const {} = memberVessel;
+  // console.log('memberVessel ===============', memberVessel)
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       {/* TODO: abstract dialog into its own component */}
@@ -156,10 +171,10 @@ const AllMembersTable = ({props}) => {
             </Stack>
             <Stack sx={{marginTop: 5, marginLeft: 2}}>
               <Typography>
-                hullMaterial: {memberVessel?.type}
+                hullMaterial: {memberVessel?.hullMaterial}
               </Typography>
               <Typography>
-                length: {memberVessel?.lenght}
+                length: {memberVessel?.length}
               </Typography>
             </Stack>
           </Grid>
