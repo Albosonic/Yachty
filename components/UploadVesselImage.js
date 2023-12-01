@@ -91,7 +91,7 @@ const UploadVesselImage = () => {
     setEditing(true)
   }
 
-  const imgWidthAndHeight = moreThan600px ? '60%' : '100%';
+  const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
   const fabHandler = editing ? uploadVesselImage : resetForm;
   if (vesselLoading || vesselImgLoading) return <CircularProgress />;
   return (

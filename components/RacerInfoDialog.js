@@ -18,9 +18,15 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
     signed_race_releases,
   } = openDialog;
 
-  const memberVessel = vessels && vessels.length > 0 ? vessels[0] : null;  
+  const memberVessel = vessels[0];
+  console.log('memberVessel ======', memberVessel)
   const signature = signed_race_releases[0]?.signature;
-
+  const hullMaterial = memberVessel?.hullMaterial
+  const length =memberVessel?.length
+  const make = memberVessel?.make
+  const model = memberVessel?.model
+  const marina = memberVessel?.marina
+  const slip = memberVessel?.slip
   return (
     <Dialog
       fullWidth={true}
@@ -33,30 +39,30 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
         <Box component="img" sx={{ height: 90, width: 120 }} alt="yacht club logo" src={yachtClubByYachtClub?.logo} />
         {moreThan600px && <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>}
         <Avatar alt="Profile Pic" src={memberPic} sx={{margin: 2}} />
-      </Grid>              
-      {!moreThan600px && 
+      </Grid>
+      {!moreThan600px &&
         <Grid container justifyContent="center">
           <DialogTitle>{ `${yachtClubByYachtClub?.name} Member` }</DialogTitle>
         </Grid>
       }
       <Stack alignItems="center">
-        <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>          
-        <Grid container justifyContent="space-around" sx={{width: '100%'}}>            
+        <Typography sx={{margin:2}}> Vessel: {memberVessel?.vesselName}</Typography>
+        <Grid container justifyContent="space-around" sx={{width: '100%'}}>
           <Box
             component="img"
             sx={{
               height: 200,
-              width: 200,                
-              borderRadius: 3,                
+              width: 200,
+              borderRadius: 3,
             }}
             alt="The house from the offer."
             src={memberVessel?.img}
-          />            
+          />
           <Stack spacing={1}>
             {signature &&
               <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="space-between">
                 <Typography sx={{color: 'green'}}>Release Signed: </Typography>
-                <Typography 
+                <Typography
                   color="success"
                   sx={{fontFamily: 'Shadows Into Light, cursive', color: 'green'}}
                 >
@@ -64,35 +70,21 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
                 </Typography>
               </Grid>
             }
-            <DialogContentText>
-              {memberEmail}
-            </DialogContentText>
-            <DialogContentText>
-              hullMaterial: {memberVessel?.hullMaterial}
-            </DialogContentText>
-            <DialogContentText>
-              length: {memberVessel?.length}
-            </DialogContentText>
-            <DialogContentText>
-              make: {memberVessel?.make}
-            </DialogContentText>
-            <DialogContentText>
-              model: {memberVessel?.model}
-            </DialogContentText>
-            <DialogContentText>
-              marina: {memberVessel?.marina}
-            </DialogContentText>
-            <DialogContentText>
-              slip: {memberVessel?.slip}
-            </DialogContentText>
-          </Stack>            
+            <DialogContentText>{memberEmail}</DialogContentText>
+            <DialogContentText>hullMaterial: {hullMaterial}</DialogContentText>
+            <DialogContentText>length: {length}</DialogContentText>
+            <DialogContentText>make: {make}</DialogContentText>
+            <DialogContentText> model: {model}</DialogContentText>
+            <DialogContentText>marina: {marina}</DialogContentText>
+            <DialogContentText>slip: {slip}</DialogContentText>
+          </Stack>
         </Grid>
-      </Stack>      
-      <Stack sx={{marginTop: 5, marginLeft: 2}}>                
+      </Stack>
+      <Stack sx={{marginTop: 5, marginLeft: 2}}>
         <DialogContentText>
           Member Bio: {memberBio}
         </DialogContentText>
-      </Stack>    
+      </Stack>
       <Grid container justifyContent="space-between" >
         <DialogActions>
           <Button onClick={handleClose}>go back</Button>

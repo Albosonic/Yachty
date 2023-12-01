@@ -127,8 +127,22 @@ const AllMembersTable = ({props}) => {
   
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
+
   const memberVessel = vessels[0];
 
+  const hullMaterial = memberVessel?.hullMaterial;
+  const length = memberVessel?.length;
+  const img = memberVessel?.img;
+  const make = memberVessel?.make;
+  const model = memberVessel?.model;
+  const beam = memberVessel?.beam;
+  const draft = memberVessel?.draft;
+  const marina = memberVessel?.marina;
+  const sailNumber = memberVessel?.sailNumber;
+  const specialNotes = memberVessel?.specialNotes;
+  const type = memberVessel?.type;
+  const slip = memberVessel?.slip;
+  console.log('member vessel =====', memberVessel)
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       {/* TODO: abstract dialog into its own component */}
@@ -142,10 +156,7 @@ const AllMembersTable = ({props}) => {
           <Grid container justifyContent="space-between">
             <DialogTitle>{ memberName }</DialogTitle>
             <Avatar alt="Profile Pic" src={memberPic} />
-          </Grid>
-                    
-
-
+          </Grid>                    
           <Grid container justifyContent="space-around">            
             <Box
               component="img"
@@ -156,23 +167,24 @@ const AllMembersTable = ({props}) => {
                 borderRadius: 3
               }}
               alt="The house from the offer."
-              src={memberVessel?.img} 
+              src={img} 
             />            
-            <Stack spacing={.5}>
-              <Typography>
-                hullMaterial: {memberVessel?.hullMaterial}
-              </Typography>
-              <Typography>
-                length: {memberVessel?.length}
-              </Typography>
-              <DialogContentText>
-                {memberEmail}
-              </DialogContentText>              
+            <Stack spacing={.5}>              
+              <DialogContentText>{`make: ${make}`}</DialogContentText>
+              <DialogContentText>{`email: ${memberEmail}`}</DialogContentText>
+              <DialogContentText>{`make: ${make}`}</DialogContentText>
+              <DialogContentText>{`model: ${model}`}</DialogContentText>
+              <DialogContentText>{`length: ${length}`}</DialogContentText>
+              <DialogContentText>{`beam: ${beam}`}</DialogContentText>
+              <DialogContentText>{`draft: ${draft}`}</DialogContentText>
+              <DialogContentText>{`sail number: ${sailNumber}`}</DialogContentText>
+              <DialogContentText>{`marina: ${marina}`}</DialogContentText>
+              <DialogContentText>{`slip: ${slip}`}</DialogContentText>              
+              <DialogContentText>{`hullMaterial: ${hullMaterial}`}</DialogContentText>
+              <DialogContentText>{`length: ${length}`}</DialogContentText>
             </Stack>
           </Grid>
-          <DialogContentText>
-            Member Bio: {memberBio}
-          </DialogContentText>
+          <DialogContentText>{memberBio}</DialogContentText>
           <Grid container justifyContent="space-between" >
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>
