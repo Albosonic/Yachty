@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { Alert, Snackbar, useMediaQuery } from '@mui/material';
 import EventCommentsList from './EventCommentsList';
 import { usePosterStyles } from './componentHooks/usePosterStyles';
+import EventOptionsMenu from './EventOptionsMenu';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -62,11 +63,7 @@ const YcEventPoster = ({ eventData }) => {
       </Snackbar>      
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+        action={<EventOptionsMenu />}
         title={eventName}
         subheader={hours}
       />

@@ -83,7 +83,7 @@ const RacePoster = ({ race }) => {
         alt="Race Image"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">put a brief race description here maybe</Typography>
+        <Typography variant="body2" color="text.secondary">Expand the Menu below to see other racers. Happy Sailing!</Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton onClick={shareClick} aria-label="share">

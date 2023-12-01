@@ -5,8 +5,9 @@ import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 import { EVENT_TICKET_FOR_PURCHASE, GET_EVENT_BY_EVENT_ID } from "@/lib/gqlQueries/ycFeedgql";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useQuery } from "@apollo/client";
-import { CircularProgress, Fab, Grid, Stack, Typography } from "@mui/material";
+import { Fab, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import LoadingYachty from "@/components/LoadingYachty";
 
 const RaceTicketReservations = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const RaceTicketReservations = () => {
   const {loading, data, error } = useQuery(EVENT_TICKET_FOR_PURCHASE, {variables:{eventId}, fetchPolicy: "no-cache" });
   const {loading: raceErrror, data: raceData, error: errorLoading } = useQuery(GET_RACE_BY_ID, { variables: { raceId: raceId }});
   
-  if (loading || raceId === undefined || !raceData) return <CircularProgress />
+  if (loading || raceId === undefined || !raceData) return <LoadingYachty />
   const race = raceData?.races;
   return (
     <>
