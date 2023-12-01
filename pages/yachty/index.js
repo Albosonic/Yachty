@@ -108,9 +108,17 @@ const Yachty = () => {
   const memberData = useSelector(state => state?.auth?.member);
 
   useEffect(() => {
-    if (user?.email_verified && !memberData?.id) {
+    // TODO: probably needs more attention.
+    if (user?.email && !memberData?.id) {
+      console.log('user in use effect =============', user)
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
+
+        // email: "snipeboatblue@gmail.com"
+        // name: "snipeboatblue@gmail.com"
+        // profilePic: "https://s.gravatar.com/avatar/b508d70aca791856de89aee499dd8f1a?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fsn.png"
+        // yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"
+
         const resp = await upsertMember({
         variables: {
           email,
@@ -121,14 +129,16 @@ const Yachty = () => {
           lasrLogin: getIsoDate(),
           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing.
         }});
+
         const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
         dispatch(addMember(userData));
       }
       upsertUser();
     }
   }, [user, userIsCommodore])
-
-  if (isLoading) return <LoadingYachty isRoot={true} />;
+  console.log('user before ==========', user)
+  if (isLoading) return <LoadingYachty />;
+  console.log('user after ==========', user)
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

@@ -72,6 +72,7 @@ export default function authReducer(state = initialState, action) {
       return initialState;
     }
     case MEMBER_OBJECT: {
+      console.log('action =========', action);
       let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
       return {
