@@ -69,7 +69,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
               {memberEmail}
             </DialogContentText>
             <DialogContentText>
-              hullMaterial: {memberVessel?.type}
+              hullMaterial: {memberVessel?.hullMaterial}
             </DialogContentText>
             <DialogContentText>
               length: {memberVessel?.length}
