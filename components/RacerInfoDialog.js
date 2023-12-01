@@ -21,11 +21,12 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
   const memberVessel = vessels[0];  
   const signature = signed_race_releases[0]?.signature;
   const hullMaterial = memberVessel?.hullMaterial
-  const length =memberVessel?.length
+  const length = memberVessel?.length
   const make = memberVessel?.make
   const model = memberVessel?.model
   const marina = memberVessel?.marina
   const slip = memberVessel?.slip
+  const vesselName = memberVessel?.vesselName
   return (
     <Dialog
       fullWidth={true}
@@ -64,13 +65,13 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
               </Grid>
             }            
             <DialogContentText>{memberEmail}</DialogContentText>
-            <DialogContentText>Vessel Name: {memberVessel?.vesselName}</DialogContentText>
-            <DialogContentText>hullMaterial: {hullMaterial}</DialogContentText>
-            <DialogContentText>length: {length}</DialogContentText>
-            <DialogContentText>make: {make}</DialogContentText>
-            <DialogContentText> model: {model}</DialogContentText>
-            <DialogContentText>marina: {marina}</DialogContentText>
-            <DialogContentText>slip: {slip}</DialogContentText>
+            {vesselName && <DialogContentText>Vessel Name: {memberVessel?.vesselName}</DialogContentText>}
+            {hullMaterial && <DialogContentText>hullMaterial: {hullMaterial}</DialogContentText>}
+            {length && <DialogContentText>length: {length}</DialogContentText>}
+            {make && <DialogContentText>make: {make}</DialogContentText>}
+            {model && <DialogContentText> model: {model}</DialogContentText>}
+            {marina && <DialogContentText>marina: {marina}</DialogContentText>}
+            {slip && <DialogContentText>slip: {slip}</DialogContentText>}
           </Stack>
         </Grid>
       </Stack>
