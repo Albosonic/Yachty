@@ -39,7 +39,7 @@ export default function NavBar() {
     setOpenDrawer(!openDrawer);
   };
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, borderBottom:'8px solid #461F00' }}>
       <AppBar position="static">
         <Toolbar >
           {userLoggedIn && 

@@ -8,6 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import '@/styles/globals.css';
+import { ThemeProvider } from '@emotion/react';
+import { theme } from '@/lib/theme/mui-theme';
 
 let persistor = persistStore(store);
 const App = ({ Component, pageProps }) => {
@@ -18,7 +20,9 @@ const App = ({ Component, pageProps }) => {
         <PersistGate persistor={persistor}>
           <UserProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Component {...pageProps} />
+              <ThemeProvider theme={theme}>
+                <Component {...pageProps} />
+              </ThemeProvider>
             </LocalizationProvider>
           </UserProvider>
         </PersistGate>
