@@ -7,7 +7,7 @@ import LetterOfReciprocity from "./LetterOfReciprocity";
 
 const VisitingMemberRequests = () => {
   const router = useRouter();
-  const ycId = router.query.ycId;
+  const ycId = router.query.ycId;  
   const { data, loading, error } = useQuery(GET_RECIPROCAL_AWAITING_RESPONSE, { variables : { visitingYCId: ycId }});
 
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});

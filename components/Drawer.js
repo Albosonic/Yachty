@@ -22,7 +22,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { clearState } from '@/slices/actions/authActions';
-import { useMediaQuery } from '@mui/material';
+import { Divider, useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
@@ -32,11 +32,10 @@ export default function AppDrawer({ open, toggleDrawer }) {
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const moreThan600px = useMediaQuery('(min-width:600px)');
   let anchor = 'left';
+  const itemStyles = {minHeight: 70}
 
-  const logout = () => {
-    dispatch(clearState());
-    window.location = `${window.location.origin}/api/auth/logout`;
-  };
+
+
 
   const list = (anchor) => (
     <Box
@@ -45,39 +44,71 @@ export default function AppDrawer({ open, toggleDrawer }) {
     >
       <List>
 
+      <ListItem sx={itemStyles} disablePadding>
+        <ListItemButton onClick={() => router.replace({pathname:'/yachty', query: { ycId: ycId }})}>
+        <ListItemIcon>
+            <HomeIcon color="primary" />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+        </ListItemButton>
+      </ListItem>
 
+      <Divider />
 
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/edit_my_profile', query: { memberId }})}>
+      <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => { router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
           <ListItemIcon>
-            <EmojiPeopleIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Edit My Profile" />
+              <BroadcastOnPersonalIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary="The Club" />
           </ListItemButton>
         </ListItem>
-
-
-        {userIsCommodore && 
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname: '/yachty/edit_club_profile', query: { ycId: ycId }})}>
-            <ListItemIcon>
-              <ModeIcon color="primary"/>
-            </ListItemIcon>
-            <ListItemText primary="Edit Club Profile" />
-          </ListItemButton >
-        </ListItem>}
-
-        <ListItem disablePadding>
+        <Divider />
+        <ListItem sx={itemStyles} disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/view_all_members', query: { ycId: ycId }})}>
             <ListItemIcon>
               <PersonSearchIcon color="primary" />
             </ListItemIcon>
-            <ListItemText primary="View All Members" />
+            <ListItemText primary="Members" />
           </ListItemButton>
         </ListItem>
+        <Divider />
+        <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname: '/yachty/racing' })}>
+            <ListItemIcon>
+              <SailingIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Racing" />
+          </ListItemButton >
+        </ListItem>
+        <Divider />
+
+        <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
+            <ListItemIcon>
+              <ChatIcon color="primary"/>
+            </ListItemIcon>
+            <ListItemText primary="Direct Messages" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/request_reciprocity', query: { memberId }})}>
+          <ListItemIcon>
+            <DirectionsBoatFilledIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Request Reciprocity" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
 
 
-        <ListItem disablePadding>
+
+
+
+
+
+        {/* <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/add_member', query: { ycId: ycId }})}>
             <ListItemIcon>
               <PersonAddIcon color="primary" />
@@ -85,7 +116,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="New Member Applicants" />
           </ListItemButton>
         </ListItem>
-
         {userIsCommodore && 
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_yc_event', query: { ycId: ycId }})}>
@@ -94,29 +124,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
             </ListItemIcon>
             <ListItemText primary="Create Yacht Club Event" />
           </ListItemButton >
-        </ListItem>}
-
-
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => { router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
-          <ListItemIcon>
-              <BroadcastOnPersonalIcon color="primary" />
-          </ListItemIcon>
-          <ListItemText primary="My Club" />
-          </ListItemButton>
-        </ListItem>
-
-
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty', query: { ycId: ycId }})}>
-          <ListItemIcon>
-              <HomeIcon color="primary" />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-          </ListItemButton>
-        </ListItem>
-
-
+        </ListItem>}  
         {userIsCommodore && 
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_races' })}>
@@ -126,41 +134,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="Create Races" />
           </ListItemButton >
         </ListItem>}
-        {<ListItem disablePadding>
-        <ListItemButton onClick={() => router.replace({pathname: '/yachty/racing' })}>
-          <ListItemIcon>
-            <SailingIcon color="primary" />
-          </ListItemIcon>
-          <ListItemText primary="Racing" />
-          </ListItemButton >
-        </ListItem>}
-
-
-        
-
-
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/request_reciprocity', query: { memberId }})}>
-          <ListItemIcon>
-            <DirectionsBoatFilledIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Request Reciprocity" />
-          </ListItemButton>
-        </ListItem>
-
-        
-
-        
-
-        
-        {/* <ListItem disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/today_at_the_club', query: { ycId: ycId }})}>
-            <ListItemIcon>
-              <InsertInvitationIcon />
-            </ListItemIcon>
-            <ListItemText primary="Today at the Club" />
-          </ListItemButton>
-        </ListItem> */}
         {userIsCommodore && <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/reciprocal_requests', query: { ycId: ycId }})}>
             <ListItemIcon>
@@ -168,24 +141,16 @@ export default function AppDrawer({ open, toggleDrawer }) {
             </ListItemIcon>
             <ListItemText primary="Reciprocal Requests" />
           </ListItemButton>
-        </ListItem>}
-
-        
-
-
-        
-
-
-
+        </ListItem>}                    
         <ListItem disablePadding>
-          <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
+          <ListItemButton onClick={() => router.replace({pathname:'/yachty/today_at_the_club', query: { ycId: ycId }})}>
             <ListItemIcon>
-              <ChatIcon color="primary"/>
+              <InsertInvitationIcon />
             </ListItemIcon>
-            <ListItemText primary="Direct Messages" />
+            <ListItemText primary="Today at the Club" />
           </ListItemButton>
-        </ListItem>
-        {/* <ListItem disablePadding>
+        </ListItem>        
+        <ListItem disablePadding>
           <ListItemButton onClick={() => console.log('build this route next')}>
             <ListItemIcon>
               <InboxIcon />
@@ -193,14 +158,9 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="All Clubs" />
           </ListItemButton>
         </ListItem> */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={logout}>
-            <ListItemIcon>
-              <LogoutIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
+
+
+
       </List>
     </Box>
   );

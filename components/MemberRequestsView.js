@@ -7,7 +7,7 @@ import { GET_RECIPROCAL_REQUESTS_BY_YC, REICPROCAL_REQEST_DATA_STRINGS, UPDATE_R
 
 const MemberRequests = () => {
   const router = useRouter();
-  const ycId = router.query.ycId;
+  const ycId = router.query.ycId;  
   const [updateRequest, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_RECIPROCAL_REQUEST);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
