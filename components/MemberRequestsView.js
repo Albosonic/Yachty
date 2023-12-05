@@ -38,8 +38,8 @@ const MemberRequests = () => {
       {
         <Box sx={{margin: 5}}>
           <Stack spacing={2} alignItems="center">
-            <Typography spacing={2} variant="h2">Reciprocal Requests</Typography>
-            <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
+            <Typography spacing={2} variant="h5">Reciprocal Requests</Typography>
+            <Typography spacing={2} variant="body1">Your members requesting to visit other clubs</Typography>
             <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>              
                 {requests.map((req, index) => {
                   const {
