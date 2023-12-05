@@ -104,7 +104,7 @@ const VesselSpecsForm = () => {
     setShowSuccess(false)
   }
   return (    
-    <Stack alignItems="center">
+    <Stack alignItems="flex-start" sx={{ width: '100%', maxWidth: 600}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success
@@ -130,7 +130,7 @@ const VesselSpecsForm = () => {
         variant="standard"
         value={formValues?.draft}          
         onChange={(event) => setFormValues({...formValues, draft: event.target.value })}
-        sx={{ m: 1, width: '40ch' }}
+        sx={{  width: '40ch' }}
         multiline
       />
       <TextField
@@ -141,7 +141,7 @@ const VesselSpecsForm = () => {
         variant="standard"
         value={formValues?.beam}
         onChange={(event) => setFormValues({...formValues, beam: event.target.value })}
-        sx={{ m: 1, width: '40ch' }}
+        sx={{  width: '40ch' }}
         multiline
       />
       <TextField
@@ -210,7 +210,15 @@ const VesselSpecsForm = () => {
         sx={{ width: '40ch' }}
         multiline
       />
-      <Button onClick={handleClick}>Update</Button>
+      <Button 
+        onClick={handleClick}
+        size="large"
+        sx={{
+          margin: 2,                    
+        }} 
+      >
+          Update
+      </Button>
     </Stack>
   )
 }
