@@ -36,7 +36,7 @@ const RadioGroupHullMaterial = () => {
   }
   const toRowOrNotToRow = moreThan600px ? true : false;
   return (
-    <Stack sx={{width: '100%'}} alignItems="center" spacing={2}>
+    <Stack sx={{width: '100%', maxWidth: 600}} alignItems="flex-start" spacing={2}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success
@@ -47,7 +47,7 @@ const RadioGroupHullMaterial = () => {
         row={toRowOrNotToRow}
         aria-labelledby="radio-buttons-hull-material-label"
         name="row-radio-buttons-hull-material-label"
-        value={inputHullMaterial}
+        value={inputHullMaterial}        
         onChange={(e) => setInputHullMaterial(e.target.value)}
 
       >
