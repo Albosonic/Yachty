@@ -7,7 +7,7 @@ import { GET_RECIPROCAL_REQUESTS_BY_YC, REICPROCAL_REQEST_DATA_STRINGS, UPDATE_R
 
 const MemberRequests = () => {
   const router = useRouter();
-  const ycId = router.query.ycId;
+  const ycId = router.query.ycId;  
   const [updateRequest, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_RECIPROCAL_REQUEST);
   const [snackBarContent, setSnackBarMsg] = useState({msg: 'Member Approved', type: 'success'});
   const [showSuccess, setShowSuccess] = useState(false);
@@ -38,8 +38,8 @@ const MemberRequests = () => {
       {
         <Box sx={{margin: 5}}>
           <Stack spacing={2} alignItems="center">
-            <Typography spacing={2} variant="h2">Reciprocal Requests</Typography>
-            <Typography spacing={2} variant="h4">Your members requesting to visit other clubs</Typography>
+            <Typography spacing={2} variant="h5">Reciprocal Requests</Typography>
+            <Typography spacing={2} variant="body1">Your members requesting to visit other clubs</Typography>
             <Button variant="outlined" onClick={() => router.push({ pathname: '/yachty/reciprocal_requests/visitors', query: {ycId} })}>see visitor requests</Button>              
                 {requests.map((req, index) => {
                   const {

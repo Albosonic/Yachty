@@ -11,22 +11,17 @@ import Menu from '@mui/material/Menu';
 import { Avatar, Fab } from '@mui/material';
 import AppDrawer from './Drawer';
 import { useSelector } from 'react-redux';
+import MainProfilePic from './MainProfilePic';
 
-export default function NavBar() {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function NavBar() {  
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
   const email = useSelector(state => state.auth?.user?.email);
   
   useEffect(() => {    
     setUserLoggedIn(!!email || emailVerrified);
   }, [emailVerrified, email]);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -39,10 +34,11 @@ export default function NavBar() {
     setOpenDrawer(!openDrawer);
   };
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, borderBottom:'8px solid #461F00' }}>
       <AppBar position="static">
         <Toolbar >
-          {userLoggedIn && 
+          {
+          userLoggedIn && 
           <IconButton
             size="large"
             edge="start"
@@ -53,7 +49,8 @@ export default function NavBar() {
           >
             <MenuIcon />
             <AppDrawer open={openDrawer} toggleDrawer={toggleDrawer} />
-          </IconButton>}
+          </IconButton>
+          }
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
           </Typography>
@@ -61,11 +58,10 @@ export default function NavBar() {
             <BugReportIcon/>
             Test
           </Fab>
-          {userLoggedIn && (
-            <Fab size='small'>
-              <Avatar alt="Profile Pic" src={profilePicture} />
-            </Fab>
-          )}
+          <MainProfilePic 
+            size="small" 
+            loggedIn={userLoggedIn}            
+          />          
         </Toolbar>
       </AppBar>
     </Box>

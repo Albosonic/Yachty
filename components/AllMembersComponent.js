@@ -19,7 +19,7 @@ import LoadingYachty from "./LoadingYachty";
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'email', label: 'Email', minWidth: 100 },
-  { id: 'duesOwed', label: 'Dues Owed', minWidth: 170 },
+  { id: 'profilePic', label: 'pic', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
   { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
 ];
@@ -31,8 +31,8 @@ const cleanDialog = {
   email: '',
   name: '',
   bio: '',
-  profilePic: '', 
-  vessels: [], 
+  profilePic: '',
+  vessels: [],
   id: '',
 }
 
@@ -78,7 +78,7 @@ const AllMembersTable = ({props}) => {
     userRmData.user_rooms.forEach(room => { if (room.recipientId === recipientId) {
       roomId = room.roomId
     } });
-    
+
     if (roomId === null) {
       const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
       roomId = resp.data.insert_room.returning[0].id;
@@ -86,14 +86,14 @@ const AllMembersTable = ({props}) => {
         variables: {
           objects: [
             {
-              memberId: memberId, 
-              roomId: roomId, 
+              memberId: memberId,
+              roomId: roomId,
               participantId:`${memberId}${roomId}`,
               recipientId: recipientId
-            }, 
+            },
             {
-              memberId: recipientId, 
-              roomId: roomId, 
+              memberId: recipientId,
+              roomId: roomId,
               participantId: `${recipientId}${roomId}`,
               recipientId: memberId,
             }
@@ -102,29 +102,29 @@ const AllMembersTable = ({props}) => {
     }
     router.push({
       pathname: '/yachty/direct_messages',
-      query: {rid: roomId}, 
+      query: {rid: roomId},
     })
   }
 
   // TODO: make this part of the db.
   const BENICIA_MEMBER_DUES = 315;
-  
+
   if (loading || !data) return <LoadingYachty isRoot={false} />
-  
+
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
-  
-  const { 
-    open, 
-    name: memberName, 
-    duesOwed: memberDuesOwed, 
-    active: memberActive, 
-    email: memberEmail, 
-    bio: memberBio, 
-    profilePic: memberPic, 
-    vessels, 
+
+  const {
+    open,
+    name: memberName,
+    duesOwed: memberDuesOwed,
+    active: memberActive,
+    email: memberEmail,
+    bio: memberBio,
+    profilePic: memberPic,
+    vessels,
     id: targetMemberId,
   } = openDialog;
-  
+
   const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
   const activeMemberText = memberActive ? 'Active' : 'Inactive';
 
@@ -142,7 +142,7 @@ const AllMembersTable = ({props}) => {
   const specialNotes = memberVessel?.specialNotes;
   const type = memberVessel?.type;
   const slip = memberVessel?.slip;
-  console.log('member vessel =====', memberVessel)
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       {/* TODO: abstract dialog into its own component */}
@@ -156,8 +156,8 @@ const AllMembersTable = ({props}) => {
           <Grid container justifyContent="space-between">
             <DialogTitle>{ memberName }</DialogTitle>
             <Avatar alt="Profile Pic" src={memberPic} />
-          </Grid>                    
-          <Grid container justifyContent="space-around">            
+          </Grid>
+          <Grid container justifyContent="space-around">
             <Box
               component="img"
               sx={{
@@ -167,21 +167,21 @@ const AllMembersTable = ({props}) => {
                 borderRadius: 3
               }}
               alt="The house from the offer."
-              src={img} 
-            />            
-            <Stack spacing={.5}>              
-              <DialogContentText>{`make: ${make}`}</DialogContentText>
-              <DialogContentText>{`email: ${memberEmail}`}</DialogContentText>
-              <DialogContentText>{`make: ${make}`}</DialogContentText>
-              <DialogContentText>{`model: ${model}`}</DialogContentText>
-              <DialogContentText>{`length: ${length}`}</DialogContentText>
-              <DialogContentText>{`beam: ${beam}`}</DialogContentText>
-              <DialogContentText>{`draft: ${draft}`}</DialogContentText>
-              <DialogContentText>{`sail number: ${sailNumber}`}</DialogContentText>
-              <DialogContentText>{`marina: ${marina}`}</DialogContentText>
-              <DialogContentText>{`slip: ${slip}`}</DialogContentText>              
-              <DialogContentText>{`hullMaterial: ${hullMaterial}`}</DialogContentText>
-              <DialogContentText>{`length: ${length}`}</DialogContentText>
+              src={img}
+            />
+            <Stack spacing={.5}>
+              {make && <DialogContentText>{`make: ${make}`}</DialogContentText>}
+              {memberEmail && <DialogContentText>{`email: ${memberEmail}`}</DialogContentText>}
+              {make && <DialogContentText>{`make: ${make}`}</DialogContentText>}
+              {model && <DialogContentText>{`model: ${model}`}</DialogContentText>}
+              {length && <DialogContentText>{`length: ${length}`}</DialogContentText>}
+              {beam && <DialogContentText>{`beam: ${beam}`}</DialogContentText>}
+              {draft && <DialogContentText>{`draft: ${draft}`}</DialogContentText>}
+              {sailNumber && <DialogContentText>{`sail number: ${sailNumber}`}</DialogContentText>}
+              {marina && <DialogContentText>{`marina: ${marina}`}</DialogContentText>}
+              {slip && <DialogContentText>{`slip: ${slip}`}</DialogContentText>}
+              {hullMaterial && <DialogContentText>{`hullMaterial: ${hullMaterial}`}</DialogContentText>}
+              {length && <DialogContentText>{`length: ${length}`}</DialogContentText>}
             </Stack>
           </Grid>
           <DialogContentText>{memberBio}</DialogContentText>
@@ -192,9 +192,9 @@ const AllMembersTable = ({props}) => {
             {targetMemberId !== memberId && <DialogActions>
               <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
             </DialogActions>}
-            <DialogActions>
+            {/* <DialogActions>
               <Button color="success" onClick={() => handlePayment(memberEmail)}>Dues Paid</Button>
-            </DialogActions>
+            </DialogActions> */}
           </Grid>
         </DialogContent>
       </Dialog>
@@ -219,16 +219,21 @@ const AllMembersTable = ({props}) => {
               .map((row, i) => {
                 return (
                   <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
-                    {columns.map((column, i) => {
+                    {columns.map((column, i) => {                      
                       let value = row[column.id];
                       if (Array.isArray(value)) {
                         value = value.length > 0 ? value[0][column.nestedKey] : null;
                       }
+                      if (column.id === 'profilePic') {
+                        return (
+                          <TableCell key={column + i} align={column.align}>
+                            <Avatar src={value} />
+                          </TableCell>
+                        )
+                      }
                       return (
                         <TableCell key={column + i} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {column.format && typeof value === 'number'? column.format(value) : value}
                         </TableCell>
                       );
                     })}

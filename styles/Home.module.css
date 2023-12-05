@@ -1,3 +1,4 @@
+
 .main {
   display: flex;
   flex-direction: column;
@@ -5,6 +6,7 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  background-color: '#052745';
 }
 
 .description {
@@ -78,6 +80,7 @@
   align-items: center;
   position: relative;
   padding: 4rem 0;
+  background-color: '#052745';
 }
 
 .center::before {
