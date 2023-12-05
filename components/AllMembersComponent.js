@@ -109,7 +109,7 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
   const specialNotes = memberVessel?.specialNotes;
   const type = memberVessel?.type;
   const slip = memberVessel?.slip;
-
+  
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Dialog

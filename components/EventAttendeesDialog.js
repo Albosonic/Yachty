@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, Grid, Typography } from '@mui/material';
 import AllMembersTable from './AllMembersComponent';
 import { gql, useQuery } from '@apollo/client';
 import LoadingYachty from './LoadingYachty';
@@ -64,7 +64,8 @@ const makeAttendeesFacade = (data) => {
 const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
   const { error, loading,  data } = useQuery(GET_EVENT_ATTENDEES, { variables: { eventId, fetchPolicy: 'no-cache' } });
   if (loading) return <LoadingYachty isRoot={false} />
-  const membersFacade = makeAttendeesFacade(data.yc_members);
+  const membersFacade = makeAttendeesFacade(data.yc_members);  
+  const { totalAttendees } = membersFacade;
   return (
     <Dialog
       fullWidth={true}
@@ -72,7 +73,8 @@ const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
       open={open}
     >
       <DialogContent>
-        <AllMembersTable columns={columns} data={membersFacade} totalAttendees={membersFacade.totalAttendees} />
+        {!!totalAttendees && <AllMembersTable columns={columns} data={membersFacade} totalAttendees={membersFacade.totalAttendees} />}
+        {!totalAttendees && <Grid container>No Reservations at this time</Grid>}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpenDialog(false)}>Close</Button>
