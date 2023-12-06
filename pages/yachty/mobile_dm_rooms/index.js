@@ -26,8 +26,7 @@ const MobileDMRooms = () => {
     <>
       <NavBar />
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>      
-        {rooms.map(room => {
-          console.log('===================>', room.yc_member.name) 
+        {rooms.map(room => {          
           const {roomId, recipientId, yc_member: { firstName, profilePic }} = room;
           if (recipientId === memberId) return null;
           return (

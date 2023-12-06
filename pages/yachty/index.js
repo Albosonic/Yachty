@@ -12,6 +12,7 @@ import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { getIsoDate } from '@/lib/utils/getters';
 import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
+import NewUserDialog from '@/components/NewUserDialog';
 
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
@@ -91,33 +92,27 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 
-const Yachty = () => {
-  // const router = useRouter();
+const Yachty = () => {  
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
-  const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
-  const [updateProfilePic, {loading: profilePicLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
+  const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)  
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
-
+  
   // const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER,{fetchPolicy: "no-cache",variables: { email: user?.email }});
   // let memberData = data?.yc_members[0];
-
+  
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const yachtClubName = useSelector(state => state?.auth?.member?.yachtClubByYachtClub.name);
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberData = useSelector(state => state?.auth?.member);
-
+  const name = useSelector(state => state?.auth?.member?.name);
+  const [newUserOpen, setNewUserOpen] = useState(false)
+    
   useEffect(() => {
-    // TODO: probably needs more attention.
+    // TODO: probably needs more attention.    
     if (user?.email && !memberData?.id) {      
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
-
-        // email: "snipeboatblue@gmail.com"
-        // name: "snipeboatblue@gmail.com"
-        // profilePic: "https://s.gravatar.com/avatar/b508d70aca791856de89aee499dd8f1a?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fsn.png"
-        // yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"
-
         const resp = await upsertMember({
         variables: {
           email,
@@ -128,12 +123,14 @@ const Yachty = () => {
           lasrLogin: getIsoDate(),
           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing.
         }});
-
         const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
         dispatch(addMember(userData));
       }
       upsertUser();
     }
+    const isNewUser = name.includes('.com');
+    console.log('===============>', isNewUser)
+    setNewUserOpen(isNewUser);
   }, [user, userIsCommodore])  
   
   if (isLoading) return <LoadingYachty />;  
@@ -159,6 +156,7 @@ const Yachty = () => {
   return (
     <div>
       <NavBar/>
+      <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
         <div className={styles.titleSection}>
           <Typography variant="h4">Welcome to {yachtClubName}</Typography>
