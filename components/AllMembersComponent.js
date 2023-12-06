@@ -14,15 +14,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { ROOM_TYPES } from "@/slices/actions/authActions";
-import LoadingYachty from "./LoadingYachty";
-
-const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'email', label: 'Email', minWidth: 100 },
-  { id: 'profilePic', label: 'pic', minWidth: 170 },
-  { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
-  { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
-];
 
 const cleanDialog = {
   open: false,
@@ -36,14 +27,8 @@ const cleanDialog = {
   id: '',
 }
 
-const UPDATE_MEMBER_DUES = gql`
-  mutation updateMemberDues($newBalance: Int, $email: String) {
-  update_yc_members(where: {email: {_eq: $email}}, _set: {duesOwed: $newBalance}) {
-    affected_rows
-  }
-}`;
-
-const AllMembersTable = ({props}) => {
+const AllMembersTable = ({ columns, data, totalAttendees }) => {
+  console.log('total attendees ==========', totalAttendees)
   const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
   const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
@@ -52,10 +37,7 @@ const AllMembersTable = ({props}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
 
-  const { error, loading,  data, refetch } = useQuery(GET_ALL_YC_MEMBERS, { variables: { ycId, fetchPolicy: 'no-cache' } });
-
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
-  const [payDues, { loading: paymentLoading }] = useMutation(UPDATE_MEMBER_DUES);
   const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
   const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
 
@@ -66,11 +48,6 @@ const AllMembersTable = ({props}) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-  const handlePayment = async (memberEmail) => {
-    await payDues({ variables: { newBalance: 0, email: memberEmail }});
-    await refetch({ycId: ycId});
-    handleClose();
   };
 
   const directMessage = async (recipientId) => {
@@ -106,27 +83,17 @@ const AllMembersTable = ({props}) => {
     })
   }
 
-  // TODO: make this part of the db.
-  const BENICIA_MEMBER_DUES = 315;
-
-  if (loading || !data) return <LoadingYachty isRoot={false} />
-
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
 
   const {
     open,
     name: memberName,
-    duesOwed: memberDuesOwed,
-    active: memberActive,
     email: memberEmail,
     bio: memberBio,
     profilePic: memberPic,
     vessels,
     id: targetMemberId,
   } = openDialog;
-
-  const memberDuesText = memberDuesOwed > BENICIA_MEMBER_DUES ? `Back dues owed: ${memberDuesOwed}` : `Membership in good standing no back dues owed`;
-  const activeMemberText = memberActive ? 'Active' : 'Inactive';
 
   const memberVessel = vessels[0];
 
@@ -142,10 +109,9 @@ const AllMembersTable = ({props}) => {
   const specialNotes = memberVessel?.specialNotes;
   const type = memberVessel?.type;
   const slip = memberVessel?.slip;
-
+  
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      {/* TODO: abstract dialog into its own component */}
       <Dialog
         fullWidth={true}
         maxWidth={'sm'}
@@ -202,15 +168,17 @@ const AllMembersTable = ({props}) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column, i) => (
-                <TableCell
-                  key={column.id + i}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
+              {columns.map((column, i) => {
+                return (
+                  <TableCell
+                    key={column.id + i}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                )
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -218,15 +186,15 @@ const AllMembersTable = ({props}) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => {
                 return (
-                  <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
-                    {columns.map((column, i) => {                      
+                  <TableRow onClick={() => setOpenDialog({ ...cleanDialog, ...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
+                    {columns.map((column, i) => {
                       let value = row[column.id];
                       if (Array.isArray(value)) {
                         value = value.length > 0 ? value[0][column.nestedKey] : null;
                       }
                       if (column.id === 'profilePic') {
                         return (
-                          <TableCell key={column + i} align={column.align}>
+                          <TableCell key={column.id + i + column.label} align={column.align}>
                             <Avatar src={value} />
                           </TableCell>
                         )
@@ -243,6 +211,7 @@ const AllMembersTable = ({props}) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {totalAttendees === 0 && 
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
@@ -251,7 +220,12 @@ const AllMembersTable = ({props}) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      />}
+      {totalAttendees > 0 && 
+        <Grid container justifyContent="flex-end">
+          <Typography sx={{padding: 2}}>Total Attendees {totalAttendees}</Typography>
+        </Grid>
+      }
     </Paper>
   );
 }

@@ -8,13 +8,11 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Snackbar, useMediaQuery } from '@mui/material';
@@ -64,7 +62,7 @@ const YcEventPoster = ({ eventData }) => {
       </Snackbar>      
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
-        action={<EventOptionsMenu />}
+        action={<EventOptionsMenu eventId={eventId} />}
         title={eventName}
         subheader={hours}
       />

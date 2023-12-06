@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import BugReportIcon from '@mui/icons-material/BugReport';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { Avatar, Fab } from '@mui/material';
+import { Fab } from '@mui/material';
 import AppDrawer from './Drawer';
 import { useSelector } from 'react-redux';
 import MainProfilePic from './MainProfilePic';
+import { useTheme } from '@emotion/react';
 
 export default function NavBar() {  
+  const theme = useTheme();  
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
@@ -33,8 +33,9 @@ export default function NavBar() {
     }
     setOpenDrawer(!openDrawer);
   };
+
   return (
-    <Box sx={{ flexGrow: 1, borderBottom:'8px solid #461F00' }}>
+    <Box sx={{ flexGrow: 1, borderBottom:`8px solid ${theme.custom.trimColor}`}}>
       <AppBar position="static">
         <Toolbar >
           {
