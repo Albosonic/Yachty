@@ -27,8 +27,7 @@ const cleanDialog = {
   id: '',
 }
 
-const AllMembersTable = ({ columns, data, totalAttendees }) => {
-  console.log('total attendees ==========', totalAttendees)
+const AllMembersTable = ({ columns, data, totalAttendees }) => {  
   const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
   const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
