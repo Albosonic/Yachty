@@ -27,6 +27,7 @@ const MobileDMRooms = () => {
       <NavBar />
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>      
         {rooms.map(room => {
+          console.log('===================>', room.yc_member.name) 
           const {roomId, recipientId, yc_member: { firstName, profilePic }} = room;
           if (recipientId === memberId) return null;
           return (
@@ -36,7 +37,7 @@ const MobileDMRooms = () => {
                   <Avatar alt="Remy Sharp" src={profilePic || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/4336f1b1-2f5a-40ae-8c47-6531a6c3d5f8" }/>
                 </ListItemAvatar>
                 <ListItemText
-                  primary="Brunch this weekend?"
+                  primary={room.yc_member.name}
                   secondary={
                     <Fragment>
                       <Typography

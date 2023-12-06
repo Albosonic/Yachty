@@ -83,6 +83,10 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
 
+
+
+
+        {/* TODO: this is stupid!!!!!!! mover responsive behavior to one component. */}
         <ListItem sx={itemStyles} disablePadding>
           <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
             <ListItemIcon>
