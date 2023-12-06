@@ -43,17 +43,18 @@ const RacePoster = ({ race }) => {
   const handleClose = () => setShowSuccess(false);
   const handleExpandClick = () => setExpanded(!expanded);
 
+  const { raceName, startDate, startTime, img, id: raceId, eventId, race_release_form } = race;
+  const releaseFormId = race_release_form?.id;
+
   const shareClick = async () => {
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
     const origin = window.location.origin;
-    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${member.id}`).then(
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/race_view?raceId=${raceId}`).then(
       (what) => setShowSuccess(true),
       (the) => console.log("copy text failed"),
     );
   }
 
-  const { raceName, startDate, startTime, img, id: raceId, eventId, race_release_form } = race;
-  const releaseFormId = race_release_form?.id;
 
   const goToReservations = () => {
     router.push({
