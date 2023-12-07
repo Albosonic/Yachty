@@ -51,11 +51,8 @@ export const GET_YC_MEMBER = gql`
 const RacerView = () => {
   const router = useRouter();
   const memberId = router.query.memberId;
-
-  const {error, loading, data} = useQuery(GET_YC_MEMBER, {variables: {memberId}});
-  
+  const {error, loading, data} = useQuery(GET_YC_MEMBER, {variables: {memberId}});  
   if (loading) return <LoadingYachty />;
-
   return (
     <>
       <NavBar />
