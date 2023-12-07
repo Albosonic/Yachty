@@ -28,7 +28,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RacerProfileCard = ({ shareData }) => {
+const RacerProfileCard = ({ shareData, memberId }) => {  
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const vessels = useSelector(state => state.auth.member.vessels);
@@ -42,12 +42,12 @@ const RacerProfileCard = ({ shareData }) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  
+
   const shareClick = async () => {    
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
     console.log(resp.state);
     const origin = window.location.origin;
-    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${member.id}`).then(
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${memberId}`).then(
       (what) => setShowSuccess(true),
       (the) => console.log("copy text failed"),
     );
