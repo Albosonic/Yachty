@@ -8,20 +8,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SailingIcon from '@mui/icons-material/Sailing';
-import EditIcon from '@mui/icons-material/Edit';
 import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
 import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-import GroupsIcon from '@mui/icons-material/Groups';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import AddHomeIcon from '@mui/icons-material/AddHome';
-import ModeIcon from '@mui/icons-material/Mode';
-import LogoutIcon from '@mui/icons-material/Logout';
 import ChatIcon from '@mui/icons-material/Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { clearState } from '@/slices/actions/authActions';
 import { Divider, useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
@@ -83,6 +75,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
 
+        {/* TODO: this is stupid!!!!!!! mover responsive behavior to one component. */}
         <ListItem sx={itemStyles} disablePadding>
           <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
             <ListItemIcon>

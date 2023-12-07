@@ -13,6 +13,7 @@ export const UPDATE_VESSEL_TYPE_ACT = 'UPDATE_VESSEL_TYPE_ACT';
 export const UPDATE_NEW_VESSEL_ACT = 'UPDATE_NEW_VESSEL_ACT';
 export const BETA_USER_IS_COMMODORE = 'BETA_USER_IS_COMMODORE';
 export const UPDATE_MEMBER_BIO_ACT = 'UPDATE_MEMBER_BIO_ACT';
+export const UPDATE_MEMBER_NAME_ACT = 'UPDATE_MEMBER_NAME_ACT';
 
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
@@ -109,5 +110,12 @@ export const updateMemberBioAct = (bio) => {
   return {
     type: UPDATE_MEMBER_BIO_ACT,
     payload: bio,
+  }
+}
+
+export const updateMemberNameAct = (firstName, lastName, userName) => {
+  return {
+    type: UPDATE_MEMBER_NAME_ACT,
+    payload: {firstName, lastName, userName}
   }
 }

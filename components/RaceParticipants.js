@@ -22,6 +22,7 @@ import RacerInfoDialog from "./RacerInfoDialog";
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'signed_race_releases', label: 'Release', minWidth: 100, isRelease: true },
+  { id: 'profilePic', label: 'Pic', minWidth: 100, },
 ];
 
 const cleanDialog = {
@@ -144,6 +145,13 @@ const RaceParticipants = ({raceId}) => {
                         return (
                           <TableCell key={column + i} align={column.align}>
                             {signed && <DownloadDoneIcon color="success" />}
+                          </TableCell>
+                        )
+                      }
+                      if (column.id === 'profilePic') {
+                        return (
+                          <TableCell key={column.id + i + column.label} align={column.align}>
+                            <Avatar src={value} />
                           </TableCell>
                         )
                       }

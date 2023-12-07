@@ -38,13 +38,15 @@ const YcEventPoster = ({ eventData }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const memberId = useSelector(state => state.auth.member.id);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const handleClose = () => setShowSuccess(false)
-  const handleExpandClick = () => setExpanded(!expanded);
+  const handleExpandClick = () => setExpanded(!expanded);  
   const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}});
+
   const shareClick = async () => {
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
     const origin = window.location.origin;
-    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${memberId}`).then(
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/event_view?eventId=${eventId}`).then(
       (what) => setShowSuccess(true),
       (the) => console.log("copy text failed"),
     );

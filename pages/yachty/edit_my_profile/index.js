@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import EditIcon from '@mui/icons-material/Edit';
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import ImageUploadField from "@/components/ImageUploadField";
-import InsertVesselForm from "@/components/InsertVesselForm";
 import NavBar from "@/components/NavBar";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
-import { INSERT_MEMBER_VESSEL, UPDATE_MEMBER_AND_VESSEL, UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_AS_RACER, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
+import { UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_AS_RACER, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
 import { UPDATE_PROFILE_PICTURE, updateIsRacer, updateUserProfilePicture } from "@/slices/actions/authActions";
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, FormGroup, Grid, IconButton, Paper, Stack, Switch, TextField, Typography, useMediaQuery } from "@mui/material";
 import YachtySwitch from "@/components/YachtySwitch";
@@ -17,6 +16,7 @@ import useLess6EditMyProfile from "@/lib/hooks/lessThan600px/useLess6EditMyProfi
 import RadioGroupHullMaterial from "@/components/RadioGroupHullMaterial";
 import VesselSpecsForm from "@/components/VesselSpecsForm";
 import RadioVesselType from "@/components/RadioVesselType";
+import UpdateName from "@/components/UpdateName";
 
 const vessel = {
   vesselName: '',
@@ -47,8 +47,6 @@ const EditMemberProfile = ({props}) => {
   const [editingProfilePicture, setEditingProfilePicture] = useState(false);
   const [vesselData, setVesselData] = useState({...vessel});
   const [racerOn, setRacerOn] = useState(false);
-
-  const pageStyles = useLess6EditMyProfile();
 
   useEffect(() => {
     if(vesselInfo.length > 0) setVesselData({...vesselInfo[0]})
@@ -96,7 +94,12 @@ const EditMemberProfile = ({props}) => {
         >
           <DialogContent>
             <DialogTitle>Choose a new Photo</DialogTitle>
-            <ImageUploadField type={UPDATE_PROFILE_PICTURE} setImageObjToParent={setProfilePic} img={profilePic} />
+            <ImageUploadField 
+              type={UPDATE_PROFILE_PICTURE} 
+              setImageObjToParent={setProfilePic} 
+              img={profilePic}
+              title=""
+            />
             <DialogActions>
               <Button onClick={() => setEditingProfilePicture(!editingProfilePicture)}>Back</Button>
               <Button onClick={uploadProfilePic}>Close and Submit</Button>
@@ -125,6 +128,7 @@ const EditMemberProfile = ({props}) => {
             </FormGroup>
           </Grid>
           <Typography sx={{margin: '0 auto', marginBottom: 2}} variant={titleVariation}>Edit Member Profile</Typography>
+          <UpdateName />
           <UpdateMemberBio />          
           <UploadVesselImage />
           {vesselExists &&
