@@ -8,13 +8,10 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Alert, Snackbar } from '@mui/material';
 
 const ExpandMore = styled((props) => {
@@ -28,12 +25,10 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RacerProfileCard = ({ shareData, memberId }) => {  
+const RacerProfileCard = ({ racer }) => {  
+  
   const [expanded, setExpanded] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const vessels = useSelector(state => state.auth.member.vessels);
-  const profilePic = useSelector(state => state.auth.member.profilePic);
-  const member = useSelector(state => state.auth.member);
+  const [showSuccess, setShowSuccess] = useState(false);  
 
   const handleClose = () => {
     setShowSuccess(false)
@@ -47,17 +42,17 @@ const RacerProfileCard = ({ shareData, memberId }) => {
     const resp = await navigator.permissions.query({ name: "clipboard-write" });
     console.log(resp.state);
     const origin = window.location.origin;
-    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${memberId}`).then(
+    const newClipResp = await navigator.clipboard.writeText(`${origin}/yachty/racer?memberId=${racer.id}`).then(
       (what) => setShowSuccess(true),
       (the) => console.log("copy text failed"),
     );
   }
   
-  const firstName = shareData?.firstName || member?.firstName;
-  const lastName = shareData?.lastName || member?.lastName;
-  const bio = shareData?.bio || member?.bio;
-  const vesselName = shareData?.vesselName || vessels[0]?.vesselName;
-  const img = shareData?.img || vessels[0]?.img;
+  const firstName = racer?.firstName
+  const lastName = racer?.lastName
+  const profilePic = racer?.profilePic
+  const bio = racer?.bio  
+  const vessel = racer?.vessels[0]
   
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -74,12 +69,12 @@ const RacerProfileCard = ({ shareData, memberId }) => {
           </IconButton>
         }
         title={`${firstName} ${lastName}`}
-        subheader={`${vesselName}`}
+        subheader={vessel?.vesselName || 'unknown'}
       />
       <CardMedia
         component="img"
         height="194"
-        image={img || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/db10f677-4c20-49dc-95eb-88d3ff3aae8c"}
+        image={vessel?.img || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/db10f677-4c20-49dc-95eb-88d3ff3aae8c"}
         alt="vessel photo"
       />
       <CardContent>

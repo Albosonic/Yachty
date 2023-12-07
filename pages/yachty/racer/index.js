@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 export const GET_YC_MEMBER = gql`
   query getYCMember($memberId: uuid!) {
     yc_members(where: {id: {_eq: $memberId}}) {
+    id
     email
     firstName
     lastName
@@ -34,15 +35,13 @@ export const GET_YC_MEMBER = gql`
       draft
       hullMaterial
       id
-      img
-      vesselImage
+      img      
       insuranceInfo
       length
       ownerId
       specialNotes
       type
-      unafilliatedVesselId
-      vesselImage
+      unafilliatedVesselId      
       vesselName
     }
   }
@@ -53,11 +52,12 @@ const RacerView = () => {
   const memberId = router.query.memberId;
   const {error, loading, data} = useQuery(GET_YC_MEMBER, {variables: {memberId}});  
   if (loading) return <LoadingYachty />;
+  const racer = data.yc_members[0];
   return (
     <>
       <NavBar />
       <Stack alignItems="center" spacing={2} sx={{margin: 5}}>
-        <RacerProfileCard shareData={data} />
+        <RacerProfileCard racer={racer} />
       </Stack>
     </>
   )  
