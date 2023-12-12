@@ -53,7 +53,7 @@ const NewUserDialog = ({ open, setOpen }) => {
     >
       <DialogTitle>New to Yachty</DialogTitle>
       <DialogContent>
-        <DialogContentText id="new-member-dialog">
+        <DialogContentText sx={{margin: 2}} id="new-member-dialog">
           You can update your profic here.
         </DialogContentText>
         <Stack>
