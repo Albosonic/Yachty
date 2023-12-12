@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,29 +9,29 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import EditProfilePic from './EditProfilePic';
 import { Grid, Stack } from '@mui/material';
 import UpdateName from './UpdateName';
+import { demoEditProfileOptionAct } from '@/slices/actions/uxActions';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const NewUserDialog = ({ open, setOpen }) => {
-  const router = useRouter();
-  const theme = useTheme();
-  const memberId = useSelector(state => state.auth.member.id);
+  
+  // const theme = useTheme();
+  const dispatch = useDispatch();
+  
 
 
   const editMyProfile = () => {
-
     // TODO:
     // create redux for orientationOn flag: boolean
     // onClose flip it on, and open main settings menu
     // fancy css for edit profile button make it glow and pulse.
     // open tool tip to edit profile button that says "Edit Profile here..."
-
+    dispatch(demoEditProfileOptionAct)
 
 
     // router.replace({
@@ -62,7 +63,7 @@ const NewUserDialog = ({ open, setOpen }) => {
         </Stack>        
       </DialogContent>
       <DialogActions>
-        <Button onClick={editMyProfile}>go</Button>        
+        <Button onClick={editMyProfile}>close</Button>        
       </DialogActions>
     </Dialog>    
   );

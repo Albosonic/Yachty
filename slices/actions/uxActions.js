@@ -1,8 +1,8 @@
-export const DEMO_EDIT_PROFILE_OPTION = 'DEMO_EDIT_PROFILE_OPTION';
+export const DEMO_EDIT_PROFILE_OPTION_ACT = 'DEMO_EDIT_PROFILE_OPTION_ACT';
 
-export const demoEditProfileOption = (payload) => {
+export const demoEditProfileOptionAct = (payload) => {
   return {
-    type: DEMO_EDIT_PROFILE_OPTION,
+    type: DEMO_EDIT_PROFILE_OPTION_ACT,
     payload,    
   }
 }
