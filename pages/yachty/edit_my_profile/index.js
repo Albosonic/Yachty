@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
-
 import NavBar from "@/components/NavBar";
-
-import { UPDATE_PROFILE_PICTURE_HASURA, UPDATE_YC_MEMBER_AS_RACER, UPDATE_YC_MEMBER_BIO } from "@/lib/gqlQueries/editMemberProfilegql";
-import { UPDATE_PROFILE_PICTURE, updateIsRacer, updateUserProfilePicture } from "@/slices/actions/authActions";
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, FormControlLabel, FormGroup, Grid, IconButton, Paper, Stack, Switch, TextField, Typography, useMediaQuery } from "@mui/material";
+import { UPDATE_YC_MEMBER_AS_RACER } from "@/lib/gqlQueries/editMemberProfilegql";
+import { updateIsRacer } from "@/slices/actions/authActions";
+import { FormControlLabel, FormGroup, Grid, Paper, Stack, Typography } from "@mui/material";
 import YachtySwitch from "@/components/YachtySwitch";
 import UpdateMemberBio from "@/components/UpdateMemberBio";
 import UploadVesselImage from "@/components/UploadVesselImage";
@@ -60,8 +58,7 @@ const EditMemberProfile = ({props}) => {
   return (
     <>
     <NavBar />
-      <Paper elevation={4} sx={{ padding: 5}}>
-        
+      <Paper elevation={4} sx={{ padding: 5}}>        
         <Stack alignItems="center" spacing={2}>
           <Grid container justifyContent="space-between">
             <EditProfilePic />
@@ -74,8 +71,7 @@ const EditMemberProfile = ({props}) => {
           </Grid>
           <Typography sx={{margin: '0 auto', marginBottom: 2}} variant={titleVariation}>Edit Member Profile</Typography>
           <UpdateName />
-          <UpdateMemberBio />
-          {/* <Typography>Upload Vessel Image</Typography>           */}
+          <UpdateMemberBio />          
           <UploadVesselImage />
           {vesselExists &&
             <>
