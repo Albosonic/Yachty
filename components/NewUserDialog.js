@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { useTheme } from '@emotion/react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,8 +8,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useRouter } from 'next/router';
-import { Fragment, forwardRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import EditProfilePic from './EditProfilePic';
+import { Grid, Stack } from '@mui/material';
+import UpdateName from './UpdateName';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,11 +42,15 @@ const NewUserDialog = ({ open, setOpen }) => {
       onClose={handleClose}
       aria-describedby="new-member-dialog"
     >
-      <DialogTitle>New to Yachty?</DialogTitle>
+      <DialogTitle>New to Yachty</DialogTitle>
       <DialogContent>
         <DialogContentText id="new-member-dialog">
-          You can update your member profile here.
+          You can update your profic here.
         </DialogContentText>
+        <Stack>
+          <EditProfilePic />
+          <UpdateName />
+        </Stack>        
       </DialogContent>
       <DialogActions>
         <Button onClick={editMyProfile}>go</Button>        

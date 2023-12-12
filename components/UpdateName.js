@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { Button, Fab, Grid, IconButton, TextField, Typography } from "@mui/material";
+import { Button, Fab, Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,30 +56,32 @@ const UpdateName = () => {
   return (   
     <>
     {!nameSet && 
-      <Grid container justifyContent="space-around" sx={{maxWidth: 500}}>      
-        <TextField
-          multiline
-          variant="standard"
-          label="first name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <TextField
-          multiline
-          variant="standard"
-          label="last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
+      <Stack alignItems="center" sx={{ width: "100%"}}>        
+        <Grid container justifyContent="space-around" sx={{maxWidth: 500, width: '100%'}}>      
+          <TextField
+            multiline
+            variant="standard"
+            label="first name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextField
+            multiline
+            variant="standard"
+            label="last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />          
+        </Grid>
         <Button
           onClick={updateName}
           size="small"
           sx={{marginTop: 2}}
           disabled={memberNameLoading}
         >
-          Update
+          Update Name
         </Button>
-      </Grid>
+      </Stack>
     }
     {nameSet &&
       <Grid container justifyContent="center" sx={{maxWidth: 400}} >
