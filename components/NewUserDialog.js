@@ -23,24 +23,12 @@ const NewUserDialog = ({ open, setOpen }) => {
   // const theme = useTheme();
   const dispatch = useDispatch();
   
-
-
-  const editMyProfile = () => {
-    // TODO:
-    // create redux for orientationOn flag: boolean
-    // onClose flip it on, and open main settings menu
-    // fancy css for edit profile button make it glow and pulse.
-    // open tool tip to edit profile button that says "Edit Profile here..."
-    dispatch(demoEditProfileOptionAct)
-
-
-    // router.replace({
-    //   pathname:'/yachty/edit_my_profile', 
-    //   query: { memberId }
-    // })
-  };  
+  // onClose flip it on, and open main settings menu
+  // fancy css for edit profile button make it glow and pulse.
+  // open tool tip to edit profile button that says "Edit Profile here..."
 
   const handleClose = () => {
+    dispatch(demoEditProfileOptionAct(true))
     setOpen(false);
   };
 
@@ -48,8 +36,7 @@ const NewUserDialog = ({ open, setOpen }) => {
     <Dialog
       open={open}      
       TransitionComponent={Transition}
-      keepMounted
-      onClose={handleClose}
+      keepMounted      
       aria-describedby="new-member-dialog"
     >
       <DialogTitle>New to Yachty</DialogTitle>
@@ -63,7 +50,7 @@ const NewUserDialog = ({ open, setOpen }) => {
         </Stack>        
       </DialogContent>
       <DialogActions>
-        <Button onClick={editMyProfile}>close</Button>        
+        <Button onClick={handleClose}>close</Button>        
       </DialogActions>
     </Dialog>    
   );
