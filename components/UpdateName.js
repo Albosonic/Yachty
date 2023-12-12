@@ -62,11 +62,13 @@ const UpdateName = () => {
             multiline
             variant="standard"
             label="first name"
+            sx={{margin: 1}}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
           <TextField
             multiline
+            sx={{margin: 1}}
             variant="standard"
             label="last name"
             value={lastName}

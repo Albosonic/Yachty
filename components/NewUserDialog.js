@@ -24,10 +24,19 @@ const NewUserDialog = ({ open, setOpen }) => {
 
 
   const editMyProfile = () => {
-    router.replace({
-      pathname:'/yachty/edit_my_profile', 
-      query: { memberId }
-    })
+
+    // TODO:
+    // create redux for orientationOn flag: boolean
+    // onClose flip it on, and open main settings menu
+    // fancy css for edit profile button make it glow and pulse.
+    // open tool tip to edit profile button that says "Edit Profile here..."
+
+
+
+    // router.replace({
+    //   pathname:'/yachty/edit_my_profile', 
+    //   query: { memberId }
+    // })
   };  
 
   const handleClose = () => {
