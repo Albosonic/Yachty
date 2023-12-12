@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import styles from '@/styles/yachty.module.css'
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Button, CircularProgress, Grid, Stack, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
-import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
+import { useRouter } from 'next/router';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { getIsoDate } from '@/lib/utils/getters';
 import SailingIcon from '@mui/icons-material/Sailing';
@@ -109,7 +109,7 @@ const Yachty = () => {
   const [newUserOpen, setNewUserOpen] = useState(false)
     
   useEffect(() => {
-    // TODO: probably needs more attention.    
+    // TODO: probably needs more attention. 
     if (user?.email && !memberData?.id) {      
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
@@ -123,17 +123,15 @@ const Yachty = () => {
           lasrLogin: getIsoDate(),
           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing.
         }});
-        const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
+        const userData = { member: resp.data.insert_yc_members.returning[0], user: user };        
         dispatch(addMember(userData));
       }
       upsertUser();
-    }
-    const isNewUser = name.includes('.com');
-    console.log('===============>', isNewUser)
-    setNewUserOpen(isNewUser);
-  }, [user, userIsCommodore])  
+    }   
+    setNewUserOpen(name.includes('.com'));
+  }, [user, userIsCommodore, name])  
   
-  if (isLoading) return <LoadingYachty />;  
+  if (isLoading || upsertMemberLoading) return <LoadingYachty />;  
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

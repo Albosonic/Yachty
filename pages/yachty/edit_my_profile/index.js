@@ -129,7 +129,8 @@ const EditMemberProfile = ({props}) => {
           </Grid>
           <Typography sx={{margin: '0 auto', marginBottom: 2}} variant={titleVariation}>Edit Member Profile</Typography>
           <UpdateName />
-          <UpdateMemberBio />          
+          <UpdateMemberBio />
+          {/* <Typography>Upload Vessel Image</Typography>           */}
           <UploadVesselImage />
           {vesselExists &&
             <>
