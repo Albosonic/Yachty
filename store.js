@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './slices/rootReducer';
 import storage from 'redux-persist/lib/storage';
-import { combineReducers } from 'redux';
 import {
     persistReducer,
     FLUSH,
