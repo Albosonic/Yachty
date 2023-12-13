@@ -1,6 +1,5 @@
 import { forwardRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTheme } from '@emotion/react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useRouter } from 'next/router';
 import EditProfilePic from './EditProfilePic';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import UpdateName from './UpdateName';
 import { demoEditProfileOptionAct } from '@/slices/actions/uxActions';
 
