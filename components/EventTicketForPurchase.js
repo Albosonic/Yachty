@@ -114,9 +114,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const cardWidthMin = moreThan600px ? 700 : '100%';
   const cardMediaWidth = moreThan600px ? 250 : 310;
   
-
   return (
-    <Stack sx={{margin: 5}}>      
+    <Stack>      
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!

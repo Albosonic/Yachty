@@ -21,7 +21,7 @@ const RaceTicketReservations = () => {
   return (
     <>
       <NavBar />
-      <Stack spacing={2} alignItems="center">        
+      <Stack spacing={2} sx={{marginBottom: 10}} alignItems="center">        
         <Grid width="100%">
           <Fab size="small" sx={{margin: 2}} color="primary" variant="extended" onClick={() => router.back()}>
             <ArrowBack/>
