@@ -23,10 +23,6 @@ export default function NavBar() {
     setUserLoggedIn(!!email || emailVerrified);
   }, [emailVerrified, email]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const toggleDrawer = () => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;

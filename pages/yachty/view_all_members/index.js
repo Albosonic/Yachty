@@ -6,11 +6,11 @@ import { useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'email', label: 'Email', minWidth: 100 },
   { id: 'profilePic', label: 'pic', minWidth: 170 },
-  { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
-  { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
+  { id: 'name', label: 'Name', minWidth: 170 },
+  // { id: 'email', label: 'Email', minWidth: 100 },
+  // { id: 'vessels', label: 'Vessel Name', nestedKey: 'vesselName', minWidth: 170 },
+  // { id: 'vessels', label: 'Vessel Type', nestedKey: 'type', minWidth: 170 },
 ];
 
 const ViewAllMembers = () => {

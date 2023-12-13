@@ -1,7 +1,39 @@
 import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_MEMBER_BIO_ACT, UPDATE_MEMBER_NAME_ACT, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
-const initialState = {
-  member: {
+const initialState = {  
+  member: {  
+    email: '',
+    firstName: '',
+    lastName: '',
+    id: '',
+    name: '',
+    profilePic: '',    
+    isRacer: false,
+    bio: '',
+    vessels: [{
+      beam: null,
+      draft: null,
+      hullMaterial: '',
+      id: '',
+      img: null,
+      length: null,
+      ownerId: '',
+      specialNotes: '',
+      type: '',
+      unafilliatedVesselId: null,
+      vesselName: '',
+      make: '',
+      model: '',
+      sailNumber: '',
+      marina: '',
+      slip: '',
+      __typename: '',
+      insuranceInfo: {
+        no: '',
+        company: '',
+        expires: ''
+      },
+    }],
     yachtClubByYachtClub: {
       id: '',
       name: '',
@@ -13,41 +45,6 @@ const initialState = {
         id: '',
       },
     },
-    email: '',
-    firstName: '',
-    lastName: '',
-    id: '',
-    name: '',
-    profilePic: '',
-    vessels: [],
-    isRacer: false,
-    bio: '',
-    vessels: [
-      {
-        beam: null,
-        draft: null,
-        hullMaterial: '',
-        id: '',
-        img: null,
-        length: null,
-        ownerId: '',
-        specialNotes: '',
-        type: '',
-        unafilliatedVesselId: null,
-        vesselName: '',
-        make: '',
-        model: '',
-        sailNumber: '',
-        marina: '',
-        slip: '',
-        __typename: '',
-        insuranceInfo: {
-          no: '',
-          company: '',
-          expires: ''
-        },
-      }
-    ],
   },
   user: {
     given_name: '',
