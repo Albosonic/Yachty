@@ -109,8 +109,11 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
   const { totalTickets, unpaid } = puchasedTicketsInfo
 
-  const cardWidthMin = moreThan600px ? 700 : 200;
+  const cardDirection = moreThan600px ? 'row' : 'column';
   const cardWidthMax = moreThan600px ? 200 : 700;
+  const cardWidthMin = moreThan600px ? 700 : '100%';
+  const cardMediaWidth = moreThan600px ? 250 : 310;
+  
 
   return (
     <Stack sx={{margin: 5}}>      
@@ -124,16 +127,14 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         elevation={4}
         sx={{
           display: 'flex',
+          flexDirection: cardDirection,
           maxWidth: cardWidthMax,
           minWidth: cardWidthMin,
-          margin: '0 auto',
-          marginBottom: 5,
-          margin: 3,
         }}
       >
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ minWidth: cardMediaWidth }}
           image={image}
           alt="Event Image"
         />
@@ -159,10 +160,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
               </Button>
             </Grid>
           </CardContent>
-          {/* <Grid sx={{ width: '100%', height: 50, display: 'flex', justifyContent: 'flex-end' }}>
-            <AttachMoneyIcon color='action' sx={{ lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
-            <Typography sx={{color: 'black', fontSize: 35, marginRight: 1}}>{ amount }</Typography>
-          </Grid> */}
         </Stack>
         {linkToRace ? (
           <Box display="flex" sx={{ '& > :not(style)': { m: 1 } }}>
