@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import Button from '@mui/material/Button';
@@ -19,40 +19,66 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 const NewUserDialog = ({ open, setOpen }) => {
-  
-  // const theme = useTheme();
+  const router = useRouter();  
   const dispatch = useDispatch();
-  
-  // onClose flip it on, and open main settings menu
-  // fancy css for edit profile button make it glow and pulse.
-  // open tool tip to edit profile button that says "Edit Profile here..."
+  const memberId = useSelector(state => state.auth.member.id);
+  const [openDemo, setOpenDemo] = useState(false);
 
-  const handleClose = () => {
-    dispatch(demoEditProfileOptionAct(true))
+  const editMyProfile = () => {
     setOpen(false);
-  };
+    router.replace({
+      pathname:'/yachty/edit_my_profile', 
+      query: { memberId }
+    })
+  };  
 
-  return (    
-    <Dialog
-      open={open}      
-      TransitionComponent={Transition}
-      keepMounted      
-      aria-describedby="new-member-dialog"
-    >
-      <DialogTitle>New to Yachty</DialogTitle>
-      <DialogContent>
-        <DialogContentText sx={{margin: 2}} id="new-member-dialog">
-          You can update your profic here.
-        </DialogContentText>
-        <Stack>
-          <EditProfilePic />
-          <UpdateName />
-        </Stack>        
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>close</Button>        
-      </DialogActions>
-    </Dialog>    
+  const demoInfoDialog = () => {
+    dispatch(demoEditProfileOptionAct(true));
+    setOpenDemo(true);
+  }
+
+  return (
+    <>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="new-member-dialog"
+      >
+        <DialogTitle>New to Yachty</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{margin: 2}} id="new-member-dialog">
+            You can update your profic here.
+          </DialogContentText>
+          <Stack>
+            <EditProfilePic />
+            <UpdateName />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={demoInfoDialog}>ok</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDemo}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="new-member-dialog"
+        
+      >
+        <DialogTitle sx={{margin: 1}} >Edit Profile</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{margin: 2}} id="new-member-dialog">
+            You can update your profile anytime by clicking the icon in the top right like so.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={editMyProfile}>close</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+
   );
 }
 

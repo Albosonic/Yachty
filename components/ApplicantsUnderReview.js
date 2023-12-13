@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useRouter } from "next/router";
-// San Diego CA | 11526 Sorrento Valley Rd #G-1, San Diego, CA 92121
+
 const ApplicantsUnderReview = ({ applicants, refetch }) => {
   // TODO: need to add auth guard.
   const router = useRouter();
