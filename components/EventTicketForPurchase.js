@@ -41,10 +41,8 @@ const GET_EVENT_TICKET_FOR_PURCHASE = gql`
 }
 `
 
-const EventTicketForPurchase = ({ eventData, linkToRace }) => {
-  const router = useRouter();
-  const memberId = useSelector(state => state.auth.member.id );
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+const EventTicketForPurchase = ({ eventData, linkToRace }) => {  
+  const memberId = useSelector(state => state.auth.member.id );  
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
