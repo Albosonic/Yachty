@@ -12,11 +12,10 @@ import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
 import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatIcon from '@mui/icons-material/Chat';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
 import CircleIcon from '@mui/icons-material/Circle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Divider, Grid, Stack, useMediaQuery } from '@mui/material';
+import { Divider, Grid, useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
