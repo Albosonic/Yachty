@@ -1,10 +1,11 @@
-import { clearState } from "@/slices/actions/authActions";
-import { demoEditProfileOptionAct } from "@/slices/actions/uxActions";
-import { useTheme } from "@emotion/react";
-import { Avatar, IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@emotion/react";
+import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import CircleIcon from '@mui/icons-material/Circle';
+import { clearState } from "@/slices/actions/authActions";
+import { demoEditProfileOptionAct } from "@/slices/actions/uxActions";
 
 const MainProfilePic = () => {
   const router = useRouter();
@@ -76,7 +77,15 @@ const MainProfilePic = () => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <Avatar alt="Profile Pic" src={profilePic} />
+        <Avatar alt="Profile Pic" src={profilePic} sx={{width: 50, height: 50}} />
+        <CircleIcon 
+          color="error"
+          sx={{
+            fontSize: 14,
+            marginBottom: 4,            
+
+          }} 
+        />          
       </IconButton>
         <Menu
           id="course-selector"
