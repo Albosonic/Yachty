@@ -12,9 +12,11 @@ import DirectionsBoatFilledIcon from '@mui/icons-material/DirectionsBoatFilled';
 import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatIcon from '@mui/icons-material/Chat';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
+import CircleIcon from '@mui/icons-material/Circle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { Divider, useMediaQuery } from '@mui/material';
+import { Divider, Grid, Stack, useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
@@ -78,10 +80,24 @@ export default function AppDrawer({ open, toggleDrawer }) {
         {/* TODO: this is stupid!!!!!!! mover responsive behavior to one component. */}
         <ListItem sx={itemStyles} disablePadding>
           <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
-            <ListItemIcon>
-              <ChatIcon color="primary"/>
-            </ListItemIcon>
+              <ListItemIcon>
+                <Grid justifyContent="center">
+                  <ChatIcon color="primary"/>
+                  <CircleIcon 
+                    color="error"
+                    sx={{
+                      fontSize: 14,
+                      marginBottom: 2,
+                      marginLeft: -1,
+
+                    }} 
+                  />                  
+                </Grid>
+              </ListItemIcon>
+
+
             <ListItemText primary="Direct Messages" />
+            
           </ListItemButton>
         </ListItem>
         <Divider />

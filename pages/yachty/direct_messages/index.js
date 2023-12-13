@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_USER_ROOMS_BY_ID, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { Avatar, Box, Button, CircularProgress, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import LoadingYachty from "@/components/LoadingYachty";
