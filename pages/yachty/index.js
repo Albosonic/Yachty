@@ -14,6 +14,19 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
 
+
+// TODO: protect routes like code Bigelow_Rules.
+// // pages/profile.js
+// import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+
+// export default function Profile({ user }) {
+//   return <div>Hello {user.name}</div>;
+// }
+
+// // You can optionally pass your own `getServerSideProps` function into
+// // `withPageAuthRequired` and the props will be merged with the `user` prop
+// export const getServerSideProps = withPageAuthRequired();
+
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
     $email: String,
