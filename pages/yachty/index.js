@@ -6,7 +6,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
+import { USER_LOGGED_IN_ACT, addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
 import { useRouter } from 'next/router';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { getIsoDate } from '@/lib/utils/getters';
@@ -169,6 +169,9 @@ const Yachty = () => {
       <NavBar/>
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
+        <Button onClick={() => dispatch({type: USER_LOGGED_IN_ACT})}>
+          Test Saga
+        </Button>
         <div className={styles.titleSection}>
           <Typography variant="h4">Welcome to {yachtClubName}</Typography>
           {logo && <img src={logo} />}

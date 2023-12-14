@@ -19,7 +19,11 @@ const directMessageFeed = ({props}) => {
   const [inputMsg, setMessage] = useState('');
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
   const moreThan600px = useMediaQuery('(min-width:600px)');
-
+  return <>
+    <Typography>
+      Hello World
+    </Typography>
+  </>
   // TOD0: poll user rooms as well, so that we can show new direct message initiations.
   const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
     variables: { memberId },
