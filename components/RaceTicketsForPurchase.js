@@ -68,7 +68,7 @@ const RaceTicketsForPurchase = ({ raceData }) => {
   },[resData])
 
   if (!raceData || resLoading || ticketLoading) return <LoadingYachty isRoot={false} />;
-  
+
   const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
 
   const reserveTicket = async () => {
@@ -84,7 +84,14 @@ const RaceTicketsForPurchase = ({ raceData }) => {
   };
 
   const cardWidthMin = moreThan600px ? 700 : 200;
-  const cardWidthMax = moreThan600px ? 200 : 700;
+  // const cardWidthMax = moreThan600px ? 200 : 700;
+  const cardDirection = moreThan600px ? 'row' : 'column';
+
+  const cardMediaWidth = moreThan600px ? 220 : '100%';
+  const justifyContentMoney = moreThan600px ? 'flex-end' : 'center';
+  const gap = moreThan600px ? 15 : 0;
+  // const cardMinHeight = moreThan600px ? 200 : 700;
+  // const cardMaxHeight = moreThan600px ? 200 : 700;
   return (
     <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -96,19 +103,23 @@ const RaceTicketsForPurchase = ({ raceData }) => {
         elevation={4}
         sx={{
           display: 'flex',
+          flexDirection: cardDirection,
           minWidth: cardWidthMin,
-          maxWidth: cardWidthMax,
-          margin: '0 auto',
-          marginBottom: 5
+          minHeight: 240,
         }}
       >
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: cardMediaWidth }}
           image={image}
           alt="Event Image"
         />
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
           <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography component="div" variant="h5">
               {raceName}
@@ -119,16 +130,24 @@ const RaceTicketsForPurchase = ({ raceData }) => {
               {ticketCount > 0 && <Button onClick={reserveTicket}>Confirm</Button>}
             </Grid>
           </CardContent>
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
+        </Box>
+        <Stack
+          alignItems="flex-end"
+          sx={{
+            gap: gap,
+            padding: 1,
+            
+          }}
+        >
+          {!ticketReserved &&
+          <Fab sx={{marginRight: 2}} onClick={() => setTicketCount(1)} size="medium" color='success'  aria-label="add">
+            <AddIcon />
+          </Fab>
+          }
+          <Grid container wrap='nowrap'>
             <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
             <Typography sx={{color: 'black', fontSize: "40px", marginRight: 1}}>{ cost }</Typography>
-          </Box>
-        </Box>
-        <Stack alignItems="center" sx={{ '& > :not(style)': { m: 1 } }}>
-          {!ticketReserved &&
-          <Fab onClick={() => setTicketCount(1)} size="medium" color='success'  aria-label="add">
-            <AddIcon />
-          </Fab>          }
+          </Grid>
         </Stack>
       </Card>
     </Stack>

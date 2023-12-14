@@ -28,10 +28,8 @@ const cleanDialog = {
 }
 
 const AllMembersTable = ({ columns, data, totalAttendees }) => {  
-  const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
   const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
-  const ycId = router.query.ycId;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
@@ -111,6 +109,7 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      {/* TODO: get this dialog into it's own container */}
       <Dialog
         fullWidth={true}
         maxWidth={'sm'}
@@ -132,7 +131,7 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
                 borderRadius: 3
               }}
               alt="The house from the offer."
-              src={img}
+              src={img || "https://yachty-letter-heads.s3.us-west-1.amazonaws.com/db10f677-4c20-49dc-95eb-88d3ff3aae8c"}
             />
             <Stack spacing={.5}>
               {make && <DialogContentText>{`make: ${make}`}</DialogContentText>}

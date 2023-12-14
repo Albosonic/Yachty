@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 // fbf64755-e7e7-4593-b4b5-12bf5f210f94 memberId Alberto
 // 33db963e-ea05-4b77-b90e-a126f6dd17e7 club kersti
 // ba93c153-c63f-4f22-9637-430aa6aa84d7 memberId tester one
-
+// TODO: wtf is this?????
 const YCMemberView = () => {
   const router = useRouter();
   const yachtClubByYachtClub = useSelector((state => state?.auth?.member?.yachtClubByYachtClub));
