@@ -48,7 +48,7 @@ const directMessageFeed = ({props}) => {
 
   const userPic = user?.picture;
   const getMsgFacade = (messages) => {
-    if (!messages) return [{}];
+    if (!messages) return [];
     return messages.map(msg => {
       const {
         id: msgId,
@@ -92,6 +92,7 @@ const directMessageFeed = ({props}) => {
 
   const Msg = ({ msg, authorId, profilePic }) => {
     const leftOrRight = authorId === memberId ? "flex-start" : "flex-end";
+    console.log('msg =========', msg)
     return (
       <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
         {authorId === memberId ? (
@@ -168,6 +169,7 @@ const directMessageFeed = ({props}) => {
               >
                 {msgFacade.map(((msg, i) => {
                   const {message, authorId, profilePic} = msg;
+                  console.log('message facade: ', msgFacade)
                   return (
                     <Grid
                       key={msg.authorId + i + message}

@@ -3,6 +3,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Stack, useMediaQuery } from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
 import LoadingYachty from "./LoadingYachty";
+import { useRouter } from "next/router";
 
 const GET_YC_DM_MEMBER = gql`
 query getYcDmMember($memberId: uuid!) {
@@ -14,6 +15,7 @@ query getYcDmMember($memberId: uuid!) {
 `
 
 const DmRoom = ({dmRoom}) => {
+  const router = useRouter();
   const { id, convoPartnerId } = dmRoom;
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
