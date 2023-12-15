@@ -14,8 +14,7 @@ import Msg from "@/components/Message";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const {user, isLoading} = useUser()
+  const dispatch = useDispatch();  
   const currentRmId = router.query.rid;
   const memberId = useSelector(state => state.auth.member.id);
   const dmRooms = useSelector(state => state.msgs.dmRooms);
@@ -49,8 +48,7 @@ const directMessageFeed = ({props}) => {
       </>
     )
   }
-
-  const userPic = user?.picture;
+  
   const getMsgFacade = (messages) => {
     if (!messages) return [];
     return messages.map(msg => {
