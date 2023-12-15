@@ -18,9 +18,10 @@ import { useRouter } from 'next/router';
 import { Divider, Grid, useMediaQuery } from '@mui/material';
 
 export default function AppDrawer({ open, toggleDrawer }) {
-  const router = useRouter();  
+  const router = useRouter();
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
+  const globalNewMsg = useSelector(state => state?.msgs?.globalNewMsg);
   const moreThan600px = useMediaQuery('(min-width:600px)');
   let anchor = 'left';
   const itemStyles = {minHeight: 70}
@@ -73,15 +74,21 @@ export default function AppDrawer({ open, toggleDrawer }) {
               <ListItemIcon>
                 <Grid justifyContent="center">
                   <ChatIcon color="primary"/>
-                  <CircleIcon 
+
+
+
+
+
+                  {globalNewMsg &&
+                    <CircleIcon
                     color="error"
                     sx={{
                       fontSize: 14,
                       marginBottom: 2,
                       marginLeft: -1,
 
-                    }} 
-                  />                  
+                    }}
+                  />}
                 </Grid>
               </ListItemIcon>
             <ListItemText primary="Direct Messages" />
@@ -106,7 +113,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <ListItemText primary="New Member Applicants" />
           </ListItemButton>
         </ListItem>
-        {userIsCommodore && 
+        {userIsCommodore &&
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_yc_event', query: { ycId: ycId }})}>
             <ListItemIcon>
@@ -114,8 +121,8 @@ export default function AppDrawer({ open, toggleDrawer }) {
             </ListItemIcon>
             <ListItemText primary="Create Yacht Club Event" />
           </ListItemButton >
-        </ListItem>}  
-        {userIsCommodore && 
+        </ListItem>}
+        {userIsCommodore &&
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname: '/yachty/create_races' })}>
             <ListItemIcon>
@@ -131,7 +138,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
             </ListItemIcon>
             <ListItemText primary="Reciprocal Requests" />
           </ListItemButton>
-        </ListItem>}                    
+        </ListItem>}
         <ListItem disablePadding>
           <ListItemButton onClick={() => router.replace({pathname:'/yachty/today_at_the_club', query: { ycId: ycId }})}>
             <ListItemIcon>
@@ -139,7 +146,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
             </ListItemIcon>
             <ListItemText primary="Today at the Club" />
           </ListItemButton>
-        </ListItem>        
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={() => console.log('build this route next')}>
             <ListItemIcon>
