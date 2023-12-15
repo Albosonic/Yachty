@@ -13,7 +13,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { ROOM_TYPES } from "@/slices/actions/authActions";
 import client from "@/lib/clients/apollo-client";
 
 const cleanDialog = {
