@@ -1,6 +1,6 @@
-import { useSelector } from "react-redux"
 import ImageIcon from '@mui/icons-material/Image';
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Stack, useMediaQuery } from "@mui/material";
+import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText, useMediaQuery } from "@mui/material";
+import CircleIcon from '@mui/icons-material/Circle';
 import { gql, useQuery } from "@apollo/client";
 import LoadingYachty from "./LoadingYachty";
 import { useRouter } from "next/router";
@@ -11,12 +11,11 @@ query getYcDmMember($memberId: uuid!) {
     profilePic
     firstName
   }
-}
-`
+}`
 
 const DmRoom = ({dmRoom}) => {
   const router = useRouter();
-  const { id, convoPartnerId } = dmRoom;
+  const { id, convoPartnerId, newMessage } = dmRoom;
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const {error, loading, data: data} = useQuery(GET_YC_DM_MEMBER, {
@@ -33,13 +32,22 @@ const DmRoom = ({dmRoom}) => {
     <>
       {moreThan600px &&
         <>
-          <ListItem 
+          <ListItem
             onClick={() => router.replace({pathname: '/yachty/direct_messages', query: {rid: id}})}
           >
             <ListItemAvatar>
-              <Avatar src={profilePic}>
-                <ImageIcon />
-              </Avatar>
+              <Grid container>
+                <Avatar src={profilePic} />
+                {newMessage && 
+                <CircleIcon
+                  color="error"
+                  sx={{
+                    fontSize: 14,
+                    marginBottom: 2,
+                    marginLeft: -.5,
+                  }}
+                />}
+              </Grid>
             </ListItemAvatar>
             <ListItemText primary={firstName} />
           </ListItem>

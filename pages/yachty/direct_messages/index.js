@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
-import ImageIcon from '@mui/icons-material/Image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Button, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
@@ -77,13 +76,11 @@ const directMessageFeed = ({props}) => {
 
   const sendMessage = async () => {
     await insertMessage({
-    variables: {
-      object: {
-        roomId: currentRmId,
-        authorId: memberId,
-        message: inputMsg,
-        created_at: new Date().toISOString()
-      }
+    variables: {      
+      roomId: currentRmId,
+      authorId: memberId,
+      message: inputMsg,
+      createdAt: new Date().toISOString()      
     }});
     setMessage('');
   }
@@ -92,7 +89,6 @@ const directMessageFeed = ({props}) => {
 
   const Msg = ({ msg, authorId, profilePic }) => {
     const leftOrRight = authorId === memberId ? "flex-start" : "flex-end";
-    console.log('msg =========', msg)
     return (
       <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
         {authorId === memberId ? (
@@ -168,8 +164,7 @@ const directMessageFeed = ({props}) => {
                 }}
               >
                 {msgFacade.map(((msg, i) => {
-                  const {message, authorId, profilePic} = msg;
-                  console.log('message facade: ', msgFacade)
+                  const {message, authorId, profilePic} = msg;                  
                   return (
                     <Grid
                       key={msg.authorId + i + message}

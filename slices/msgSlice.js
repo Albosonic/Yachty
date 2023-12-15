@@ -7,7 +7,7 @@ const initialState = {
 export default function msgReducer(state = initialState, action) {
   const {payload, type} = action;
   switch (type) {
-    case DM_ROOMS_ACT: {
+    case DM_ROOMS_ACT: {      
       return {
         ...state,
         dmRooms: [...payload]
