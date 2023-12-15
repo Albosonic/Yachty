@@ -94,7 +94,7 @@ const directMessageFeed = ({props}) => {
 
   
   const msgFacade = getMsgFacade(pollMsgData?.messages);
-  console.log('dmRooms=============', dmRooms)
+
   return (
     <>
       <NavBar />
