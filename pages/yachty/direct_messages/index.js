@@ -13,27 +13,19 @@ import LoadingYachty from "@/components/LoadingYachty";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
-  const currentRmId =  router.query.rid;
+  const currentRmId = router.query.rid;
   const {user, isLoading} = useUser()
   const memberId = useSelector(state => state.auth.member.id);
   const [inputMsg, setMessage] = useState('');
+  const dmRooms = useSelector(state => state.msgs.dmRooms);
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  return <>
-    <Typography>
-      Hello World
-    </Typography>
-  </>
-  // TOD0: poll user rooms as well, so that we can show new direct message initiations.
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {
-    variables: { memberId },
-    fetchPolicy: 'no-cache'
-  });
   
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
+    fetchPolicy: 'no-cache',
     variables: {roomId: currentRmId},
-    pollInterval: 1500,
-  });
+    pollInterval: 5500,
+  });  
   
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
 
@@ -42,8 +34,8 @@ const directMessageFeed = ({props}) => {
     if (!moreThan600px) return '93%';
   }
 
-  if (pollLoading || userRmLoading) return <LoadingYachty />;
-  if (userRmData.user_rooms.length === 0) {
+  if (pollLoading) return <LoadingYachty />;
+  if (dmRooms.length === 0) {
     return (
       <>
         <NavBar/>
@@ -148,7 +140,6 @@ const directMessageFeed = ({props}) => {
   }
 
   const msgFacade = getMsgFacade(pollMsgData?.messages);
-  const rooms = userRmData?.user_rooms;
 
   return (
     <>
@@ -161,7 +152,7 @@ const directMessageFeed = ({props}) => {
               height: "100%",
             }}>
               {moreThan600px && 
-              rooms.map((room,  i) => {
+              dmRooms.map((room,  i) => {
                 const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
                 if (recipientId === memberId) return null;
                 return (
