@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -9,15 +9,19 @@ import NavBar from "@/components/NavBar";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import LoadingYachty from "@/components/LoadingYachty";
 import DmRoom from "@/components/DmRoom";
+import { pollUserRooms } from "@/slices/actions/msgActions";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
-  const currentRmId = router.query.rid;
+  const dispatch = useDispatch();
   const {user, isLoading} = useUser()
+  const currentRmId = router.query.rid;
   const memberId = useSelector(state => state.auth.member.id);
-  const [inputMsg, setMessage] = useState('');
   const dmRooms = useSelector(state => state.msgs.dmRooms);
+
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
+  const [inputMsg, setMessage] = useState('');
+
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
@@ -76,13 +80,15 @@ const directMessageFeed = ({props}) => {
 
   const sendMessage = async () => {
     await insertMessage({
-    variables: {      
+    variables: {
       roomId: currentRmId,
       authorId: memberId,
       message: inputMsg,
-      createdAt: new Date().toISOString()      
+      createdAt: new Date().toISOString()
     }});
+    dispatch(pollUserRooms());
     setMessage('');
+    
   }
 
   const messageGridHeight = getMessageGridHeight();
@@ -164,7 +170,7 @@ const directMessageFeed = ({props}) => {
                 }}
               >
                 {msgFacade.map(((msg, i) => {
-                  const {message, authorId, profilePic} = msg;                  
+                  const {message, authorId, profilePic} = msg;
                   return (
                     <Grid
                       key={msg.authorId + i + message}

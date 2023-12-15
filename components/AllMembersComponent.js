@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GET_USERS_ROOM } from "@/lib/gqlQueries/dmgql";
 import { INSERT_ROOM } from "@/lib/gqlQueries/allMembersgql";
 import { useMutation } from "@apollo/client";
@@ -14,6 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import client from "@/lib/clients/apollo-client";
+import { pollUserRooms } from "@/slices/actions/msgActions";
 
 const cleanDialog = {
   open: false,
@@ -28,6 +29,7 @@ const cleanDialog = {
 }
 
 const AllMembersTable = ({ columns, data, totalAttendees }) => {  
+  const dispatch = useDispatch();
   const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
   const [page, setPage] = useState(0);
@@ -66,6 +68,7 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
         }
       });
       roomId = resp.data.insert_user_rooms_one.id;
+      dispatch(pollUserRooms());
     } else {
       roomId = queryResp?.data?.user_rooms[0].id;
     }

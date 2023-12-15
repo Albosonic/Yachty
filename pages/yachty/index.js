@@ -6,13 +6,14 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { USER_LOGGED_IN_ACT, addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
+import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
 import { useRouter } from 'next/router';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { getIsoDate } from '@/lib/utils/getters';
 import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
+import { pollUserRooms } from '@/slices/actions/msgActions';
 
 
 // TODO: protect routes like code Bigelow_Rules.
@@ -104,7 +105,6 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
   }
 }`;
 
-
 const Yachty = () => {  
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
@@ -121,8 +121,7 @@ const Yachty = () => {
   const name = useSelector(state => state?.auth?.member?.name);
   const [newUserOpen, setNewUserOpen] = useState(false)
     
-  useEffect(() => {
-    // TODO: probably needs more attention. 
+  useEffect(() => {    
     if (user?.email && !memberData?.id) {      
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
@@ -140,7 +139,8 @@ const Yachty = () => {
         dispatch(addMember(userData));
       }
       upsertUser();
-    }   
+    }
+    dispatch(pollUserRooms());
     setNewUserOpen(name.includes('.com'));
   }, [user, userIsCommodore, name])  
   
@@ -169,9 +169,6 @@ const Yachty = () => {
       <NavBar/>
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
-        <Button onClick={() => dispatch({type: USER_LOGGED_IN_ACT})}>
-          Test Saga
-        </Button>
         <div className={styles.titleSection}>
           <Typography variant="h4">Welcome to {yachtClubName}</Typography>
           {logo && <img src={logo} />}

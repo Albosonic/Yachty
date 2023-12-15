@@ -4,6 +4,8 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { gql, useQuery } from "@apollo/client";
 import LoadingYachty from "./LoadingYachty";
 import { useRouter } from "next/router";
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 const GET_YC_DM_MEMBER = gql`
 query getYcDmMember($memberId: uuid!) {
@@ -16,18 +18,25 @@ query getYcDmMember($memberId: uuid!) {
 const DmRoom = ({dmRoom}) => {
   const router = useRouter();
   const { id, convoPartnerId, newMessage } = dmRoom;
-  const moreThan600px = useMediaQuery('(min-width:600px)');
-
+  const memberId = useSelector(state => state.auth.member.id);
+  const [notify, setNotify] = useState(false);
+  
   const {error, loading, data: data} = useQuery(GET_YC_DM_MEMBER, {
     variables: {
       memberId: convoPartnerId
     }
   })
 
+  useEffect(() => {
+    setNotify(memberId !== newMessage);
+  }, [newMessage])
+  
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+
   if (loading) return <LoadingYachty isRoot={false} />
 
   const {profilePic, firstName} = data.yc_members[0];
-
+  console.log('newMessage =======', newMessage)
   return (
     <>
       {moreThan600px &&
@@ -38,7 +47,7 @@ const DmRoom = ({dmRoom}) => {
             <ListItemAvatar>
               <Grid container>
                 <Avatar src={profilePic} />
-                {newMessage && 
+                {notify && 
                 <CircleIcon
                   color="error"
                   sx={{
