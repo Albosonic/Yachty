@@ -2,14 +2,14 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ALL_USER_ROOMS_BY_ID, INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
+import { INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import ImageIcon from '@mui/icons-material/Image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Avatar, Button, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import LoadingYachty from "@/components/LoadingYachty";
-
+import DmRoom from "@/components/DmRoom";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
@@ -20,13 +20,13 @@ const directMessageFeed = ({props}) => {
   const dmRooms = useSelector(state => state.msgs.dmRooms);
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  
+
   const {data: pollMsgData, loading: pollLoading, error: pollError} = useQuery(POLL_ALL_MESSAGES, {
     fetchPolicy: 'no-cache',
     variables: {roomId: currentRmId},
     pollInterval: 5500,
-  });  
-  
+  });
+
   const [insertMessage, {loading: msgLoading}] = useMutation(INSERT_MESSAGE);
 
   const getMessageGridHeight = () => {
@@ -151,21 +151,7 @@ const directMessageFeed = ({props}) => {
               overflowY: "scroll",
               height: "100%",
             }}>
-              {moreThan600px && 
-              dmRooms.map((room,  i) => {
-                const {roomId, recipientId, yc_member: { profilePic, firstName }} = room;
-                if (recipientId === memberId) return null;
-                return (
-                  <ListItem onClick={() => router.replace({pathname: '/yachty/direct_messages', query: {rid: roomId}})} key={profilePic + i}>
-                    <ListItemAvatar>
-                      <Avatar src={profilePic}>
-                        <ImageIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={firstName} />
-                  </ListItem>
-                )
-              })}
+              {moreThan600px && dmRooms.map((room,  i) => <DmRoom dmRoom={room} key={room.id} />)}
             </List>
           </Stack>
           <Container sx={{margin: 0}} fixed maxWidth="sm">
