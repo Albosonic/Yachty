@@ -1,4 +1,3 @@
-import ImageIcon from '@mui/icons-material/Image';
 import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText, useMediaQuery } from "@mui/material";
 import CircleIcon from '@mui/icons-material/Circle';
 import { gql, useQuery } from "@apollo/client";
@@ -28,7 +27,7 @@ const DmRoom = ({dmRoom}) => {
   })
 
   useEffect(() => {
-    setNotify(memberId !== newMessage);
+    setNotify(memberId !== newMessage && newMessage !== null);
   }, [newMessage])
   
   const moreThan600px = useMediaQuery('(min-width:600px)');
