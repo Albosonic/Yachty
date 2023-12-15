@@ -10,6 +10,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import LoadingYachty from "@/components/LoadingYachty";
 import DmRoom from "@/components/DmRoom";
 import { pollUserRooms } from "@/slices/actions/msgActions";
+import Msg from "@/components/Message";
 
 const directMessageFeed = ({props}) => {
   const router = useRouter();
@@ -93,55 +94,7 @@ const directMessageFeed = ({props}) => {
 
   const messageGridHeight = getMessageGridHeight();
 
-  const Msg = ({ msg, authorId, profilePic }) => {
-    const leftOrRight = authorId === memberId ? "flex-start" : "flex-end";
-    return (
-      <Grid container justifyContent={leftOrRight} sx={{ width: '80%'}} >
-        {authorId === memberId ? (
-          <>
-          <Avatar src={profilePic || userPic}
-            sx={{
-              width: 20,
-              height: 20,
-              marginRight: -1,
-            }}
-          />
-          <Typography
-            sx={{
-              border: '1px solid grey',
-              borderRadius: 4,
-              padding: .7,
-              opacity: .5
-            }}
-          >
-            {msg}
-          </Typography>
-        </>
-        ) : (
-          <>
-            <Typography
-              sx={{
-                border: '1px solid grey',
-                borderRadius: 4,
-                padding: .7,
-                opacity: .5
-              }}
-            >
-              {msg}
-            </Typography>
-            <Avatar src={profilePic || userPic}
-              sx={{
-                width: 20,
-                height: 20,
-                marginRight: -1,
-              }}
-            />
-          </>
-        )}
-      </Grid>
-    )
-  }
-
+  
   const msgFacade = getMsgFacade(pollMsgData?.messages);
 
   return (

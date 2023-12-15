@@ -36,7 +36,7 @@ const DmRoom = ({dmRoom}) => {
   if (loading) return <LoadingYachty isRoot={false} />
 
   const {profilePic, firstName} = data.yc_members[0];
-  console.log('newMessage =======', newMessage)
+  
   return (
     <>
       {moreThan600px &&
