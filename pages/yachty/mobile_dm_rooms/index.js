@@ -24,8 +24,6 @@ const mobileDmRooms = ({props}) => {
     setValue(newValue);
   };
 
-
-
   const [showReactionOptions, setShowReactionOptions] = useState({ msgRef: null, showOptions: false });
   const [inputMsg, setMessage] = useState('');
 
@@ -104,55 +102,55 @@ const mobileDmRooms = ({props}) => {
     <>
       <NavBar />      
       <Grid container justifyContent="center" sx={{padding: 2}}>
-          <Tabs            
-            value={value}
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable dm rooms"
-          >
-            {dmRooms.map((room,  i) => <Tab key={room.id} tabIndex={i} icon={<DmRoom dmRoom={room} />} /> )}
-          </Tabs>
-        </Grid>      
-        <Grid  container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
-          <Container sx={{margin: 0}} fixed maxWidth="sm">
-            <Stack sx={{width: messageGridHeight, margin: 0, bottom: 0, position: 'fixed'}}>
-              {/* this should probably be it's own component */}
-              <Grid
-                sx={{
-                  overflow: "hidden",
-                  overflowY: "scroll",
-                  width: "100%",
-                  maxHeight: 600,
-                  marginTop: 20,
-                  marginBottom: 5,
-                }}
-              >
-                {msgFacade.map(((msg, i) => {
-                  const {message, authorId, profilePic} = msg;
-                  return (
-                    <Grid
-                      key={msg.authorId + i + message}
-                      container
-                      margin={1}
-                      justifyContent="center"
-                    >
-                      <Msg msg={message} authorId={authorId} profilePic={profilePic} />
-                    </Grid>
-                  )
-                }))}
-              </Grid>
-              <TextField
-                multiline
-                label="message"
-                value={inputMsg}
-                onChange={(e) => setMessage(e.target.value)}
-                sx={{padding: 1}}
-                InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
-              />
-            </Stack>
-          </Container>
-        </Grid>
+        <Tabs            
+          value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable dm rooms"
+        >
+          {dmRooms.map((room,  i) => <Tab key={room.id} tabIndex={i} icon={<DmRoom dmRoom={room} />} /> )}
+        </Tabs>
+      </Grid>      
+      <Grid container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
+        <Container sx={{margin: 0}} fixed maxWidth="sm">
+          <Stack sx={{width: messageGridHeight, margin: 0, bottom: 0, position: 'fixed'}}>
+            {/* this should probably be it's own component */}
+            <Grid
+              sx={{
+                overflow: "hidden",
+                overflowY: "scroll",
+                width: "100%",
+                maxHeight: 600,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
+            >
+              {msgFacade.map(((msg, i) => {
+                const {message, authorId, profilePic} = msg;
+                return (
+                  <Grid
+                    key={msg.authorId + i + message}
+                    container
+                    margin={1}
+                    justifyContent="center"
+                  >
+                    <Msg msg={message} authorId={authorId} profilePic={profilePic} />
+                  </Grid>
+                )
+              }))}
+            </Grid>
+            <TextField
+              multiline
+              label="message"
+              value={inputMsg}
+              onChange={(e) => setMessage(e.target.value)}
+              sx={{padding: 1}}
+              InputProps={{endAdornment: <Button onClick={sendMessage}>Send</Button>}}
+            />
+          </Stack>
+        </Container>
+      </Grid>
     </>
   )
 };
