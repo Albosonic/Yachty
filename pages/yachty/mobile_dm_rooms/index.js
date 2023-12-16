@@ -19,7 +19,7 @@ const mobileDmRooms = ({props}) => {
   const dmRooms = useSelector(state => state.msgs.dmRooms);
 
   const [value, setValue] = useState(0);
-
+  console.log('value ===========', value)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -109,7 +109,7 @@ const mobileDmRooms = ({props}) => {
           scrollButtons="auto"
           aria-label="scrollable dm rooms"
         >
-          {dmRooms.map((room,  i) => <Tab key={room.id} tabIndex={i} icon={<DmRoom dmRoom={room} />} /> )}
+          {dmRooms.map((room,  i) => <Tab key={room.id} icon={<DmRoom dmRoom={room} />} /> )}
         </Tabs>
       </Grid>      
       <Grid container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
@@ -157,3 +157,37 @@ const mobileDmRooms = ({props}) => {
 
 export default mobileDmRooms;
 
+// [
+//   {
+//     id: 'e6202e23-a450-4b88-9d5a-f4a195f67a68',
+//     lastSeen: null,
+//     memberId: 'dc4725cc-4b27-453f-b662-91f7553b1a84',
+//     recipientId: '9fa6f32d-7284-415a-a576-36aaca82c400',
+//     convoPartnerId: 'dc4725cc-4b27-453f-b662-91f7553b1a84',
+//     newMessage: null
+//   },
+//   {
+//     id: '9dce2299-2ead-4150-a9b5-271264e94737',
+//     lastSeen: null,
+//     memberId: '9fa6f32d-7284-415a-a576-36aaca82c400',
+//     recipientId: '1820250e-b1ce-4b95-93aa-587bd5014730',
+//     convoPartnerId: '1820250e-b1ce-4b95-93aa-587bd5014730',
+//     newMessage: '9fa6f32d-7284-415a-a576-36aaca82c400'
+//   },
+//   {
+//     id: '483a3004-2b88-4395-8ee2-634484ec3169',
+//     lastSeen: null,
+//     memberId: '9fa6f32d-7284-415a-a576-36aaca82c400',
+//     recipientId: 'c10e267c-ff9d-4c76-9ebf-ee97c34f6db2',
+//     convoPartnerId: 'c10e267c-ff9d-4c76-9ebf-ee97c34f6db2',
+//     newMessage: '9fa6f32d-7284-415a-a576-36aaca82c400'
+//   },
+//   {
+//     id: 'f7c08b4f-8c85-4f32-bc44-89cb1b6dbff7',
+//     lastSeen: null,
+//     memberId: '9fa6f32d-7284-415a-a576-36aaca82c400',
+//     recipientId: '0017b07e-c030-4e9a-897c-14a6206680fb',
+//     convoPartnerId: '0017b07e-c030-4e9a-897c-14a6206680fb',
+//     newMessage: '9fa6f32d-7284-415a-a576-36aaca82c400'
+//   }
+// ],
