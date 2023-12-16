@@ -19,7 +19,7 @@ const mobileDmRooms = ({props}) => {
   const dmRooms = useSelector(state => state.msgs.dmRooms);
 
   const [value, setValue] = useState(0);
-  console.log('value ===========', value)
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
