@@ -14,8 +14,7 @@ query getYcDmMember($memberId: uuid!) {
   }
 }`
 
-const DmRoom = ({dmRoom}) => {
-  console.log('dmRoom ==========', dmRoom)
+const DmRoom = ({dmRoom}) => {  
   const router = useRouter();
   const { id, convoPartnerId, newMessage } = dmRoom;
   const memberId = useSelector(state => state.auth.member.id);

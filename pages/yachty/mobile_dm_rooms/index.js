@@ -111,7 +111,7 @@ const mobileDmRooms = ({props}) => {
             scrollButtons="auto"
             aria-label="scrollable dm rooms"
           >
-            {dmRooms.map((room,  i) => <Tab tabIndex={i} icon={<DmRoom dmRoom={room} />} /> )}
+            {dmRooms.map((room,  i) => <Tab key={room.id} tabIndex={i} icon={<DmRoom dmRoom={room} />} /> )}
           </Tabs>
         </Grid>      
         <Grid  container justifyContent="flex-start" direction="row" wrap="nowrap" columns={2}>
