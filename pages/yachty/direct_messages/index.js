@@ -40,7 +40,7 @@ const directMessageFeed = () => {
             }}>
               {dmRooms.map((room,  i) => {
                 return (
-                  <ListItem onClick={() => handleClick(room.id)}>
+                  <ListItem key={room.id} onClick={() => handleClick(room.id)}>
                     <DmRoom dmRoom={room} key={room.id} />
                   </ListItem>
                 )
