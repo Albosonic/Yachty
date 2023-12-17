@@ -43,7 +43,8 @@ const DmRoom = ({dmRoom}) => {
   return (
     <>      
       <ListItem
-        onClick={handleClick}
+        onClick={handleClick}        
+        sx={{minWidth: 200}}
       >
         <ListItemAvatar>
           <Grid container justifyContent="space-around">

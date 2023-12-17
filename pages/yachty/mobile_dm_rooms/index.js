@@ -10,29 +10,37 @@ import LoadingYachty from "@/components/LoadingYachty";
 import DmRoom from "@/components/DmRoom";
 import { pollUserRooms } from "@/slices/actions/msgActions";
 import Msg from "@/components/Message";
+import DmMsgFeed from "@/components/DmMsgFeed";
 
 const mobileDmRooms = ({props}) => {
+  const router = useRouter();
+  const rid = router.query.rid;
   const dmRooms = useSelector(state => state.msgs.dmRooms);
   const profilePic = useSelector(state => state.auth.member.profilePic);
   const firstName = useSelector(state => state.auth.member.firstName);
-  console.log('dmRooms ======', dmRooms)
+
   return (
     <>
       <NavBar />
       <Stack>
-        <ListItem>
-          <ListItemAvatar sx={{padding: 5}}>
-            <Avatar sx={{width: 70, height: 70}} src={profilePic} />
-          </ListItemAvatar>
-          <ListItemText primary={firstName} />
-        </ListItem>
-        {dmRooms.map((room,  i) => {
-          return (
-            <ListItem sx={{padding: 2}}>
-              <DmRoom dmRoom={room} />
+        {rid && <DmMsgFeed />}
+        {!rid && 
+          <>
+            <ListItem>
+              <ListItemAvatar sx={{padding: 5}}>
+                <Avatar sx={{width: 70, height: 70}} src={profilePic} />
+              </ListItemAvatar>
+              <ListItemText primary={firstName} />
             </ListItem>
-          )
-        })}
+            {dmRooms.map((room,  i) => {
+              return (
+                <ListItem sx={{padding: 2}}>
+                  <DmRoom dmRoom={room} />
+                </ListItem>
+              )
+            })} 
+          </>
+        }        
       </Stack>
     </>
   )
