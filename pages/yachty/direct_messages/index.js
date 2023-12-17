@@ -1,11 +1,19 @@
 import { useSelector } from "react-redux";
-import { Grid, List, Stack, Typography } from "@mui/material";
+import { Grid, List, ListItem, Stack, Typography, useMediaQuery } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
+import { useRouter } from "next/router";
 
-const directMessageFeed = ({props}) => {  
+const directMessageFeed = () => {  
+  const router = useRouter();
   const dmRooms = useSelector(state => state.msgs.dmRooms);
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+
+  const handleClick = (id) => {
+    const pathSegment = moreThan600px ? 'direct_messages' : 'mobile_dm_rooms';    
+    router.replace({pathname: `/yachty/${pathSegment}`, query: {rid: id}})
+  }
 
   if (dmRooms.length === 0) {
     return (
@@ -30,7 +38,13 @@ const directMessageFeed = ({props}) => {
               width: "100%",
               minWidth: 200,
             }}>
-              {dmRooms.map((room,  i) => <DmRoom dmRoom={room} key={room.id} />)}
+              {dmRooms.map((room,  i) => {
+                return (
+                  <ListItem onClick={() => handleClick(room.id)}>
+                    <DmRoom dmRoom={room} key={room.id} />
+                  </ListItem>
+                )
+              })}
             </List>
           </Stack>
           <DmMsgFeed />
