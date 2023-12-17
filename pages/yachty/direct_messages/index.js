@@ -1,16 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Avatar, Button, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { Grid, List, Stack, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import LoadingYachty from "@/components/LoadingYachty";
 import DmRoom from "@/components/DmRoom";
-import { pollUserRooms } from "@/slices/actions/msgActions";
-import Msg from "@/components/Message";
 import DmMsgFeed from "@/components/DmMsgFeed";
 
 const directMessageFeed = ({props}) => {  
