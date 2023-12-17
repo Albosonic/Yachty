@@ -1,15 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Button, Container, Grid, Stack, Tabs, Tab, TextField, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
+import { Stack, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import NavBar from "@/components/NavBar";
-import LoadingYachty from "@/components/LoadingYachty";
 import DmRoom from "@/components/DmRoom";
-import { pollUserRooms } from "@/slices/actions/msgActions";
-import Msg from "@/components/Message";
 import DmMsgFeed from "@/components/DmMsgFeed";
 
 const mobileDmRooms = ({props}) => {
