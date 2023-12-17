@@ -1,21 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { Stack, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Stack, ListItem, ListItemAvatar, Avatar, ListItemText, Fab } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
 
-const mobileDmRooms = ({props}) => {
+const mobileDmRooms = () => {
   const router = useRouter();
   const rid = router.query.rid;
   const dmRooms = useSelector(state => state.msgs.dmRooms);
   const profilePic = useSelector(state => state.auth.member.profilePic);
-  const firstName = useSelector(state => state.auth.member.firstName);
+  const firstName = useSelector(state => state.auth.member.firstName);  
 
   return (
     <>
       <NavBar />
       <Stack>
+        <Fab size="small" onClick={() => router.replace({pathname: '/yachty/mobile_dm_rooms'})} variant="extended" sx={{ alignSelf: 'flex-start', margin: 3 }} color="primary">
+          <ArrowBackIcon /> Back
+        </Fab>
         {rid && <DmMsgFeed />}
         {!rid && 
           <>
