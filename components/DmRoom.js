@@ -46,8 +46,8 @@ const DmRoom = ({dmRoom}) => {
         onClick={handleClick}
       >
         <ListItemAvatar>
-          <Grid container>
-            <Avatar src={profilePic} />
+          <Grid container justifyContent="space-around">
+            <Avatar sx={{width: 60, height: 60}} src={profilePic} />
             {notify && 
             <CircleIcon
               color="error"
@@ -59,7 +59,7 @@ const DmRoom = ({dmRoom}) => {
             />}
           </Grid>
         </ListItemAvatar>
-        <ListItemText primary={firstName} />
+        <ListItemText sx={{marginLeft: 3}} primary={firstName} />
       </ListItem>              
     </>
   )
