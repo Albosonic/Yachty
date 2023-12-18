@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { GET_ALL_USER_ROOMS_BY_ID } from "@/lib/gqlQueries/dmgql";
-import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { GET_USERS_ROOM } from "@/lib/gqlQueries/dmgql";
+import { INSERT_ROOM } from "@/lib/gqlQueries/allMembersgql";
+import { useMutation } from "@apollo/client";
 import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import Paper from '@mui/material/Paper';
@@ -13,7 +13,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { ROOM_TYPES } from "@/slices/actions/authActions";
+import client from "@/lib/clients/apollo-client";
+import { pollUserRooms } from "@/slices/actions/msgActions";
 
 const cleanDialog = {
   open: false,
@@ -28,15 +29,15 @@ const cleanDialog = {
 }
 
 const AllMembersTable = ({ columns, data, totalAttendees }) => {  
+  const dispatch = useDispatch();
   const memberId = useSelector(state => state.auth.member.id);
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState({...cleanDialog});
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
 
-  const { data: userRmData, loading: userRmLoading, error: userRmError } = useQuery(GET_ALL_USER_ROOMS_BY_ID, {variables: {memberId}});
-  const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
-  const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
+  const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);  
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleClose = async () => {
@@ -49,34 +50,33 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
 
   const directMessage = async (recipientId) => {
     let roomId = null;
-    userRmData.user_rooms.forEach(room => { if (room.recipientId === recipientId) {
-      roomId = room.roomId
-    } });
-
-    if (roomId === null) {
-      const resp = await createDMRoom({variables: {name: `${recipientId}&${memberId}`, type: ROOM_TYPES.PRIVATE, group: `DM&${recipientId}&${memberId}`}});
-      roomId = resp.data.insert_room.returning[0].id;
-      await addUserRooms({
+    const queryResp = await client.query({
+      query: GET_USERS_ROOM,
+      fetchPolicy: 'no-cache',
+      variables: {
+        recipientId,
+        memberId,
+      }
+    })
+    const userRmData = queryResp?.data?.user_rooms;
+    if (userRmData.length === 0) {
+      const resp = await createDMRoom({
         variables: {
-          objects: [
-            {
-              memberId: memberId,
-              roomId: roomId,
-              participantId:`${memberId}${roomId}`,
-              recipientId: recipientId
-            },
-            {
-              memberId: recipientId,
-              roomId: roomId,
-              participantId: `${recipientId}${roomId}`,
-              recipientId: memberId,
-            }
-          ]}
+          memberId,
+          recipientId,
+          ycId,
+        }
       });
+      roomId = resp.data.insert_user_rooms_one.id;
+      dispatch(pollUserRooms());
+    } else {
+      roomId = queryResp?.data?.user_rooms[0].id;
     }
+
+    const pathSegment = 'mobile_dm_rooms'
     router.push({
-      pathname: '/yachty/direct_messages',
-      query: {rid: roomId},
+      pathname: `/yachty/${pathSegment}`,
+      query: { rid: roomId },
     })
   }
 
@@ -109,6 +109,10 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
   
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+
+
+
+
       {/* TODO: get this dialog into it's own container */}
       <Dialog
         fullWidth={true}
@@ -153,7 +157,8 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
             <DialogActions>
               <Button onClick={handleClose}>go back</Button>
             </DialogActions>
-            {targetMemberId !== memberId && <DialogActions>
+            {targetMemberId !== memberId && 
+            <DialogActions>
               <Button onClick={() => directMessage(targetMemberId)}>Send Message</Button>
             </DialogActions>}
             {/* <DialogActions>
@@ -162,6 +167,10 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
           </Grid>
         </DialogContent>
       </Dialog>
+
+
+
+
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

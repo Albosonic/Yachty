@@ -42,8 +42,6 @@ const Racing = () => {
     }
   });
   if (pastRraceEventsLoading || raceEventsLoading || racersLoading) return <LoadingYachty />;  
-  console.log('racerData ========', racersData)
-  
   const pastRaces = pastRaceEventData.races;
   const races = raceEventData.races;
   const racers = racersData.yc_members;

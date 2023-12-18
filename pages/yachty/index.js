@@ -13,6 +13,7 @@ import { getIsoDate } from '@/lib/utils/getters';
 import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
+import { pollUserRooms } from '@/slices/actions/msgActions';
 
 
 // TODO: protect routes like code Bigelow_Rules.
@@ -104,7 +105,6 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
   }
 }`;
 
-
 const Yachty = () => {  
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
@@ -121,8 +121,7 @@ const Yachty = () => {
   const name = useSelector(state => state?.auth?.member?.name);
   const [newUserOpen, setNewUserOpen] = useState(false)
     
-  useEffect(() => {
-    // TODO: probably needs more attention. 
+  useEffect(() => {    
     if (user?.email && !memberData?.id) {      
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
@@ -140,7 +139,8 @@ const Yachty = () => {
         dispatch(addMember(userData));
       }
       upsertUser();
-    }   
+    }
+    dispatch(pollUserRooms());
     setNewUserOpen(name.includes('.com'));
   }, [user, userIsCommodore, name])  
   
