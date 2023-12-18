@@ -4,11 +4,8 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { INSERT_MESSAGE, POLL_ALL_MESSAGES } from "@/lib/gqlQueries/dmgql";
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { Avatar, Button, Container, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, TextField, Typography } from "@mui/material";
-import NavBar from "@/components/NavBar";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { Button, Container, Grid, Stack, TextField } from "@mui/material";
 import LoadingYachty from "@/components/LoadingYachty";
-import DmRoom from "@/components/DmRoom";
 import { pollUserRooms } from "@/slices/actions/msgActions";
 import Msg from "@/components/Message";
 

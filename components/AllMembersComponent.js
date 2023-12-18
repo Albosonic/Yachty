@@ -72,9 +72,10 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
     } else {
       roomId = queryResp?.data?.user_rooms[0].id;
     }
-    
+
+    const pathSegment = 'mobile_dm_rooms'
     router.push({
-      pathname: '/yachty/direct_messages',
+      pathname: `/yachty/${pathSegment}`,
       query: { rid: roomId },
     })
   }
