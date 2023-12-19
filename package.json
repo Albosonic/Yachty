@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.8.0",
     "@apollo/client": "^3.8.6",
     "@auth0/nextjs-auth0": "^2.2.2",
     "@aws-sdk/client-s3": "^3.391.0",
