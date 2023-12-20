@@ -19,11 +19,17 @@ const CreateYCEvent = () => {
   const dispatch = useDispatch();  
   const router = useRouter();
   const ycId = useSelector((state) => state.auth.member.yachtClubByYachtClub.id);
-  const workingDate = useSelector(state => state.scheduler.workingRaceDate)
-  const [createYCEvent, { loading, data, error }] = useMutation(INSERT_YC_EVENT);
-  const [updateEvent, { loading: updateLoading, data: updateData, error: updateError }] = useMutation(UPDATE_YC_EVENT);
+  const workingDate = useSelector(state => state.scheduler.workingRaceDate);
+
   const [showSpecialHours, setShowSpecialHours] = useState(false);
   const [imageObj, setImageObj] = useState(null);
+  const [formErrors, setFormErrors] = useState({
+    startDateError: false,
+    endDateError: false,
+  });
+
+  const [createYCEvent, { loading, data, error }] = useMutation(INSERT_YC_EVENT);
+  const [updateEvent, { loading: updateLoading, data: updateData, error: updateError }] = useMutation(UPDATE_YC_EVENT);
   
   const [eventData, setEventData] = useState({
     entertainment: '',
