@@ -6,20 +6,9 @@ import { gql, useQuery } from "@apollo/client";
 import { Typography } from "@mui/material";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-// const action: EventActions = selectedEvent?.event_id ? "edit" : "create";
-// interface CalendarEvent {
-//   event_id: number | string;
-//   title: string;
-//   start: Date;
-//   end: Date;
-//   disabled?: boolean;
-//   color?: string;
-//   textColor?: string;
-//   editable?: boolean;
-//   deletable?: boolean;
-//   draggable?: boolean;
-//   allDay?: boolean;
-// }
+
+export const RACE = 'RACE';
+export const PARTY = 'PARTY';
 
 const GET_ALL_CALENDAR_EVENTS = gql`
 query getAllCalendarEvents($ycId: uuid!) {
@@ -41,7 +30,10 @@ query getAllCalendarEvents($ycId: uuid!) {
 const useAllCallendarEvents = () => {
   let events = [];
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);  
-  const {error, loading, data} = useQuery(GET_ALL_CALENDAR_EVENTS, {variables: { ycId }});
+  const {error, loading, data} = useQuery(GET_ALL_CALENDAR_EVENTS, {
+    fetchPolicy: 'no-cache',
+    variables: { ycId }
+  });
   if (loading) return {error, loading, data};
 
   data.races.forEach(race => {
@@ -51,11 +43,11 @@ const useAllCallendarEvents = () => {
     let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]} ${startTime}`
     let endFix = `${splitEndtDate[0]}/${splitEndtDate[1]}/${splitEndtDate[2]} ${endTime}`    
     let event = {
-      event_id: id,
+      event_id: `${id}/${RACE}`,
       title: raceName,
       start: new Date(startFix),
-      end: new Date(endFix),
-    }
+      end: new Date(endFix),            
+    }    
     events.push(event);
   });
   data.yc_events.forEach(ycEvent => {
@@ -63,14 +55,14 @@ const useAllCallendarEvents = () => {
     let splitStartDate = startDate.split('-');
     let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]}`  
     let event = {
-      event_id: id,
+      event_id: `${id}/${PARTY}`,
       title: eventName,
       start: new Date(startFix),
-      end: new Date(startFix),
+      end: new Date(startFix),      
     }    
     events.push(event);
+    console.log('events =========', events)
   })
-
   return {error, loading, events};
 }
 
@@ -85,7 +77,7 @@ const Calendar = () => {
       <Scheduler
         view="month"
         ref={calendarRef}
-        events={events}
+        events={events}        
         customEditor={(scheduler) => <CalendarDayClickMenu scheduler={scheduler} />}
       />
     </>

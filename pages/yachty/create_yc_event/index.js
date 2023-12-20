@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, Fab, Grid, Paper, Stack, TextField, Typography } from '@mui/material';
 import { DateTimeField } from '@mui/x-date-pickers/DateTimeField';
 import dayjs from 'dayjs';
 import { useMutation } from '@apollo/client';
@@ -9,11 +9,17 @@ import { useState } from 'react';
 import { YC_EVENT } from '@/slices/actions/authActions';
 import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import YcEvent from '@/components/YcEvent';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { workingRaceDateAct } from '@/slices/actions/schedulerActions';
 
-const CreateYCEvent = () => {
+const CreateYCEvent = () => {  
+  const dispatch = useDispatch();  
+  const router = useRouter();
   const ycId = useSelector((state) => state.auth.member.yachtClubByYachtClub.id);
+  const workingDate = useSelector(state => state.scheduler.workingRaceDate)
   const [createYCEvent, { loading, data, error }] = useMutation(INSERT_YC_EVENT);
   const [updateEvent, { loading: updateLoading, data: updateData, error: updateError }] = useMutation(UPDATE_YC_EVENT);
   const [showSpecialHours, setShowSpecialHours] = useState(false);
@@ -96,7 +102,12 @@ const CreateYCEvent = () => {
   const stackStyles = { paddingBottom: 1, textAlign: 'center', width: '100%', maxWidth: 700 };
   // const buttonText = showSpecialHours ? 'Never Mind' : 'Add Special Hours';
   const submittButtonText = newEventId ? 'Update Event' : 'Create Event';
-  
+
+  const goBack = () => {    
+    dispatch(workingRaceDateAct(null))
+    router.replace({pathname: '/yachty/calendar'})    
+  }
+  const defaultStartDate = workingDate ? dayjs(workingDate.start.value) : null;
   return (
     <>
     <NavBar />
@@ -105,6 +116,20 @@ const CreateYCEvent = () => {
       ) : (
       <Paper sx={{padding: 5, maxWidth: 700, height: '100%', margin: '0 auto', marginTop: 5, marginBottom: 5}} elevation={3}>
         <Stack sx={stackStyles} spacing={5} alignItems="center">
+        {workingDate && 
+          <Fab 
+            size="small" 
+            onClick={goBack} 
+            variant="extended" 
+            sx={{ 
+              alignSelf: 'flex-start', 
+              margin: 3
+            }} 
+            color="primary">
+            <ArrowBackIcon /> 
+            Back
+          </Fab>
+        }
           <Typography variant='h5'>Create Event</Typography>
             <TextField
               required
@@ -141,7 +166,11 @@ const CreateYCEvent = () => {
           <Grid container direction="row" spacing={2} justifyContent="space-around">
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>From</Typography>
-              <DateTimeField onBlur={(e) => setEventData({...eventData, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+              <DateTimeField 
+                onBlur={(e) => setEventData({...eventData, startDate: e.target.value})} 
+                label="Date Time"
+                defaultValue={defaultStartDate || dayjs(new Date())} 
+              />
             </Grid>
             <Grid textAlign="left">
               <Typography sx={{marginBottom: 2}}>To</Typography>
