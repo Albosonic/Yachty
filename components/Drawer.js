@@ -13,6 +13,7 @@ import BroadcastOnPersonalIcon from '@mui/icons-material/BroadcastOnPersonal';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleIcon from '@mui/icons-material/Circle';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Divider, Grid, useMediaQuery } from '@mui/material';
@@ -65,6 +66,15 @@ export default function AppDrawer({ open, toggleDrawer }) {
               <SailingIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Racing" />
+          </ListItemButton >
+        </ListItem>
+        <Divider />
+        <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => router.replace({pathname: '/yachty/calendar' })}>
+            <ListItemIcon>
+              <CalendarMonthIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="calendar" />
           </ListItemButton >
         </ListItem>
         <Divider />
