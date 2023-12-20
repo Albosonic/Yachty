@@ -29,7 +29,7 @@ query getAllCalendarEvents($ycId: uuid!) {
 
 const useAllCallendarEvents = () => {
   let events = [];
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);  
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const {error, loading, data} = useQuery(GET_ALL_CALENDAR_EVENTS, {
     fetchPolicy: 'no-cache',
     variables: { ycId }
@@ -39,29 +39,28 @@ const useAllCallendarEvents = () => {
   data.races.forEach(race => {
     const {id, raceName, startDate, startTime, endDate, endTime } = race;
     let splitStartDate = startDate.split('-');
-    let splitEndtDate = endDate.split('-');        
+    let splitEndtDate = endDate.split('-');
     let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]} ${startTime}`
-    let endFix = `${splitEndtDate[0]}/${splitEndtDate[1]}/${splitEndtDate[2]} ${endTime}`    
+    let endFix = `${splitEndtDate[0]}/${splitEndtDate[1]}/${splitEndtDate[2]} ${endTime}`
     let event = {
       event_id: `${id}/${RACE}`,
       title: raceName,
       start: new Date(startFix),
-      end: new Date(endFix),            
-    }    
+      end: new Date(endFix),
+    }
     events.push(event);
   });
   data.yc_events.forEach(ycEvent => {
     const {id, event_name: eventName, startDate} = ycEvent;
     let splitStartDate = startDate.split('-');
-    let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]}`  
+    let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]}`
     let event = {
       event_id: `${id}/${PARTY}`,
       title: eventName,
       start: new Date(startFix),
-      end: new Date(startFix),      
-    }    
+      end: new Date(startFix),
+    }
     events.push(event);
-    console.log('events =========', events)
   })
   return {error, loading, events};
 }
@@ -69,7 +68,7 @@ const useAllCallendarEvents = () => {
 const Calendar = () => {
   const calendarRef = useRef(null);
   const {error, loading, events} = useAllCallendarEvents();
-  if (loading) return <LoadingYachty />  
+  if (loading) return <LoadingYachty />
 
   return (
     <>
@@ -77,7 +76,7 @@ const Calendar = () => {
       <Scheduler
         view="month"
         ref={calendarRef}
-        events={events}        
+        events={events}
         customEditor={(scheduler) => <CalendarDayClickMenu scheduler={scheduler} />}
       />
     </>
