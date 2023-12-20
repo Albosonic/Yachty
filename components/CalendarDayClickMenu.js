@@ -14,8 +14,7 @@ import { useRouter } from 'next/router';
 const CalendarDayClickMenu = ({scheduler}) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [selectedIndex, setSelectedIndex] = useState(1);
-  console.log('scheduler =========', scheduler.edited.event_id)
+  const [selectedIndex, setSelectedIndex] = useState(1);  
 
   const handleListItemClick = (event, index) => {    
     setSelectedIndex(index);
