@@ -22,7 +22,8 @@ const CalendarDayClickMenu = ({scheduler}) => {
 
   const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state));
-    router.replace({pathname: '/yachty/create_races', query: {workingDate: true, eventId: scheduler.edited.event_id} })
+    const queryObj = scheduler?.edited ? { workingDate: true, eventId: scheduler?.edited?.event_id } : { workingDate: true }
+    router.replace({pathname: '/yachty/create_races', query: queryObj})
   }
 
   return (
