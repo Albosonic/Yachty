@@ -14,8 +14,7 @@ import { useRouter } from 'next/router';
 const CalendarDayClickMenu = ({scheduler}) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [selectedIndex, setSelectedIndex] = useState(1);
-  console.log('scheduler =========', scheduler.edited.event_id)
+  const [selectedIndex, setSelectedIndex] = useState(1);  
 
   const handleListItemClick = (event, index) => {    
     setSelectedIndex(index);
@@ -23,7 +22,8 @@ const CalendarDayClickMenu = ({scheduler}) => {
 
   const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state));
-    router.replace({pathname: '/yachty/create_races', query: {workingDate: true, eventId: scheduler.edited.event_id} })
+    const queryObj = scheduler?.edited ? { workingDate: true, eventId: scheduler?.edited?.event_id } : { workingDate: true }
+    router.replace({pathname: '/yachty/create_races', query: queryObj})
   }
 
   return (
