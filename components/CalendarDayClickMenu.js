@@ -15,14 +15,15 @@ const CalendarDayClickMenu = ({scheduler}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [selectedIndex, setSelectedIndex] = useState(1);
+  console.log('scheduler =========', scheduler.edited.event_id)
 
-  const handleListItemClick = (event, index) => {
+  const handleListItemClick = (event, index) => {    
     setSelectedIndex(index);
   };
 
   const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state));
-    router.replace({pathname: '/yachty/create_races', query: {workingDate: true} })
+    router.replace({pathname: '/yachty/create_races', query: {workingDate: true, eventId: scheduler.edited.event_id} })
   }
 
   return (

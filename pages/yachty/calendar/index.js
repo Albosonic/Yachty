@@ -77,8 +77,7 @@ const useAllCallendarEvents = () => {
 const Calendar = () => {
   const calendarRef = useRef(null);
   const {error, loading, events} = useAllCallendarEvents();
-  if (loading) return <LoadingYachty />
-  // console.log('events =============', events)
+  if (loading) return <LoadingYachty />  
 
   return (
     <>
