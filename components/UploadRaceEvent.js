@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import dayjs from "dayjs";
 import { DateTimeField } from "@mui/x-date-pickers";
 import EditIcon from '@mui/icons-material/Edit';
 import { useMutation, useQuery } from "@apollo/client";
-import { Alert, Button, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Button, Fab, Grid, IconButton, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { GET_RACE_COURSES_BY_YCID, GET_RACE_SERIES_BY_YC_ID, INSERT_RACE_ONE, INSERT_RACE_SERIES } from "@/lib/gqlQueries/racinggql";
 import { YC_EVENT } from "@/slices/actions/authActions";
@@ -13,15 +13,21 @@ import RaceCourseMenu from "./RaceCourseMenu";
 import RaceCourseDetails from "./RaceCourseDetails";
 import ImageUploadField from "./ImageUploadField";
 import { IMG_BUCKET, s3Client } from "@/lib/clients/s3-client";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import RaceEvent from "./RaceEvent";
 import RaceSeriesMenu from "./RaceSeriesMenu";
 import SelectedTimeRange from "./SelectedTimeRange";
 import RaceReleaseMenu from "./RaceReleaseMenu";
 import LoadingYachty from "./LoadingYachty";
+import { useRouter } from "next/router";
+import { workingRaceDateAct } from "@/slices/actions/schedulerActions";
 
 const UploadRaceEvent = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const clearRaceInfo = { courseId: null, raceName: '', raceCourseId: null, img: '', raceNameSet: false , startDate: null, endDate: null, review: false, newRaceId: null };
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const workingDate = useSelector(state => state.scheduler.workingRaceDate)
   const [course, setCourse] = useState(null);
   const [series, setSeries] = useState(null);
   const [raceInfo, setRaceInfo] = useState(clearRaceInfo);
@@ -117,9 +123,18 @@ const UploadRaceEvent = () => {
     setFormErrors({...formErrors, releaseFormError: false});
   }
 
+  const goBack = () => {
+    if (workingDate) {
+      dispatch(workingRaceDateAct(null))
+      router.replace({pathname: '/yachty/calendar'})
+    } else {
+      router.back();
+    }
+  }
+
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
   const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
-
+  const defaultStartDate = workingDate ? dayjs(workingDate.start.value) : null;
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
@@ -132,9 +147,21 @@ const UploadRaceEvent = () => {
         overflow: "hidden",
         overflowY: "scroll",
         height: 600,
-        margin: 5
+        padding: 2        
       }}
     >
+      <Fab 
+        size="small" 
+        onClick={goBack} 
+        variant="extended" 
+        sx={{ 
+          alignSelf: 'flex-start', 
+          margin: 3
+        }} 
+        color="primary">
+        <ArrowBackIcon /> 
+        Back
+      </Fab>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={snackBarClose} severity="success" sx={{ width: '100%' }}>
           Success!
@@ -212,10 +239,20 @@ const UploadRaceEvent = () => {
       {showDatePickers &&
         <>
           <Typography variant="subtitle1" >From</Typography>
-          <DateTimeField required onBlur={(e) => setRaceInfo({...raceInfo, startDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+          <DateTimeField 
+            required 
+            onBlur={(e) => setRaceInfo({...raceInfo, startDate: e.target.value})} 
+            label="Date Time" 
+            defaultValue={defaultStartDate || dayjs(new Date())} 
+          />
           {startDateError && <Typography color="error">please choose start date</Typography>}
           <Typography variant="subtitle1" >To</Typography>
-          <DateTimeField required onBlur={(e) => setRaceInfo({...raceInfo, endDate: e.target.value})} label="Date Time" defaultValue={dayjs(new Date())} />
+          <DateTimeField 
+            required 
+            onBlur={(e) => setRaceInfo({...raceInfo, endDate: e.target.value})} 
+            label="Date Time" 
+            defaultValue={defaultStartDate || dayjs(new Date())} 
+          />
           {endDateError && <Typography color="error">please choose end date</Typography>}
         </>
       }
