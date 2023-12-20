@@ -135,6 +135,7 @@ const UploadRaceEvent = () => {
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
   const showDatePickers = startDate === null || endDate === null || startDateError || endDateError ? true : false;
   const defaultStartDate = workingDate ? dayjs(workingDate.start.value) : null;
+
   return (
     review ? (
       <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />

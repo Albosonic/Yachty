@@ -20,14 +20,13 @@ const CalendarDayClickMenu = ({scheduler}) => {
     setSelectedIndex(index);
   };
 
-  const handleCreateRace = (event) => {
-    
+  const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state));
     router.replace({pathname: '/yachty/create_races', query: {workingDate: true} })
   }
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>      
+    <Box sx={{ width: '100%', justifyContent: "center", maxWidth: 360, bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="secondary mailbox folder">
         <ListItemButton
           selected={selectedIndex === 2}

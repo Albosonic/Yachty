@@ -9,8 +9,7 @@ export default function schedulerReducer(state = initialState, action) {
   const {payload, type} = action;
   
   switch (type) {
-    case WORKING_RACE_DATE_ACT: {
-      console.log('payload ==========', payload)
+    case WORKING_RACE_DATE_ACT: {      
       return {
         ...state,
         workingRaceDate: payload
