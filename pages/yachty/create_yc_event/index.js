@@ -262,12 +262,13 @@ const CreateYCEvent = () => {
             </Grid>
           </Grid>} */}
           <TextField
-            onChange={(e) => setEventData({...eventData, specialNotes: e.target.value })}
+            fullWidth
+            multiline            
             variant="standard"
             label="Special Notes"
-            multiline
-            maxRows={4}
-            sx={{width: '100%'}}
+            value={eventData.specialNotes}
+            sx={{ maxWidth: 500 }}
+            onChange={(e) => setEventData({...eventData, specialNotes: e.target.value })}
           />
           <Button color='success' onClick={handleSubmit}>{ submittButtonText }</Button>
         </Stack>
