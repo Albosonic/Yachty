@@ -17,13 +17,15 @@ const CalendarDayClickMenu = ({ scheduler }) => {
   useEffect(() => {    
     const eventString = scheduler?.edited?.event_id
     if (eventString) {
-      const eventSplitArr = eventString.split('/');      
+      const eventSplitArr = eventString.split('/');
+      const eventType = eventSplitArr[1];
+      const eventId = eventSplitArr[0];
       dispatch(workingRaceDateAct(scheduler.state));
-      if (eventSplitArr[1] === RACE) {        
-        router.replace({pathname: '/yachty/create_races', query: { workingDate: true, raceId: scheduler?.edited?.event_id }});
+      if (eventType === RACE) {        
+        router.replace({pathname: '/yachty/create_races', query: { workingDate: true, raceId: eventId }});
       }
-      if (eventSplitArr[1] === PARTY) {
-        router.replace({pathname: '/yachty/create_yc_event', query: { workingDate: true, eventId: scheduler?.edited?.event_id }});
+      if (eventType === PARTY) {
+        router.replace({pathname: '/yachty/create_yc_event', query: { workingDate: true, eventId: eventId }});
       }
     }
   }, [scheduler?.edited?.event_id])
