@@ -101,8 +101,7 @@ const CreateEventTicket = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}              
-              onChange={(e) => {
-                console.log('e.target.value :', e.target.value)
+              onChange={(e) => {                
                 setAmount(e.target.value)
               }}
             />            
