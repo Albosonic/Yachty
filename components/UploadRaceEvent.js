@@ -123,13 +123,9 @@ const UploadRaceEvent = () => {
     setFormErrors({...formErrors, releaseFormError: false});
   }
 
-  const goBack = () => {
-    if (workingDate) {
-      dispatch(workingRaceDateAct(null))
-      router.replace({pathname: '/yachty/calendar'})
-    } else {
-      router.back();
-    }
+  const goBack = () => {    
+    dispatch(workingRaceDateAct(null))
+    router.replace({pathname: '/yachty/calendar'})    
   }
 
   const {chooseCourseError, raceTitleError, seriesError, startDateError, endDateError} = formErrors;
@@ -151,18 +147,20 @@ const UploadRaceEvent = () => {
         padding: 2        
       }}
     >
-      <Fab 
-        size="small" 
-        onClick={goBack} 
-        variant="extended" 
-        sx={{ 
-          alignSelf: 'flex-start', 
-          margin: 3
-        }} 
-        color="primary">
-        <ArrowBackIcon /> 
-        Back
-      </Fab>
+      {workingDate && 
+        <Fab 
+          size="small" 
+          onClick={goBack} 
+          variant="extended" 
+          sx={{ 
+            alignSelf: 'flex-start', 
+            margin: 3
+          }} 
+          color="primary">
+          <ArrowBackIcon /> 
+          Back
+        </Fab>
+      }
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={snackBarClose} severity="success" sx={{ width: '100%' }}>
           Success!
