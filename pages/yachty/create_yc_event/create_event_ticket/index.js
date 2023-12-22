@@ -17,11 +17,12 @@ const CreateEventTicket = (props) => {
   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id}});
   const [createYachtClubEventTicket, { loading: ticketLoading, data: ticketData, error: ticketError }] = useMutation(UPSERT_EVENT_TICKET);
   const [amount, setAmount] = useState(null);
+  const [dinnerAmount, setDinnerAmount] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const moreThan600px = useMediaQuery('(min-width:600px)');
   if (loading) return <LoadingYachty />;
-  
+
   const {
     date,
     entertainment,
@@ -35,19 +36,20 @@ const CreateEventTicket = (props) => {
     specialNotes,
   } = data.yc_events[0];
 
-  const createYCEventTicket = async () => {    
+  const createYCEventTicket = async () => {
     let variables = {
+      dinnerCost: dinnerAmount,
       cost: amount,
       eventId,
       ycId,
     }
     setShowSpinner(true);
-    await createYachtClubEventTicket({ variables });    
+    await createYachtClubEventTicket({ variables });
     setShowSuccess(true);
     setShowSpinner(false);
   }
 
-  const handleClose = () => router.push({ pathname: '/yachty', query: { ycId } }); 
+  const handleClose = () => router.push({ pathname: '/yachty', query: { ycId } });
   const contentDirection = moreThan600px ? 'row' : 'column';
   return (
     <>
@@ -63,13 +65,13 @@ const CreateEventTicket = (props) => {
         sx={{
           display: 'flex',
           flexDirection: contentDirection,
-          maxWidth: 650,          
+          maxWidth: 650,
           // margin: '0 auto',
           marginBottom: 5
         }}
       >
         <CardMedia
-          component="img"        
+          component="img"
           image={image}
           alt="Event Image"
         />
@@ -83,31 +85,48 @@ const CreateEventTicket = (props) => {
             {location && <Typography>where: {location}</Typography>}
             {specialNotes && <Typography>{specialNotes}</Typography>}
             {showSpinner && <CircularProgress />}
-          </CardContent>          
+          </CardContent>
         </Box>
         <Stack display="flex" alignItems="center" sx={{minWidth: 100, margin: 1}}>
           <Fab disabled={showSpinner} onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
             <AddIcon />
           </Fab>
-          <Grid container flexWrap="nowrap" sx={{marginTop: 'auto'}} >
+          <Grid container flexWrap="nowrap" sx={{margin: 2 }} >
             <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: 24}} />
             <TextField
-              multiline              
+              multiline
               id="ticket-cost"
-              label="Cost"
+              label="Event"
               type="number"
               variant="standard"
               sx={{maxWidth:70}}
               InputLabelProps={{
                 shrink: true,
-              }}              
-              onChange={(e) => {                
+              }}
+              onChange={(e) => {
                 setAmount(e.target.value)
               }}
-            />            
+            />
+          </Grid>
+          <Grid container flexWrap="nowrap" sx={{margin: 2 }} >
+            <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: 24}} />
+            <TextField
+              multiline
+              id="ticket-cost"
+              label="Dinner"
+              type="number"
+              variant="standard"
+              sx={{maxWidth:70}}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e) => {
+                setDinnerAmount(e.target.value)
+              }}
+            />
           </Grid>
         </Stack>
-      </Card>      
+      </Card>
     </Stack>
     </>
   );
