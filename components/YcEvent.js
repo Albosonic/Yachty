@@ -29,7 +29,7 @@ const YcEvent = ({eventIdProp, review, edit}) => {
   const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, startDate } = data.yc_events[0];
   const posterWidth = moreThan600px ? 550 : 300;
   return (
-    <Stack alignItems="center" margin={10}>
+    <Stack alignItems="center">
       <Card sx={{ width: posterWidth }}>
         <CardHeader
           avatar={<Avatar src={burgee} aria-label="burgee" />}          
@@ -42,7 +42,7 @@ const YcEvent = ({eventIdProp, review, edit}) => {
           alt="Event Image"
         />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">{`Featuring: ${entertainment}`}</Typography>
+          <Typography sx={{margin: 1}} variant="body2" color="text.secondary">{`Featuring: ${entertainment}`}</Typography>
           <Typography sx={{margin: 1}} variant="body2" color="text.secondary">{specialNotes}</Typography>
         </CardContent>
         <CardActions sx={{justifyContent: 'space-between'}}>

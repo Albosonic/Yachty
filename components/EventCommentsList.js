@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useEventCommentsFacade } from "./componentHooks/useEventCommentsFacade";
 import RecommendIcon from '@mui/icons-material/Recommend';
 import { INSERT_EVENT_COMMENT } from "@/lib/gqlQueries/ycFeedgql";
-import {  Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
+import {  Avatar, Button, CircularProgress, Grid, IconButton, Paper, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
 import LoadingYachty from "./LoadingYachty";
@@ -70,13 +70,14 @@ const EventCommentsList = ({ eventId }) => {
           author,
           commentId
         } = commentFacade;
-
+        console.log('autho ========>', author)
         const childComments = commentFacadeArrays[commentId] ? commentFacadeArrays[commentId] : null;
 
         return (
           <Stack key={comment + i}>
             <Grid container justifyContent="space-between">
               <Stack alignItems="flex-start">
+                <Avatar src={authorPic} sx={{fontSize: 10}} />
                 <Typography variant="subtitle2">{comment}</Typography>
                 <Button
                   sx={{

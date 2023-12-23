@@ -1,14 +1,12 @@
-import NavBar from '@/components/NavBar';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
-import CheckIcon from '@mui/icons-material/Check';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Fab from '@mui/material/Fab';
 import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
-import {  useEffect, useState } from 'react';
+import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import EventPaymentDialog from './EventPaymentDialog';
 import LoadingYachty from './LoadingYachty';
 
@@ -27,6 +25,7 @@ const INSERT_PURCHASED_TICKETS = gql`
 const GET_PURCHASED_EVENT_TICKETS_BY_IDS = gql`
   query getPurchasedEventTicketsById($eventId: uuid!, $memberId: uuid!) {
     yc_event_purchased_tickets(where: {eventId: {_eq: $eventId}, memberId: {_eq: $memberId}}) {
+    withDinner
     paid
     id
   }
@@ -37,20 +36,23 @@ const GET_EVENT_TICKET_FOR_PURCHASE = gql`
   yc_event_tickets_for_purchase(where: {eventId: {_eq: $eventId}}) {
     id
     cost
+    dinnerCost
   }
 }
 `
 
-const EventTicketForPurchase = ({ eventData, linkToRace }) => {  
-  const memberId = useSelector(state => state.auth.member.id );  
+const EventTicketForPurchase = ({ eventData, linkToRace }) => {
+  const memberId = useSelector(state => state.auth.member.id );
   const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
+  const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
   const [eventLinked, setEventLinked] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [noDinnerPurchasedTicket, setNodinnerPurchasedTicket] = useState([]);
   const [puchasedTicketsInfo, setPurchasedTicketInfo] = useState({totalTickets: 0, unpaid: 0});
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  
+
   const {
     date,
     entertainment,
@@ -63,18 +65,21 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     id: eventId,
   } = eventData;
 
-  const {error, loading, data, refetch} = useQuery(GET_PURCHASED_EVENT_TICKETS_BY_IDS, { variables: {eventId, memberId}});  
+  const {error, loading, data, refetch} = useQuery(GET_PURCHASED_EVENT_TICKETS_BY_IDS, { variables: {eventId, memberId}});
   const {error: forPurchaseError, loading: forPurchaseLoading, data: forPurchaseData} = useQuery(GET_EVENT_TICKET_FOR_PURCHASE, { variables: {eventId}});
   const purchasedTicketData = data?.yc_event_purchased_tickets;
-  
+
   useEffect(() => {
     let unpaid = 0;
     let totalTickets = 0;
+    let noDinner = [];
     if (loading) return;
-    purchasedTicketData.forEach(ticket => {
+    purchasedTicketData.forEach(ticket => {      
       totalTickets++;
       if (ticket.paid === false) unpaid++;
+      if (ticket.withDinner) noDinner.push(ticket);
     });
+    setNodinnerPurchasedTicket([...noDinner])
     setPurchasedTicketInfo({totalTickets, unpaid})
   }, [purchasedTicketData]);
 
@@ -83,8 +88,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   // const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
+  const dinnerCost = eventForPurchase?.dinnerCost;  
   const ticketId = eventForPurchase?.id;
-  const reserveTicket = async () => {
+
+  const reserveTickets = async () => {
     // TODO: make this a batch update
     if (ticketCount === 0) return;
     let noTickets = ticketCount;
@@ -110,12 +117,9 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const { totalTickets, unpaid } = puchasedTicketsInfo
 
   const cardDirection = moreThan600px ? 'row' : 'column';
-  const cardWidthMax = moreThan600px ? 200 : 700;
-  const cardWidthMin = moreThan600px ? 700 : '100%';
-  const cardMediaWidth = moreThan600px ? 250 : 310;
-  
+
   return (
-    <Stack>      
+    <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!
@@ -127,13 +131,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         sx={{
           display: 'flex',
           flexDirection: cardDirection,
-          maxWidth: cardWidthMax,
-          minWidth: cardWidthMin,
         }}
       >
         <CardMedia
           component="img"
-          sx={{ minWidth: cardMediaWidth }}
           image={image}
           alt="Event Image"
         />
@@ -146,12 +147,89 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             {date && <Typography>date: {date}</Typography>}
             {location && <Typography>location: {location}</Typography>}
             {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
+
             {!linkToRace &&
-            <Grid container display="flex" direction="row">
-              <Typography sx={{lineHeight: 2.5}} variant='body1'>How Many Tickets: {ticketCount}</Typography>
-              <Button onClick={reserveTicket}>Reserve</Button>
+            <Grid container justifyContent="space-between">
+              {/* <Button onClick={reserveTicket}>Reserve</Button> */}
+
+              <Typography sx={{lineHeight: 2.5}} variant='body1'>Event Tickets:</Typography>
+              <Grid 
+                container
+                flexWrap="nowrap"
+                justifyContent="center"
+                sx={{                        
+                  maxWidth: 70,
+                  marginLeft: -5,                        
+                }} >
+                <AttachMoneyIcon
+                  color='action'
+                  sx={{
+                    color: 'black',
+                    fontSize: 25,
+                    marginTop: 1,
+                    lineHeight: 2.5
+                  }} 
+                />
+                <Typography                           
+                  sx={{
+                    lineHeight: 1.75,                             
+                    fontSize: 25,                            
+                  }}>
+                  {cost}
+                </Typography>
+              </Grid>
+                <Grid>
+                <IconButton onClick={() => setTicketCount(ticketCount - 1)}>
+                  <RemoveIcon color='error' />
+                </IconButton>
+                <IconButton onClick={() => setTicketCount(ticketCount + 1)}>
+                  <ControlPointOutlinedIcon color='success' />
+                </IconButton>
+              </Grid>
             </Grid>}
-            <Typography variant='body1'>Already reserved: {totalTickets}</Typography>
+
+            {!linkToRace &&
+              <Grid container>
+                <Grid container minWidth={100} justifyContent="space-between" flexWrap="nowrap">
+                  <Typography sx={{lineHeight: 2.5}}>Dinner Tickets:</Typography>
+                    <Grid 
+                      container
+                      flexWrap="nowrap"
+                      justifyContent="center"
+                      sx={{                        
+                        maxWidth: 70,
+                        marginLeft: -5,                        
+                      }} >
+                      <AttachMoneyIcon
+                        color='action'
+                        sx={{
+                          color: 'black',
+                          fontSize: 25,
+                          marginTop: 1,
+                          lineHeight: 2.5
+                        }} />
+                        <Typography                           
+                          sx={{
+                            lineHeight: 1.75,                             
+                            fontSize: 25,                            
+                          }}>
+                          {dinnerCost}
+                        </Typography>
+                    </Grid>
+                  <Grid>
+                    <IconButton onClick={() => setDinnerTicketCount(dinnerTicketCount - 1)}>
+                      <RemoveIcon color='error' />
+                    </IconButton>
+                    <IconButton onClick={() => setDinnerTicketCount(dinnerTicketCount + 1)}>
+                      <ControlPointOutlinedIcon color='success' />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </Grid>
+            }
+
+            <Typography variant='body1'>Total for Event: {totalTickets + ticketCount}</Typography>
+            <Typography variant='body1'>Total fro Dinner: {dinnerTicketCount}</Typography>
             <Grid container>
               <Typography sx={{lineHeight: 2.5}} variant='body1'>unpaid: {unpaid}</Typography>
               <Button onClick={() => setOpenDialog(true)}>
@@ -171,25 +249,22 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             <Grid container flexWrap="nowrap" sx={{bottom: 0, width: '100%', height: '100%', margin: '0 auto' }}>
               <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', color: 'black', fontSize: 40, marginBottom: 1}} />
               <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, marginRight: 1}}>{ cost }</Typography>
-
-
-              
-            </Grid>            
+            </Grid>
           </Box>
         ) : (
           <Stack alignItems="center" sx={{'& > :not(style)': { m: 1 } }}>
             <Stack spacing={2} alignItems="center">
-              <Fab onClick={() => setTicketCount(ticketCount + 1)} size="medium" color='success'  aria-label="add">
+              <Fab 
+                variant="extended" 
+                onClick={reserveTickets} 
+                size="medium" 
+                color='success' 
+                aria-label="add"
+              >
                 <AddIcon />
+                confirm
               </Fab>
-              <Fab onClick={() => setTicketCount(ticketCount - 1)} size='small'>
-                <RemoveIcon color="error" />
-              </Fab>
-            </Stack>
-            <Grid container flexWrap="nowrap" sx={{ width: '100%', height: '100%' }}>
-              <AttachMoneyIcon color='action' sx={{ alignSelf: 'flex-end', lineHeight: 2, color: 'black', fontSize: 35, marginTop: 1}} />
-              <Typography sx={{alignSelf: 'flex-end', color: 'black', fontSize: 35, lineHeight: 1}}>{ cost }</Typography>
-            </Grid>            
+            </Stack>            
           </Stack>
         )}
       </Card>

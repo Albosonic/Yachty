@@ -13,6 +13,7 @@ const YcEventTicketForPurchase = () => {
   const eventId = router.query.eventId;
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
   const {loading, data, error } = useQuery(EVENT_TICKET_FOR_PURCHASE, {variables:{eventId}, fetchPolicy: "no-cache" });
+  console.log('data ============', data)
   if (loading || data === undefined) return <LoadingYachty />
   const eventData = data.yc_events[0];
   return (
