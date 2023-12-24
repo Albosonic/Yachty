@@ -70,13 +70,17 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const memberId = useSelector(state => state.auth.member.id );
   const [insertTickets, {loading: insertLoading}] = useMutation(INSERT_PURCHASED_TICKETS);
   const [updatePurchasedTicket, {loading: updateLoading}] = useMutation(UPDATE_PURCHASED_TICKET);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [formErrors, setFormErrors] = useState({
+    tooManyDinTicketsErr: false,
+  })
   const [ticketCount, setTicketCount] = useState(0);
-  const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
-  const [eventLinked, setEventLinked] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [eventLinked, setEventLinked] = useState(false);
+  const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
   const [noDinnerPurchasedTicket, setNodinnerPurchasedTicket] = useState([]);
   const [puchasedTicketsInfo, setPurchasedTicketInfo] = useState({totalTickets: 0, unpaid: 0});
+
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const {
@@ -98,20 +102,21 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   useEffect(() => {
     let unpaid = 0;
     let totalTickets = 0;
-    let noDinner = [];    
+    let totalDinners = 0;
+    let noDinner = [];
     if (loading) return;
     purchasedTicketData.forEach(ticket => {
       totalTickets++;
+      if (ticket.withDinner) totalDinners++;
       if (ticket.paid === false) unpaid++;
       if (ticket.withDinner === false) noDinner.push(ticket);
     });
     setNodinnerPurchasedTicket([...noDinner])
-    setPurchasedTicketInfo({totalTickets, unpaid})
-  }, [purchasedTicketData]);
+    setPurchasedTicketInfo({totalTickets, totalDinners, unpaid})
+  }, [purchasedTicketData, data]);
 
   if (loading) return <LoadingYachty isRoot={false} />;
 
-  // const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
   const dinnerCost = eventForPurchase?.dinnerCost;
@@ -134,18 +139,15 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       numTickets--;
       numDinnerTickets--;
     }
-    
     noDinnerPurchasedTicket.forEach(async noDinTicket => {
-      console.log('noDinTik =======', noDinTicket.id);
       const ticketId = noDinTicket.id;
       await updatePurchasedTicket({
         variables: {
           ticketId,
           withDinner: true,
         }
-      })      
+      })
     })
-    
     setTicketCount(0);
     setDinnerTicketCount(0);
     setShowSuccess(true);
@@ -167,8 +169,22 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     setEventLinked(true);
   }
 
-  const { totalTickets, unpaid } = puchasedTicketsInfo
+  const handleIncrementDinnerCount = () => {
+    const allTickets = totalTickets + ticketCount;
+    if (dinnerTicketCount === allTickets) {
+      return setFormErrors({...formErrors, tooManyDinTicketsErr: true})
+    }
+    setDinnerTicketCount(dinnerTicketCount + 1);
+  }
 
+  const handleDecrementDinnerCount = () => {
+    if (dinnerTicketCount === 0) {
+      return setFormErrors({...formErrors, zeroDinCountCountError: true})
+    }
+    setDinnerTicketCount(dinnerTicketCount - 1);
+  }
+
+  const { totalTickets, totalDinners, unpaid } = puchasedTicketsInfo
   const cardDirection = moreThan600px ? 'row' : 'column';
 
   return (
@@ -270,19 +286,18 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                         </Typography>
                     </Grid>
                   <Grid>
-                    <IconButton onClick={() => setDinnerTicketCount(dinnerTicketCount - 1)}>
+                    <IconButton onClick={handleDecrementDinnerCount}>
                       <RemoveIcon color='error' />
                     </IconButton>
-                    <IconButton onClick={() => setDinnerTicketCount(dinnerTicketCount + 1)}>
+                    <IconButton onClick={handleIncrementDinnerCount}>
                       <ControlPointOutlinedIcon color='success' />
                     </IconButton>
                   </Grid>
                 </Grid>
               </Grid>
             }
-
             <Typography variant='body1'>Total for Event: {totalTickets + ticketCount}</Typography>
-            <Typography variant='body1'>Total fro Dinner: {dinnerTicketCount}</Typography>
+            <Typography variant='body1'>Total for Dinner: {totalDinners + dinnerTicketCount}</Typography>
             <Grid container>
               <Typography sx={{lineHeight: 2.5}} variant='body1'>unpaid: {unpaid}</Typography>
               <Button onClick={() => setOpenDialog(true)}>
