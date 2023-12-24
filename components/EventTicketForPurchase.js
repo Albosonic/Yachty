@@ -11,14 +11,40 @@ import EventPaymentDialog from './EventPaymentDialog';
 import LoadingYachty from './LoadingYachty';
 
 const INSERT_PURCHASED_TICKETS = gql`
-  mutation insertPurchasedTickets($memberId: uuid!, $ticketForPurchaseId: uuid!, $eventId: uuid!) {
+  mutation insertPurchasedTickets(
+    $memberId: uuid!,
+    $ticketForPurchaseId: uuid!,
+    $eventId: uuid!,
+    $withDinner: Boolean
+  ) {
   insert_yc_event_purchased_tickets(
-  objects: [{memberId: $memberId, ticketForPurchaseId: $ticketForPurchaseId, eventId: $eventId}]) {
+  objects: [{
+    memberId: $memberId,
+    ticketForPurchaseId: $ticketForPurchaseId,
+    withDinner: $withDinner,
+    eventId: $eventId,
+  }]) {
     returning {
       memberId
       ticketForPurchaseId,
-      eventId
+      withDinner,
+      eventId,
     }
+  }
+}`;
+
+const UPDATE_PURCHASED_TICKET = gql`
+  mutation updatePurchasedTicket($ticketId: uuid!, $withDinner: Boolean!) {
+  update_yc_event_purchased_tickets(
+    where: {
+      id: {
+        _eq: $ticketId
+      }},
+      _set: {
+        withDinner: $withDinner
+      }
+    ) {
+    affected_rows
   }
 }`;
 
@@ -38,12 +64,12 @@ const GET_EVENT_TICKET_FOR_PURCHASE = gql`
     cost
     dinnerCost
   }
-}
-`
+}`;
 
 const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const memberId = useSelector(state => state.auth.member.id );
-  const [insertTickets, {error: insertError, loading: insertLoading, data: insertData}] = useMutation(INSERT_PURCHASED_TICKETS)
+  const [insertTickets, {loading: insertLoading}] = useMutation(INSERT_PURCHASED_TICKETS);
+  const [updatePurchasedTicket, {loading: updateLoading}] = useMutation(UPDATE_PURCHASED_TICKET);
   const [showSuccess, setShowSuccess] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
   const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
@@ -72,12 +98,12 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   useEffect(() => {
     let unpaid = 0;
     let totalTickets = 0;
-    let noDinner = [];
+    let noDinner = [];    
     if (loading) return;
-    purchasedTicketData.forEach(ticket => {      
+    purchasedTicketData.forEach(ticket => {
       totalTickets++;
       if (ticket.paid === false) unpaid++;
-      if (ticket.withDinner) noDinner.push(ticket);
+      if (ticket.withDinner === false) noDinner.push(ticket);
     });
     setNodinnerPurchasedTicket([...noDinner])
     setPurchasedTicketInfo({totalTickets, unpaid})
@@ -88,20 +114,47 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   // const {cost, id: ticketId} = forPurchaseData?.yc_event_tickets_for_purchase[0]
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
-  const dinnerCost = eventForPurchase?.dinnerCost;  
+  const dinnerCost = eventForPurchase?.dinnerCost;
   const ticketId = eventForPurchase?.id;
 
   const reserveTickets = async () => {
-    // TODO: make this a batch update
-    if (ticketCount === 0) return;
-    let noTickets = ticketCount;
-    while(noTickets > 0) {
-      await insertTickets({variables: { memberId: memberId, ticketForPurchaseId: ticketId, eventId: eventId }});
-      noTickets--;
+    if (ticketCount === 0 && dinnerTicketCount === 0) return;
+    let numTickets = ticketCount;
+    let numDinnerTickets = dinnerTicketCount;
+    while (numTickets > 0) {
+      const withDinner = (numDinnerTickets > 0);
+      await insertTickets({
+        variables: {
+          memberId,
+          eventId,
+          withDinner,
+          ticketForPurchaseId: ticketId,
+        }
+      });
+      numTickets--;
+      numDinnerTickets--;
     }
+    
+    noDinnerPurchasedTicket.forEach(async noDinTicket => {
+      console.log('noDinTik =======', noDinTicket.id);
+      const ticketId = noDinTicket.id;
+      await updatePurchasedTicket({
+        variables: {
+          ticketId,
+          withDinner: true,
+        }
+      })      
+    })
+    
     setTicketCount(0);
+    setDinnerTicketCount(0);
     setShowSuccess(true);
-    refetch({ variables: {eventId, memberId}})
+    refetch({
+      variables: {
+        eventId,
+        memberId
+      }
+    })
   }
 
   const handleClose = () => {
@@ -153,13 +206,13 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
               {/* <Button onClick={reserveTicket}>Reserve</Button> */}
 
               <Typography sx={{lineHeight: 2.5}} variant='body1'>Event Tickets:</Typography>
-              <Grid 
+              <Grid
                 container
                 flexWrap="nowrap"
                 justifyContent="center"
-                sx={{                        
+                sx={{
                   maxWidth: 70,
-                  marginLeft: -5,                        
+                  marginLeft: -5,
                 }} >
                 <AttachMoneyIcon
                   color='action'
@@ -168,12 +221,12 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                     fontSize: 25,
                     marginTop: 1,
                     lineHeight: 2.5
-                  }} 
+                  }}
                 />
-                <Typography                           
+                <Typography
                   sx={{
-                    lineHeight: 1.75,                             
-                    fontSize: 25,                            
+                    lineHeight: 1.75,
+                    fontSize: 25,
                   }}>
                   {cost}
                 </Typography>
@@ -192,13 +245,13 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
               <Grid container>
                 <Grid container minWidth={100} justifyContent="space-between" flexWrap="nowrap">
                   <Typography sx={{lineHeight: 2.5}}>Dinner Tickets:</Typography>
-                    <Grid 
+                    <Grid
                       container
                       flexWrap="nowrap"
                       justifyContent="center"
-                      sx={{                        
+                      sx={{
                         maxWidth: 70,
-                        marginLeft: -5,                        
+                        marginLeft: -5,
                       }} >
                       <AttachMoneyIcon
                         color='action'
@@ -208,10 +261,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                           marginTop: 1,
                           lineHeight: 2.5
                         }} />
-                        <Typography                           
+                        <Typography
                           sx={{
-                            lineHeight: 1.75,                             
-                            fontSize: 25,                            
+                            lineHeight: 1.75,
+                            fontSize: 25,
                           }}>
                           {dinnerCost}
                         </Typography>
@@ -254,17 +307,17 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         ) : (
           <Stack alignItems="center" sx={{'& > :not(style)': { m: 1 } }}>
             <Stack spacing={2} alignItems="center">
-              <Fab 
-                variant="extended" 
-                onClick={reserveTickets} 
-                size="medium" 
-                color='success' 
+              <Fab
+                variant="extended"
+                onClick={reserveTickets}
+                size="medium"
+                color='success'
                 aria-label="add"
               >
                 <AddIcon />
                 confirm
               </Fab>
-            </Stack>            
+            </Stack>
           </Stack>
         )}
       </Card>
