@@ -75,11 +75,12 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   })
   const [ticketCount, setTicketCount] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
+  const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
   const [showSuccess, setShowSuccess] = useState(false);
   const [eventLinked, setEventLinked] = useState(false);
-  const [dinnerTicketCount, setDinnerTicketCount] = useState(0)
   const [noDinnerPurchasedTicket, setNodinnerPurchasedTicket] = useState([]);
-  const [puchasedTicketsInfo, setPurchasedTicketInfo] = useState({totalTickets: 0, unpaid: 0});
+  const [withDinnerTickets, setWithDinnerTickets] = useState([]);
+  const [purchasedTicketsInfo, setPurchasedTicketInfo] = useState({totalTickets: 0, totalDinners: 0, unpaid: 0});
 
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
@@ -104,14 +105,20 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     let totalTickets = 0;
     let totalDinners = 0;
     let noDinner = [];
+    let withDinner = [];
     if (loading) return;
     purchasedTicketData.forEach(ticket => {
       totalTickets++;
       if (ticket.withDinner) totalDinners++;
       if (ticket.paid === false) unpaid++;
-      if (ticket.withDinner === false) noDinner.push(ticket);
+      if (ticket.withDinner === false) {
+        noDinner.push(ticket);
+      } else {
+        withDinner.push(ticket);
+      }
     });
     setNodinnerPurchasedTicket([...noDinner])
+    setWithDinnerTickets([...withDinner])
     setPurchasedTicketInfo({totalTickets, totalDinners, unpaid})
   }, [purchasedTicketData, data]);
 
@@ -123,9 +130,24 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const ticketId = eventForPurchase?.id;
 
   const reserveTickets = async () => {
-    if (ticketCount === 0 && dinnerTicketCount === 0) return;
+    // if (ticketCount === 0) return;
     let numTickets = ticketCount;
-    let numDinnerTickets = dinnerTicketCount;
+    let numDinnerTickets = dinnerTicketCount;    
+    
+    if (numDinnerTickets < 0) {
+      withDinnerTickets.forEach(async withDinTicket => {
+        if (numDinnerTickets === 0) return;
+        await updatePurchasedTicket({
+          variables: {
+            ticketId: withDinTicket.id,
+            withDinner: false,
+          }
+        })
+        numDinnerTickets++;
+      })
+      setDinnerTicketCount(0)
+    }
+
     while (numTickets > 0) {
       const withDinner = (numDinnerTickets > 0);
       await insertTickets({
@@ -177,14 +199,14 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     setDinnerTicketCount(dinnerTicketCount + 1);
   }
 
-  const handleDecrementDinnerCount = () => {
-    if (dinnerTicketCount === 0) {
+  const handleDecrementDinnerCount = () => {    
+    if (withDinnerTickets.length === 0) {
       return setFormErrors({...formErrors, zeroDinCountCountError: true})
     }
     setDinnerTicketCount(dinnerTicketCount - 1);
   }
 
-  const { totalTickets, totalDinners, unpaid } = puchasedTicketsInfo
+  const { totalTickets, totalDinners, unpaid } = purchasedTicketsInfo
   const cardDirection = moreThan600px ? 'row' : 'column';
 
   return (
@@ -219,8 +241,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
             {!linkToRace &&
             <Grid container justifyContent="space-between">
-              {/* <Button onClick={reserveTicket}>Reserve</Button> */}
-
               <Typography sx={{lineHeight: 2.5}} variant='body1'>Event Tickets:</Typography>
               <Grid
                 container
