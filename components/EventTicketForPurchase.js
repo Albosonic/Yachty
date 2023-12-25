@@ -24,6 +24,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const [deleteEventTickets, {loading: deleteLoading}] = useMutation(DELETE_EVENT_TICKET);
   const [insertDinnerTickets, {loading: dinnerInsertLoading}] = useMutation(INSERT_DINNER_TICKETS);
   const [deleteDinners, {loading: deleteDinnerLoading}] = useMutation(DELETE_DINNER_TICKETS);
+  const {tooManyDinTicketsErr} = formErrors;
 
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
@@ -274,7 +275,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                   </Grid>
                   <Button onClick={handleSendDinners} variant='outlined' size='small'>send</Button>
                 </Grid>
-                {formErrors.tooManyDinTicketsErr && <Typography color="error">can't have more dinners than event tickets</Typography>}
+                {tooManyDinTicketsErr && <Typography color="error">can't have more dinners than event tickets</Typography>}
               </Grid>
             }
             {/* <Typography variant='body1'>Total for Event: {ticketCount}</Typography>

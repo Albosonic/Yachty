@@ -33,9 +33,9 @@ const GET_EVENT_ATTENDEES = gql`
 }`;
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'profilePic', label: 'pic', minWidth: 170 },
   { id: 'totalTickets', label: 'reservations', minWidth: 170 },
+  { id: 'name', label: 'Name', minWidth: 170 },
 ];
 const makeAttendeesFacade = (data) => {
   let totalAttendees = 0;
