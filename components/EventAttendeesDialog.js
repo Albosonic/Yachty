@@ -54,8 +54,7 @@ const makeAttendeesFacade = (data) => {
       totalTickets++;
     })
 
-    dinners.forEach(dinner => {
-      console.log('dinner =======', dinner)
+    dinners.forEach(dinner => {      
       totalDinners++;
     })
 
