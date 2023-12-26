@@ -65,7 +65,7 @@ const AttendeeDialog = ({ data, setOpenDialog }) => {
     dinnersUnpaid,
 
   } = data;
-  console.log('data =======', data)
+
   return (
 
     <Dialog

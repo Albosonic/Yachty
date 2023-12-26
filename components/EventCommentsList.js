@@ -60,7 +60,7 @@ const EventCommentsList = ({ eventId }) => {
   const { parentComments } = commentFacadeArrays;
 
   return (
-    <Stack>      
+    <Stack>
       { parentComments.map((commentFacade, i) => {
         const {
           comment,
@@ -70,7 +70,7 @@ const EventCommentsList = ({ eventId }) => {
           author,
           commentId
         } = commentFacade;
-        console.log('autho ========>', author)
+
         const childComments = commentFacadeArrays[commentId] ? commentFacadeArrays[commentId] : null;
 
         return (
@@ -81,9 +81,9 @@ const EventCommentsList = ({ eventId }) => {
                 <Typography variant="subtitle2">{comment}</Typography>
                 <Button
                   sx={{
-                    fontSize: 9,                    
+                    fontSize: 9,
                     margin: 0,
-                  }}                  
+                  }}
                   variant="standard"
                   onClick={() => setViewReplies({...viewReplies, [commentId]: !viewReplies[commentId]})}>
                   view replies
@@ -94,8 +94,8 @@ const EventCommentsList = ({ eventId }) => {
                   fontSize: 9,
                   margin: 0,
                   alignSelf: 'flex-start',
-                }}                
-                                
+                }}
+
                 onClick={() => setInputComment({lineHeight: 2, parentIdCommentId: commentId, msg: '', childComment: true })}
               >
                 reply

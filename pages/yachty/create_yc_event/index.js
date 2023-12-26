@@ -97,9 +97,7 @@ const CreateYCEvent = () => {
       await s3Client.send(new PutObjectCommand(params));
       imgPath = `${IMG_BUCKET}${imgKey}`;
     } else {
-      console.log('eventData =====', eventData)
       imgPath = eventData.image;
-
     }    
 
     const startDay = startDate.slice(0, 10);

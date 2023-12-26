@@ -54,7 +54,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       memberId
     }
   });
-  const {error: forPurchaseError, loading: forPurchaseLoading, data: forPurchaseData} = useQuery(GET_EVENT_TICKET_FOR_PURCHASE, { 
+  const {error: forPurchaseError, loading: forPurchaseLoading, data: forPurchaseData} = useQuery(GET_EVENT_TICKET_FOR_PURCHASE, {
     variables: {eventId}
   });
   const purchasedTicketData = data?.yc_event_purchased_tickets;
@@ -64,18 +64,18 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     if (loading || dinnersLoading) return;
 
     setTicketCount(purchasedTicketData.length)
-    setDinnerTicketCount(purchasedDinnersData.length)    
+    setDinnerTicketCount(purchasedDinnersData.length)
   }, [data, dinnersData]);
 
   if (loading) return <LoadingYachty isRoot={false} />;
 
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
-  const dinnerCost = eventForPurchase?.dinnerCost;  
+  const dinnerCost = eventForPurchase?.dinnerCost;
 
   const handleSendTickets = async () => {
     if (tooManyDinTicketsErr) setFormErrors({...formErrors, tooManyDinTicketsErr: false})
-    let insertTicketObjects = [];    
+    let insertTicketObjects = [];
     const currentTickets = purchasedTicketData.length;
     if (ticketCount > currentTickets) {
       let ticketsToAdd = ticketCount - currentTickets;
@@ -96,12 +96,12 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       let ticketIds = [];
       for (let i = 0; i < ticketsToDelete; i++) {
         ticketIds.push(purchasedTicketData[i].id)
-      }            
+      }
       const resp = await deleteEventTickets({
         variables: {
           ids: ticketIds
         }
-      })      
+      })
     }
     await refetch({
       variables: {
@@ -111,8 +111,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     })
   }
 
-  const handleSendDinners = async () => {    
-    let insertDinnerObjects = [];    
+  const handleSendDinners = async () => {
+    let insertDinnerObjects = [];
     const currentDinners = purchasedDinnersData.length;
     if (dinnerTicketCount > currentDinners) {
       let ticketsToAdd = dinnerTicketCount - currentDinners;
@@ -138,13 +138,13 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         } else {
           dinnerIds.push(purchasedDinnersData[i].id)
         }
-      }            
+      }
       const resp = await deleteDinners({
         variables: {
           ids: dinnerIds
         }
-      })      
-      console.log('dinnerTickets ==resp===', resp)
+      })
+
     }
     await refetchDinners({
       variables: {
@@ -155,7 +155,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
 
   }
 
-  const handleClose = () => {    
+  const handleClose = () => {
     setShowSuccess(false);
   };
 
@@ -269,7 +269,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                     <IconButton onClick={() => setDinnerTicketCount(dinnerTicketCount - 1)}>
                       <RemoveIcon color='error' />
                     </IconButton>
-                    <IconButton 
+                    <IconButton
                       onClick={() => {
                         if (dinnerTicketCount === ticketCount) return setFormErrors({...formErrors, tooManyDinTicketsErr: true})
                         setDinnerTicketCount(dinnerTicketCount + 1)
