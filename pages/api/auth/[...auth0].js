@@ -2,7 +2,7 @@ import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
 
 export default handleAuth({
   login: async (req, res) => {    
-    console.log('req.query: ', req.query)
+
     try {
       await handleLogin(req, res, {
         returnTo: '/yachty'
