@@ -58,7 +58,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     variables: {eventId}
   });
   const purchasedTicketData = data?.yc_event_purchased_tickets;
-  const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;  
+  const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;
 
   useEffect(() => {
     if (loading || dinnersLoading) return;
@@ -131,8 +131,13 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
     } else if (currentDinners > dinnerTicketCount) {
       let dinneersToDelete = currentDinners - dinnerTicketCount;
       let dinnerIds = [];
+      let dinnersPaidFor = [];
       for (let i = 0; i < dinneersToDelete; i++) {
-        dinnerIds.push(purchasedDinnersData[i].id)
+        if (purchasedDinnersData[i].paid) {
+          dinnersPaidFor.push(purchasedDinnersData[i])
+        } else {
+          dinnerIds.push(purchasedDinnersData[i].id)
+        }
       }            
       const resp = await deleteDinners({
         variables: {

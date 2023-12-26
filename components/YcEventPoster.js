@@ -36,9 +36,7 @@ const YcEventPoster = ({ eventData }) => {
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const memberId = useSelector(state => state.auth.member.id);
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);  
   const handleClose = () => setShowSuccess(false)
   const handleExpandClick = () => setExpanded(!expanded);  
   const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}});

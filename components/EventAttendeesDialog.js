@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, Grid, Typography } from '
 import AllMembersTable from './AllMembersComponent';
 import { gql, useQuery } from '@apollo/client';
 import LoadingYachty from './LoadingYachty';
+import AttendeesTable from './tablesYachty/AttendeesTable';
 
 const GET_EVENT_ATTENDEES = gql`
   query getEventAttendees($eventId: uuid!) {
@@ -11,6 +12,7 @@ const GET_EVENT_ATTENDEES = gql`
     duesOwed
     profilePic
     bio
+    id
     vessels {
       vesselName
       hullMaterial
@@ -31,52 +33,69 @@ const GET_EVENT_ATTENDEES = gql`
     }
     yc_event_dinner_tickets(where: {eventId: {_eq: $eventId}}) {
       id
+      paid
     }
   }
 }`;
 
 const columns = [
-  { id: 'profilePic', label: 'pic', minWidth: 170 },
-  { id: 'dinner', label: 'Dinners', minWidth: 170},
-  { id: 'totalTickets', label: 'reservations', minWidth: 170 },
-  { id: 'name', label: 'Name', minWidth: 170 },
+  { id: 'profilePic', label: 'Picture', minWidth: 80 },
+  { id: 'totalTickets', label: 'RSVP', minWidth: 80 },  
+  { id: 'totalDinners', label: 'Dinners', minWidth: 80},  
 ];
+
 const makeAttendeesFacade = (data) => {
   let totalAttendees = 0;
+  let totalAttendeeDinners = 0;
   let yc_members = data.map(item => {
-    const { name, profilePic, yc_event_purchased_tickets: tickets, yc_event_dinner_tickets: dinners } = item;
-    let ticketsPaid = 0;
+    const {
+      id, 
+      name, 
+      profilePic, 
+      yc_event_purchased_tickets: tickets, 
+      yc_event_dinner_tickets: dinners 
+    } = item;
+    let ticketsPaid = 0;    
     let ticketsUnPaid = 0;
     let totalTickets = 0;
     let totalDinners = 0;
+    let dinnersPaid = 0;
+    let dinnersUnpaid = 0;
+
     tickets.forEach(ticket => {
       ticket.paid ? ticketsPaid++ : ticketsUnPaid++;
       totalTickets++;
     })
 
     dinners.forEach(dinner => {      
+      dinner.paid ? dinnersPaid++ : dinnersUnpaid++;
       totalDinners++;
     })
 
-    totalAttendees += totalTickets;
+    totalAttendees = totalTickets;
+    totalAttendeeDinners = totalDinners;
+
     return { 
       ...item,
-      name,      
-      profilePic, 
-      totalTickets, 
+      targetMemberId: id,
+      memberName: name,
+      memberPic: profilePic, 
+      totalTickets,
       ticketsPaid, 
       ticketsUnPaid,
-      dinner: totalDinners
+      dinnersPaid,
+      dinnersUnpaid,
+      totalDinners,      
     };
   })
-  return { yc_members, totalAttendees };
+  return { yc_members, totalAttendees, totalAttendeeDinners };
 }
 
 const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
   const { error, loading,  data } = useQuery(GET_EVENT_ATTENDEES, { variables: { eventId, fetchPolicy: 'no-cache' } });
   if (loading) return <LoadingYachty isRoot={false} />
   const membersFacade = makeAttendeesFacade(data.yc_members);  
-  const { totalAttendees } = membersFacade;
+  const { totalAttendees, totalAttendeeDinners } = membersFacade;
   return (
     <Dialog
       fullWidth={true}
@@ -84,7 +103,13 @@ const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
       open={open}
     >
       <DialogContent>
-        {!!totalAttendees && <AllMembersTable columns={columns} data={membersFacade} totalAttendees={membersFacade.totalAttendees} />}
+        {!!totalAttendees && 
+          <AttendeesTable 
+            columns={columns} 
+            data={membersFacade} 
+            totalAttendees={totalAttendees} 
+            totalAttendeeDinners={totalAttendeeDinners}
+          />}
         {!totalAttendees && <Grid container>No Reservations at this time</Grid>}
       </DialogContent>
       <DialogActions>
