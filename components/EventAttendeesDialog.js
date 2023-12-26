@@ -26,28 +26,39 @@ const GET_EVENT_ATTENDEES = gql`
       slip
       img
     }
-    yc_event_purchased_tickets {
+    yc_event_purchased_tickets(where: {eventId: {_eq: $eventId}}) {
       paid
+    }
+    yc_event_dinner_tickets(where: {eventId: {_eq: $eventId}}) {
+      id
     }
   }
 }`;
 
 const columns = [
   { id: 'profilePic', label: 'pic', minWidth: 170 },
+  { id: 'dinner', label: 'Dinners', minWidth: 170},
   { id: 'totalTickets', label: 'reservations', minWidth: 170 },
   { id: 'name', label: 'Name', minWidth: 170 },
 ];
 const makeAttendeesFacade = (data) => {
   let totalAttendees = 0;
   let yc_members = data.map(item => {
-    const { name, profilePic, yc_event_purchased_tickets: tickets } = item;
+    const { name, profilePic, yc_event_purchased_tickets: tickets, yc_event_dinner_tickets: dinners } = item;
     let ticketsPaid = 0;
     let ticketsUnPaid = 0;
     let totalTickets = 0;
+    let totalDinners = 0;
     tickets.forEach(ticket => {
       ticket.paid ? ticketsPaid++ : ticketsUnPaid++;
       totalTickets++;
     })
+
+    dinners.forEach(dinner => {
+      console.log('dinner =======', dinner)
+      totalDinners++;
+    })
+
     totalAttendees += totalTickets;
     return { 
       ...item,
@@ -55,7 +66,8 @@ const makeAttendeesFacade = (data) => {
       profilePic, 
       totalTickets, 
       ticketsPaid, 
-      ticketsUnPaid
+      ticketsUnPaid,
+      dinner: totalDinners
     };
   })
   return { yc_members, totalAttendees };
