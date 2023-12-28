@@ -4,11 +4,13 @@ import ycInfoReducer from './ycInfoSlice'
 import uxReducer from './uxSlice'
 import msgReducer from './msgSlice'
 import schedulerReducer from './schedulerSlice'
+import workingRaceReducer from './workingRaceSlice'
 
 export const rootReducer = combineReducers({
   msgs: msgReducer,
   auth: authReducer,
   ux: uxReducer,
   scheduler: schedulerReducer,
-  ycInfo: ycInfoReducer
+  ycInfo: ycInfoReducer,
+  workingRace: workingRaceReducer,
 })
