@@ -6,10 +6,9 @@ import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import dayjs from "dayjs";
-import { getIsoDate, getNormalCalanderDate } from "@/lib/utils/getters";
 import { RACE_FIELDS } from "@/pages/yachty/make_new_race";
 
-const SetRaceStart = ({ callBack }) => {
+const SetRaceStart = ({ callback }) => {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(null);
   const workingDateFromScheduler = useSelector(state => state.scheduler.workingRaceDate)
@@ -23,11 +22,11 @@ const SetRaceStart = ({ callBack }) => {
     let dateString = startDate.toString()
     // let t = new Date(dateString)
     // let date = getNormalCalanderDate(t.toISOString())
-    // dispatch(makeNewRaceFieldAct({startDate: dateString}));
-    // callBack(END_DATE);
+    dispatch(makeNewRaceFieldAct({startDate: dateString}));
+    callback(END_DATE);
   }
-  
-  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDate.start.value) : null;  
+
+  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDate.start.value) : null;
 
   return (
     <>
@@ -36,14 +35,12 @@ const SetRaceStart = ({ callBack }) => {
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
         <MobileDateTimePicker
-          defaultValue={defaultStartDate || dayjs(new Date(workingDate)) || dayjs(new Date())}
-          onChange={(e) => setStartDate(e)}        
+          defaultValue={defaultStartDate || dayjs(new Date())}
+          onChange={(e) => setStartDate(e.$d)}
         />
-          <Slide direction="left" in={true} mountOnEnter unmountOnExit>
-            <Button onClick={editRaceStart} endIcon={<EastIcon />}>next</Button>        
-          </Slide>
-
-        
+        <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+          <Button onClick={editRaceStart} endIcon={<EastIcon />}>next</Button>
+        </Slide>
       </Grid>
     </>
   )

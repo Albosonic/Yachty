@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import { getIsoDate, getNormalCalanderDate } from "@/lib/utils/getters";
 import { RACE_FIELDS } from "@/pages/yachty/make_new_race";
 
-const SetRaceEnd = ({ callBack }) => {
+const SetRaceEnd = ({ callback }) => {
   const dispatch = useDispatch();
   const [endDate, setEndDate] = useState(null);
   const workingDate = useSelector(state => state.scheduler.workingRaceDate)  
@@ -20,7 +20,7 @@ const SetRaceEnd = ({ callBack }) => {
     // let t = new Date(dateString)
     // let date = getNormalCalanderDate(t.toISOString())
     dispatch(makeNewRaceFieldAct({endDate: dateString}));
-    callBack(RACE_NAME);
+    callback(RACE_NAME);
   }    
 
   return (
@@ -29,8 +29,7 @@ const SetRaceEnd = ({ callBack }) => {
         <Typography variant="h4">Race End</Typography>
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
-        <MobileDateTimePicker
-          // defaultValue={defaultStartDate || dayjs(new Date())}
+        <MobileDateTimePicker          
           onChange={(e) => setEndDate(e.$d)}        
         />
           <Slide direction="left" in={true} mountOnEnter unmountOnExit>
