@@ -11,7 +11,7 @@ import SetRaceSeries from "@/components/makenewRace/RaceSeriesl";
 import { clearNewRaceFieldsAct } from "@/slices/actions/workingRaceActions";
 
 export const RACE_FIELDS = {
-  START_DATE: 'START_DATE',  
+  START_DATE: 'START_DATE',
   END_DATE: 'END_DATE',
   RACE_NAME: 'RACE_NAME',
   SERIES: 'SERIES',
@@ -19,10 +19,12 @@ export const RACE_FIELDS = {
   COURSE: 'COURSE',
 }
 
+
+
 const makeNewRace = () => {
   // const dispatch = useDispatch()
   const {
-    START_DATE,    
+    START_DATE,
     END_DATE,
     RACE_NAME,
     SERIES,
@@ -40,11 +42,11 @@ const makeNewRace = () => {
   const [currentField, setCurrentField] = useState(START_DATE);
 
   useEffect(() => {
-    flowOrder.forEach(detail => {      
+    flowOrder.forEach(detail => {
       let key = Object.keys(detail)[0];
       if (!detail[key]) {
         setCurrentField(key);
-      }      
+      }
     })
   }, [raceName, startDate, endDate, series])
 
@@ -54,6 +56,7 @@ const makeNewRace = () => {
   const fullStart = `${startDay} ${startTime}`;
   const fullStop = `${endDay} ${endTime}`;
   // dispatch(clearNewRaceFieldsAct());
+
   return (
     <>
       <NavBar />
@@ -62,11 +65,35 @@ const makeNewRace = () => {
         direction="column"
         alignItems="center"
         padding={5}
-      >        
-        {startDate && <RaceDetail detail={fullStart} label="Starts"/>}
-        {endDate && <RaceDetail detail={fullStop} label="Ends"/>}
-        {raceName && <RaceDetail detail={raceName} label="Race name"/>}     
-        {series && <RaceDetail detail={series} label="Race Series"/>}     
+      >
+        {startDate && 
+          <RaceDetail 
+            clearField={{startDate: null}}
+            detail={fullStart} 
+            label="Starts"
+          />
+        }
+        {endDate && 
+          <RaceDetail
+            clearField={{endDate: null}}
+            detail={fullStop} 
+            label="Ends"
+          />
+        }
+        {raceName && 
+          <RaceDetail
+            clearField={{raceName: ''}}
+            detail={raceName} 
+            label="Race name"
+          />
+        }
+        {series && 
+          <RaceDetail 
+            clearField={{series: null}}
+            detail={series.seriesName} 
+            label="Race Series"
+          />
+        }
       </Grid>
       <Grid
         container
@@ -79,7 +106,7 @@ const makeNewRace = () => {
           {currentField === START_DATE && <SetRaceStart callback={setCurrentField} />}
           {currentField === END_DATE && <SetRaceEnd callback={setCurrentField} />}
           {currentField === RACE_NAME && <SetRaceName callback={setCurrentField} />}
-          {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
+          {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}          
         </Stack>
       </Grid>
     </>

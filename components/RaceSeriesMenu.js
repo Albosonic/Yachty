@@ -5,11 +5,13 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CreateSeriesDialog from './makenewRace/dialogs/CreateSeriesDialog';
 import { useQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GET_RACE_SERIES_BY_YC_ID } from '@/lib/gqlQueries/racinggql';
 import LoadingYachty from './LoadingYachty';
-
+import { makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
+// seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}
 const RaceSeriesMenu = () => {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonText, setButtonText] = useState('Choose Race Series');
   const [creatingSeries, setCreatingSeries] = useState(false);
@@ -25,10 +27,14 @@ const RaceSeriesMenu = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (series) => {
+  const handleClose = () => {
     setAnchorEl(null);
-    // if (series?.id) setSeries(series);
   };
+
+  const chooseSeries = (series) => {
+    console.log('series ========', series)
+    dispatch(makeNewRaceFieldAct({series: series}))
+  }
 
   const createSeries = () => {
     handleClose();
@@ -61,7 +67,7 @@ const RaceSeriesMenu = () => {
           'aria-labelledby': 'course-select',
         }}
       >
-        {seriesArr.map((series, i) => <MenuItem key={series.seriesName + i} onClick={() => handleClose(series)}>{series.seriesName}</MenuItem>)}
+        {seriesArr.map((series, i) => <MenuItem key={series.seriesName + i} onClick={() => chooseSeries(series)}>{series.seriesName}</MenuItem>)}
         <MenuItem key="create series" onClick={createSeries}>{'...create series'}</MenuItem>
       </Menu>
     </>
