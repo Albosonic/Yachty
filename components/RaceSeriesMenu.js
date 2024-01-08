@@ -31,8 +31,7 @@ const RaceSeriesMenu = () => {
     setAnchorEl(null);
   };
 
-  const chooseSeries = (series) => {
-    console.log('series ========', series)
+  const chooseSeries = (series) => {    
     dispatch(makeNewRaceFieldAct({series: series}))
   }
 

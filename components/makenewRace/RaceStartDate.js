@@ -1,4 +1,4 @@
-import { clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { RACE_FIELDS, clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { DateTimeField, MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
@@ -6,7 +6,6 @@ import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import dayjs from "dayjs";
-import { RACE_FIELDS } from "@/pages/yachty/make_new_race";
 
 const SetRaceStart = ({ callback }) => {
   const dispatch = useDispatch();

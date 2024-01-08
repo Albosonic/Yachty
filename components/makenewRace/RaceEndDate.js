@@ -1,4 +1,4 @@
-import { clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { RACE_FIELDS, clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { DateTimeField, MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
@@ -7,20 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { getIsoDate, getNormalCalanderDate } from "@/lib/utils/getters";
-import { RACE_FIELDS } from "@/pages/yachty/make_new_race";
+
 
 const SetRaceEnd = ({ callback }) => {
   const dispatch = useDispatch();
   const [endDate, setEndDate] = useState(null);
   const workingDate = useSelector(state => state.scheduler.workingRaceDate)  
-  const {RACE_NAME} = RACE_FIELDS;
+  const {IMAGE} = RACE_FIELDS;
   // dispatch(clearNewRaceFieldsAct()); for debugging...
   const editRaceEnd = () => {
     let dateString = endDate.toString()
     // let t = new Date(dateString)
     // let date = getNormalCalanderDate(t.toISOString())
     dispatch(makeNewRaceFieldAct({endDate: dateString}));
-    callback(RACE_NAME);
+    callback(IMAGE);
   }    
 
   return (

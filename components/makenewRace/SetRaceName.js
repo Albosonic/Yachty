@@ -1,17 +1,16 @@
-import { clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { RACE_FIELDS, clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import EastIcon from '@mui/icons-material/East';
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { RACE_FIELDS } from "@/pages/yachty/make_new_race";
 
 const SetRaceName = ({ callback }) => {
   const dispatch = useDispatch();
   const [raceName, setRaceName] = useState({raceName: ''});
-  const {SERIES} = RACE_FIELDS
+  const {START_DATE} = RACE_FIELDS
   const editRaceName = () => {
     dispatch(makeNewRaceFieldAct(raceName));
-    callback(SERIES)
+    callback(START_DATE)
   }
 
   return (
