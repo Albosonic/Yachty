@@ -5,7 +5,7 @@ const initialState = {
   raceCourseId: null,
   course: null,
   raceName: '',
-  imageObj: null,
+  image: { src: null, fileDatum: null, imgKey: null },
   raceNameSet: false, 
   startDate: null,
   endDate: null,

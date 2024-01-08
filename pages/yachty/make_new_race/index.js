@@ -137,9 +137,7 @@ const makeNewRace = () => {
           {currentField === START_DATE && <SetRaceStart callback={setCurrentField} />}
           {currentField === END_DATE && <SetRaceEnd callback={setCurrentField} />}
           {currentField === RELEASE && <SetRaceRelease callback={setCurrentField} />}
-          {currentField === IMAGE && 
-            <SetRaceImage />
-          }
+          {currentField === IMAGE && <SetRaceImage />}
         </Stack>
       </Grid>
     </>
