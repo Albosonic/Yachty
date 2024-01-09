@@ -82,8 +82,7 @@ const RaceTicketForm = ({raceData}) => {
           display: 'flex',
           flexDirection: moreThan600px ? 'row': 'column',
           maxWidth: 700,
-          margin: '0 auto',
-          marginBottom: 5
+          margin: '0 auto',          
         }}
       >
         <CardMedia
