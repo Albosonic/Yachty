@@ -54,7 +54,6 @@ const RaceReviewPoster = ({ race }) => {
   const release = useSelector(state => state.workingRace.release);
   const image = useSelector(state => state.workingRace.imageObj)
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
-  console.log('series ========', series)
   const handleClose = () => setShowSuccess(false);
 
   const createTickets = (raceId) => {
@@ -65,7 +64,6 @@ const RaceReviewPoster = ({ race }) => {
   }
   const confirmRace = async () => {
     const {fileDatum, src, imgKey} = image;
-    console.log('========key', imgKey)
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
 
@@ -86,8 +84,6 @@ const RaceReviewPoster = ({ race }) => {
 
     const normalStartDay = getNormalCalanderDate(isoStart)
     const normalEndDay = getNormalCalanderDate(isoEnd)
-
-    console.log('normalDay =========', getNormalCalanderDate(isoStart))
     const variables = {
       object: {
         seriesId: series.id,
