@@ -21,8 +21,12 @@ import { Alert, Grid, Snackbar } from '@mui/material';
 
 import { useRouter } from 'next/router';
 import { usePosterStyles } from '../componentHooks/usePosterStyles';
-import { getNormalDateFromDaysjsString } from '@/lib/utils/getters';
+import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import RaceOptionsMenu from '../RaceOptionsMenu';
+import { useMutation } from '@apollo/client';
+import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
+import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 
 const ExpandMore = styled((props) => {
@@ -39,9 +43,9 @@ const ExpandMore = styled((props) => {
 const RaceReviewPoster = ({ race }) => {
   const router = useRouter();
   const posterStyles = usePosterStyles();
-  const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const series = useSelector(state => state.workingRace.series);
   const course = useSelector(state => state.workingRace.course);
   const raceName = useSelector(state => state.workingRace.raceName);
@@ -49,16 +53,59 @@ const RaceReviewPoster = ({ race }) => {
   const endDate = useSelector(state => state.workingRace.endDate);
   const release = useSelector(state => state.workingRace.release);
   const image = useSelector(state => state.workingRace.imageObj)
+  const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   console.log('series ========', series)
   const handleClose = () => setShowSuccess(false);
 
-  const handleExpandClick = () => setExpanded(!expanded);
-
-  const goToReservations = () => {
+  const createTickets = (raceId) => {
     router.push({
-      pathname: '/yachty/racing/reservations',
-      // query: {raceId, eventId}
+      pathname: '/yachty/create_races/create_tickets',
+      query: {raceId}
     })
+  }
+  const confirmRace = async () => {
+    const {fileDatum, src, imgKey} = image;
+    console.log('========key', imgKey)
+    const { id: courseId } = course;
+    const imagePath = `${IMG_BUCKET}${imgKey}`;
+
+    const params = {
+      Bucket: 'yachty-letter-heads',
+      Key: imgKey,
+      Body: fileDatum,
+      ContentType: 'image/png'
+    };
+    
+    await s3Client.send(new PutObjectCommand(params));
+
+    const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
+    const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
+    
+    const isoStart = new Date(startDate).toISOString()
+    const isoEnd = new Date(endDate).toISOString()
+
+    const normalStartDay = getNormalCalanderDate(isoStart)
+    const normalEndDay = getNormalCalanderDate(isoEnd)
+
+    console.log('normalDay =========', getNormalCalanderDate(isoStart))
+    const variables = {
+      object: {
+        seriesId: series.id,
+        eventId: null,
+        img: imagePath,
+        raceName,
+        raceCourseId: courseId,
+        startDate: normalStartDay,
+        endDate: normalEndDay,
+        ycId: ycId,
+        startTime,
+        endTime,
+        releaseFormId: release.id,
+      }
+    };
+    const resp = await insertRace({variables})
+    createTickets(resp.data.insert_races_one.id)
+    console.log('resp =======', resp);
   }
   // const { posterWidth } = posterStyles;
 
@@ -93,7 +140,7 @@ const RaceReviewPoster = ({ race }) => {
             <ArrowBackIcon color="primary" />
             <Typography color="primary">back to edit</Typography>
           </IconButton>
-          <IconButton>
+          <IconButton onClick={confirmRace}>
             <Typography color="primary">Confirm Race&nbsp;</Typography>
             <ConfirmationNumberIcon color="success" />
           </IconButton>

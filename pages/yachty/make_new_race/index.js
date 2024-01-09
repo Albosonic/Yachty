@@ -46,7 +46,6 @@ const makeNewRace = () => {
   ];
 
   const [currentField, setCurrentField] = useState('');
-  const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
 
   useEffect(() => {
     let keyFound = false;
