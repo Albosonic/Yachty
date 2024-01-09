@@ -12,6 +12,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { useState } from 'react';
@@ -25,7 +26,6 @@ import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/util
 import RaceOptionsMenu from '../RaceOptionsMenu';
 import { useMutation } from '@apollo/client';
 import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
-import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 
@@ -66,15 +66,19 @@ const RaceReviewPoster = ({ race }) => {
     const {fileDatum, src, imgKey} = image;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
-
+    console.log('fileDateum ==========', fileDatum)
+    const base64Data = new Buffer.from(fileDatum.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+    const type = fileDatum.split(';')[0].split('/')[1];
     const params = {
       Bucket: 'yachty-letter-heads',
       Key: imgKey,
-      Body: fileDatum,
-      ContentType: 'image/png'
+      Body: base64Data,
+      ContentEncoding: 'base64',
+      ContentType: `image/png${type}`
     };
     
-    await s3Client.send(new PutObjectCommand(params));
+    const results = await s3Client.send(new PutObjectCommand(params));
+    console.log('results =======', results)
 
     const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
     const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);

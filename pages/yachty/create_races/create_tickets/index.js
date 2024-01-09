@@ -40,6 +40,7 @@ const CreateRaceEventTickets = () => {
     await refetchRace();
   }
   const race = data.races[0];
+  console.log('race =======', race)
   const eventListData = eventData.yc_events;
 
   return (

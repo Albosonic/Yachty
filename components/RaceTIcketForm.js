@@ -51,7 +51,7 @@ const RaceTicketForm = ({raceData}) => {
   }
 
   const handleClose = () => setShowSuccess(false);
-
+  console.log('image ======', image)
   return (
     <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
