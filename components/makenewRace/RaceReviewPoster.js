@@ -66,7 +66,6 @@ const RaceReviewPoster = ({ race }) => {
     const {fileDatum, src, imgKey} = image;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
-    console.log('fileDateum ==========', fileDatum)
     const base64Data = new Buffer.from(fileDatum.replace(/^data:image\/\w+;base64,/, ""), 'base64');
     const type = fileDatum.split(';')[0].split('/')[1];
     const params = {
@@ -78,7 +77,6 @@ const RaceReviewPoster = ({ race }) => {
     };
     
     const results = await s3Client.send(new PutObjectCommand(params));
-    console.log('results =======', results)
 
     const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
     const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
