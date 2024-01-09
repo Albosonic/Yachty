@@ -12,11 +12,12 @@ import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/logoKey";
 import { resizeLetterHead, resizeYcEventPoster } from "@/lib/utils/imgResizer";
 import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { useRouter } from "next/router";
 
 const SetRaceImage = () => {
-  const dispatch = useDispatch();
+  const router = useRouter()
+  const dispatch = useDispatch()
   const image = useSelector(state => state.workingRace.imageObj)
-  const [editing, setEditing] = useState(true);
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const {fileDatum, src, imgKey} = image;
 
@@ -36,9 +37,7 @@ const SetRaceImage = () => {
     reader.readAsDataURL(file);
   };
 
-  const goToReview = () => {
-    // this is where we sill upload the image to s3 and nav to review.
-  }
+  const goToReview = () => router.push({ pathname: '/yachty/make_new_race/review' });
 
   const resetImage = () => dispatch(makeNewRaceFieldAct({imageObj: { src: null, fileDatum: null, imgKey: null }}))
 
