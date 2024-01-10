@@ -39,6 +39,7 @@ const SetRaceCourse = ({callback}) => {
     <>
       <Button
         id="course-select-button"
+        size='large'
         aria-controls={open ? 'race-course-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}

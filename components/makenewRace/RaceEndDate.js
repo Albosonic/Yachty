@@ -5,9 +5,6 @@ import EastIcon from '@mui/icons-material/East';
 import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import dayjs from "dayjs";
-import { getIsoDate, getNormalCalanderDate } from "@/lib/utils/getters";
-
 
 const SetRaceEnd = ({ callback }) => {
   const dispatch = useDispatch();

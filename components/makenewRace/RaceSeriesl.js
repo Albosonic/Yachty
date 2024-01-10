@@ -51,6 +51,7 @@ const SetRaceSeries = ({callback}) => {
     <>
       <CreateSeriesDialog open={creatingSeries} setOpen={setCreatingSeries} refetch={refetchRaceSeries} />
       <Button
+        size='large'
         id="course-select-button"
         aria-controls={open ? 'race-course-menu' : undefined}
         aria-haspopup="true"
