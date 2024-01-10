@@ -4,41 +4,21 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Grid, Snackbar } from '@mui/material';
-// import RaceOptionsMenu from '../RaceOptionsMenu';
-
 import { useRouter } from 'next/router';
 import { usePosterStyles } from '../componentHooks/usePosterStyles';
 import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
-import RaceOptionsMenu from '../RaceOptionsMenu';
 import { useMutation } from '@apollo/client';
 import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
-
-
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 const RaceReviewPoster = ({ race }) => {
   const router = useRouter();
@@ -103,7 +83,6 @@ const RaceReviewPoster = ({ race }) => {
     };
     const resp = await insertRace({variables})
     createTickets(resp.data.insert_races_one.id)
-    console.log('resp =======', resp);
   }
   // const { posterWidth } = posterStyles;
 

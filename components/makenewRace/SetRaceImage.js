@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 const SetRaceImage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const image = useSelector(state => state.workingRace.imageObj)
+  const image = useSelector(state => state.workingRace.image)
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const {fileDatum, src, imgKey} = image;
 

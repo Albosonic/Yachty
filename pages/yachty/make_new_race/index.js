@@ -33,7 +33,7 @@ const makeNewRace = () => {
   const startDate = useSelector(state => state.workingRace.startDate);
   const endDate = useSelector(state => state.workingRace.endDate);
   const release = useSelector(state => state.workingRace.release);
-  const imageObj = useSelector(state => state.workingRace.imageObj);
+  const imageObj = useSelector(state => state.workingRace.image);
 
   const flowOrder = [
     {SERIES: series},
@@ -53,11 +53,16 @@ const makeNewRace = () => {
       let key = Object.keys(detail)[0];
       if (keyFound) return;
       if (!detail[key]) {
+        console.log('detail ======', detail[key])
+        console.log('detail ======', detail)
+        console.log('detail ======', key)
         keyFound = true;
         setCurrentField(key);
       }
     })
-    if (currentField === '') setCurrentField(IMAGE)
+    if (!keyFound) {      
+      setCurrentField(IMAGE)
+    }
   }, [series, course, raceName, startDate, endDate, release, imageObj])
 
   const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);

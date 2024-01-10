@@ -11,9 +11,6 @@ const SetRaceStart = ({ callback }) => {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(null);
   const workingDateFromScheduler = useSelector(state => state.scheduler.workingRaceDate)
-
-  const workingDate = useSelector(state => state.workingRace.startDate)
-
   const {END_DATE} = RACE_FIELDS;
   // dispatch(clearNewRaceFieldsAct()); for debugging...
   const editRaceStart = () => {
@@ -25,7 +22,7 @@ const SetRaceStart = ({ callback }) => {
     callback(END_DATE);
   }
 
-  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDate.start.value) : null;
+  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : null;
 
   return (
     <>

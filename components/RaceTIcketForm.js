@@ -1,7 +1,7 @@
 import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import {  useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,8 +9,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_TICKET_COST, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
 import SelectedTimeRange from './SelectedTimeRange';
+import { clearNewRaceFieldsAct } from '@/slices/actions/workingRaceActions';
+import { getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 
 const RaceTicketForm = ({raceData}) => {
+  const dispatch = useDispatch();
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
 
   const [createRaceTicket, { loading: raceTicketLoading }] = useMutation(INSERT_RACE_TICKET_FOR_PURCHASE);
@@ -64,6 +67,7 @@ const RaceTicketForm = ({raceData}) => {
       await updateRace({variables: {raceId, raceTicketId: rtid}});
       setExistingRid(rtid);
       setShowSuccess(true);
+      dispatch(clearNewRaceFieldsAct());
     }
   }
 

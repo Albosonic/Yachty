@@ -37,7 +37,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
 
   const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state));    
-    router.replace({pathname: '/yachty/create_races', query: { workingDate: true }})
+    router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
   }
 
   return (
