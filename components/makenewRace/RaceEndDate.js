@@ -21,7 +21,7 @@ const SetRaceEnd = ({ callback }) => {
     dispatch(makeNewRaceFieldAct({endDate: dateString}));
     callback(IMAGE);
   }    
-  console.log('error ====', error)
+
   return (
     <>
       <Slide direction="right" in={true} mountOnEnter unmountOnExit>
