@@ -32,7 +32,7 @@ const RaceReviewPoster = ({ race }) => {
   const startDate = useSelector(state => state.workingRace.startDate);
   const endDate = useSelector(state => state.workingRace.endDate);
   const release = useSelector(state => state.workingRace.release);
-  const image = useSelector(state => state.workingRace.imageObj)
+  const image = useSelector(state => state.workingRace.image)
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
   const handleClose = () => setShowSuccess(false);
 
