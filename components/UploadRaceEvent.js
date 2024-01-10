@@ -147,6 +147,32 @@ const UploadRaceEvent = () => {
         padding: 2        
       }}
     >
+      {showDatePickers &&
+        <>
+          <Typography variant="subtitle1" >From</Typography>
+          <DateTimeField 
+            required 
+            onBlur={(e) => {
+
+              console.log('=========>', e.target.value)
+              setRaceInfo({...raceInfo, startDate: e.target.value})
+            }
+            } 
+            label="Date Time" 
+            defaultValue={defaultStartDate || dayjs(new Date())} 
+          />
+          {startDateError && <Typography color="error">please choose start date</Typography>}
+          <Typography variant="subtitle1" >To</Typography>
+          <DateTimeField 
+            required 
+            onBlur={(e) => {setRaceInfo({...raceInfo, endDate: e.target.value})}} 
+            label="Date Time" 
+            defaultValue={defaultStartDate || dayjs(new Date())} 
+          />
+          {endDateError && <Typography color="error">please choose end date</Typography>}
+        </>
+      }
+      {!showDatePickers && <SelectedTimeRange startDate={startDate} endDate={endDate} />}
       {workingDate && 
         <Fab 
           size="small" 
@@ -235,27 +261,7 @@ const UploadRaceEvent = () => {
           <Button onClick={() => setRaceInfo({...raceInfo, raceName: raceName, raceNameSet: false})} >Edit</Button>
         </Grid>
       }
-      {showDatePickers &&
-        <>
-          <Typography variant="subtitle1" >From</Typography>
-          <DateTimeField 
-            required 
-            onBlur={(e) => setRaceInfo({...raceInfo, startDate: e.target.value})} 
-            label="Date Time" 
-            defaultValue={defaultStartDate || dayjs(new Date())} 
-          />
-          {startDateError && <Typography color="error">please choose start date</Typography>}
-          <Typography variant="subtitle1" >To</Typography>
-          <DateTimeField 
-            required 
-            onBlur={(e) => setRaceInfo({...raceInfo, endDate: e.target.value})} 
-            label="Date Time" 
-            defaultValue={defaultStartDate || dayjs(new Date())} 
-          />
-          {endDateError && <Typography color="error">please choose end date</Typography>}
-        </>
-      }
-      {!showDatePickers && <SelectedTimeRange startDate={startDate} endDate={endDate} />}
+      
       <ImageUploadField type={YC_EVENT} setImageObjToParent={setImageObj} img={imageObj} title="Upload Race Poster" />
       <Button onClick={() => submitRace()}>Submit</Button>
     </Stack>)

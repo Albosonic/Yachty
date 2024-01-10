@@ -1,21 +1,31 @@
-import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import {  useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
-import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
+import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_TICKET_COST, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
 import SelectedTimeRange from './SelectedTimeRange';
+import { clearNewRaceFieldsAct } from '@/slices/actions/workingRaceActions';
+import { getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 
 const RaceTicketForm = ({raceData}) => {
+  const dispatch = useDispatch();
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+
   const [createRaceTicket, { loading: raceTicketLoading }] = useMutation(INSERT_RACE_TICKET_FOR_PURCHASE);
+  const [updateTicketCost, {loading: updateTicketLoading}] = useMutation(UPDATE_RACE_TICKET_COST)
   const [updateRace, { loading: raceLoading }] = useMutation(UPDATE_RACE_W_TICKET_ID);
-  const [amount, setAmount] = useState(0);
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [existingRid, setExistingRid] = useState(null);
+  const [editing, setEditing] = useState(true);
+  const [amount, setAmount] = useState(0);
+
+  const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const {
     endDate,
@@ -33,21 +43,35 @@ const RaceTicketForm = ({raceData}) => {
   } = raceData;
 
   useEffect(() => {
-    const cost = raceTicket ? raceTicket.cost : 0;
+    console.log('raceTicket ========', raceTicket)
+    const cost = raceTicket ? raceTicket.cost : 0;    
     setAmount(cost);
     setExistingRid(raceTicketId)
+    if (raceTicketId) setEditing(false)  
   }, [raceTicketId]);
 
   const handleCreateRaceTicket = async () => {
-
-
-    const ticketResp = await createRaceTicket({ variables: { cost: amount, raceId, ycId } });
-    const rtid = ticketResp.data.insert_race_tickets_for_purchase.returning[0].id;
-
-    await updateRace({variables: {raceId, raceTicketId: rtid}});
-
-    setExistingRid(rtid);
-    setShowSuccess(true);
+    if (existingRid && !editing) {
+      return setEditing(true);
+    }
+    if (editing && existingRid) {
+      await updateTicketCost({
+        variables: {
+          ticketId: existingRid,
+          cost: amount,
+        }
+      })
+      setShowSuccess(true);
+      setEditing(false);
+    } else {
+      const ticketResp = await createRaceTicket({ variables: { cost: amount, raceId, ycId } });
+      const rtid = ticketResp.data.insert_race_tickets_for_purchase.returning[0].id;
+      await updateRace({variables: {raceId, raceTicketId: rtid}});
+      setExistingRid(rtid);
+      setShowSuccess(true);
+      setEditing(false)
+      dispatch(clearNewRaceFieldsAct());
+    }
   }
 
   const handleClose = () => setShowSuccess(false);
@@ -63,14 +87,14 @@ const RaceTicketForm = ({raceData}) => {
         elevation={4}
         sx={{
           display: 'flex',
-          maxWidth: 600,
-          margin: '0 auto',
-          marginBottom: 5
+          flexDirection: moreThan600px ? 'row': 'column',
+          maxWidth: 700,
+          margin: '0 auto',          
         }}
       >
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: '100%', maxWidth: 320 }}
           image={image}
           alt="Event Image"
         />
@@ -82,41 +106,56 @@ const RaceTicketForm = ({raceData}) => {
             <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />
             {existingRid && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
           </CardContent>
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
-            {existingRid ? (
-              <Grid container justifyContent="flex-end">
-                <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px"}} />
-                <Typography variant="h4" sx={{lineHeight: -1}} >{amount}</Typography>
+          <Grid display="flex" justifyContent="center" sx={{ '& > :not(style)': { m: 1 }, maxHeight: 70 }}>
+          {!moreThan600px &&
+            <Fab onClick={handleCreateRaceTicket} size="medium" color='success'  aria-label="add">
+              {editing ? <AddIcon /> : <EditIcon />}
+            </Fab>
+          }
+        </Grid>
+          <Box
+            sx={{              
+              width: '100%',
+              display: 'flex',
+              justifyContent: moreThan600px ? 'flex-end' : 'center',
+              pl: 1, pb: 1
+            }}>              
+            {!editing ? (
+              <Grid container direction="row" padding={2} justifyContent={moreThan600px ? 'flex-end' : 'center'}>
+                <AttachMoneyIcon color='primary' sx={{alignSelf: 'center', marginLeft: -4}} />
+                <Typography variant="h4" >{amount}</Typography>
               </Grid>
             ) : (
               <>
-                <AttachMoneyIcon color='action' sx={{color: 'black', fontSize: "40px", marginTop: 1}} />
+                <AttachMoneyIcon sx={{alignSelf: 'flex-end'}} color='primary' />
                 <TextField
                   id="ticket-cost"
-                  label="Cost"
+                  label="race fee"
                   type="number"
                   variant="standard"
                   multiline
-                  sx={{
-                    maxWidth: 80,
-                    marginRight: -5,
-
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  sx={{maxWidth: 80}}
                   onChange={(e) => setAmount(e.target.value)}
                 />
               </>
               )
             }
           </Box>
-        </Box>
-        <Box display="flex" sx={{ '& > :not(style)': { m: 1 }, maxHeight: 70 }}>
-          <Fab onClick={handleCreateRaceTicket} size="medium" color='success'  aria-label="add">
-            {existingRid ? <CheckIcon/> : <AddIcon />}
+        </Box>        
+        {moreThan600px &&
+          <Fab 
+            onClick={handleCreateRaceTicket} 
+            size="medium" 
+            color='success'  
+            aria-label="add"
+            sx={{
+              width: 90,
+              margin: 1
+            }}
+          >
+            {editing ? <AddIcon /> : <CheckIcon/>}
           </Fab>
-        </Box>
+        }
       </Card>
     </Stack>
   );

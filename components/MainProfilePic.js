@@ -60,6 +60,9 @@ const MainProfilePic = () => {
   const createRaces = () => {
     router.replace({pathname: '/yachty/create_races' })
   }
+  const makeNewRace = () => {
+    router.replace({pathname: '/yachty/make_new_race' })
+  }
   const reciprocalRequests = () => {
     router.replace({pathname: '/yachty/reciprocal_requests', query: { ycId: ycId }})
   }
@@ -98,6 +101,7 @@ const MainProfilePic = () => {
         >
         {userIsCommodore && <MenuItem onClick={reciprocalRequests}>reciprocal requests</MenuItem>}
         {userIsCommodore && <MenuItem onClick={createRaces}>create races</MenuItem>}
+        {userIsCommodore && <MenuItem onClick={makeNewRace}>make new race</MenuItem>}
         {userIsCommodore && <MenuItem onClick={editClubProfile}>edit club info</MenuItem> }
         <MenuItem onClick={createEvent}>create Event</MenuItem>
         <MenuItem onClick={memberApplicants}>member applicants</MenuItem>        

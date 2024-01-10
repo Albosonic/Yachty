@@ -66,6 +66,7 @@ const UploadVesselImage = () => {
 
   const uploadVesselImage = async () => {
     const {fileDatum, src, imgKey} = vesselImg;
+
     const params = {
       Bucket: 'yachty-letter-heads',
       Key: imgKey,

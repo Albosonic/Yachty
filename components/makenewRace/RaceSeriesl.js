@@ -1,16 +1,19 @@
+
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CreateSeriesDialog from './makenewRace/dialogs/CreateSeriesDialog';
+import CreateSeriesDialog from './dialogs/CreateSeriesDialog';
 import { useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_RACE_SERIES_BY_YC_ID } from '@/lib/gqlQueries/racinggql';
-import LoadingYachty from './LoadingYachty';
-import { makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
-// seriesArr={raceSeriesArr} setSeries={setSeries} setCreatingSeries={setCreatingSeries}
-const RaceSeriesMenu = () => {
+
+import { RACE_FIELDS, makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
+import LoadingYachty from '../LoadingYachty';
+
+
+const SetRaceSeries = ({callback}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonText, setButtonText] = useState('Choose Race Series');
@@ -22,7 +25,7 @@ const RaceSeriesMenu = () => {
   });
 
   const open = Boolean(anchorEl);
-
+  const {RACE_NAME} = RACE_FIELDS
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,8 +34,9 @@ const RaceSeriesMenu = () => {
     setAnchorEl(null);
   };
 
-  const chooseSeries = (series) => {    
+  const chooseSeries = (series) => {
     dispatch(makeNewRaceFieldAct({series: series}))
+    callback(RACE_NAME)
   }
 
   const createSeries = () => {
@@ -47,6 +51,7 @@ const RaceSeriesMenu = () => {
     <>
       <CreateSeriesDialog open={creatingSeries} setOpen={setCreatingSeries} refetch={refetchRaceSeries} />
       <Button
+        size='large'
         id="course-select-button"
         aria-controls={open ? 'race-course-menu' : undefined}
         aria-haspopup="true"
@@ -73,4 +78,4 @@ const RaceSeriesMenu = () => {
   );
 }
 
-export default RaceSeriesMenu;
+export default SetRaceSeries;

@@ -8,7 +8,7 @@ const SelectedTimeRange = ({startDate, endDate}) => {
   const endDay = endDate.slice(0, 10);
   const endHrs = endDate.slice(11);
   if (startDay === endDay) return <Typography variant="h6">{`${startDay} ${startHrs} - ${endHrs}`}</Typography>
-  return  <Typography variant="h6">{`${startDay} ${startDayHours} - ${endDay} ${endHrs}`}</Typography>
+  return  <Typography variant="h6">{`${startDay} ${startHrs} - ${endDay} ${endHrs}`}</Typography>
 }
 
 export default SelectedTimeRange;

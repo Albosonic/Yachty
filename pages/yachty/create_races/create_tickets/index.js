@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { useMutation, useQuery } from "@apollo/client";
-import { CircularProgress, Fab, Stack, Typography } from "@mui/material";
+import { CircularProgress, Fab, Grid, Stack, Typography } from "@mui/material";
+import DoneIcon from '@mui/icons-material/Done';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EventTicketForPurchase from "@/components/EventTicketForPurchase";
 import EventsListMenu from "@/components/EventsListMenu";
@@ -35,23 +36,35 @@ const CreateRaceEventTickets = () => {
     })
   }
 
+  const done = () => {
+    router.replace({
+      pathname: '/yachty',
+    })
+  }
+
   const linkEventDinnerToRace = async () => {
     await linkToRace({variables: {raceId, eventId: chosenEventToLink.id}});
     await refetchRace();
   }
-  const race = data.races[0];
+
+  const race = data.races[0];  
   const eventListData = eventData.yc_events;
 
   return (
     <>
       <NavBar />
       <Stack alignItems="center">
-        <Fab size="small" onClick={goBack} variant="extended" sx={{ alignSelf: 'flex-start', margin: 3 }} color="primary">
-          <ArrowBackIcon /> Back
-        </Fab>
+        <Grid  container justifyContent="space-between">
+          <Fab size="medium" onClick={goBack} variant="extended" sx={{ margin: 3 }} color="primary">
+            <ArrowBackIcon /> Back
+          </Fab>
+          <Fab size="medium" onClick={done} variant="extended" sx={{ margin: 3 }} color="primary">
+            <DoneIcon /> Done
+          </Fab>
+        </Grid>
         <RaceTicketForm raceData={race} />
-        <Typography variant="h5">Add Event Dinner Ticket</Typography>
-        <EventsListMenu eventData={eventListData} setEvent={setChosenEventToLink} />
+        {eventListData.length > 0 && <Typography variant="h5">Add Event Dinner Ticket</Typography>}
+        {eventListData.length > 0 && <EventsListMenu eventData={eventListData} setEvent={setChosenEventToLink} />}
         {chosenEventToLink && <EventTicketForPurchase eventData={chosenEventToLink} linkToRace={linkEventDinnerToRace} raceId={raceId} linked={!!race.eventId} />}
       </Stack>
     </>
