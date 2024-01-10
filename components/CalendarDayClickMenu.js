@@ -8,20 +8,21 @@ import { useDispatch } from 'react-redux';
 import { workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { useRouter } from 'next/router';
 import { PARTY, RACE } from '@/pages/yachty/calendar';
+import { Button, Divider, Grid } from '@mui/material';
 
 const CalendarDayClickMenu = ({ scheduler }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [selectedIndex, setSelectedIndex] = useState(1);
 
-  useEffect(() => {    
+  useEffect(() => {
     const eventString = scheduler?.edited?.event_id
     if (eventString) {
       const eventSplitArr = eventString.split('/');
       const eventType = eventSplitArr[1];
       const eventId = eventSplitArr[0];
       dispatch(workingRaceDateAct(scheduler.state));
-      if (eventType === RACE) {        
+      if (eventType === RACE) {
         router.replace({pathname: '/yachty/create_races', query: { workingDate: true, raceId: eventId }});
       }
       if (eventType === PARTY) {
@@ -30,33 +31,44 @@ const CalendarDayClickMenu = ({ scheduler }) => {
     }
   }, [scheduler?.edited?.event_id])
 
-  const handleCreateEvent = () => {    
+  const handleCreateEvent = () => {
     dispatch(workingRaceDateAct(scheduler.state));
     router.replace({ pathname: '/yachty/create_yc_event', query: { workingDate: true } });
   };
 
   const handleCreateRace = () => {
-    dispatch(workingRaceDateAct(scheduler.state));    
+    dispatch(workingRaceDateAct(scheduler.state));
     router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
   }
 
   return (
-    <Box sx={{ width: '100%', justifyContent: "center", maxWidth: 360, bgcolor: 'background.paper' }}>
-      <List component="nav" aria-label="secondary mailbox folder">
-        <ListItemButton
-          selected={selectedIndex === 2}
-          onClick={handleCreateRace}
-        >
-          <ListItemText primary="Create Race" />
-        </ListItemButton>
-        <ListItemButton
-          selected={selectedIndex === 3}
-          onClick={handleCreateEvent}
-        >
-          <ListItemText primary="Create Event" />
-        </ListItemButton>
-      </List>
-    </Box>
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: '50vh' }}
+    >
+      <Button
+        color='primary'
+        size='large'
+        variant='outlined'
+        sx={{padding: 3, marginTop: 2, width: '90%'}}
+        onClick={handleCreateRace}
+
+      >
+        Create Event
+      </Button>
+      <Button        
+        color='primary'
+        size='large'
+        variant='outlined'
+        sx={{padding: 3, marginTop: 2, width: '90%'}}
+        onClick={handleCreateRace}
+      >
+        Crate Race
+      </Button>      
+    </Grid>
   );
 }
 
