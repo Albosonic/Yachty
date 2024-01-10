@@ -22,7 +22,7 @@ const RaceTicketForm = ({raceData}) => {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [existingRid, setExistingRid] = useState(null);
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
   const [amount, setAmount] = useState(0);
 
   const moreThan600px = useMediaQuery('(min-width:600px)');
@@ -43,16 +43,18 @@ const RaceTicketForm = ({raceData}) => {
   } = raceData;
 
   useEffect(() => {
+    console.log('raceTicket ========', raceTicket)
     const cost = raceTicket ? raceTicket.cost : 0;    
     setAmount(cost);
-    setExistingRid(raceTicketId)    
+    setExistingRid(raceTicketId)
+    if (raceTicketId) setEditing(false)  
   }, [raceTicketId]);
 
   const handleCreateRaceTicket = async () => {
     if (existingRid && !editing) {
       return setEditing(true);
     }
-    if (editing) {      
+    if (editing && existingRid) {
       await updateTicketCost({
         variables: {
           ticketId: existingRid,
@@ -67,6 +69,7 @@ const RaceTicketForm = ({raceData}) => {
       await updateRace({variables: {raceId, raceTicketId: rtid}});
       setExistingRid(rtid);
       setShowSuccess(true);
+      setEditing(false)
       dispatch(clearNewRaceFieldsAct());
     }
   }

@@ -1,12 +1,13 @@
-import EventTicketForPurchase from "@/components/EventTicketForPurchase";
+import { useRouter } from "next/router";
 import NavBar from "@/components/NavBar";
 import RaceTicketsForPurchase from "@/components/RaceTicketsForPurchase";
+import { Fab, Grid, Stack, Typography } from "@mui/material";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import DoneIcon from '@mui/icons-material/Done';
+import { useQuery } from "@apollo/client";
 import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 import { EVENT_TICKET_FOR_PURCHASE } from "@/lib/gqlQueries/ycFeedgql";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import { useQuery } from "@apollo/client";
-import { Fab, Grid, Stack, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import EventTicketForPurchase from "@/components/EventTicketForPurchase";
 import LoadingYachty from "@/components/LoadingYachty";
 
 const RaceTicketReservations = () => {
@@ -18,14 +19,24 @@ const RaceTicketReservations = () => {
   
   if (loading || raceId === undefined || !raceData) return <LoadingYachty />
   const race = raceData?.races;
+
+  const done = () => {
+    router.replace({
+      pathname: '/yachty',
+    })
+  }
+
   return (
     <>
       <NavBar />
       <Stack spacing={2} sx={{marginBottom: 10}} alignItems="center">        
-        <Grid width="100%">
-          <Fab size="small" sx={{margin: 2}} color="primary" variant="extended" onClick={() => router.back()}>
+        <Grid container width="100%" justifyContent="space-between">
+          <Fab size="medium" sx={{margin: 2}} color="primary" variant="extended" onClick={() => router.back()}>
             <ArrowBack/>
             Back
+          </Fab>
+          <Fab size="medium" onClick={done} variant="extended" sx={{ margin: 2 }} color="primary">
+            <DoneIcon /> Done
           </Fab>
         </Grid>
         <Typography variant="h5">Reserve your Tickets Now</Typography>

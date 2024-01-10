@@ -53,9 +53,6 @@ const makeNewRace = () => {
       let key = Object.keys(detail)[0];
       if (keyFound) return;
       if (!detail[key]) {
-        console.log('detail ======', detail[key])
-        console.log('detail ======', detail)
-        console.log('detail ======', key)
         keyFound = true;
         setCurrentField(key);
       }
@@ -73,8 +70,6 @@ const makeNewRace = () => {
 
   // dispatch(clearNewRaceFieldsAct());
   // console.warn('debug clear race field on!!!')
-
-  console.log('currenField ====', currentField)
 
   return (
     <>

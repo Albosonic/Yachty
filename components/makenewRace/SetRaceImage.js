@@ -32,7 +32,7 @@ const SetRaceImage = () => {
         imgKey: uuid4(),
         src: URL.createObjectURL(file),
       }    
-      dispatch(makeNewRaceFieldAct({imageObj: imageObject}))
+      dispatch(makeNewRaceFieldAct({image: imageObject}))
     };
     reader.readAsDataURL(file);
   };

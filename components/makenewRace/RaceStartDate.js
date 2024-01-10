@@ -4,7 +4,7 @@ import { DateTimeField, MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
 import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 const SetRaceStart = ({ callback }) => {
@@ -14,15 +14,17 @@ const SetRaceStart = ({ callback }) => {
   const {END_DATE} = RACE_FIELDS;
   // dispatch(clearNewRaceFieldsAct()); for debugging...
   const editRaceStart = () => {
-    console.log('date ======', startDate)
     let dateString = startDate.toString()
-    // let t = new Date(dateString)
-    // let date = getNormalCalanderDate(t.toISOString())
     dispatch(makeNewRaceFieldAct({startDate: dateString}));
     callback(END_DATE);
   }
 
   const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : null;
+  useEffect(() => {
+    const date = defaultStartDate;
+    console.log('date ====', date)
+    setStartDate(defaultStartDate.$d)
+  }, [defaultStartDate])
 
   return (
     <>
