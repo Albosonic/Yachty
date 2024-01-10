@@ -20,9 +20,7 @@ const SetRaceStart = ({ callback }) => {
   }
 
   const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : null;
-  useEffect(() => {
-    const date = defaultStartDate;
-    console.log('date ====', date)
+  useEffect(() => {  
     setStartDate(defaultStartDate.$d)
   }, [defaultStartDate])
 
