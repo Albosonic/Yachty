@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Grid, Snackbar } from '@mui/material';
 import { useRouter } from 'next/router';
-import { usePosterStyles } from '../componentHooks/usePosterStyles';
 import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import { useMutation } from '@apollo/client';
 import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
