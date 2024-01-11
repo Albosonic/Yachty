@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,7 +21,6 @@ import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
 
 const RaceReviewPoster = ({ race }) => {
   const router = useRouter();
-  const posterStyles = usePosterStyles();
   const [showSuccess, setShowSuccess] = useState(false);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);

@@ -1,6 +1,6 @@
 import { RACE_FIELDS, clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
-import { DateTimeField, MobileDateTimePicker } from "@mui/x-date-pickers";
+import { Button, Grid, Stack, Typography } from "@mui/material";
+import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
 import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ const SetRaceEnd = ({ callback }) => {
     dispatch(makeNewRaceFieldAct({endDate: dateString}));
     callback(IMAGE);
   }    
-  console.log('error ====', error)
+
   return (
     <>
       <Slide direction="right" in={true} mountOnEnter unmountOnExit>

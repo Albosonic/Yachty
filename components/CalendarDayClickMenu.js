@@ -54,7 +54,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
         size='large'
         variant='outlined'
         sx={{padding: 3, marginTop: 2, width: '90%'}}
-        onClick={handleCreateRace}
+        onClick={handleCreateEvent}
 
       >
         Create Event

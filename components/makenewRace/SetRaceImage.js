@@ -1,16 +1,8 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client, IMG_BUCKET } from "@/lib/clients/s3-client";
-import { Box, Button, Fab, Grid, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Fab, Grid, Stack, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import PublishIcon from '@mui/icons-material/Publish';
 import StartIcon from '@mui/icons-material/Start';
-import { useMutation } from "@apollo/client";
 import uuid4 from "uuid4";
-import { UPDATE_YC_LOGO_KEY } from "@/lib/gqlQueries/logoKey";
-import { resizeLetterHead, resizeYcEventPoster } from "@/lib/utils/imgResizer";
-import { UPDATE_LOGO, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, YC_EVENT, updateLogo } from "@/slices/actions/authActions";
 import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { useRouter } from "next/router";
 
@@ -19,7 +11,7 @@ const SetRaceImage = () => {
   const dispatch = useDispatch()
   const image = useSelector(state => state.workingRace.image)
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  const {fileDatum, src, imgKey} = image;
+  const {fileDatum} = image;
 
   const handleChange = async (e) => {
     const {files} = e.target;    

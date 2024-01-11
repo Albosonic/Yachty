@@ -99,9 +99,8 @@ const MainProfilePic = () => {
             'aria-labelledby': 'course-select',
           }}
         >
-        {userIsCommodore && <MenuItem onClick={reciprocalRequests}>reciprocal requests</MenuItem>}
-        {userIsCommodore && <MenuItem onClick={createRaces}>create races</MenuItem>}
-        {userIsCommodore && <MenuItem onClick={makeNewRace}>make new race</MenuItem>}
+        {userIsCommodore && <MenuItem onClick={reciprocalRequests}>reciprocal requests</MenuItem>}        
+        {userIsCommodore && <MenuItem onClick={makeNewRace}>create race</MenuItem>}
         {userIsCommodore && <MenuItem onClick={editClubProfile}>edit club info</MenuItem> }
         <MenuItem onClick={createEvent}>create Event</MenuItem>
         <MenuItem onClick={memberApplicants}>member applicants</MenuItem>        
