@@ -13,17 +13,16 @@ const SetRaceStart = ({ callback }) => {
   const workingDateFromScheduler = useSelector(state => state.scheduler.workingRaceDate)
   const {END_DATE} = RACE_FIELDS;
   // dispatch(clearNewRaceFieldsAct()); for debugging...
-  const editRaceStart = () => {
-    let dateString = startDate.toString()
-    dispatch(makeNewRaceFieldAct({startDate: dateString}));
+  const editRaceStart = () => {    
+    dispatch(makeNewRaceFieldAct({startDate: startDate}));
     callback(END_DATE);
   }
 
-  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler) : null;
+  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler) : dayjs(new Date());
   
   useEffect(() => {  
-    setStartDate(defaultStartDate.$d || dayjs(new Date()))
-  }, [defaultStartDate])
+    setStartDate(defaultStartDate)
+  }, [workingDateFromScheduler])
 
   return (
     <>
@@ -32,8 +31,8 @@ const SetRaceStart = ({ callback }) => {
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
         <MobileDateTimePicker
-          defaultValue={defaultStartDate || dayjs(new Date())}
-          onChange={(e) => setStartDate(e.$d)}
+          defaultValue={defaultStartDate}
+          onChange={(e) => setStartDate(e)}
         />
         <Slide direction="left" in={true} mountOnEnter unmountOnExit>
           <Button onClick={editRaceStart} endIcon={<EastIcon />}>next</Button>
