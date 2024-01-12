@@ -1,17 +1,19 @@
 import {  useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation, useQuery } from '@apollo/client';
-import { Alert, Box, Button, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEventgql';
 import LoadingYachty from '@/components/LoadingYachty';
 import NavBar from '@/components/NavBar';
+import { clearNewEventFieldsAct } from '@/slices/actions/workingEventActions';
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const id = router.query.eventId;
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const {data, loading, error} = useQuery(GET_YC_EVENT, {variables: {id}});
@@ -44,7 +46,8 @@ const CreateEventTicket = (props) => {
       ycId,
     }
     setShowSpinner(true);
-    await createYachtClubEventTicket({ variables });
+    dispatch(clearNewEventFieldsAct());
+    await createYachtClubEventTicket({ variables });    
     setShowSuccess(true);
     setShowSpinner(false);
   }

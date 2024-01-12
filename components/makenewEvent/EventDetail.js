@@ -1,4 +1,5 @@
-import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { clearNewEventFieldsAct, makeNewEventFieldAct } from "@/slices/actions/workingEventActions";
+import { clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 
@@ -9,7 +10,7 @@ const EventDetail = ({ detail, label, clearField }) => {
       <Typography variant="h5">{label}</Typography>
       <Grid container>
       <Typography variant="h6">{detail}</Typography>
-        {/* <Button onClick={() => dispatch(makeNewRaceFieldAct(clearField))}>edit</Button> */}
+        <Button onClick={() => dispatch(makeNewEventFieldAct(clearField))}>edit</Button>
       </Grid>
     </Stack>
   )

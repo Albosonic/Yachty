@@ -1,14 +1,9 @@
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { workingRaceDateAct } from '@/slices/actions/schedulerActions';
+import { workingEventDateAct, workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { useRouter } from 'next/router';
 import { PARTY, RACE } from '@/pages/yachty/calendar';
-import { Button, Divider, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
 const CalendarDayClickMenu = ({ scheduler }) => {
   const router = useRouter();
@@ -32,12 +27,12 @@ const CalendarDayClickMenu = ({ scheduler }) => {
   }, [scheduler?.edited?.event_id])
 
   const handleCreateEvent = () => {
-    dispatch(workingRaceDateAct(scheduler.state));
-    router.replace({ pathname: '/yachty/create_yc_event', query: { workingDate: true } });
+    dispatch(workingEventDateAct(scheduler.state.start.value));
+    router.replace({ pathname: '/yachty/make_new_event', query: { workingDate: true } });
   };
 
   const handleCreateRace = () => {
-    dispatch(workingRaceDateAct(scheduler.state));
+    dispatch(workingRaceDateAct(scheduler.state.start.value));
     router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
   }
 

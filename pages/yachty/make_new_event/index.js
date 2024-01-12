@@ -10,10 +10,12 @@ import SetEventEnd from "@/components/makenewEvent/SetEventEnd";
 import SetEventImage from "@/components/makenewEvent/SetEventImage";
 import SetEventNotes from "@/components/makenewEvent/SetSpecialNotes";
 import SetEventEntertainment from "@/components/makenewEvent/SetEntertainment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
+import EventDetail from "@/components/makenewEvent/EventDetail";
 
-const makeNewRace = () => {  
+const makeNewRace = () => {
+  const dispatch = useDispatch();
   const {
     EVENT_NAME,
     LOCATION,
@@ -60,7 +62,7 @@ const makeNewRace = () => {
   }, [name, location, startDate, endDate, entertainment, specialNotes])
 
   // dispatch(clearNewEventFieldsAct());
-  // console.warn('debug clear race field on!!!')  
+  // console.warn('debug clear race field on!!!')
   let startDayString = dayjs(startDate).$d.toString()
   let endDayString = dayjs(endDate).$d.toString()
   return (
@@ -73,42 +75,42 @@ const makeNewRace = () => {
         padding={5}
       >
         {name &&
-          <RaceDetail
+          <EventDetail
             clearField={{name: ''}}
             detail={name}
             label="Event Name"
           />
         }
         {location &&
-          <RaceDetail
+          <EventDetail
             clearField={{location: ''}}
             detail={location}
             label="Location"
           />
         }
         {entertainment &&
-          <RaceDetail
+          <EventDetail
             clearField={{entertainment: ''}}
             detail={entertainment}
-            label="entertainment"
+            label="Entertainment"
           />
         }        
         {startDate &&
-          <RaceDetail
+          <EventDetail
             clearField={{startDate: ''}}
             detail={startDayString}
             label="Start Date"
           />
         }
         {endDate &&
-          <RaceDetail
+          <EventDetail
             clearField={{endDate: ''}}
             detail={endDayString}
-            label="Start Date"
+            label="End Date"
           />
         }
         {specialNotes &&
-          <RaceDetail
+          <EventDetail
             clearField={{specialNotes: ''}}
             detail={specialNotes}
             label="Special Notes"

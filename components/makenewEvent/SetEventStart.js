@@ -19,7 +19,7 @@ const SetEventStart = ({ callback }) => {
     callback(END_DATE);
   }
 
-  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : dayjs(new Date());
+  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler) : dayjs(new Date());
 
   useEffect(() => {    
     setStartDate(defaultStartDate)

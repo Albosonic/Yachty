@@ -34,7 +34,7 @@ const SetEventImage = () => {
   const resetImage = () => dispatch(makeNewEventFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
 
   const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
-  console.log('fileDatum ========', fileDatum)
+
   return (
     <>
       <Stack alignItems="center">

@@ -34,7 +34,7 @@ const EventReviewPoster = ({ race }) => {
   const image = useSelector(state => state.workingEvent.image)
 
   const [insertEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT);
-  
+
   const handleClose = () => setShowSuccess(false);
 
   const createTickets = (eventId) => {
@@ -56,11 +56,12 @@ const EventReviewPoster = ({ race }) => {
       ContentType: `image/png${type}`
     };
 
-    const results = await s3Client.send(new PutObjectCommand(params));    
+    const results = await s3Client.send(new PutObjectCommand(params));
     const hasuraStartDate = getHasuraDate(dayjs(startDate));
-    const hasuraEndDate = getHasuraDate(dayjs(endDate))    
+    const hasuraEndDate = getHasuraDate(dayjs(endDate))
 
     const variables = {
+      location,
       entertainment,
       image: imagePath,
       eventName: name,
@@ -70,7 +71,7 @@ const EventReviewPoster = ({ race }) => {
       endTime,
       ycId: ycId,
     };
-    const resp = await insertEvent({variables})    
+    const resp = await insertEvent({variables})
     createTickets(resp.data.insert_yc_events.returning[0].id)
   }
   // const { posterWidth } = posterStyles;
@@ -98,8 +99,9 @@ const EventReviewPoster = ({ race }) => {
         alt="Race Image"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">At {location}</Typography>
-        <Typography variant="body2" color="text.secondary">{specialNotes}</Typography>
+        <Typography>At {location}</Typography>
+        {entertainment && <Typography>Featuring: {entertainment}</Typography>}
+        {specialNotes && <Typography>Notes: {specialNotes}</Typography>}
 
       </CardContent>
       <CardActions>
