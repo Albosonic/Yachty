@@ -14,16 +14,16 @@ const SetEventStart = ({ callback }) => {
 
   const {END_DATE} = EVENT_FIELDS;
 
-  const editEventStart = () => {
-    let dateString = startDate.toString()
-    dispatch(makeNewEventFieldAct({startDate: dateString}));
+  const editEventStart = () => {    
+    dispatch(makeNewEventFieldAct({startDate: startDate}));
     callback(END_DATE);
   }
 
-  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : null;
+  const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler?.start.value) : dayjs(new Date());
+
   useEffect(() => {    
-    setStartDate(defaultStartDate?.$d || dayjs(new Date()))
-  }, [defaultStartDate])
+    setStartDate(defaultStartDate)
+  }, [workingDateFromScheduler])
 
   return (
     <>
@@ -32,8 +32,8 @@ const SetEventStart = ({ callback }) => {
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
         <MobileDateTimePicker
-          defaultValue={defaultStartDate || dayjs(new Date())}
-          onChange={(e) => setEventDate(e.$d)}
+          defaultValue={defaultStartDate}
+          onChange={(e) => setStartDate(e)}
         />
         <Slide direction="left" in={true} mountOnEnter unmountOnExit>
           <Button onClick={editEventStart} endIcon={<EastIcon />}>next</Button>

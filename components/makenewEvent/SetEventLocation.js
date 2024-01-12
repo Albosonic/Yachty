@@ -7,10 +7,10 @@ import { EVENT_FIELDS, makeNewEventFieldAct } from "@/slices/actions/workingEven
 const SetEventLocation = ({ callback }) => {
   const dispatch = useDispatch();
   const [location, setLocation] = useState({location: ''});
-  const {START_DATE} = EVENT_FIELDS
+  const {ENTERTAINMENT} = EVENT_FIELDS
   const editLocation = () => {
     dispatch(makeNewEventFieldAct(location));
-    callback(START_DATE)
+    callback(ENTERTAINMENT)
   }
   return (
     <>      

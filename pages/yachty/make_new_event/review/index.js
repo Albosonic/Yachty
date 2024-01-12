@@ -1,9 +1,13 @@
-import RaceEvent from "@/components/RaceEvent"
+import NavBar from "@/components/NavBar";
+import EventReviewPoster from "@/components/makenewEvent/EventReviewPoster";
 
-const EventPosterReview = () => {
+const EventPreviewReview = () => {
   return (
-    <RaceEvent newRaceId={newRaceId} review={review} edit={editRace} />
+    <>
+      <NavBar />
+      <EventReviewPoster />
+    </>
   )
 }
 
-export default EventPosterReview;
+export default EventPreviewReview;

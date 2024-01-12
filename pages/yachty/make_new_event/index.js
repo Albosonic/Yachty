@@ -1,19 +1,7 @@
 import NavBar from "@/components/NavBar";
-import SetRaceStart from "@/components/makenewRace/RaceStartDate";
-import { Button, Grid, Stack, Typography } from "@mui/material";
-import SetRaceName from "@/components/makenewRace/SetRaceName";
-import { useDispatch, useSelector } from "react-redux";
+import { Grid, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
-import SetRaceEnd from "@/components/makenewRace/RaceEndDate";
-import { getNormalDateFromDaysjsString } from "@/lib/utils/getters";
 import RaceDetail from "@/components/makenewRace/RaceDetail";
-import SetRaceSeries from "@/components/makenewRace/RaceSeriesl";
-import { RACE_FIELDS, clearNewRaceFieldsAct } from "@/slices/actions/workingRaceActions";
-import SetRaceCourse from "@/components/makenewRace/SetRaceCourse";
-import { INSERT_RACE_ONE } from "@/lib/gqlQueries/racinggql";
-import { useMutation } from "@apollo/client";
-import SetRaceRelease from "@/components/makenewRace/SetRaceRelease";
-import SetRaceImage from "@/components/makenewRace/SetRaceImage";
 import SetEventName from "@/components/makenewEvent/SetEventName";
 import { EVENT_FIELDS, clearNewEventFieldsAct } from "@/slices/actions/workingEventActions";
 import SetEventLocation from "@/components/makenewEvent/SetEventLocation";
@@ -21,12 +9,15 @@ import SetEventStart from "@/components/makenewEvent/SetEventStart";
 import SetEventEnd from "@/components/makenewEvent/SetEventEnd";
 import SetEventImage from "@/components/makenewEvent/SetEventImage";
 import SetEventNotes from "@/components/makenewEvent/SetSpecialNotes";
+import SetEventEntertainment from "@/components/makenewEvent/SetEntertainment";
+import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
-const makeNewRace = () => {
-  const dispatch = useDispatch()
+const makeNewRace = () => {  
   const {
     EVENT_NAME,
     LOCATION,
+    ENTERTAINMENT,
     START_DATE,
     END_DATE,
     IMAGE,
@@ -35,6 +26,7 @@ const makeNewRace = () => {
 
   const name = useSelector(state => state.workingEvent.name)
   const location = useSelector(state => state.workingEvent.location)
+  const entertainment = useSelector(state => state.workingEvent.entertainment)
   const startDate = useSelector(state => state.workingEvent.startDate)
   const endDate = useSelector(state => state.workingEvent.endDate)
   const specialNotes = useSelector(state => state.workingEvent.specialNotes)
@@ -43,6 +35,7 @@ const makeNewRace = () => {
   const flowOrder = [
     {EVENT_NAME: name},
     {LOCATION: location},
+    {ENTERTAINMENT: entertainment},
     {START_DATE: startDate},
     {END_DATE: endDate},
     {SPECIAL_NOTES: specialNotes},
@@ -64,17 +57,12 @@ const makeNewRace = () => {
     if (!keyFound) {
       setCurrentField(IMAGE)
     }
-  }, [name, location, startDate, endDate])
-
-//   const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
-//   const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
-
-//   const fullStart = `${startDay} ${startTime}`;
-//   const fullStop = `${endDay} ${endTime}`;
+  }, [name, location, startDate, endDate, entertainment, specialNotes])
 
   // dispatch(clearNewEventFieldsAct());
-  // console.warn('debug clear race field on!!!')
-  console.log('current =======', currentField)
+  // console.warn('debug clear race field on!!!')  
+  let startDayString = dayjs(startDate).$d.toString()
+  let endDayString = dayjs(endDate).$d.toString()
   return (
     <>
       <NavBar />
@@ -98,17 +86,24 @@ const makeNewRace = () => {
             label="Location"
           />
         }
+        {entertainment &&
+          <RaceDetail
+            clearField={{entertainment: ''}}
+            detail={entertainment}
+            label="entertainment"
+          />
+        }        
         {startDate &&
           <RaceDetail
             clearField={{startDate: ''}}
-            detail={startDate}
+            detail={startDayString}
             label="Start Date"
           />
         }
         {endDate &&
           <RaceDetail
             clearField={{endDate: ''}}
-            detail={startDate}
+            detail={endDayString}
             label="Start Date"
           />
         }
@@ -130,6 +125,7 @@ const makeNewRace = () => {
         <Stack spacing={2}>
           {currentField === EVENT_NAME && <SetEventName callback={setCurrentField} />}
           {currentField === LOCATION && <SetEventLocation callback={setCurrentField} />}
+          {currentField === ENTERTAINMENT && <SetEventEntertainment callback={setCurrentField} />}
           {currentField === START_DATE && <SetEventStart callback={setCurrentField} />}
           {currentField === END_DATE && <SetEventEnd callback={setCurrentField} />}
           {currentField === SPECIAL_NOTES && <SetEventNotes callback={setCurrentField} />}
