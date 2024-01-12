@@ -64,8 +64,6 @@ const YcEventPoster = ({ eventData }) => {
     entertainment,
   } = eventData;
 
-  console.log('event =============', eventData)
-
   const makeSubheader = () => {
     const start = new Date(startDate)
     const end = new Date(endDate)
