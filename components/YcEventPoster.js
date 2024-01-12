@@ -27,7 +27,7 @@ const ExpandMore = styled((props) => {
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create(
-    'transform', 
+    'transform',
     { duration: theme.transitions.duration.shortest }),
 }));
 
@@ -36,9 +36,9 @@ const YcEventPoster = ({ eventData }) => {
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);  
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const handleClose = () => setShowSuccess(false)
-  const handleExpandClick = () => setExpanded(!expanded);  
+  const handleExpandClick = () => setExpanded(!expanded);
   const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}});
 
   const shareClick = async () => {
@@ -51,11 +51,10 @@ const YcEventPoster = ({ eventData }) => {
   }
 
   const { posterWidth } = posterStyles;
-  const { 
-    image, 
-    event_name: eventName, 
-    hours,    
-    specialNotes, 
+  const {
+    image,
+    event_name: eventName,
+    specialNotes,
     id: eventId,
     startDate,
     endDate,
@@ -85,7 +84,7 @@ const YcEventPoster = ({ eventData }) => {
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           url copied to clipboard
         </Alert>
-      </Snackbar>      
+      </Snackbar>
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
         action={<EventOptionsMenu eventId={eventId} />}
@@ -98,7 +97,7 @@ const YcEventPoster = ({ eventData }) => {
         image={image}
         alt="Event Image"
       />
-      <CardContent>        
+      <CardContent>
         <Typography>Location: {location}</Typography>
         <Typography>Entertainment: {entertainment}</Typography>
         {specialNotes && <Typography>Notes: {specialNotes}</Typography>}
@@ -106,11 +105,11 @@ const YcEventPoster = ({ eventData }) => {
       <CardActions disableSpacing>
         <IconButton onClick={shareClick} aria-label="share">
           <ShareIcon />
-        </IconButton>        
-        
-        <IconButton 
-          onClick={goToReservations} 
-          color="success" 
+        </IconButton>
+
+        <IconButton
+          onClick={goToReservations}
+          color="success"
           aria-label="add to favorites"
         >
           <HowToRegIcon />
