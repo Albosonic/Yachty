@@ -51,8 +51,34 @@ const YcEventPoster = ({ eventData }) => {
   }
 
   const { posterWidth } = posterStyles;
-  const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
+  const { 
+    image, 
+    event_name: eventName, 
+    hours,    
+    specialNotes, 
+    id: eventId,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    location,
+    entertainment,
+  } = eventData;
 
+  console.log('event =============', eventData)
+
+  const makeSubheader = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const friendlyStartDay = start.toString().slice(0, 10)
+    const friendlyEndDate = end.toString().slice(0, 10)
+    if (startDate === endDate) {
+      return `${friendlyStartDay} ${startTime} - ${endTime}`
+    } else {
+      return `${friendlyStartDay} ${startTime} - ${friendlyEndDate} ${endTime}`
+    }
+  }
+  const subheader = makeSubheader();
   return (
     <Card sx={{ width: posterWidth }}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -64,7 +90,7 @@ const YcEventPoster = ({ eventData }) => {
         avatar={<Avatar src={burgee} aria-label="burgee" />}
         action={<EventOptionsMenu eventId={eventId} />}
         title={eventName}
-        subheader={hours}
+        subheader={subheader}
       />
       <CardMedia
         component="img"
@@ -72,8 +98,10 @@ const YcEventPoster = ({ eventData }) => {
         image={image}
         alt="Event Image"
       />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">{specialNotes}</Typography>
+      <CardContent>        
+        <Typography>Location: {location}</Typography>
+        <Typography>Entertainment: {entertainment}</Typography>
+        {specialNotes && <Typography>Notes: {specialNotes}</Typography>}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton onClick={shareClick} aria-label="share">
