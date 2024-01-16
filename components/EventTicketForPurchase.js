@@ -231,7 +231,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                     <ControlPointOutlinedIcon color='success' />
                   </IconButton>
                 </Grid>
-                <Button disabled={insertEventTicksLoading} onClick={handleSendTickets} variant='outlined' size='small'>send</Button>
+                <Button disabled={insertEventTicksLoading} onClick={handleSendTickets} variant='outlined' size='small'>confirm</Button>
               </Grid>
             </Grid>
             }
@@ -277,7 +277,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                       <ControlPointOutlinedIcon color='success' />
                     </IconButton>
                   </Grid>
-                  <Button disabled={dinnerInsertLoading} onClick={handleSendDinners} variant='outlined' size='small'>send</Button>
+                  <Button disabled={dinnerInsertLoading} onClick={handleSendDinners} variant='outlined' size='small'>confirm</Button>
                 </Grid>
                 {tooManyDinTicketsErr && <Typography color="error">can't have more dinners than event tickets</Typography>}
               </Grid>
