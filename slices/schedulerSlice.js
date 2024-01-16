@@ -1,4 +1,4 @@
-import { WORKING_RACE_DATE_ACT } from "./actions/schedulerActions";
+import { WORKING_EVENT_DATE_ACT, WORKING_RACE_DATE_ACT } from "./actions/schedulerActions";
 
 const initialState = {
   workingRaceDate: null,
@@ -13,6 +13,12 @@ export default function schedulerReducer(state = initialState, action) {
       return {
         ...state,
         workingRaceDate: payload
+      }
+    }
+    case WORKING_EVENT_DATE_ACT: {
+      return {
+        ...state,
+        workingEventDate: payload
       }
     }    
     default:

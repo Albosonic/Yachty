@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Box, CircularProgress, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import NavBar from "@/components/NavBar";

@@ -27,7 +27,7 @@ const ExpandMore = styled((props) => {
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create(
-    'transform', 
+    'transform',
     { duration: theme.transitions.duration.shortest }),
 }));
 
@@ -36,9 +36,9 @@ const YcEventPoster = ({ eventData }) => {
   const posterStyles = usePosterStyles();
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);  
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
   const handleClose = () => setShowSuccess(false)
-  const handleExpandClick = () => setExpanded(!expanded);  
+  const handleExpandClick = () => setExpanded(!expanded);
   const goToReservations = () => router.push({pathname: '/yachty/yc_feed/purchase_event_ticket', query: {eventId}});
 
   const shareClick = async () => {
@@ -51,20 +51,43 @@ const YcEventPoster = ({ eventData }) => {
   }
 
   const { posterWidth } = posterStyles;
-  const { image, event_name: eventName, location, hours, date, entertainment, specialNotes, id: eventId } = eventData;
+  const {
+    image,
+    event_name: eventName,
+    specialNotes,
+    id: eventId,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    location,
+    entertainment,
+  } = eventData;
 
+  const makeSubheader = () => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const friendlyStartDay = start.toString().slice(0, 10)
+    const friendlyEndDate = end.toString().slice(0, 10)
+    if (startDate === endDate) {
+      return `${friendlyStartDay} ${startTime} - ${endTime}`
+    } else {
+      return `${friendlyStartDay} ${startTime} - ${friendlyEndDate} ${endTime}`
+    }
+  }
+  const subheader = makeSubheader();
   return (
     <Card sx={{ width: posterWidth }}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           url copied to clipboard
         </Alert>
-      </Snackbar>      
+      </Snackbar>
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
         action={<EventOptionsMenu eventId={eventId} />}
         title={eventName}
-        subheader={hours}
+        subheader={subheader}
       />
       <CardMedia
         component="img"
@@ -73,16 +96,18 @@ const YcEventPoster = ({ eventData }) => {
         alt="Event Image"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">{specialNotes}</Typography>
+        <Typography>Location: {location}</Typography>
+        <Typography>Entertainment: {entertainment}</Typography>
+        {specialNotes && <Typography>Notes: {specialNotes}</Typography>}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton onClick={shareClick} aria-label="share">
           <ShareIcon />
-        </IconButton>        
-        
-        <IconButton 
-          onClick={goToReservations} 
-          color="success" 
+        </IconButton>
+
+        <IconButton
+          onClick={goToReservations}
+          color="success"
           aria-label="add to favorites"
         >
           <HowToRegIcon />

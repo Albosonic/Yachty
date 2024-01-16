@@ -3,13 +3,13 @@ import { Box, Fab, Grid, Stack, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
-import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { useRouter } from "next/router";
+import { makeNewEventFieldAct } from "@/slices/actions/workingEventActions";
 
-const SetRaceImage = () => {
+const SetEventImage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const image = useSelector(state => state.workingRace.image)
+  const image = useSelector(state => state.workingEvent.image)
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const {fileDatum} = image;
 
@@ -24,14 +24,14 @@ const SetRaceImage = () => {
         imgKey: uuid4(),
         src: URL.createObjectURL(file),
       }    
-      dispatch(makeNewRaceFieldAct({image: imageObject}))
+      dispatch(makeNewEventFieldAct({image: imageObject}))
     };
     reader.readAsDataURL(file);
   };
 
-  const goToReview = () => router.push({ pathname: '/yachty/make_new_race/review' });
+  const goToReview = () => router.push({ pathname: '/yachty/make_new_event/review' });
 
-  const resetImage = () => dispatch(makeNewRaceFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
+  const resetImage = () => dispatch(makeNewEventFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
 
   const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
 
@@ -96,4 +96,4 @@ const SetRaceImage = () => {
   )
 }
 
-export default SetRaceImage;
+export default SetEventImage;

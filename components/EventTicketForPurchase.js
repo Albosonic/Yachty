@@ -20,7 +20,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [eventLinked, setEventLinked] = useState(false);
 
-  const [insertTickets, {loading: insertLoading}] = useMutation(INSERT_PURCHASED_TICKETS);
+  const [insertTickets, {loading: insertEventTicksLoading}] = useMutation(INSERT_PURCHASED_TICKETS);
   const [deleteEventTickets, {loading: deleteLoading}] = useMutation(DELETE_EVENT_TICKET);
   const [insertDinnerTickets, {loading: dinnerInsertLoading}] = useMutation(INSERT_DINNER_TICKETS);
   const [deleteDinners, {loading: deleteDinnerLoading}] = useMutation(DELETE_DINNER_TICKETS);
@@ -61,13 +61,12 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;
 
   useEffect(() => {
-    if (loading || dinnersLoading) return;
-
+    if (loading || dinnersLoading) return;    
     setTicketCount(purchasedTicketData.length)
     setDinnerTicketCount(purchasedDinnersData.length)
   }, [data, dinnersData]);
 
-  if (loading) return <LoadingYachty isRoot={false} />;
+  if (loading || dinnersLoading) return <LoadingYachty isRoot={false} />;
 
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
@@ -109,6 +108,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         memberId
       }
     })
+    setShowSuccess(true);
   }
 
   const handleSendDinners = async () => {
@@ -152,7 +152,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         memberId
       }
     })
-
+    setShowSuccess(true);
   }
 
   const handleClose = () => {
@@ -195,7 +195,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
             {date && <Typography>date: {date}</Typography>}
             {location && <Typography>location: {location}</Typography>}
             {eventLinked && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
-
             {!linkToRace &&
             <Grid container>
               <Typography sx={{lineHeight: 2.5}} variant='h6'>Event Tickets: {ticketCount}</Typography>
@@ -232,7 +231,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                     <ControlPointOutlinedIcon color='success' />
                   </IconButton>
                 </Grid>
-                <Button onClick={handleSendTickets} variant='outlined' size='small'>send</Button>
+                <Button disabled={insertEventTicksLoading} onClick={handleSendTickets} variant='outlined' size='small'>confirm</Button>
               </Grid>
             </Grid>
             }
@@ -278,7 +277,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                       <ControlPointOutlinedIcon color='success' />
                     </IconButton>
                   </Grid>
-                  <Button onClick={handleSendDinners} variant='outlined' size='small'>send</Button>
+                  <Button disabled={dinnerInsertLoading} onClick={handleSendDinners} variant='outlined' size='small'>confirm</Button>
                 </Grid>
                 {tooManyDinTicketsErr && <Typography color="error">can't have more dinners than event tickets</Typography>}
               </Grid>

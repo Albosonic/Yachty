@@ -14,6 +14,7 @@ import { INSERT_RACE_ONE } from "@/lib/gqlQueries/racinggql";
 import { useMutation } from "@apollo/client";
 import SetRaceRelease from "@/components/makenewRace/SetRaceRelease";
 import SetRaceImage from "@/components/makenewRace/SetRaceImage";
+import dayjs from "dayjs";
 
 const makeNewRace = () => {
   const dispatch = useDispatch()
@@ -62,11 +63,8 @@ const makeNewRace = () => {
     }
   }, [series, course, raceName, startDate, endDate, release, imageObj])
 
-  const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
-  const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
-
-  const fullStart = `${startDay} ${startTime}`;
-  const fullStop = `${endDay} ${endTime}`;
+  let startDayString = dayjs(startDate).$d.toString()
+  let endDayString = dayjs(endDate).$d.toString()
 
   // dispatch(clearNewRaceFieldsAct());
   // console.warn('debug clear race field on!!!')
@@ -91,7 +89,7 @@ const makeNewRace = () => {
           <RaceDetail
             clearField={{course: null}}
             detail={course.courseName}
-            label="course"
+            label="Course"
           />
         }
         {raceName && 
@@ -104,14 +102,14 @@ const makeNewRace = () => {
         {startDate &&
           <RaceDetail
             clearField={{startDate: null}}
-            detail={fullStart}
+            detail={startDayString}
             label="Starts"
           />
         }
         {endDate &&
           <RaceDetail
             clearField={{endDate: null}}
-            detail={fullStop}
+            detail={endDayString}
             label="Ends"
           />
         }
