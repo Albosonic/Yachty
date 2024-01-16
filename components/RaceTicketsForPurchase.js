@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import SelectedTimeRange from './SelectedTimeRange';
 import { GET_RACE_TICKET_RESERVATION } from '@/lib/gqlQueries/racinggql';
 import LoadingYachty from './LoadingYachty';
+import { getFriendlyDateAndTime } from '@/lib/utils/dateStrings';
 
 const INSERT_PURCHASED_TICKETS = gql`
   mutation insertPurchasedTickets($ticketForPurchaseId: uuid!, $raceId: uuid!, $ycId: uuid!, $memberId: uuid!) {
@@ -83,11 +84,13 @@ const RaceTicketsForPurchase = ({ raceData }) => {
     setShowSuccess(false)
   };
 
+  const friendDateAndTime = getFriendlyDateAndTime(startDate, endDate, startTime, endTime)
+
   const cardWidthMin = moreThan600px ? 700 : 200;
-  // const cardWidthMax = moreThan600px ? 200 : 700;
+  const cardWidthMax = moreThan600px ? 700: 380;
   const cardDirection = moreThan600px ? 'row' : 'column';
 
-  const cardMediaWidth = moreThan600px ? 220 : '100%';
+  const cardMediaWidth = moreThan600px ? 200 : '100%';
   const justifyContentMoney = moreThan600px ? 'flex-end' : 'center';
   const gap = moreThan600px ? 15 : 0;
   // const cardMinHeight = moreThan600px ? 200 : 700;
@@ -105,6 +108,7 @@ const RaceTicketsForPurchase = ({ raceData }) => {
           display: 'flex',
           flexDirection: cardDirection,
           minWidth: cardWidthMin,
+          maxWidth: cardWidthMax,
           minHeight: 240,
         }}
       >
@@ -124,7 +128,8 @@ const RaceTicketsForPurchase = ({ raceData }) => {
             <Typography component="div" variant="h5">
               {raceName}
             </Typography>
-            <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />
+            <Typography>{friendDateAndTime}</Typography>
+            
             <Grid container display="flex" direction="row" justifyContent="center" sx={{marginTop: 2}}>
               {ticketReserved && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
               {ticketCount > 0 && <Button onClick={reserveTicket}>Confirm</Button>}

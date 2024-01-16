@@ -8,9 +8,9 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Fab from '@mui/material/Fab';
 import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_TICKET_COST, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
-import SelectedTimeRange from './SelectedTimeRange';
 import { clearNewRaceFieldsAct } from '@/slices/actions/workingRaceActions';
-import { getNormalDateFromDaysjsString } from '@/lib/utils/getters';
+import { getFriendlyDateAndTime } from '@/lib/utils/dateStrings';
+
 
 const RaceTicketForm = ({raceData}) => {
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ const RaceTicketForm = ({raceData}) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [existingRid, setExistingRid] = useState(null);
   const [editing, setEditing] = useState(true);
+
   const [amount, setAmount] = useState(0);
 
   const moreThan600px = useMediaQuery('(min-width:600px)');
@@ -30,11 +31,8 @@ const RaceTicketForm = ({raceData}) => {
   const {
     endDate,
     startDate,
-    eventId,
-    hours,
     id: raceId,
-    img: image,
-    raceCourseId,
+    img: image,    
     raceName,
     startTime,
     endTime,
@@ -42,8 +40,7 @@ const RaceTicketForm = ({raceData}) => {
     race_tickets_for_purchase: raceTicket,
   } = raceData;
 
-  useEffect(() => {
-    console.log('raceTicket ========', raceTicket)
+  useEffect(() => {    
     const cost = raceTicket ? raceTicket.cost : 0;    
     setAmount(cost);
     setExistingRid(raceTicketId)
@@ -76,6 +73,8 @@ const RaceTicketForm = ({raceData}) => {
 
   const handleClose = () => setShowSuccess(false);
 
+  const dateAndTime = getFriendlyDateAndTime(startDate, endDate, startTime, endTime)
+
   return (
     <Stack sx={{margin: 5}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -94,7 +93,7 @@ const RaceTicketForm = ({raceData}) => {
       >
         <CardMedia
           component="img"
-          sx={{ width: '100%', maxWidth: 320 }}
+          sx={{ width: '100%', maxWidth: 350 }}
           image={image}
           alt="Event Image"
         />
@@ -103,7 +102,8 @@ const RaceTicketForm = ({raceData}) => {
             <Typography component="div" variant="h5">
               {raceName}
             </Typography>
-            <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} />
+            {/* <SelectedTimeRange startDate={startDate + startTime} endDate={endDate + endTime} /> */}
+            <Typography>{dateAndTime}</Typography>
             {existingRid && <Typography variant="h5" sx={{color: 'green', transform: "rotate(-30deg)"}}>You're all set!</Typography>}
           </CardContent>
           <Grid display="flex" justifyContent="center" sx={{ '& > :not(style)': { m: 1 }, maxHeight: 70 }}>

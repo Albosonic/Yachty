@@ -17,6 +17,9 @@ import { useRouter } from 'next/router';
 import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import { useMutation } from '@apollo/client';
 import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
+import { getFriendlyDateAndTime, getHasuraDate } from '@/lib/utils/dateStrings';
+import dayjs from 'dayjs';
+
 
 const RaceReviewPoster = ({ race }) => {
   const router = useRouter();
@@ -35,7 +38,7 @@ const RaceReviewPoster = ({ race }) => {
 
   const createTickets = (raceId) => {
     router.push({
-      pathname: '/yachty/create_races/create_tickets',
+      pathname: '/yachty/make_new_race/review/create_ticket',
       query: {raceId}
     })
   }
@@ -55,14 +58,9 @@ const RaceReviewPoster = ({ race }) => {
     
     const results = await s3Client.send(new PutObjectCommand(params));
 
-    const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
-    const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
-    
-    const isoStart = new Date(startDate).toISOString()
-    const isoEnd = new Date(endDate).toISOString()
+    const hasuraStartDate = getHasuraDate(dayjs(startDate));
+    const hasuraEndDate = getHasuraDate(dayjs(endDate))
 
-    const normalStartDay = getNormalCalanderDate(isoStart)
-    const normalEndDay = getNormalCalanderDate(isoEnd)
     const variables = {
       object: {
         seriesId: series.id,
@@ -70,8 +68,8 @@ const RaceReviewPoster = ({ race }) => {
         img: imagePath,
         raceName,
         raceCourseId: courseId,
-        startDate: normalStartDay,
-        endDate: normalEndDay,
+        startDate: hasuraStartDate,
+        endDate: hasuraEndDate,
         ycId: ycId,
         startTime,
         endTime,
@@ -86,6 +84,8 @@ const RaceReviewPoster = ({ race }) => {
   const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
   const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
 
+  const subheader = getFriendlyDateAndTime(startDate, endDate, startTime, endTime);
+
   return (
     <Card>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
@@ -97,7 +97,7 @@ const RaceReviewPoster = ({ race }) => {
         avatar={<Avatar src={burgee} aria-label="burgee" />}
         // action={<RaceOptionsMenu raceId={raceId} releaseFormId={releaseFormId} goToReservations={goToReservations} />}
         title={raceName}        
-        subheader={`${startDay}${startTime} - ${endTime}`}
+        subheader={subheader}
       />
       <CardMedia
         component="img"
