@@ -53,8 +53,6 @@ const UploadRaceCourse = ({ closeDialog }) => {
       <Stack sx={{
           overflow: "hidden",
           overflowY: "scroll",
-          // height: 600,
-          // paddingTop: 5
           padding: 6
         }}
         width="100%"
