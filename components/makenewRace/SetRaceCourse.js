@@ -8,10 +8,12 @@ import LoadingYachty from '../LoadingYachty';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@apollo/client';
 import {  RACE_FIELDS, makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
+import CreateCourseDialog from './dialogs/CreateCourseDialog';
 
 const SetRaceCourse = ({callback}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [creatingCourse, setCreatingCourse] = useState(false);
   const open = Boolean(anchorEl);
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {
@@ -35,8 +37,13 @@ const SetRaceCourse = ({callback}) => {
     callback(RACE_NAME)
   };
 
+  const createCourse = () => {    
+    setCreatingCourse(true);
+  }
+
   return (
     <>
+      <CreateCourseDialog open={creatingCourse} setOpen={setCreatingCourse} refetch={refetchCourses}/>
       <Button
         id="course-select-button"
         size='large'
@@ -60,6 +67,7 @@ const SetRaceCourse = ({callback}) => {
         }}
       >
         {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => handleClose(course)}>{course.courseName}</MenuItem>)}
+        <MenuItem key="create series" onClick={createCourse}>{'...create course'}</MenuItem>
       </Menu>
     </>
   );

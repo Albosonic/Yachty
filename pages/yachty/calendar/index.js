@@ -76,7 +76,7 @@ const Calendar = () => {
       <Scheduler
         view="month"
         ref={calendarRef}
-        events={events}
+        events={events}        
         customEditor={(scheduler) => <CalendarDayClickMenu scheduler={scheduler} />}
       />
     </>

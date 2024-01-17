@@ -126,7 +126,7 @@ const makeNewRace = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: '50vh' }}
+        // sx={{ minHeight: '50vh' }}
       >
         <Stack spacing={2}>
           {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
