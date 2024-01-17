@@ -58,7 +58,7 @@ const makeNewRace = () => {
         setCurrentField(key);
       }
     })
-    if (!keyFound) {      
+    if (!keyFound) {
       setCurrentField(IMAGE)
     }
   }, [series, course, raceName, startDate, endDate, release, imageObj])
@@ -92,13 +92,13 @@ const makeNewRace = () => {
             label="Course"
           />
         }
-        {raceName && 
+        {raceName &&
           <RaceDetail
             clearField={{raceName: ''}}
-            detail={raceName} 
+            detail={raceName}
             label="Race name"
           />
-        }        
+        }
         {startDate &&
           <RaceDetail
             clearField={{startDate: null}}
@@ -126,7 +126,6 @@ const makeNewRace = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        // sx={{ minHeight: '50vh' }}
       >
         <Stack spacing={2}>
           {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
