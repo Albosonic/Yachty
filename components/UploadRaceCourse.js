@@ -8,7 +8,7 @@ import { INSERT_RACE_COURSE } from "@/lib/gqlQueries/racinggql";
 import { useSelector } from "react-redux";
 
 
-const UploadRaceCourse = () => {
+const UploadRaceCourse = ({ closeDialog }) => {
   const clearCourseInfo = {name: '', set: false, startFrom: ''};
   const [userInput, setUserInput] = useState('');
   const [courseNameInfo, setCourseNameInfo] = useState(clearCourseInfo);
@@ -40,20 +40,20 @@ const UploadRaceCourse = () => {
 
   const handleClose = () => {
     setCourseNameInfo({...clearCourseInfo})
-    setCourse([]);
-    setShowSuccess(false);
+    setCourse([])
+    setShowSuccess(false)
+    closeDialog()
   }
 
   const { marker, side } = workingLeg;
   const containerWidth = moreThan600px ? 700 : 350;
-  const uploadButtonLocation = moreThan600px ? '30%' : '10%';
+
   return (
     <>
       <Stack sx={{
           overflow: "hidden",
           overflowY: "scroll",
-          height: 600,
-          paddingTop: 5
+          padding: 6
         }}
         width="100%"
         maxWidth={containerWidth}
@@ -69,9 +69,6 @@ const UploadRaceCourse = () => {
           size="small"
           sx={{
             alignSelf: 'flex-end',
-            position: 'fixed',
-            right: uploadButtonLocation,
-            top: 140
           }}
           onClick={uploadRaceCourse}
           color="success"
@@ -114,12 +111,12 @@ const UploadRaceCourse = () => {
                 sx={{justifyContent: 'space-around'}}
                 onChange={(e) => setCourseNameInfo({ ...courseNameInfo, startFrom: e.target.value })}
               >
-                <FormControlLabel labelPlacement="start" value="West" control={<Radio />} label="West" />
                 <Stack>
                   <FormControlLabel labelPlacement="top" value="North" control={<Radio />} label="North" />
-                  <FormControlLabel labelPlacement="bottom" value="South" control={<Radio />} label="South" />
+                  <FormControlLabel labelPlacement="top" value="East" control={<Radio />} label="East" />
+                  <FormControlLabel labelPlacement="top" value="South" control={<Radio />} label="South" />
+                  <FormControlLabel labelPlacement="top" value="West" control={<Radio />} label="West" />
                 </Stack>
-                <FormControlLabel value="East" control={<Radio />} label="East" />
               </RadioGroup>
             </FormControl>
           </>}
