@@ -3,6 +3,7 @@ import AllMembersTable from './AllMembersComponent';
 import { gql, useQuery } from '@apollo/client';
 import LoadingYachty from './LoadingYachty';
 import AttendeesTable from './tablesYachty/AttendeesTable';
+import { useEffect, useState } from 'react';
 
 const GET_EVENT_ATTENDEES = gql`
   query getEventAttendees($eventId: uuid!) {
@@ -93,8 +94,13 @@ const makeAttendeesFacade = (data) => {
 
 const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
   const { error, loading,  data } = useQuery(GET_EVENT_ATTENDEES, { variables: { eventId, fetchPolicy: 'no-cache' } });
+  const [membersFacade, setMembersFacade] = useState({});
+  useEffect(() => {
+    if (loading) return;
+    setMembersFacade(makeAttendeesFacade(data.yc_members))
+  }, [data])
+
   if (loading) return <LoadingYachty isRoot={false} />
-  const membersFacade = makeAttendeesFacade(data.yc_members);  
   const { totalAttendees, totalAttendeeDinners } = membersFacade;
   return (
     <Dialog
