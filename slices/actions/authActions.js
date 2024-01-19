@@ -15,6 +15,7 @@ export const BETA_USER_IS_COMMODORE = 'BETA_USER_IS_COMMODORE';
 export const UPDATE_MEMBER_BIO_ACT = 'UPDATE_MEMBER_BIO_ACT';
 export const UPDATE_MEMBER_NAME_ACT = 'UPDATE_MEMBER_NAME_ACT';
 export const USER_LOGGED_IN_ACT = 'USER_LOGGED_IN_ACT';
+export const INTRO_SEEN = 'INTRO_SEEN';
 
 export const ROOM_TYPES = {
   PUBLIC: 'PUBLIC',
@@ -120,3 +121,5 @@ export const updateMemberNameAct = (firstName, lastName, userName) => {
     payload: {firstName, lastName, userName}
   }
 }
+
+export const introSeenAct = () => ({ type: INTRO_SEEN })

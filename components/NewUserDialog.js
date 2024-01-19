@@ -12,24 +12,15 @@ import EditProfilePic from './EditProfilePic';
 import { Stack } from '@mui/material';
 import UpdateName from './UpdateName';
 import { demoEditProfileOptionAct } from '@/slices/actions/uxActions';
+import { introSeenAct } from '@/slices/actions/authActions';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const NewUserDialog = ({ open, setOpen }) => {
-  const router = useRouter();  
-  const dispatch = useDispatch();
-  const memberId = useSelector(state => state.auth.member.id);
+const NewUserDialog = ({ open, setOpen }) => {  
+  const dispatch = useDispatch();  
   const [openDemo, setOpenDemo] = useState(false);
-
-  const editMyProfile = () => {
-    setOpen(false);
-    router.replace({
-      pathname:'/yachty/dashboard', 
-      query: { memberId }
-    })
-  };  
 
   const demoInfoDialog = () => {
     dispatch(demoEditProfileOptionAct(true));
@@ -37,8 +28,9 @@ const NewUserDialog = ({ open, setOpen }) => {
   }
 
   const closeDialogs = () => {
+    dispatch(introSeenAct())    
     setOpen(false)
-    setOpenDemo(false);
+    setOpenDemo(false)
   }
 
   return (

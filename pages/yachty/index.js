@@ -119,6 +119,7 @@ const Yachty = () => {
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberData = useSelector(state => state?.auth?.member);
   const name = useSelector(state => state?.auth?.member?.name);
+  const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
     
   useEffect(() => {    
@@ -140,9 +141,10 @@ const Yachty = () => {
       }
       upsertUser();
     }
-    dispatch(pollUserRooms());
-    setNewUserOpen(name.includes('.com'));
-  }, [user, userIsCommodore, name])  
+    dispatch(pollUserRooms())
+    setNewUserOpen(!introSeen)
+    // setNewUserOpen(name.includes('.com'));
+  }, [user, userIsCommodore, name, introSeen])  
   
   if (isLoading || upsertMemberLoading) return <LoadingYachty />;  
 
