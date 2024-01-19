@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, Grid, Typography } from '@mui/material';
-import AllMembersTable from './AllMembersComponent';
+import AllMembersTable from './tablesYachty/AllMembers/AllMembersTable';
 import { gql, useQuery } from '@apollo/client';
 import LoadingYachty from './LoadingYachty';
 import AttendeesTable from './tablesYachty/AttendeesTable';

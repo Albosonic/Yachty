@@ -1,4 +1,4 @@
-import AllMembersTable from "@/components/AllMembersComponent"
+import AllMembersTable from "@/components/tablesYachty/AllMembers/AllMembersTable";
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
 import { GET_ALL_YC_MEMBERS } from "@/lib/gqlQueries/allMembersgql";
