@@ -11,25 +11,24 @@ const mobileDmRooms = () => {
   const rid = router.query.rid;
   const dmRooms = useSelector(state => state.msgs.dmRooms);
   const profilePic = useSelector(state => state.auth.member.profilePic);
-  const firstName = useSelector(state => state.auth.member.firstName);  
+  const firstName = useSelector(state => state.auth.member.firstName);
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   const handleClick = (id) => {
-    const pathSegment = moreThan600px ? 'direct_messages' : 'mobile_dm_rooms';    
+    const pathSegment = moreThan600px ? 'direct_messages' : 'mobile_dm_rooms';
     router.replace({pathname: `/yachty/${pathSegment}`, query: {rid: id}})
-  }
-
+  }  
   return (
     <>
       <NavBar />
       <Stack>
-        {rid && 
+        {rid &&
           <Fab size="small" onClick={() => router.replace({pathname: '/yachty/mobile_dm_rooms'})} variant="extended" sx={{ alignSelf: 'flex-start', margin: 3 }} color="primary">
             <ArrowBackIcon /> Back
           </Fab>
         }
         {rid && <DmMsgFeed />}
-        {!rid && 
+        {!rid &&
           <>
             <ListItem>
               <ListItemAvatar sx={{padding: 5}}>
@@ -43,9 +42,10 @@ const mobileDmRooms = () => {
                   <DmRoom dmRoom={room} />
                 </ListItem>
               )
-            })} 
+            })}
+            
           </>
-        }        
+        }
       </Stack>
     </>
   )
