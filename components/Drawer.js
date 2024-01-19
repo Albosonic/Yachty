@@ -45,7 +45,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
       <ListItem sx={itemStyles} disablePadding>
           <ListItemButton onClick={() => { router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
           <ListItemIcon>
-              <BroadcastOnPersonalIcon color="primary" />
+            <BroadcastOnPersonalIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="The Club" />
           </ListItemButton>
@@ -84,11 +84,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
               <ListItemIcon>
                 <Grid justifyContent="center">
                   <ChatIcon color="primary"/>
-
-
-
-
-
                   {globalNewMsg &&
                     <CircleIcon
                     color="error"
@@ -96,7 +91,6 @@ export default function AppDrawer({ open, toggleDrawer }) {
                       fontSize: 14,
                       marginBottom: 2,
                       marginLeft: -1,
-
                     }}
                   />}
                 </Grid>

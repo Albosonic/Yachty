@@ -1,8 +1,10 @@
 import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText, useMediaQuery } from "@mui/material";
+import { useRouter } from "next/router";
+import TelegramIcon from '@mui/icons-material/Telegram';
 import CircleIcon from '@mui/icons-material/Circle';
+
 import { gql, useQuery } from "@apollo/client";
 import LoadingYachty from "./LoadingYachty";
-import { useRouter } from "next/router";
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
@@ -14,17 +16,17 @@ query getYcDmMember($memberId: uuid!) {
   }
 }`
 
-const DmRoom = ({dmRoom}) => {    
+const DmRoom = ({dmRoom}) => {
   const { convoPartnerId, newMessage } = dmRoom;
   const memberId = useSelector(state => state.auth.member.id);
   const [notify, setNotify] = useState(false);
-  
+
   const {error, loading, data} = useQuery(GET_YC_DM_MEMBER, {
     variables: {
       memberId: convoPartnerId
     }
   })
-  
+
   useEffect(() => {
     setNotify(memberId !== newMessage && newMessage !== null);
   }, [newMessage])
@@ -32,25 +34,27 @@ const DmRoom = ({dmRoom}) => {
   if (loading) return <LoadingYachty isRoot={false} />
 
   const {profilePic, firstName} = data.yc_members[0];
-  
+  console.log('data.yc_members[0]', data.yc_members[0])
+
   return (
-    <>            
-      <ListItemAvatar>
-        <Grid container justifyContent="space-around">
-          <Avatar sx={{width: 60, height: 60}} src={profilePic} />
-          {notify && 
-          <CircleIcon
-            color="error"
-            sx={{
-              fontSize: 14,
-              marginBottom: 2,
-              marginLeft: -.5,
-            }}
-          />}
-        </Grid>
-      </ListItemAvatar>
-      <ListItemText sx={{marginLeft: 3}} primary={firstName} />      
-    </>
+    <Grid container justifyContent="space-around">    
+      <ListItemAvatar>        
+          <Grid container justifyContent="space-around" flexWrap="nowrap">            
+            <Avatar sx={{width: 60, height: 60}} src={profilePic} />
+            {notify &&
+            <CircleIcon
+              color="error"
+              sx={{
+                fontSize: 14,
+                marginBottom: 2,
+                marginLeft: -.5,
+              }}
+            />}
+          </Grid>        
+        </ListItemAvatar>
+        <ListItemText sx={{marginLeft: 3}} primary={firstName} />
+      <TelegramIcon />
+    </Grid>
   )
 }
 

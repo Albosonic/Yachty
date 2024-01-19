@@ -26,7 +26,7 @@ const NewUserDialog = ({ open, setOpen }) => {
   const editMyProfile = () => {
     setOpen(false);
     router.replace({
-      pathname:'/yachty/edit_my_profile', 
+      pathname:'/yachty/dashboard', 
       query: { memberId }
     })
   };  
@@ -34,6 +34,11 @@ const NewUserDialog = ({ open, setOpen }) => {
   const demoInfoDialog = () => {
     dispatch(demoEditProfileOptionAct(true));
     setOpenDemo(true);
+  }
+
+  const closeDialogs = () => {
+    setOpen(false)
+    setOpenDemo(false);
   }
 
   return (
@@ -64,7 +69,6 @@ const NewUserDialog = ({ open, setOpen }) => {
         TransitionComponent={Transition}
         keepMounted
         aria-describedby="new-member-dialog"
-        
       >
         <DialogTitle sx={{margin: 1}} >Edit Profile</DialogTitle>
         <DialogContent>
@@ -73,7 +77,7 @@ const NewUserDialog = ({ open, setOpen }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={editMyProfile}>close</Button>
+          <Button onClick={closeDialogs}>close</Button>
         </DialogActions>
       </Dialog>
     </>
