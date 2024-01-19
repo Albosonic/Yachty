@@ -1,6 +1,7 @@
-import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_MEMBER_BIO_ACT, UPDATE_MEMBER_NAME_ACT, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
+import { BETA_USER_IS_COMMODORE, CLEAR_STATE, INTRO_SEEN, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_MEMBER_BIO_ACT, UPDATE_MEMBER_NAME_ACT, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
-const initialState = {  
+const initialState = {
+  introSeen: false,
   member: {  
     email: '',
     firstName: '',
@@ -206,13 +207,18 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case BETA_USER_IS_COMMODORE: {
-
       return {
         ...state,
         user: {
           ...state.user,
           userIsCommodore: payload,
         }
+      }
+    }
+    case INTRO_SEEN: {
+      return {
+        ...state,
+        introSeen: true,
       }
     }
     default:

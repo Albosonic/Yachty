@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,29 +7,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { useRouter } from 'next/router';
 import EditProfilePic from './EditProfilePic';
 import { Stack } from '@mui/material';
 import UpdateName from './UpdateName';
 import { demoEditProfileOptionAct } from '@/slices/actions/uxActions';
+import { introSeenAct } from '@/slices/actions/authActions';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const NewUserDialog = ({ open, setOpen }) => {
-  const router = useRouter();  
-  const dispatch = useDispatch();
-  const memberId = useSelector(state => state.auth.member.id);
+const NewUserDialog = ({ open, setOpen }) => {  
+  const dispatch = useDispatch();  
   const [openDemo, setOpenDemo] = useState(false);
-
-  const editMyProfile = () => {
-    setOpen(false);
-    router.replace({
-      pathname:'/yachty/dashboard', 
-      query: { memberId }
-    })
-  };  
 
   const demoInfoDialog = () => {
     dispatch(demoEditProfileOptionAct(true));
@@ -37,8 +27,9 @@ const NewUserDialog = ({ open, setOpen }) => {
   }
 
   const closeDialogs = () => {
+    dispatch(introSeenAct())    
     setOpen(false)
-    setOpenDemo(false);
+    setOpenDemo(false)
   }
 
   return (

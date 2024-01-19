@@ -5,14 +5,28 @@ import { Stack, ListItem, ListItemAvatar, Avatar, ListItemText, Fab, useMediaQue
 import NavBar from "@/components/NavBar";
 import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
+import { useEffect } from "react";
 
 const mobileDmRooms = () => {
-  const router = useRouter();
-  const rid = router.query.rid;
-  const dmRooms = useSelector(state => state.msgs.dmRooms);
-  const profilePic = useSelector(state => state.auth.member.profilePic);
-  const firstName = useSelector(state => state.auth.member.firstName);
-  const moreThan600px = useMediaQuery('(min-width:600px)');
+  const router = useRouter()
+  const rid = router.query.rid
+  const dmRooms = useSelector(state => state.msgs.dmRooms)
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
+  const profilePic = useSelector(state => state.auth.member.profilePic)
+  const firstName = useSelector(state => state.auth.member.firstName)
+  const moreThan600px = useMediaQuery('(min-width:600px)')
+
+  useEffect(() => {    
+    if (dmRooms.length === 0) {
+      router.replace({
+        pathname:'/yachty/view_all_members',
+        query: { 
+          ycId,
+          noDms: true,
+        }
+      })
+    }
+  },[dmRooms])
 
   const handleClick = (id) => {
     const pathSegment = moreThan600px ? 'direct_messages' : 'mobile_dm_rooms';
