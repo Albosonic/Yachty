@@ -143,7 +143,6 @@ const Yachty = () => {
     }
     dispatch(pollUserRooms())
     setNewUserOpen(!introSeen)
-    // setNewUserOpen(name.includes('.com'));
   }, [user, userIsCommodore, name, introSeen])  
   
   if (isLoading || upsertMemberLoading) return <LoadingYachty />;  
