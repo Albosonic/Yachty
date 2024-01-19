@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_USERS_ROOM } from "@/lib/gqlQueries/dmgql";
 import { INSERT_ROOM } from "@/lib/gqlQueries/allMembersgql";
@@ -14,15 +14,22 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import MemberInfoDialog, { cleanDialog } from "./MemberInfoDialog";
+import NoDmsDialog from "./NoDmsDialog";
 
-const AllMembersTable = ({ columns, data, totalAttendees }) => {    
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  
-  const [openDialog, setOpenDialog] = useState({...cleanDialog});
+const AllMembersTable = ({ columns, data, totalAttendees }) => {
+  const router = useRouter()
+  const noDms = router.query.noDms
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [openDialog, setOpenDialog] = useState({...cleanDialog})
+  const [openNoDmsDialog, setOpenNoDmsDialog] = useState()
+
+  useEffect(() => {
+    if (noDms) setOpenNoDmsDialog(true)
+  }, [noDms])
 
   const handleChangePage = (event, newPage) => setPage(newPage);
-  
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -33,6 +40,7 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <MemberInfoDialog openDialog={openDialog} setOpen={setOpenDialog} />
+      <NoDmsDialog open={openNoDmsDialog} setOpen={setOpenNoDmsDialog} />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
