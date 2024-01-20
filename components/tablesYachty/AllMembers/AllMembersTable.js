@@ -20,9 +20,9 @@ const AllMembersTable = ({ columns, data, totalAttendees }) => {
   const router = useRouter()
   const noDms = router.query.noDms
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(35)
   const [openDialog, setOpenDialog] = useState({...cleanDialog})
-  const [openNoDmsDialog, setOpenNoDmsDialog] = useState()
+  const [openNoDmsDialog, setOpenNoDmsDialog] = useState(false)
 
   useEffect(() => {
     if (noDms) setOpenNoDmsDialog(true)
