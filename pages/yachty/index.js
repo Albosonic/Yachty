@@ -119,6 +119,7 @@ const Yachty = () => {
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberData = useSelector(state => state?.auth?.member);
   const name = useSelector(state => state?.auth?.member?.name);
+  const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
     
@@ -136,13 +137,16 @@ const Yachty = () => {
           lasrLogin: getIsoDate(),
           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing.
         }});
-        const userData = { member: resp.data.insert_yc_members.returning[0], user: user };        
+        const userData = { member: resp.data.insert_yc_members.returning[0], user: user };             
         dispatch(addMember(userData));
       }
+
       upsertUser();
     }
     dispatch(pollUserRooms())
-    setNewUserOpen(!introSeen)
+    if (email !== '') {
+      setNewUserOpen(!introSeen)
+    }
   }, [user, userIsCommodore, name, introSeen])  
   
   if (isLoading || upsertMemberLoading) return <LoadingYachty />;  
