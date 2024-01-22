@@ -76,7 +76,7 @@ const Racing = () => {
         </Stack>
       }
       {view === RACES &&
-        <Stack spacing={2} alignItems="center">
+        <Stack spacing={2} alignItems="center" sx={{ padding: 2}}>
           <Typography noWrap sx={{padding: 1}} variant="h5">Upcoming Races</Typography>
           <Stack spacing={4}>
             {races.length === 0 && <Typography>The are no upcoming races at this time.</Typography>}
