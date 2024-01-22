@@ -143,8 +143,8 @@ const Yachty = () => {
 
       upsertUser();
     }
-    dispatch(pollUserRooms())
-    if (email !== '') {
+    dispatch(pollUserRooms())    
+    if (name.includes('.com')) {
       setNewUserOpen(!introSeen)
     }
   }, [user, userIsCommodore, name, introSeen])  
