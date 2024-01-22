@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { GET_ALL_USER_ROOMS_BY_ID } from "@/lib/gqlQueries/dmgql";
 import { GET_ALL_YC_MEMBERS, INSERT_ROOM, INSERT_USER_ROOMS } from "@/lib/gqlQueries/allMembersgql";
@@ -44,6 +44,7 @@ const RaceParticipants = ({raceId}) => {
   const ycId = router.query.ycId;
 
   const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
+  const anchor = useRef(null);
   const memberId = useSelector(state => state.auth.member.id);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -64,10 +65,17 @@ const RaceParticipants = ({raceId}) => {
     pollInterval: 2000,
   });
 
-  const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM);
-  const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS);
+  const [createDMRoom, { loading: dMRoomLoading }] = useMutation(INSERT_ROOM)
+  const [addUserRooms, { loading: userRoomsLoading }] = useMutation(INSERT_USER_ROOMS)
 
   const handleClose = async () => setOpenDialog({...cleanDialog})
+
+  const scrollToElLeaveSetRow = (row) => {
+    if (anchor.current) {
+      anchor.current.scrollIntoView({behavior: "smooth"})
+    }
+    return () => setOpenDialog({...row, open: true })
+  }
 
   const directMessage = async (recipientId) => {
     let roomId = null;
@@ -136,38 +144,45 @@ const RaceParticipants = ({raceId}) => {
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => {
-                return (
-                  <TableRow onClick={() => setOpenDialog({...row, open: true })} hover role="checkbox" tabIndex={-1} key={row.email}>
-                    {columns.map((column, i) => {
-                      let value = row[column.id];
-                      if (column.isRelease && row.signed_race_releases[0]) {
-                        let signed = row.signed_race_releases[0]?.releaseFormId;
+                if (i === rows.length -1) {
+                  return (
+
+
+                    <TableRow ref={anchor} onClick={scrollToElLeaveSetRow(row)} hover role="checkbox" tabIndex={-1} key={row.email}>
+
+
+
+                      {columns.map((column, i) => {
+                        let value = row[column.id];
+                        if (column.isRelease && row.signed_race_releases[0]) {
+                          let signed = row.signed_race_releases[0]?.releaseFormId;
+                          return (
+                            <TableCell key={column + i} align={column.align}>
+                              {signed && <DownloadDoneIcon color="success" />}
+                            </TableCell>
+                          )
+                        }
+                        if (column.id === 'profilePic') {
+                          return (
+                            <TableCell key={column.id + i + column.label} align={column.align}>
+                              <Avatar src={value} />
+                            </TableCell>
+                          )
+                        }
+                        if (Array.isArray(value)) {
+                          value = value.length > 0 ? value[0][column.nestedKey] : null;
+                        }
                         return (
                           <TableCell key={column + i} align={column.align}>
-                            {signed && <DownloadDoneIcon color="success" />}
+                            {column.format && typeof value === 'number'
+                              ? column.format(value)
+                              : value}
                           </TableCell>
-                        )
-                      }
-                      if (column.id === 'profilePic') {
-                        return (
-                          <TableCell key={column.id + i + column.label} align={column.align}>
-                            <Avatar src={value} />
-                          </TableCell>
-                        )
-                      }
-                      if (Array.isArray(value)) {
-                        value = value.length > 0 ? value[0][column.nestedKey] : null;
-                      }
-                      return (
-                        <TableCell key={column + i} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
+                        );
+                      })}
+                    </TableRow>
+                  );
+                }
               })}
           </TableBody>
         </Table>
