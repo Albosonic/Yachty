@@ -2,11 +2,12 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const RaceCourseMenu = ({courses, setCourse}) => {
+const RaceCourseMenu = ({ courses, setCourse }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -24,6 +25,9 @@ const RaceCourseMenu = ({courses, setCourse}) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant="contained"        
+        endIcon={<ArrowDropDownIcon />}
+        sx={{minWidth: 223}}
       >
         choose a course
       </Button>

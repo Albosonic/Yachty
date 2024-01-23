@@ -1,7 +1,40 @@
-import { BETA_USER_IS_COMMODORE, CLEAR_STATE, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
+import { BETA_USER_IS_COMMODORE, CLEAR_STATE, INTRO_SEEN, MEMBER_OBJECT, NON_MEMBER_OBJECT, UPDATE_HULL_MATERIAL_ACT, UPDATE_IS_RACER, UPDATE_LOGO, UPDATE_MEMBER_BIO_ACT, UPDATE_MEMBER_NAME_ACT, UPDATE_NEW_VESSEL_ACT, UPDATE_PROFILE_PICTURE, UPDATE_VESSEL_IMAGE, UPDATE_VESSEL_SPECS_ACT, UPDATE_VESSEL_TYPE_ACT } from "./actions/authActions"
 
 const initialState = {
-  member: {
+  introSeen: false,
+  member: {  
+    email: '',
+    firstName: '',
+    lastName: '',
+    id: '',
+    name: '',
+    profilePic: '',    
+    isRacer: false,
+    bio: '',
+    vessels: [{
+      beam: null,
+      draft: null,
+      hullMaterial: '',
+      id: '',
+      img: null,
+      length: null,
+      ownerId: '',
+      specialNotes: '',
+      type: '',
+      unafilliatedVesselId: null,
+      vesselName: '',
+      make: '',
+      model: '',
+      sailNumber: '',
+      marina: '',
+      slip: '',
+      __typename: '',
+      insuranceInfo: {
+        no: '',
+        company: '',
+        expires: ''
+      },
+    }],
     yachtClubByYachtClub: {
       id: '',
       name: '',
@@ -13,36 +46,6 @@ const initialState = {
         id: '',
       },
     },
-    email: '',
-    firstName: '',
-    lastName: '',
-    id: '',
-    name: '',
-    profilePic: '',
-    vessels: [],
-    isRacer: false,
-    bio: '',
-    vessels: [
-      {
-        beam: null,
-        draft: null,
-        hullMaterial: '',
-        id: '',
-        img: null,
-        length: null,
-        ownerId: '',
-        specialNotes: '',
-        type: '',
-        unafilliatedVesselId: null,
-        vesselName: '',
-        __typename: '',
-        insuranceInfo: {
-          no: '',
-          company: '',
-          expires: ''
-        },
-      }
-    ],
   },
   user: {
     given_name: '',
@@ -66,7 +69,7 @@ export default function authReducer(state = initialState, action) {
     case CLEAR_STATE: {
       return initialState;
     }
-    case MEMBER_OBJECT: {
+    case MEMBER_OBJECT: {      
       let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
       return {
@@ -77,6 +80,26 @@ export default function authReducer(state = initialState, action) {
           profilePic: payload.member?.profilePic || payload.user?.picture,
         },
       };
+    }
+    case UPDATE_MEMBER_BIO_ACT: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          bio: payload,
+        }
+      }
+    }
+    case UPDATE_MEMBER_NAME_ACT: {
+      return {
+        ...state,
+        member: {
+          ...state.member,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          name: payload.userName,
+        }
+      }
     }
     case UPDATE_NEW_VESSEL_ACT: {
       const {img, id, ownerId} = payload;
@@ -118,7 +141,7 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case UPDATE_VESSEL_SPECS_ACT: {
-      const {vesselName, draft, length, beam} = payload;
+      const {vesselName, draft, length, beam, model, sailNumber, marina, slip, make} = payload;
       return {
         ...state,
         member: {
@@ -129,6 +152,11 @@ export default function authReducer(state = initialState, action) {
             draft,
             length,
             beam,
+            model, 
+            sailNumber, 
+            marina, 
+            slip,
+            make,
           }]
         }
       }
@@ -179,13 +207,18 @@ export default function authReducer(state = initialState, action) {
       }
     }
     case BETA_USER_IS_COMMODORE: {
-
       return {
         ...state,
         user: {
           ...state.user,
           userIsCommodore: payload,
         }
+      }
+    }
+    case INTRO_SEEN: {
+      return {
+        ...state,
+        introSeen: true,
       }
     }
     default:

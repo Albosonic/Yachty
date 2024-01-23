@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Divider, Grid, Stack, Typography } from "@mui/material";
 import NavBar from "@/components/NavBar";
 import UploadRaceCourse from "@/components/UploadRaceCourse";
 import UploadRaceEvent from "@/components/UploadRaceEvent";
+import { useRouter } from "next/router";
 
 const CreateRaces = () => {
+  const router = useRouter();
+  const workingDate = router.query.workingDate;
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   const left = showLeftPanel ? 1.5 : 1;
   const right = showLeftPanel ? 1 : 1.5;
+
+  useEffect(() => {
+    if(workingDate) {
+      setShowLeftPanel(false);
+    }
+  }, [workingDate])
   return (
     <>
       <NavBar />
@@ -23,7 +32,7 @@ const CreateRaces = () => {
             Upload Course
           </Button>
           <Divider orientation="vertical" flexItem></Divider>
-          <Button sx={{borderBottom: right, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(false)}>
+          <Button sx={{ borderBottom: right, borderRadius:0 }} fullWidth onClick={() => setShowLeftPanel(false)}>
             Create Race
           </Button>
         </Grid>

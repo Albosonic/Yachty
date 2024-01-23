@@ -66,6 +66,7 @@ const UploadVesselImage = () => {
 
   const uploadVesselImage = async () => {
     const {fileDatum, src, imgKey} = vesselImg;
+
     const params = {
       Bucket: 'yachty-letter-heads',
       Key: imgKey,
@@ -75,10 +76,10 @@ const UploadVesselImage = () => {
 
     const results = await s3Client.send(new PutObjectCommand(params));
     const imgPath = `${IMG_BUCKET}${imgKey}`;
-    if (vesselIdExists) {
+    if (vesselIdExists) {      
       await updateVesselImage({variables: {ownerId: memberId, img: imgPath}})
       dispatch(updateVesselImgAct(imgPath));
-    } else {
+    } else {      
       const resp = await insertVesselAndImage({variables: {ownerId: memberId, img: imgPath, vesselImg: imgPath}});
       dispatch(updateNewVesselAct({ownerId: memberId, img: imgPath, id: resp.data.insert_vessels_one.id}))
     }  
@@ -91,7 +92,7 @@ const UploadVesselImage = () => {
     setEditing(true)
   }
 
-  const imgWidthAndHeight = moreThan600px ? '60%' : '100%';
+  const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
   const fabHandler = editing ? uploadVesselImage : resetForm;
   if (vesselLoading || vesselImgLoading) return <CircularProgress />;
   return (
@@ -117,10 +118,10 @@ const UploadVesselImage = () => {
           <Fab 
             onClick={fabHandler}
             sx={{
-            background: 'white',
-            position: 'relative',
-            top: -100,
-          }}>
+              background: 'white',
+              position: 'relative',
+              top: -100,
+            }}>
             {editing ? <PublishIcon /> : <EditIcon />}
           </Fab>
       </>}

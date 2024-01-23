@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const RaceCourseDetails = ({ course }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -17,8 +18,9 @@ const RaceCourseDetails = ({ course }) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        endIcon={<ArrowDropDownIcon />}
       >
-        Details
+        See Course Details
       </Button>
       <Menu
         id="course-details"

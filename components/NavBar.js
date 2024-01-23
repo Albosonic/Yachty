@@ -6,31 +6,22 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import BugReportIcon from '@mui/icons-material/BugReport';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { Avatar, Fab } from '@mui/material';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { Fab } from '@mui/material';
 import AppDrawer from './Drawer';
 import { useSelector } from 'react-redux';
+import MainProfilePic from './MainProfilePic';
+import { useTheme } from '@emotion/react';
 
-export default function NavBar() {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function NavBar() {  
+  const theme = useTheme();  
   const [openDrawer, setOpenDrawer] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const profilePicture = useSelector(state => state.auth.member?.profilePic);
   const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
+  const email = useSelector(state => state.auth?.user?.email);
   
-  useEffect(() => {
-    setUserLoggedIn(emailVerrified);
-  }, [emailVerrified]);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {    
+    setUserLoggedIn(!!email || emailVerrified);
+  }, [emailVerrified, email]);
 
   const toggleDrawer = () => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -38,11 +29,14 @@ export default function NavBar() {
     }
     setOpenDrawer(!openDrawer);
   };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, borderBottom:`8px solid ${theme.custom.trimColor}`}}>
       <AppBar position="static">
         <Toolbar >
-          {emailVerrified && <IconButton
+          {
+          userLoggedIn && 
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -52,49 +46,19 @@ export default function NavBar() {
           >
             <MenuIcon />
             <AppDrawer open={openDrawer} toggleDrawer={toggleDrawer} />
-          </IconButton>}
+          </IconButton>
+          }
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Yachty
-          </Typography>        
+          </Typography>
           <Fab size='small' variant="extended" sx={{marginRight: 3}}>
             <BugReportIcon/>
-            Beta
+            Test
           </Fab>
-          {userLoggedIn && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <Fab size='small'>
-                  <Avatar alt="Profile Pic" src={profilePicture} />
-
-                </Fab>
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+          <MainProfilePic 
+            size="small" 
+            loggedIn={userLoggedIn}            
+          />          
         </Toolbar>
       </AppBar>
     </Box>

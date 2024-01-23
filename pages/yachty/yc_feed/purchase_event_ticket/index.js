@@ -1,4 +1,5 @@
 import EventTicketForPurchase from "@/components/EventTicketForPurchase"
+import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
 import { EVENT_TICKET_FOR_PURCHASE } from "@/lib/gqlQueries/ycFeedgql";
 import { useQuery } from "@apollo/client";
@@ -12,13 +13,13 @@ const YcEventTicketForPurchase = () => {
   const eventId = router.query.eventId;
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
   const {loading, data, error } = useQuery(EVENT_TICKET_FOR_PURCHASE, {variables:{eventId}, fetchPolicy: "no-cache" });
-  if (loading || data === undefined) return <CircularProgress />
+  if (loading || data === undefined) return <LoadingYachty />
   const eventData = data.yc_events[0];
   return (
     <>
       <NavBar />
       <Stack alignItems="center">  
-        <Fab sx={{alignSelf: 'flex-start', margin: 5}} color="primary" variant="extended" onClick={() => router.replace({pathname: '/yachty/yc_feed', query: { ycId }})}>
+        <Fab size="small" sx={{alignSelf: 'flex-start', margin: 5}} color="primary" variant="extended" onClick={() => router.replace({pathname: '/yachty/yc_feed', query: { ycId }})}>
           <ArrowBackIcon />
           Back
         </Fab>      

@@ -40,7 +40,7 @@ const RadioVesselType = () => {
   }
   const toRowOrNotToRow = moreThan600px ? true : true;
   return (
-    <Stack sx={{width: '100%'}} alignItems="center" spacing={2}>
+    <Stack sx={{width: '100%', maxWidth: 600}} alignItems="flex-start" spacing={2}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success

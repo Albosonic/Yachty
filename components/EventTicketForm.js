@@ -1,4 +1,4 @@
-import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Box, Card, CardContent, CardMedia, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import {  useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@apollo/client';
@@ -7,13 +7,14 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import NavBar from '@/components/NavBar';
 import { UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEventgql';
+import LoadingYachty from './LoadingYachty';
 
 const CreateEventTicket = ({ eventData }) => {  
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const [createYachtClubEventTicket, { loading: ticketLoading, data: ticketData, error: ticketError }] = useMutation(UPSERT_EVENT_TICKET);
   const [amount, setAmount] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingYachty />;
   
   const {
     date,
