@@ -16,24 +16,30 @@ import { Alert, Grid, Snackbar } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import { useMutation } from '@apollo/client';
-import { INSERT_RACE_ONE } from '@/lib/gqlQueries/racinggql';
+import { INSERT_RACE_ONE, UPDATE_RACE } from '@/lib/gqlQueries/racinggql';
 import { getFriendlyDateAndTime, getHasuraDate } from '@/lib/utils/dateStrings';
 import dayjs from 'dayjs';
 
 
 const RaceReviewPoster = ({ race }) => {
-  const router = useRouter();
-  const [showSuccess, setShowSuccess] = useState(false);
-  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
-  const series = useSelector(state => state.workingRace.series);
-  const course = useSelector(state => state.workingRace.course);
-  const raceName = useSelector(state => state.workingRace.raceName);
-  const startDate = useSelector(state => state.workingRace.startDate);
-  const endDate = useSelector(state => state.workingRace.endDate);
-  const release = useSelector(state => state.workingRace.release);
+  const router = useRouter()
+  const [showSuccess, setShowSuccess] = useState(false)
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo)
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
+  const series = useSelector(state => state.workingRace.series)
+  const course = useSelector(state => state.workingRace.course)
+  const raceName = useSelector(state => state.workingRace.raceName)
+  const startDate = useSelector(state => state.workingRace.startDate)
+  const endDate = useSelector(state => state.workingRace.endDate)
+  const release = useSelector(state => state.workingRace.release)
   const image = useSelector(state => state.workingRace.image)
-  const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE);
+  const raceId = useSelector(state => state.workingRace.raceId)
+  const existingRace = useSelector(state => state.workingRace.existingRace)
+  const existingImg = useSelector(state => state.workingRace.existingImg)
+
+  const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE)
+  const [updateRace, {loading: updateRaceLoading}] = useMutation(UPDATE_RACE)
+
   const handleClose = () => setShowSuccess(false);
 
   const createTickets = (raceId) => {
@@ -42,24 +48,23 @@ const RaceReviewPoster = ({ race }) => {
       query: {raceId}
     })
   }
-  const confirmRace = async () => {
+  const confirmRace = async () => {    
     const {fileDatum, src, imgKey} = image;
     const { id: courseId } = course;
     const imagePath = `${IMG_BUCKET}${imgKey}`;
-    const base64Data = new Buffer.from(fileDatum.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-    const type = fileDatum.split(';')[0].split('/')[1];
-    const params = {
-      Bucket: 'yachty-letter-heads',
-      Key: imgKey,
-      Body: base64Data,
-      ContentEncoding: 'base64',
-      ContentType: `image/png${type}`
-    };
-    
-    const results = await s3Client.send(new PutObjectCommand(params));
 
-    const hasuraStartDate = getHasuraDate(dayjs(startDate));
-    const hasuraEndDate = getHasuraDate(dayjs(endDate))
+    if (!existingImg) {
+      const base64Data = new Buffer.from(fileDatum.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+      const type = fileDatum.split(';')[0].split('/')[1];
+      const params = {
+        Bucket: 'yachty-letter-heads',
+        Key: imgKey,
+        Body: base64Data,
+        ContentEncoding: 'base64',
+        ContentType: `image/png${type}`
+      };
+      const results = await s3Client.send(new PutObjectCommand(params));
+    }    
 
     const variables = {
       object: {
@@ -68,16 +73,22 @@ const RaceReviewPoster = ({ race }) => {
         img: imagePath,
         raceName,
         raceCourseId: courseId,
-        startDate: hasuraStartDate,
-        endDate: hasuraEndDate,
+        startDate: existingRace ? startDate : getHasuraDate(dayjs(startDate)),
+        endDate: existingRace ? endDate : getHasuraDate(dayjs(endDate)),
         ycId: ycId,
         startTime,
         endTime,
         releaseFormId: release.id,
       }
     };
-    const resp = await insertRace({variables})
-    createTickets(resp.data.insert_races_one.id)
+    if (existingRace) {
+      variables.raceId = raceId;
+      console.log('variables ======', variables)
+      updateRace({variables})
+    } else {
+      const resp = await insertRace({variables})
+      createTickets(resp.data.insert_races_one.id)
+    }
   }
   // const { posterWidth } = posterStyles;
 
@@ -96,12 +107,13 @@ const RaceReviewPoster = ({ race }) => {
       <CardHeader
         avatar={<Avatar src={burgee} aria-label="burgee" />}
         // action={<RaceOptionsMenu raceId={raceId} releaseFormId={releaseFormId} goToReservations={goToReservations} />}
-        title={raceName}        
+        title={raceName}
         subheader={subheader}
       />
       <CardMedia
         component="img"
         height="100%"
+        width= "100%"        
         image={image.fileDatum}
         alt="Race Image"
       />

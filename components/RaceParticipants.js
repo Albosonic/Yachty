@@ -41,9 +41,6 @@ const cleanDialog = {
 
 const RaceParticipants = ({raceId}) => {
   const router = useRouter();
-  const ycId = router.query.ycId;
-
-  const userIsCommodore = useSelector(state => state.auth.user.userIsCommodore);
   const memberId = useSelector(state => state.auth.member.id);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);

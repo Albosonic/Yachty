@@ -3,15 +3,25 @@ import { Box, Fab, Grid, Stack, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
-import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { clearWorkingRaceImagesAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const SetRaceImage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const [showInput, setShowInput] = useState(true);  
   const image = useSelector(state => state.workingRace.image)
+  const existingImg = useSelector(state => state.workingRace.existingImg)
+  const existingRace = useSelector(state => state.workingRace.existingRace)
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const {fileDatum} = image;
+
+  useEffect(() => {
+    if (fileDatum || existingImg) {
+      setShowInput(false);
+    }    
+  }, [image, existingImg])
 
   const handleChange = async (e) => {
     const {files} = e.target;    
@@ -24,21 +34,25 @@ const SetRaceImage = () => {
         imgKey: uuid4(),
         src: URL.createObjectURL(file),
       }    
-      dispatch(makeNewRaceFieldAct({image: imageObject}))
+      dispatch(makeNewRaceFieldAct({image: imageObject}))      
     };
     reader.readAsDataURL(file);
   };
 
-  const goToReview = () => router.push({ pathname: '/yachty/make_new_race/review' });
+  const goToReview = () => router.push({ pathname: '/yachty/make_new_race/review' })
 
-  const resetImage = () => dispatch(makeNewRaceFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
+  const resetImage = () => dispatch(clearWorkingRaceImagesAct())  
 
   const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
+
+  console.log('file datum =====', fileDatum)
+  console.log('existing image =====', existingImg)
+
 
   return (
     <>
       <Stack alignItems="center">
-        {fileDatum &&
+        {!showInput &&
           <>
             <Box
               component="img"
@@ -49,7 +63,7 @@ const SetRaceImage = () => {
                 marginBottom: 2,
               }}
               alt="Vessel Image"
-              src={fileDatum}
+              src={fileDatum || existingImg}
             />
             <Grid>
               <Fab
@@ -79,7 +93,7 @@ const SetRaceImage = () => {
             </Grid>
           </>
         }        
-        {!fileDatum &&
+        {showInput &&
           <input
             onChange={(e) => handleChange(e)}
             type="file"

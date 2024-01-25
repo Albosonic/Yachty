@@ -1,14 +1,12 @@
 import CalendarDayClickMenu from "@/components/CalendarDayClickMenu";
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
+import { PARTY, RACE } from "@/lib/strings";
 import { Scheduler } from "@aldabil/react-scheduler";
 import { gql, useQuery } from "@apollo/client";
 import { Typography } from "@mui/material";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-
-export const RACE = 'RACE';
-export const PARTY = 'PARTY';
 
 const GET_ALL_CALENDAR_EVENTS = gql`
 query getAllCalendarEvents($ycId: uuid!) {
@@ -43,10 +41,11 @@ const useAllCallendarEvents = () => {
     let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]} ${startTime}`
     let endFix = `${splitEndtDate[0]}/${splitEndtDate[1]}/${splitEndtDate[2]} ${endTime}`
     let event = {
-      event_id: `${id}/${RACE}`,
+      event_id: id,
       title: raceName,
       start: new Date(startFix),
       end: new Date(endFix),
+      type: RACE,
     }
     events.push(event);
   });
@@ -55,10 +54,11 @@ const useAllCallendarEvents = () => {
     let splitStartDate = startDate.split('-');
     let startFix = `${splitStartDate[0]}/${splitStartDate[1]}/${splitStartDate[2]}`
     let event = {
-      event_id: `${id}/${PARTY}`,
+      event_id: id,
       title: eventName,
       start: new Date(startFix),
       end: new Date(startFix),
+      type: PARTY
     }
     events.push(event);
   })
