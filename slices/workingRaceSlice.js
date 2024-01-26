@@ -3,16 +3,12 @@ import { CLEAR_NEW_RACE_FIELDS_ACT, CLEAR_WORKING_RACE_IMAGES_ACT, EDIT_NEW_RACE
 const initialState = {
   inReview: false,
   raceId: '',
-  course: {
-    instructions: [],
-    courseName: '',
-    id: null,
-  },
+  course: null,
   raceName: '',
-  image: { 
-    src: null, 
-    fileDatum: null, 
-    imgKey: null 
+  image: {
+    src: null,
+    fileDatum: null,
+    imgKey: null
   },
   raceNameSet: false,
   startDate: null,
@@ -20,12 +16,9 @@ const initialState = {
   newRaceId: null,
   series: null,
   release: null,
-  release: {
-    id: null
-  },
-  raceTicketsForPurchase: { 
-    id: null, 
-    cost: 0 
+  raceTicketsForPurchase: {
+    id: null,
+    cost: 0
   },
   existingImg: '',
   existingRace: false,
@@ -39,19 +32,20 @@ export default function workingRaceReducer(state = initialState, action) {
       return { ...state, [key]: payload[key] }
     case HYDRATE_WORKING_RACE_ACT: {      
       const {
-        id,        
+        id,
         race_course: course,
         raceName,
         // raceTicketId,
-        race_series: series,        
+        race_series: series,
         startDate,
         endDate,
         startTime,
         endTime,
         img,
         race_release_form: release,
-        race_tickets_for_purchase: raceTicketsForPurchase,        
+        race_tickets_for_purchase: raceTicketsForPurchase,
       } = payload;
+      console.log('course ========', payload)
       return {
         ...state,
         raceId: id,
@@ -62,28 +56,28 @@ export default function workingRaceReducer(state = initialState, action) {
         endDate,
         startTime,
         endTime,
-        series,        
+        series,
         release,
         raceTicketsForPurchase,
         existingRace: true,
       }
     }
-    case TOGGLE_RACE_IN_REVIEW_ACT:      
-      return { 
-        ...state, 
+    case TOGGLE_RACE_IN_REVIEW_ACT:
+      return {
+        ...state,
         inReview: payload
       }
     case CLEAR_NEW_RACE_FIELDS_ACT:
       return { ...initialState }
     case CLEAR_WORKING_RACE_IMAGES_ACT:
       return {
-        ...state, 
+        ...state,
         inReview: false,
-        existingImg: '', 
-        image: { 
-          src: null, 
-          fileDatum: null, 
-          imgKey: null 
+        existingImg: '',
+        image: {
+          src: null,
+          fileDatum: null,
+          imgKey: null
         }
       }
     default:

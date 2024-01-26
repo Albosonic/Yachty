@@ -22,7 +22,7 @@ const SetRaceName = ({ callback }) => {
         label="race name"
         variant="standard"
         onChange={(e) => setRaceName({raceName: e.target.value})}
-        InputProps={{endAdornment: <Button onClick={editRaceName} endIcon={<EastIcon />}>next</Button>}}
+        InputProps={{endAdornment: <Button disabled={raceName.raceName === ''} onClick={editRaceName} endIcon={<EastIcon />}>next</Button>}}
       />
     </>
   )

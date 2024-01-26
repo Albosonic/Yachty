@@ -6,7 +6,8 @@ import { Button, Grid } from '@mui/material';
 import { GET_RACE_BY_ID } from '@/lib/gqlQueries/racinggql';
 import client from '@/lib/clients/apollo-client';
 import { PARTY, RACE } from '@/lib/strings';
-import { hydrateWorkingRace } from '@/slices/actions/workingRaceActions';
+import { clearNewRaceFieldsAct, hydrateWorkingRace } from '@/slices/actions/workingRaceActions';
+import { clearNewEventFieldsAct } from '@/slices/actions/workingEventActions';
 
 const CalendarDayClickMenu = ({ scheduler }) => {
   const router = useRouter();
@@ -32,10 +33,10 @@ const CalendarDayClickMenu = ({ scheduler }) => {
           const race = raceData.data.races[0];
           dispatch(hydrateWorkingRace(race))                    
         })
-
         router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true, raceId: eventId }});
       }
       if (eventType === PARTY) {
+        // TODO: fix Event to work like races
         router.replace({pathname: '/yachty/create_yc_event', query: { workingDate: true, eventId: eventId }});
       }
     }
@@ -43,11 +44,13 @@ const CalendarDayClickMenu = ({ scheduler }) => {
 
   const handleCreateEvent = () => {
     dispatch(workingEventDateAct(scheduler.state.start.value));
+    dispatch(clearNewEventFieldsAct())
     router.replace({ pathname: '/yachty/make_new_event', query: { workingDate: true } });
   };
 
   const handleCreateRace = () => {    
     dispatch(workingRaceDateAct(scheduler.state.start.value));
+    dispatch(clearNewRaceFieldsAct())
     router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
   }
 

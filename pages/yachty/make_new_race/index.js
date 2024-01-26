@@ -86,7 +86,7 @@ const makeNewRace = () => {
             label="Race Series"
           />
         }
-        {course?.id &&
+        {course &&
           <RaceDetail
             clearField={{course: null}}
             detail={course.courseName}
@@ -114,10 +114,10 @@ const makeNewRace = () => {
             label="Ends"
           />
         }
-        {release?.id &&
+        {release &&
           <RaceDetail
             clearField={{release: null}}
-            detail={release.name}
+            detail={release?.name}
             label="Release"
           />
         }
