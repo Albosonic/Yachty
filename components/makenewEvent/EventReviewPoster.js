@@ -33,9 +33,9 @@ const EventReviewPoster = ({ race }) => {
   const entertainment = useSelector(state => state.workingEvent.entertainment)
   const image = useSelector(state => state.workingEvent.image)
 
-  const [insertEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT);
+  const [insertEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT)
 
-  const handleClose = () => setShowSuccess(false);
+  const handleClose = () => setShowSuccess(false)
 
   const createTickets = (eventId) => {
     router.push({

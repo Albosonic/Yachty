@@ -155,7 +155,7 @@ const CreateYCEvent = () => {
     dispatch(workingRaceDateAct(null))
     router.replace({pathname: '/yachty/calendar'})
   }
-  const defaultStartDate = workingDate ? dayjs(workingDate.start.value) : null;
+  const defaultStartDate = workingDate ? dayjs(workingDate) : null;
   const {
     eventNameError,
     locationError,

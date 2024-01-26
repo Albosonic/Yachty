@@ -59,7 +59,7 @@ const RaceReviewPoster = ({ race }) => {
   const confirmRace = async () => {    
     const {fileDatum, src, imgKey} = image;
     const { id: courseId } = course;
-    const imagePath = `${IMG_BUCKET}${imgKey}`;
+    let imagePath = `${IMG_BUCKET}${imgKey}`;
 
     if (!existingImg) {
       const base64Data = new Buffer.from(fileDatum.replace(/^data:image\/\w+;base64,/, ""), 'base64');
@@ -71,7 +71,7 @@ const RaceReviewPoster = ({ race }) => {
         ContentEncoding: 'base64',
         ContentType: `image/png${type}`
       };
-      const results = await s3Client.send(new PutObjectCommand(params));
+      const results = await s3Client.send(new PutObjectCommand(params))
     }    
 
     const variables = {
@@ -90,8 +90,9 @@ const RaceReviewPoster = ({ race }) => {
       }
     };
     if (existingRace) {
-      variables.raceId = raceId;      
-      const resp = await updateRace({variables})
+      if (existingImg) variables.object.img = existingImg;
+      variables.raceId = raceId;
+      const resp = await updateRace({variables})      
       setShowSuccess(true)
     } else {
       const resp = await insertRace({variables})
@@ -105,7 +106,7 @@ const RaceReviewPoster = ({ race }) => {
 
   const subheader = getFriendlyDateAndTime(startDate, endDate, startTime, endTime);
   console.log('in review', inReview)
-  if (!inReview) return <LoadingYachty isRoot={false} />
+  if (!inReview || updateRaceLoading) return <LoadingYachty isRoot={false} />
   return (
     <Card>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
