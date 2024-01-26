@@ -38,7 +38,6 @@ const RacePoster = ({ race }) => {
   const [expanded, setExpanded] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const member = useSelector(state => state.auth.member);
 
   const handleClose = () => setShowSuccess(false);
   const handleExpandClick = () => setExpanded(!expanded);
@@ -62,6 +61,7 @@ const RacePoster = ({ race }) => {
       query: {raceId, eventId}
     })
   }
+  
   const { posterWidth } = posterStyles;
 
   return (

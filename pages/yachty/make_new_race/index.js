@@ -35,7 +35,8 @@ const makeNewRace = () => {
   const endDate = useSelector(state => state.workingRace.endDate);
   const release = useSelector(state => state.workingRace.release);
   const imageObj = useSelector(state => state.workingRace.image);
-
+  const existingImg = useSelector(state => state.workingRace.existingImg);
+  
   const flowOrder = [
     {SERIES: series},
     {COURSE: course},
@@ -43,7 +44,7 @@ const makeNewRace = () => {
     {START_DATE: startDate},
     {END_DATE: endDate},
     {RELEASE: release},
-    {IMAGE: imageObj}
+    {IMAGE: imageObj || existingImg},    
   ];
 
   const [currentField, setCurrentField] = useState('');
@@ -116,7 +117,7 @@ const makeNewRace = () => {
         {release &&
           <RaceDetail
             clearField={{release: null}}
-            detail={release.name}
+            detail={release?.name}
             label="Release"
           />
         }
