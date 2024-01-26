@@ -5,10 +5,11 @@ import EastIcon from '@mui/icons-material/East';
 import Slide from '@mui/material/Slide';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import dayjs from "dayjs";
 
 const SetRaceEnd = ({ callback }) => {
   const dispatch = useDispatch();
-  const startDate = useSelector(state => state.workingRace.startDate);  
+  const startDate = useSelector(state => state.workingRace.startDate);
   const [error, setError] = useState(false);
   const [endDate, setEndDate] = useState(null);    
   const {IMAGE} = RACE_FIELDS;
@@ -29,7 +30,10 @@ const SetRaceEnd = ({ callback }) => {
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
         <Stack>
-          <MobileDateTimePicker onChange={(e) => setEndDate(e.$d)} />
+          <MobileDateTimePicker
+            defaultValue={dayjs(startDate)}
+            onChange={(e) => setEndDate(e.$d)} 
+          />
           {error && <Typography color="error">cannot have end date before start date</Typography>}
         </Stack>
           <Slide direction="left" in={true} mountOnEnter unmountOnExit>
