@@ -1,6 +1,7 @@
-import { CLEAR_NEW_RACE_FIELDS_ACT, CLEAR_WORKING_RACE_IMAGES_ACT, EDIT_NEW_RACE_FIELD_ACT, HYDRATE_WORKING_RACE_ACT } from "./actions/workingRaceActions";
+import { CLEAR_NEW_RACE_FIELDS_ACT, CLEAR_WORKING_RACE_IMAGES_ACT, EDIT_NEW_RACE_FIELD_ACT, HYDRATE_WORKING_RACE_ACT, TOGGLE_RACE_INREVIEW_ACT, TOGGLE_RACE_IN_REVIEW_ACT } from "./actions/workingRaceActions";
 
 const initialState = {
+  inReview: false,
   raceId: '',
   course: {
     instructions: [],
@@ -8,16 +9,24 @@ const initialState = {
     id: null,
   },
   raceName: '',
-  image: { src: null, fileDatum: null, imgKey: null },
+  image: { 
+    src: null, 
+    fileDatum: null, 
+    imgKey: null 
+  },
   raceNameSet: false,
   startDate: null,
   endDate: null,
-  review: false,
   newRaceId: null,
   series: null,
   release: null,
-  release: {id: null},
-  raceTicketsForPurchase: { id: null, cost: 0 },
+  release: {
+    id: null
+  },
+  raceTicketsForPurchase: { 
+    id: null, 
+    cost: 0 
+  },
   existingImg: '',
   existingRace: false,
 };
@@ -27,11 +36,10 @@ export default function workingRaceReducer(state = initialState, action) {
   switch (type) {
     case EDIT_NEW_RACE_FIELD_ACT:
       let key = Object.keys(payload)[0]
-      return {...state, [key]: payload[key] }
-    case HYDRATE_WORKING_RACE_ACT: {
-      console.log('payload ==========', payload)
+      return { ...state, [key]: payload[key] }
+    case HYDRATE_WORKING_RACE_ACT: {      
       const {
-        id,
+        id,        
         race_course: course,
         raceName,
         // raceTicketId,
@@ -60,11 +68,17 @@ export default function workingRaceReducer(state = initialState, action) {
         existingRace: true,
       }
     }
+    case TOGGLE_RACE_IN_REVIEW_ACT:      
+      return { 
+        ...state, 
+        inReview: payload
+      }
     case CLEAR_NEW_RACE_FIELDS_ACT:
-      return {...initialState}
+      return { ...initialState }
     case CLEAR_WORKING_RACE_IMAGES_ACT:
       return {
         ...state, 
+        inReview: false,
         existingImg: '', 
         image: { 
           src: null, 

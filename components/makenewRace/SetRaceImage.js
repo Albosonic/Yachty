@@ -3,7 +3,7 @@ import { Box, Fab, Grid, Stack, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
-import { clearWorkingRaceImagesAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { clearWorkingRaceImagesAct, makeNewRaceFieldAct, toggleInReview } from "@/slices/actions/workingRaceActions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -19,8 +19,10 @@ const SetRaceImage = () => {
 
   useEffect(() => {
     if (fileDatum || existingImg) {
-      setShowInput(false);
-    }    
+      setShowInput(false)
+    } else {
+      setShowInput(true)
+    }
   }, [image, existingImg])
 
   const handleChange = async (e) => {
@@ -39,15 +41,14 @@ const SetRaceImage = () => {
     reader.readAsDataURL(file);
   };
 
-  const goToReview = () => router.push({ pathname: '/yachty/make_new_race/review' })
+  const goToReview = () => {    
+    dispatch(toggleInReview(true))
+    router.push({ pathname: '/yachty/make_new_race/review' })
+  }
 
   const resetImage = () => dispatch(clearWorkingRaceImagesAct())  
 
   const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
-
-  console.log('file datum =====', fileDatum)
-  console.log('existing image =====', existingImg)
-
 
   return (
     <>

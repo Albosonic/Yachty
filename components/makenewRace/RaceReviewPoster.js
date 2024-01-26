@@ -11,18 +11,21 @@ import { IMG_BUCKET, s3Client } from '@/lib/clients/s3-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Grid, Snackbar } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
+import { getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import { useMutation } from '@apollo/client';
 import { INSERT_RACE_ONE, UPDATE_RACE } from '@/lib/gqlQueries/racinggql';
 import { getFriendlyDateAndTime, getHasuraDate } from '@/lib/utils/dateStrings';
 import dayjs from 'dayjs';
+import { clearNewRaceFieldsAct } from '@/slices/actions/workingRaceActions';
+import LoadingYachty from '../LoadingYachty';
 
 
 const RaceReviewPoster = ({ race }) => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [showSuccess, setShowSuccess] = useState(false)
   const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo)
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
@@ -36,11 +39,16 @@ const RaceReviewPoster = ({ race }) => {
   const raceId = useSelector(state => state.workingRace.raceId)
   const existingRace = useSelector(state => state.workingRace.existingRace)
   const existingImg = useSelector(state => state.workingRace.existingImg)
+  const inReview = useSelector(state => state.workingRace.inReview)
 
   const [insertRace, {loading: insertRaceLoading}] = useMutation(INSERT_RACE_ONE)
   const [updateRace, {loading: updateRaceLoading}] = useMutation(UPDATE_RACE)
 
-  const handleClose = () => setShowSuccess(false);
+  const handleClose = () => {
+    setShowSuccess(false)
+    dispatch(clearNewRaceFieldsAct())
+    router.replace({pathname: '/yachty', query: { ycId: ycId }})
+  }
 
   const createTickets = (raceId) => {
     router.push({
@@ -82,9 +90,9 @@ const RaceReviewPoster = ({ race }) => {
       }
     };
     if (existingRace) {
-      variables.raceId = raceId;
-      console.log('variables ======', variables)
-      updateRace({variables})
+      variables.raceId = raceId;      
+      const resp = await updateRace({variables})
+      setShowSuccess(true)
     } else {
       const resp = await insertRace({variables})
       createTickets(resp.data.insert_races_one.id)
@@ -96,12 +104,13 @@ const RaceReviewPoster = ({ race }) => {
   const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
 
   const subheader = getFriendlyDateAndTime(startDate, endDate, startTime, endTime);
-
+  console.log('in review', inReview)
+  if (!inReview) return <LoadingYachty isRoot={false} />
   return (
     <Card>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          url copied to clipboard
+          All Set!
         </Alert>
       </Snackbar>
       <CardHeader
@@ -114,7 +123,7 @@ const RaceReviewPoster = ({ race }) => {
         component="img"
         height="100%"
         width= "100%"        
-        image={image.fileDatum}
+        image={image.fileDatum || existingImg}
         alt="Race Image"
       />
       <CardContent>
