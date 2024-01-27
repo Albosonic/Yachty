@@ -16,7 +16,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
   // const [selectedIndex, setSelectedIndex] = useState(1);
   // const {data, loading, error} = useQuery(GET_RACE_BY_ID, {variables: { raceId: newRaceId }});
 
-  const getRace = async (raceId) => {    
+  const getRace = async (raceId) => {
     const resp = await client.query({
       query: GET_RACE_BY_ID,
       variables: {raceId},
@@ -34,19 +34,18 @@ const CalendarDayClickMenu = ({ scheduler }) => {
     return resp
   }
 
-  useEffect(() => {        
+  useEffect(() => {
     if (scheduler.edited) {
-      const {type: eventType, event_id: eventId} = scheduler.edited;            
+      const {type: eventType, event_id: eventId} = scheduler.edited;
       if (eventType === RACE) {
         const resp = getRace(eventId)
         resp.then(raceData => {
           const race = raceData.data.races[0]
-          dispatch(hydrateWorkingRaceAct(race))                    
+          dispatch(hydrateWorkingRaceAct(race))
         })
         router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true, raceId: eventId }});
       }
       if (eventType === PARTY) {
-        // TODO: fix Event to work like races
         const resp = getEvent(eventId)
         resp.then(eventData => {
           const event = eventData.data.yc_events[0]
@@ -63,7 +62,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
     router.replace({ pathname: '/yachty/make_new_event', query: { workingDate: true } });
   };
 
-  const handleCreateRace = () => {    
+  const handleCreateRace = () => {
     dispatch(workingRaceDateAct(scheduler.state.start.value));
     dispatch(clearNewRaceFieldsAct())
     router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
@@ -87,7 +86,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
       >
         Create Event
       </Button>
-      <Button        
+      <Button
         color='primary'
         size='large'
         variant='outlined'
@@ -95,7 +94,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
         onClick={handleCreateRace}
       >
         Crate Race
-      </Button>      
+      </Button>
     </Grid>
   );
 }
