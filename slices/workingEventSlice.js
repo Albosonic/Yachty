@@ -19,8 +19,7 @@ export default function workingEventReducer(state = initialState, action) {
     case EDIT_NEW_EVENT_FIELD_ACT:
       let key = Object.keys(payload)[0]
       return { ...state, [key]: payload[key] }
-    case HYDRATE_WORKING_EVENT_ACT:
-      console.log('payload ========', payload)
+    case HYDRATE_WORKING_EVENT_ACT:      
       const {
         image,
         event_name: name,        
