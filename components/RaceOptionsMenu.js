@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
 const RaceOptionsMenu = ({ raceId, releaseFormId, goToReservations }) => {
+  console.log('releaseForm ID =====', releaseFormId)
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openReleaseDialog, setOpenReleaseDialog] = useState(false);

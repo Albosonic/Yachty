@@ -30,7 +30,7 @@ export default function workingRaceReducer(state = initialState, action) {
     case EDIT_NEW_RACE_FIELD_ACT:
       let key = Object.keys(payload)[0]
       return { ...state, [key]: payload[key] }
-    case HYDRATE_WORKING_RACE_ACT: {      
+    case HYDRATE_WORKING_RACE_ACT: {
       const {
         id,
         race_course: course,
@@ -45,7 +45,6 @@ export default function workingRaceReducer(state = initialState, action) {
         race_release_form: release,
         race_tickets_for_purchase: raceTicketsForPurchase,
       } = payload;
-      console.log('course ========', payload)
       return {
         ...state,
         raceId: id,

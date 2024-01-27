@@ -21,15 +21,14 @@ export const makeNewRaceFieldAct = (payload) => {
   }
 }
 
-export const hydrateWorkingRace = (race) => {
+export const hydrateWorkingRaceAct = (race) => {
   return {
     type: HYDRATE_WORKING_RACE_ACT,
     payload: race,
   }
 }
 
-export const toggleInReview = (inReview) => {
-  console.log('inReview ======', inReview)
+export const toggleRaceInReviewAct = (inReview) => {
   return {
     type: TOGGLE_RACE_IN_REVIEW_ACT,
     payload: inReview

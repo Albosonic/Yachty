@@ -64,7 +64,7 @@ const CommentsFromChairDialog = ({ setOpenDialog, open, raceId }) => {
   },[data]);
 
   if (loading) return <CircularProgress />;
-
+  console.log('race chair Data ======================', data)
   const { commentary, yacht_club: { race_chairs }} = data.races[0];
   const raceChair = race_chairs[0];
   // const { yc_member: { name, profilePic }} = race_chairs[0];

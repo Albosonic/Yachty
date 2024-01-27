@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { workingEventDateAct, workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { useRouter } from 'next/router';
@@ -6,8 +6,9 @@ import { Button, Grid } from '@mui/material';
 import { GET_RACE_BY_ID } from '@/lib/gqlQueries/racinggql';
 import client from '@/lib/clients/apollo-client';
 import { PARTY, RACE } from '@/lib/strings';
-import { clearNewRaceFieldsAct, hydrateWorkingRace } from '@/slices/actions/workingRaceActions';
-import { clearNewEventFieldsAct } from '@/slices/actions/workingEventActions';
+import { clearNewRaceFieldsAct, hydrateWorkingRaceAct } from '@/slices/actions/workingRaceActions';
+import { clearNewEventFieldsAct, hydrateWorkingEventAct } from '@/slices/actions/workingEventActions';
+import { GET_YC_EVENT } from '@/lib/gqlQueries/createYCEventgql';
 
 const CalendarDayClickMenu = ({ scheduler }) => {
   const router = useRouter();
@@ -20,7 +21,16 @@ const CalendarDayClickMenu = ({ scheduler }) => {
       query: GET_RACE_BY_ID,
       variables: {raceId},
       fetchPolicy: 'no-cache',
-    });
+    })
+    return resp
+  }
+
+  const getEvent = async (eventId) => {
+    const resp = await client.query({
+      query: GET_YC_EVENT,
+      variables: {id: eventId},
+      fetchPolicy: 'no-cache',
+    })
     return resp
   }
 
@@ -30,14 +40,19 @@ const CalendarDayClickMenu = ({ scheduler }) => {
       if (eventType === RACE) {
         const resp = getRace(eventId)
         resp.then(raceData => {
-          const race = raceData.data.races[0];
-          dispatch(hydrateWorkingRace(race))                    
+          const race = raceData.data.races[0]
+          dispatch(hydrateWorkingRaceAct(race))                    
         })
         router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true, raceId: eventId }});
       }
       if (eventType === PARTY) {
         // TODO: fix Event to work like races
-        router.replace({pathname: '/yachty/create_yc_event', query: { workingDate: true, eventId: eventId }});
+        const resp = getEvent(eventId)
+        resp.then(eventData => {
+          const event = eventData.data.yc_events[0]
+          dispatch(hydrateWorkingEventAct(event))
+        })
+        router.replace({pathname: '/yachty/make_new_event', query: { workingDate: true, eventId: eventId }});
       }
     }
   }, [scheduler?.edited?.event_id])
