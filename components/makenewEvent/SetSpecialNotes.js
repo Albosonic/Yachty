@@ -21,7 +21,7 @@ const SetEventNotes = ({ callback }) => {
         label="special notes"
         variant="standard"
         onChange={(e) => setEventNotes({specialNotes: e.target.value})}
-        InputProps={{endAdornment: <Button onClick={editEventName} endIcon={<EastIcon />}>next</Button>}}
+        InputProps={{endAdornment: <Button disabled= {specialNotes.specialNotes === ''} onClick={editEventName} endIcon={<EastIcon />}>next</Button>}}
       />
     </>
   )

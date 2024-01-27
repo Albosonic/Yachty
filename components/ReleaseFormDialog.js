@@ -25,25 +25,27 @@ const INSERT_SIGNED_RELEASE = gql`
 `
 
 const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
-  const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo);
-  const memberId = useSelector(state => state.auth.member.id);
-  const [signature, setSignature] = useState('');
-  const [formError, setFormError] = useState(false);
-  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE);
+  const logo = useSelector(state => state.auth.member.yachtClubByYachtClub.logo)
+  const memberId = useSelector(state => state.auth.member.id)
+  const [signature, setSignature] = useState('')
+  const [content, setContent] = useState('')
+  const [formError, setFormError] = useState(false)
+  const [insertSignedForm, {loading: signedFormLoading}] = useMutation(INSERT_SIGNED_RELEASE)
+
   const {error, loading, data, refetch} = useQuery(GET_RELEASE_FORM_BY_ID, {
     variables: { releaseFormId, memberId },
     fetchPolicy: 'no-cache'
   });
 
   useEffect(() => {
-    if (!loading) {
+    if (loading) return
       const savedSignature = data.race_release_forms[0].signed_race_releases[0]?.signature
       setSignature(savedSignature)
-    }
+      const { content } = data.race_release_forms[0]
+      setContent(content)
   },[data])
 
-  if (loading) return <LoadingYachty isRoot={false} />;
-  const { content } = data.race_release_forms[0];  
+  if (loading) return <LoadingYachty isRoot={false} />;  
 
   const signDoc = async () => {
     if (!signature) return setFormError(true);
@@ -56,7 +58,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
     refetch();
     setOpenDialog(false);
   }
-  
+
   return (
     <Dialog
       fullWidth={true}
@@ -66,7 +68,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
     >
       <DialogContent>
         <Grid alignContent="center">
-          <Grid container justifyContent="space-between">              
+          <Grid container justifyContent="space-between">
             <Box
               component="img"
               sx={{
@@ -78,12 +80,12 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
               src={logo}
             />
           </Grid>
-          <Grid container direction="column">              
+          <Grid container direction="column">
             <Typography sx={{marginTop: 2}}>
               {content}
-            </Typography>                          
+            </Typography>
           </Grid>
-        </Grid>        
+        </Grid>
         <TextField
           autoFocus
           multiline
@@ -96,7 +98,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
           value={signature}
           onChange={(e) => setSignature(e.target.value)}
           inputProps={{
-            style: { 
+            style: {
               fontFamily: 'Shadows Into Light, cursive',
               fontSize: 24
             },

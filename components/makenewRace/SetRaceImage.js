@@ -3,7 +3,7 @@ import { Box, Fab, Grid, Stack, useMediaQuery } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
-import { clearWorkingRaceImagesAct, makeNewRaceFieldAct, toggleInReview } from "@/slices/actions/workingRaceActions";
+import { clearWorkingRaceImagesAct, makeNewRaceFieldAct, toggleRaceInReviewAct } from "@/slices/actions/workingRaceActions";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -42,7 +42,7 @@ const SetRaceImage = () => {
   };
 
   const goToReview = () => {    
-    dispatch(toggleInReview(true))
+    dispatch(toggleRaceInReviewAct(true))
     router.push({ pathname: '/yachty/make_new_race/review' })
   }
 

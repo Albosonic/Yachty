@@ -153,8 +153,6 @@ const UploadRaceEvent = () => {
           <DateTimeField 
             required 
             onBlur={(e) => {
-
-              console.log('=========>', e.target.value)
               setRaceInfo({...raceInfo, startDate: e.target.value})
             }
             } 

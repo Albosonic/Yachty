@@ -4,14 +4,25 @@ import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
 import { useRouter } from "next/router";
-import { makeNewEventFieldAct } from "@/slices/actions/workingEventActions";
+import { makeNewEventFieldAct, toggleEventInReviewAct } from "@/slices/actions/workingEventActions";
+import { useEffect, useState } from "react";
 
 const SetEventImage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const [showInput, setShowInput] = useState(true);
   const image = useSelector(state => state.workingEvent.image)
+  const existingImg = useSelector(state => state.workingEvent.existingImage)
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const {fileDatum} = image;
+
+  useEffect(() => {
+    if (fileDatum || existingImg) {
+      setShowInput(false)
+    } else {
+      setShowInput(true)
+    }
+  }, [image, existingImg])
 
   const handleChange = async (e) => {
     const {files} = e.target;    
@@ -29,7 +40,10 @@ const SetEventImage = () => {
     reader.readAsDataURL(file);
   };
 
-  const goToReview = () => router.push({ pathname: '/yachty/make_new_event/review' });
+  const goToReview = () => {
+    dispatch(toggleEventInReviewAct(true))
+    router.push({ pathname: '/yachty/make_new_event/review' })
+  };
 
   const resetImage = () => dispatch(makeNewEventFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
 
@@ -38,7 +52,7 @@ const SetEventImage = () => {
   return (
     <>
       <Stack alignItems="center">
-        {fileDatum &&
+        {!showInput &&
           <>
             <Box
               component="img"
@@ -49,7 +63,7 @@ const SetEventImage = () => {
                 marginBottom: 2,
               }}
               alt="Vessel Image"
-              src={fileDatum}
+              src={fileDatum || existingImg}
             />
             <Grid>
               <Fab
@@ -79,7 +93,7 @@ const SetEventImage = () => {
             </Grid>
           </>
         }        
-        {!fileDatum &&
+        {showInput &&
           <input
             onChange={(e) => handleChange(e)}
             type="file"

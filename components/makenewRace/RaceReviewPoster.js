@@ -101,12 +101,12 @@ const RaceReviewPoster = ({ race }) => {
   }
   // const { posterWidth } = posterStyles;
 
-  const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate);
-  const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate);
+  const {fullDay: startDay, time: startTime} = getNormalDateFromDaysjsString(startDate)
+  const {fullDay: endDay, time: endTime} = getNormalDateFromDaysjsString(endDate)
 
-  const subheader = getFriendlyDateAndTime(startDate, endDate, startTime, endTime);
-  console.log('in review', inReview)
-  if (!inReview || updateRaceLoading) return <LoadingYachty isRoot={false} />
+  const subheader = getFriendlyDateAndTime(startDate, endDate, startTime, endTime)
+
+  if (!inReview || updateRaceLoading || insertRaceLoading) return <LoadingYachty isRoot={false} />
   return (
     <Card>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
