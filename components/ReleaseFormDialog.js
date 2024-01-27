@@ -38,14 +38,11 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
   });
 
   useEffect(() => {
-    if (!loading) {
+    if (loading) return
       const savedSignature = data.race_release_forms[0].signed_race_releases[0]?.signature
       setSignature(savedSignature)
-      if (content) {
-        const { content } = data.race_release_forms[0]
-        setContent(content)
-      }
-    }
+      const { content } = data.race_release_forms[0]
+      setContent(content)
   },[data])
 
   if (loading) return <LoadingYachty isRoot={false} />;  
@@ -61,7 +58,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
     refetch();
     setOpenDialog(false);
   }
-  
+
   return (
     <Dialog
       fullWidth={true}
@@ -71,7 +68,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
     >
       <DialogContent>
         <Grid alignContent="center">
-          <Grid container justifyContent="space-between">              
+          <Grid container justifyContent="space-between">
             <Box
               component="img"
               sx={{
@@ -83,12 +80,12 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
               src={logo}
             />
           </Grid>
-          <Grid container direction="column">              
+          <Grid container direction="column">
             <Typography sx={{marginTop: 2}}>
               {content}
-            </Typography>                          
+            </Typography>
           </Grid>
-        </Grid>        
+        </Grid>
         <TextField
           autoFocus
           multiline
@@ -101,7 +98,7 @@ const ReleaseFormDialog = ({setOpenDialog, open, releaseFormId}) => {
           value={signature}
           onChange={(e) => setSignature(e.target.value)}
           inputProps={{
-            style: { 
+            style: {
               fontFamily: 'Shadows Into Light, cursive',
               fontSize: 24
             },
