@@ -17,8 +17,6 @@ const SetEventImage = () => {
   const {fileDatum} = image;
 
   useEffect(() => {
-    console.log('fileData =======', fileDatum)
-    console.log('existingImg =======', existingImg)
     if (fileDatum || existingImg) {
       setShowInput(false)
     } else {
