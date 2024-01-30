@@ -71,11 +71,7 @@ const EventReviewPoster = ({ race }) => {
       };
       const results = await s3Client.send(new PutObjectCommand(params));
     }
-
-
-
-
-    // TODO: fix this!!!!!!
+    
     if (existingEvent) {        
       const variables = {
         eventId,
