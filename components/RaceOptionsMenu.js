@@ -86,3 +86,13 @@ const RaceOptionsMenu = ({ raceId, releaseFormId, goToReservations }) => {
 }
 
 export default RaceOptionsMenu;
+
+
+
+// Design and Build internal tools, for large enterprise scale and support teams that need help with React bugs and features. Deploy code through CI/CD pipelines. Debug deploys in AWS. 
+
+// Develop Web application in React, grapghQL, Postgress, to communicate with a VR headset for use in the Medical device industry. Small Agile team of 3 engineers. Build and maintain full-stack end to end features with a high degree of security, utilizing an agile methodology to organize tasks and bugs.
+
+// Maintain large enterprise e-commerce software application utilizing agile methodology for fast iteration and efficient use of time and visibility. Partnering with product design and QA
+
+// Extend existing Software application with new features to meet business goals and contractual obligations. Utilize agile methodologies for streamlined workflow and organization of tasks and bugs. Work closely with design and QA.
