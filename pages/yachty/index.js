@@ -79,6 +79,9 @@ const UPSERT_MEMBER = gql`
         logo
         name
         region
+        race_chairs {
+          memberId
+        }
         commodore {
           member_id
           name
@@ -138,6 +141,7 @@ const Yachty = () => {
           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing.
         }});
         const userData = { member: resp.data.insert_yc_members.returning[0], user: user };             
+        console.log('userData ========', userData)
         dispatch(addMember(userData));
       }
 
