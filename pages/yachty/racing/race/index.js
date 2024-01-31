@@ -23,18 +23,18 @@ const Counter = ({ startDate, startTime }) => {
       let days = (diff / (1000 * 60 * 60 * 24)).toFixed(1)
       if (days > .9) {
         const daysArr = days.split('.')
-        const calculatedHours = daysArr[1] * 6
-        setCountDown(<Typography variant="h5">{`Starts in ${days[0]} days ${calculatedHours} hrs`}</Typography>)
+        const calculatedHours = (24 / daysArr[1]).toString().split('.')[0]        
+        return setCountDown(<Typography variant="h5">{`Starts in ${days[0]} days ${calculatedHours} hrs`}</Typography>)
       } else if (hours > 0 && hours < 25) {
         const hrsArr = hours.split('.')
         const calculatedMinutes = hrsArr[1] * 6
-        setCountDown(<Typography variant="h5">{`Starts in ${hrsArr[0]} hrs ${calculatedMinutes} minutes`}</Typography>)
+        return setCountDown(<Typography variant="h5">{`Starts in ${hrsArr[0]} hrs ${calculatedMinutes} minutes`}</Typography>)
       } else if (minutes > 0 && minutes < 61) {
         const minutesArr = minutes.split('.')
         const calculatedSeconds = minutesArr[1] * 6
         setCountDown(<Typography variant="h5">{`Starts in ${minutes[0]} mintutes ${calculatedSeconds} seconds`}</Typography>)
       } else if (seconds > 0 && seconds < 61) {
-        setCountDown(<Typography variant="h3">{`Get ${seconds} Ready!`}</Typography>)
+        return setCountDown(<Typography variant="h3">{`Get ${seconds} Ready!`}</Typography>)
       }
     }, 1000)
   }, [startTime, startDate])
@@ -60,7 +60,6 @@ const Race = () => {
 
   if (loading) return <LoadingYachty />;
   const {raceName, startDate, startTime} = race
-  console.log('race ==========', race)
 
   return (
     <>
