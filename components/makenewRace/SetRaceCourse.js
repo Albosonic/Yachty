@@ -19,7 +19,7 @@ const UPDATE_RACE_COURSE = gql`
   }
 }`;
 
-const SetRaceCourse = ({callback}) => {
+const SetRaceCourse = ({callback, alternateTitle}) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -27,6 +27,7 @@ const SetRaceCourse = ({callback}) => {
   const [showSuccess, setShowSuccess] = useState(false)
   const open = Boolean(anchorEl)
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
+  const userIsChair = useSelector(state => state.auth.user.userIsRaceChair)
   const [updateRaceCourse, {loading: updateLoading}] = useMutation(UPDATE_RACE_COURSE)
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {
     variables: { ycId },
@@ -62,7 +63,7 @@ const SetRaceCourse = ({callback}) => {
   }
 
   const handleClose = (course) => {
-
+    setAnchorEl(null)
   };
 
   const createCourse = () => {
@@ -76,37 +77,42 @@ const SetRaceCourse = ({callback}) => {
 
   return (
     <>
-      <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Success!
-        </Alert>
-      </Snackbar>
-      <CreateCourseDialog open={creatingCourse} setOpen={setCreatingCourse} refetch={refetchCourses}/>
-      <Button
-        id="course-select-button"
-        size='large'
-        aria-controls={open ? 'race-course-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        variant="contained"
-        endIcon={<ArrowDropDownIcon />}
-        sx={{minWidth: 223}}
-      >
-        choose a course
-      </Button>
-      <Menu
-        id="course-selector"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'course-select',
-        }}
-      >
-        {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => menuItemClick(course)}>{course.courseName}</MenuItem>)}
-        <MenuItem key="create series" onClick={createCourse}>{'...create course'}</MenuItem>
-      </Menu>
+
+      {userIsChair &&
+        <>
+          <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              Success!
+            </Alert>
+          </Snackbar>
+          <CreateCourseDialog open={creatingCourse} setOpen={setCreatingCourse} refetch={refetchCourses}/>
+          <Button
+            id="course-select-button"
+            size='large'
+            aria-controls={open ? 'race-course-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            variant="contained"
+            endIcon={<ArrowDropDownIcon />}
+            sx={{minWidth: 223}}
+          >
+            {alternateTitle || 'choose a course'}
+          </Button>
+          <Menu
+            id="course-selector"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'course-select',
+            }}
+          >
+            {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => menuItemClick(course)}>{course.courseName}</MenuItem>)}
+            <MenuItem key="create series" onClick={createCourse}>{'...create course'}</MenuItem>
+          </Menu>
+        </>
+      }
     </>
   );
 }

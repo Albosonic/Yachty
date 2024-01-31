@@ -7,20 +7,21 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Fab, Stack, Typography } from "@mui/material";
 import LoadingYachty from "@/components/LoadingYachty";
 import SetRaceCourse from "@/components/makenewRace/SetRaceCourse";
+import { getCountDown } from "@/lib/utils/getters";
 
 
-const Counter = ({ startDate, startTime }) => {
-  const [countDown, setCountDown] = useState()
+const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
+  const [countDown, setCountDown] = useState()  
+  const [showCourse, setShowCourse] = useState(true)
+  console.log('course ======', course)
   useEffect(() => {
-    setCountDown(<LoadingYachty isRoot={false} />)
+    if (!startDate || !startTime) return setCountDown(<LoadingYachty isRoot={false} />)    
     setInterval(() => {
-      const start = new Date(`${startDate} ${startTime}`).getTime()
-      const now = new Date().getTime()
-      const diff = start - now
-      let seconds = (diff / 1000).toFixed(1)
-      let minutes = (diff / (1000 * 60)).toFixed(1)
-      let hours = (diff / (1000 * 60 * 60)).toFixed(1)
-      let days = (diff / (1000 * 60 * 60 * 24)).toFixed(1)
+      const {diff, seconds, minutes, hours, days } = getCountDown(startDate, startTime)
+      if (minutes < 5) {
+        raceStartedCb(true)
+        showCourse(true)
+      }
       if (days > .9) {
         const daysArr = days.split('.')
         const calculatedHours = (24 / daysArr[1]).toString().split('.')[0]        
@@ -38,17 +39,24 @@ const Counter = ({ startDate, startTime }) => {
       }
     }, 1000)
   }, [startTime, startDate])
-  return countDown;
+  if (!course) return  
+  const {instructions, courseName} = course
+  return (
+    <Stack spacing={2}>
+      {countDown}
+      {showCourse && <Typography variant="h4">{ courseName }</Typography>}
+      {showCourse && instructions.map((leg, i) => <Typography sx={{paddingLeft: 2}} variant="body1">{`${i + 1}. ${leg.marker} ${leg.side}`}</Typography>)}
+    </Stack>
+  )  
 }
-
-
 
 const Race = () => {
   const router = useRouter();
   const raceId = router.query.raceId;
-  const [race, setRace] = useState({})
+  const [race, setRace] = useState({raceName: '', startDate: '', startTime: ''})
+  const [raceStarted, setRaceStarted] = useState(false)
   const {error, loading, data} = useQuery(GET_RACE_BY_ID, {variables: {raceId}});
-
+  const {raceName, startDate, startTime} = race
   useEffect(() => {
     if (loading) return
     setRace(data.races[0])
@@ -58,9 +66,8 @@ const Race = () => {
     router.back()
   }
 
-  if (loading) return <LoadingYachty />;
-  const {raceName, startDate, startTime} = race
-
+  if (loading) return <LoadingYachty />;  
+  console.log('race =======', race.race_course)
   return (
     <>
       <NavBar />
@@ -69,7 +76,12 @@ const Race = () => {
       </Fab>
       <Stack spacing={4} alignItems="center">
         <Typography variant="h4">{ raceName } Race</Typography>
-        <Counter startDate={startDate} startTime={startTime} />
+        <CourseCountDown 
+          startDate={startDate} 
+          startTime={startTime}
+          course={race.race_course}
+          cb={setRaceStarted}
+        />
         <SetRaceCourse />
         <Button size="small" fullWidth sx={{padding: 2, borderRadius: 0, bottom: 0, position: 'absolute'}} variant="outlined">
           Start Race
