@@ -54,7 +54,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
               width: 200,
               borderRadius: 3,
             }}
-            alt="The house from the offer."
+            alt="vessel image"
             src={memberVessel?.img}
           />
           <Stack spacing={1}>
