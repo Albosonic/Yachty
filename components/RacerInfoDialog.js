@@ -27,6 +27,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
   const marina = memberVessel?.marina
   const slip = memberVessel?.slip
   const vesselName = memberVessel?.vesselName
+
   return (
     <Dialog
       fullWidth={true}
@@ -47,16 +48,32 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
       }
       <Stack alignItems="center">        
         <Grid container justifyContent="space-around" sx={{width: '100%'}}>
-          <Box
-            component="img"
-            sx={{
-              height: 200,
-              width: 200,
-              borderRadius: 3,
-            }}
-            alt="vessel image"
-            src={memberVessel?.img}
-          />
+          {memberVessel && 
+            <Box
+              component="img"
+              sx={{
+                height: 200,
+                width: 200,
+                borderRadius: 3,
+              }}
+              alt="vessel image"
+              src={memberVessel?.img}
+            />
+          }
+          {!memberVessel &&
+            // https://yachty-letter-heads.s3.us-west-1.amazonaws.com/60ae091c-b9aa-4918-baaf-c6c38caa6dc3
+            <Box
+              component="img"
+              sx={{
+                height: 200,
+                width: 200,
+                borderRadius: 3,
+              }}
+              alt="vessel image"
+              src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/60ae091c-b9aa-4918-baaf-c6c38caa6dc3"
+            />
+
+          }
           <Stack spacing={1}>
             {signature &&
               <Grid container sx={{minWidth: 250, width: '100%'}} justifyContent="flex-start">
@@ -76,9 +93,7 @@ const RacerInfoDialog = ({openDialog, setOpenDialog, handleClose, cleanDialog, d
         </Grid>
       </Stack>
       <Stack sx={{marginTop: 5, marginLeft: 2}}>
-        <DialogContentText>
-          Member Bio: {memberBio}
-        </DialogContentText>
+        {memberBio && <DialogContentText> Member Bio: {memberBio}</DialogContentText>}
       </Stack>
       <Grid container justifyContent="space-between" >
         <DialogActions>

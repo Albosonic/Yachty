@@ -100,7 +100,7 @@ const RaceParticipants = ({raceId}) => {
   }
 
   if (loading || !data) return <CircularProgress />
-  // TODO: fix this logout crash!!!!
+  // TODO: fix this
   let rows = [...data.yc_members].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
