@@ -41,8 +41,8 @@ const SetRaceCourse = ({callback, alternateTitle}) => {
   const courses = data.race_courses;
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const menuItemClick = async (course) => {
     if (callback) {

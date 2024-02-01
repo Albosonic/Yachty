@@ -4,23 +4,28 @@ import { useQuery } from "@apollo/client";
 import NavBar from "@/components/NavBar";
 import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, Fab, Stack, Typography } from "@mui/material";
+import { Button, Fab, FormControlLabel, Grid, Stack, Typography } from "@mui/material";
 import LoadingYachty from "@/components/LoadingYachty";
 import SetRaceCourse from "@/components/makenewRace/SetRaceCourse";
 import { getCountDown } from "@/lib/utils/getters";
+import Checkbox from '@mui/material/Checkbox';
 
 
 const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
-  const [countDown, setCountDown] = useState()  
-  const [showCourse, setShowCourse] = useState(true)
-  console.log('course ======', course)
+  const [countDown, setCountDown] = useState(null)  
+  const [showCourse, setShowCourse] = useState(false)  
   useEffect(() => {
-    if (!startDate || !startTime) return setCountDown(<LoadingYachty isRoot={false} />)    
+    // if (!startDate || !startTime) return setCountDown(<LoadingYachty isRoot={false} />)
+    const {diff, seconds, minutes, hours, days } = getCountDown(startDate, startTime)
+    if (minutes < 5) {
+      raceStartedCb(true)
+      setShowCourse(true)
+    }
     setInterval(() => {
-      const {diff, seconds, minutes, hours, days } = getCountDown(startDate, startTime)
       if (minutes < 5) {
+        
         raceStartedCb(true)
-        showCourse(true)
+        setShowCourse(true)
       }
       if (days > .9) {
         const daysArr = days.split('.')
@@ -42,10 +47,19 @@ const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
   if (!course) return  
   const {instructions, courseName} = course
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{minWidth: 300, paddingTop: 5}}>
       {countDown}
-      {showCourse && <Typography variant="h4">{ courseName }</Typography>}
-      {showCourse && instructions.map((leg, i) => <Typography sx={{paddingLeft: 2}} variant="body1">{`${i + 1}. ${leg.marker} ${leg.side}`}</Typography>)}
+      {showCourse && <Typography sx={{paddingBottom: 1}} variant="h4">{ courseName }</Typography>}
+      {showCourse && 
+        instructions.map((leg, i) => {
+          return (
+            <Grid container justifyContent="space-between">
+              <Typography sx={{lineHeight: 3.5}}  variant="body1">{`${i + 1}. ${leg.marker} ${leg.side}`}</Typography>
+              <FormControlLabel control={<Checkbox />} />
+            </Grid>
+          )
+        })
+      }
     </Stack>
   )  
 }
@@ -53,7 +67,7 @@ const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
 const Race = () => {
   const router = useRouter();
   const raceId = router.query.raceId;
-  const [race, setRace] = useState({raceName: '', startDate: '', startTime: ''})
+  const [race, setRace] = useState({raceName: '', startDate: '', startTime: ''})  
   const [raceStarted, setRaceStarted] = useState(false)
   const {error, loading, data} = useQuery(GET_RACE_BY_ID, {variables: {raceId}});
   const {raceName, startDate, startTime} = race
@@ -67,7 +81,7 @@ const Race = () => {
   }
 
   if (loading) return <LoadingYachty />;  
-  console.log('race =======', race.race_course)
+
   return (
     <>
       <NavBar />
@@ -80,9 +94,9 @@ const Race = () => {
           startDate={startDate} 
           startTime={startTime}
           course={race.race_course}
-          cb={setRaceStarted}
+          raceStartedCb={setRaceStarted}
         />
-        <SetRaceCourse />
+        {!raceStarted && <SetRaceCourse />}
         <Button size="small" fullWidth sx={{padding: 2, borderRadius: 0, bottom: 0, position: 'absolute'}} variant="outlined">
           Start Race
         </Button>
