@@ -1,10 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
 const NoDmsDialog = ({open, setOpen}) => {
   const router = useRouter()
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
+  const burgee = useSelector(state => state.auth.member.yachtClubByYachtClub.logo)
   const handleClose = () => {
     setOpen(false)
     router.replace({
@@ -24,6 +25,7 @@ const NoDmsDialog = ({open, setOpen}) => {
     >
       <DialogContent>
         <Grid container justifyContent="space-between">
+          <Avatar src={burgee} />
           <DialogTitle>Hello Sailor</DialogTitle>
           {/* <Avatar alt="Profile Pic" src={memberPic} /> */}
         </Grid>

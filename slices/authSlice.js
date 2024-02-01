@@ -2,13 +2,13 @@ import { BETA_USER_IS_COMMODORE, CLEAR_STATE, INTRO_SEEN, MEMBER_OBJECT, NON_MEM
 
 const initialState = {
   introSeen: false,
-  member: {  
+  member: {
     email: '',
     firstName: '',
     lastName: '',
     id: '',
     name: '',
-    profilePic: '',    
+    profilePic: '',
     isRacer: false,
     bio: '',
     vessels: [{
@@ -58,6 +58,7 @@ const initialState = {
     email: '',
     email_verified: false,
     userIsCommodore: false,
+    userIsRaceChair: false,
     sub: '',
     sid: ''
   }
@@ -69,12 +70,17 @@ export default function authReducer(state = initialState, action) {
     case CLEAR_STATE: {
       return initialState;
     }
-    case MEMBER_OBJECT: {      
-      let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined);
+    case MEMBER_OBJECT: {
+      let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined)
+      let userIsRaceChair = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.race_chairs[0]?.memberId && payload?.member?.id !== undefined)      
       payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
       return {
         ...state,
-        user: {...payload.user, userIsCommodore: userIsCommodore },
+        user: {
+          ...payload.user,
+          userIsCommodore: userIsCommodore,
+          userIsRaceChair: userIsRaceChair
+        },
         member: {
           ...payload.member,
           profilePic: payload.member?.profilePic || payload.user?.picture,
@@ -152,9 +158,9 @@ export default function authReducer(state = initialState, action) {
             draft,
             length,
             beam,
-            model, 
-            sailNumber, 
-            marina, 
+            model,
+            sailNumber,
+            marina,
             slip,
             make,
           }]

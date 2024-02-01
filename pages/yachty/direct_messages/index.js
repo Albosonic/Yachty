@@ -4,11 +4,26 @@ import NavBar from "@/components/NavBar";
 import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
 import { useRouter } from "next/router";
+import { use, useEffect } from "react";
 
 const directMessageFeed = () => {  
-  const router = useRouter();
-  const dmRooms = useSelector(state => state.msgs.dmRooms);
+  const router = useRouter()
+  const dmRooms = useSelector(state => state.msgs.dmRooms)
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
+
   const moreThan600px = useMediaQuery('(min-width:600px)');
+
+  useEffect (() => {    
+    if (dmRooms.length === 0) {
+      router.replace({
+        pathname:'/yachty/view_all_members',
+        query: { 
+          ycId,
+          noDms: true,
+        }
+      })
+    }
+  },[dmRooms])
 
   const handleClick = (id) => {
     const pathSegment = moreThan600px ? 'direct_messages' : 'mobile_dm_rooms';    

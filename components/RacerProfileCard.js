@@ -47,6 +47,8 @@ const RacerProfileCard = ({ racer }) => {
       (the) => console.log("copy text failed"),
     );
   }
+
+  console.log('racer =======', racer)
   
   const firstName = racer?.firstName
   const lastName = racer?.lastName

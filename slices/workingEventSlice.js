@@ -1,4 +1,5 @@
-import { CLEAR_NEW_EVENT_FIELDS_ACT, EDIT_NEW_EVENT_FIELD_ACT, HYDRATE_WORKING_EVENT_ACT, TOGGLE_EVENT_IN_REVIEW_ACT } from "./actions/workingEventActions";
+import { CLEAR_NEW_EVENT_FIELDS_ACT, CLEAR_WORKING_EVENT_IMAGES_ACT, EDIT_NEW_EVENT_FIELD_ACT, HYDRATE_WORKING_EVENT_ACT, TOGGLE_EVENT_IN_REVIEW_ACT } from "./actions/workingEventActions";
+
 
 const initialState = {
   inReview: false,
@@ -50,6 +51,17 @@ export default function workingEventReducer(state = initialState, action) {
       }
     case CLEAR_NEW_EVENT_FIELDS_ACT:
       return { ...initialState }
+    case CLEAR_WORKING_EVENT_IMAGES_ACT:
+      return {
+        ...state,
+        inReview: false,
+        existingImage: '',
+        image: {
+          src: null,
+          fileDatum: null,
+          imgKey: null
+        }
+      }
     default:
       return state
   }

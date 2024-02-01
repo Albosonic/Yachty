@@ -4,13 +4,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import StartIcon from '@mui/icons-material/Start';
 import uuid4 from "uuid4";
 import { useRouter } from "next/router";
-import { makeNewEventFieldAct, toggleEventInReviewAct } from "@/slices/actions/workingEventActions";
+import { clearWorkingEventImagesAct, makeNewEventFieldAct, toggleEventInReviewAct } from "@/slices/actions/workingEventActions";
 import { useEffect, useState } from "react";
 
 const SetEventImage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const [showInput, setShowInput] = useState(true);
+  const [showInput, setShowInput] = useState(true);  
   const image = useSelector(state => state.workingEvent.image)
   const existingImg = useSelector(state => state.workingEvent.existingImage)
   const moreThan600px = useMediaQuery('(min-width:600px)');
@@ -45,7 +45,7 @@ const SetEventImage = () => {
     router.push({ pathname: '/yachty/make_new_event/review' })
   };
 
-  const resetImage = () => dispatch(makeNewEventFieldAct({image: { src: null, fileDatum: null, imgKey: null }}))
+  const resetImage = () => dispatch(clearWorkingEventImagesAct())
 
   const imgWidthAndHeight = moreThan600px ? '45%' : '100%';
 

@@ -71,13 +71,14 @@ const EventReviewPoster = ({ race }) => {
       };
       const results = await s3Client.send(new PutObjectCommand(params));
     }
+    
     if (existingEvent) {        
       const variables = {
         eventId,
         object: {
           location,
           entertainment,
-          image: existingImg,
+          image: imagePath,
           event_name: name,
           specialNotes,
           startDate,
@@ -89,7 +90,7 @@ const EventReviewPoster = ({ race }) => {
       };
       const resp = await updateEvent({variables})
       setShowSuccess(true)
-    } else {      
+    } else {
       const variables = {
         location,
         entertainment,

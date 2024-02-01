@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { workingEventDateAct, workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Button, Fab, Grid } from '@mui/material';
+import { workingEventDateAct, workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { GET_RACE_BY_ID } from '@/lib/gqlQueries/racinggql';
 import client from '@/lib/clients/apollo-client';
 import { PARTY, RACE } from '@/lib/strings';
@@ -68,34 +69,43 @@ const CalendarDayClickMenu = ({ scheduler }) => {
     router.replace({pathname: '/yachty/make_new_race', query: { workingDate: true }})
   }
 
-  return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: '50vh' }}
-    >
-      <Button
-        color='primary'
-        size='large'
-        variant='outlined'
-        sx={{padding: 3, marginTop: 2, width: '90%'}}
-        onClick={handleCreateEvent}
+  const goBack = () => {
+    router.reload()
+  }
 
+  return (
+    <>
+      <Fab size="medium" onClick={goBack} variant="extended" sx={{ margin: 3, alignSelf: 'flex-start' }} color="primary">
+        <ArrowBackIcon /> Back
+      </Fab>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: '50vh' }}
       >
-        Create Event
-      </Button>
-      <Button
-        color='primary'
-        size='large'
-        variant='outlined'
-        sx={{padding: 3, marginTop: 2, width: '90%'}}
-        onClick={handleCreateRace}
-      >
-        Crate Race
-      </Button>
-    </Grid>
+        <Button
+          color='primary'
+          size='large'
+          variant='outlined'
+          sx={{padding: 3, marginTop: 2, width: '90%'}}
+          onClick={handleCreateEvent}
+
+        >
+          Create Event
+        </Button>
+        <Button
+          color='primary'
+          size='large'
+          variant='outlined'
+          sx={{padding: 3, marginTop: 2, width: '90%'}}
+          onClick={handleCreateRace}
+        >
+          Crate Race
+        </Button>
+      </Grid>
+    </>
   );
 }
 
