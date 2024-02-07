@@ -34,7 +34,7 @@ const SetRaceCourse = ({callback, alternateTitle}) => {
     fetchPolicy: 'no-cache'
   });
 
-  const {RACE_NAME} = RACE_FIELDS;
+  const {COURSE} = RACE_FIELDS;
 
   if (loading) return <LoadingYachty isRoot={false} />
 
@@ -48,7 +48,7 @@ const SetRaceCourse = ({callback, alternateTitle}) => {
     if (callback) {
       setAnchorEl(null)
       dispatch(makeNewRaceFieldAct({course: course}));
-      callback(RACE_NAME)
+      callback(COURSE)
     } else {
       const raceId = router.query.raceId
       const {id: raceCourseId} = course
