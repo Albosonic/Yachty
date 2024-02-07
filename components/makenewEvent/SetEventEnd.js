@@ -26,7 +26,7 @@ const SetEventEnd = ({ callback }) => {
   return (
     <>
       <Slide direction="right" in={true} mountOnEnter unmountOnExit>
-        <Typography variant="h4">Race End</Typography>
+        <Typography variant="h4">Event End</Typography>
       </Slide>
       <Grid sx={{minWidth: 300}} container justifyContent="space-between">
         <Stack>
