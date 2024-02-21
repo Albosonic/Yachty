@@ -129,13 +129,14 @@ const makeNewRace = () => {
         justifyContent="center"
       >
         <Stack spacing={2}>
-          {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
+          <Typography variant="h1">This is a deploy test!!!</Typography>
+          {/* {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
           {currentField === COURSE && <SetRaceCourse callback={setCurrentField} />}
           {currentField === RACE_NAME && <SetRaceName callback={setCurrentField} />}
           {currentField === START_DATE && <SetRaceStart callback={setCurrentField} />}
           {currentField === END_DATE && <SetRaceEnd callback={setCurrentField} />}
           {currentField === RELEASE && <SetRaceRelease callback={setCurrentField} />}
-          {currentField === IMAGE && <SetRaceImage />}
+          {currentField === IMAGE && <SetRaceImage />} */}
         </Stack>
       </Grid>
     </>
