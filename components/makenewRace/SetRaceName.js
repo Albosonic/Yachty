@@ -4,13 +4,12 @@ import EastIcon from '@mui/icons-material/East';
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
-const SetRaceName = ({ callback }) => {
+const SetRaceName = () => {
   const dispatch = useDispatch();
   const [raceName, setRaceName] = useState({raceName: ''});
-  const {START_DATE} = RACE_FIELDS
+    
   const editRaceName = () => {
-    dispatch(makeNewRaceFieldAct(raceName));
-    callback(START_DATE)
+    dispatch(makeNewRaceFieldAct(raceName));    
   }
 
   return (

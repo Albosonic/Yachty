@@ -1,4 +1,4 @@
-import { RACE_FIELDS, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, Typography } from "@mui/material";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
@@ -7,15 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-const SetRaceStart = ({ callback }) => {
+const SetRaceStart = () => {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(null);
-  const workingDateFromScheduler = useSelector(state => state.scheduler.workingRaceDate)
-  const {END_DATE} = RACE_FIELDS;
+  const workingDateFromScheduler = useSelector(state => state.scheduler.workingRaceDate)  
   // dispatch(clearNewRaceFieldsAct()); for debugging...
   const editRaceStart = () => {    
-    dispatch(makeNewRaceFieldAct({startDate: startDate}));
-    callback(END_DATE);
+    dispatch(makeNewRaceFieldAct({startDate: startDate}));    
   }
 
   const defaultStartDate = workingDateFromScheduler ? dayjs(workingDateFromScheduler) : dayjs(new Date());

@@ -8,12 +8,11 @@ import CreateSeriesDialog from './dialogs/CreateSeriesDialog';
 import { useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { GET_RACE_SERIES_BY_YC_ID } from '@/lib/gqlQueries/racinggql';
-
-import { RACE_FIELDS, makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
+import { makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
 import LoadingYachty from '../LoadingYachty';
 
 
-const SetRaceSeries = ({callback}) => {
+const SetRaceSeries = () => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonText, setButtonText] = useState('Choose Race Series');
@@ -25,7 +24,7 @@ const SetRaceSeries = ({callback}) => {
   });
 
   const open = Boolean(anchorEl);
-  const {RACE_NAME} = RACE_FIELDS
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,8 +34,7 @@ const SetRaceSeries = ({callback}) => {
   };
 
   const chooseSeries = (series) => {
-    dispatch(makeNewRaceFieldAct({series: series}))
-    callback(RACE_NAME)
+    dispatch(makeNewRaceFieldAct({series: series}))    
   }
 
   const createSeries = () => {

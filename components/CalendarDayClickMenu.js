@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button, Fab, Grid } from '@mui/material';
+import { Button, Fab, Grid, useMediaQuery } from '@mui/material';
 import { workingEventDateAct, workingRaceDateAct } from '@/slices/actions/schedulerActions';
 import { GET_RACE_BY_ID } from '@/lib/gqlQueries/racinggql';
 import client from '@/lib/clients/apollo-client';
@@ -14,6 +14,7 @@ import { GET_YC_EVENT } from '@/lib/gqlQueries/createYCEventgql';
 const CalendarDayClickMenu = ({ scheduler }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const moreThan600px = useMediaQuery('(min-width:600px)');
   // const [selectedIndex, setSelectedIndex] = useState(1);
   // const {data, loading, error} = useQuery(GET_RACE_BY_ID, {variables: { raceId: newRaceId }});
 
@@ -75,7 +76,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
 
   return (
     <>
-      <Fab size="medium" onClick={goBack} variant="extended" sx={{ margin: 3, alignSelf: 'flex-start' }} color="primary">
+      <Fab size="small" onClick={goBack} variant="extended" sx={{ margin: 3, alignSelf: 'flex-start' }} color="primary">
         <ArrowBackIcon /> Back
       </Fab>
       <Grid
@@ -83,11 +84,14 @@ const CalendarDayClickMenu = ({ scheduler }) => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: '50vh' }}
+        sx={{ 
+          minHeight: '50vh',
+          minWidth: '300px'
+        }}
       >
         <Button
           color='primary'
-          size='large'
+          size={moreThan600px ? 'small' : 'large'}
           variant='outlined'
           sx={{padding: 3, marginTop: 2, width: '90%'}}
           onClick={handleCreateEvent}
@@ -97,7 +101,7 @@ const CalendarDayClickMenu = ({ scheduler }) => {
         </Button>
         <Button
           color='primary'
-          size='large'
+          size={moreThan600px ? 'small' : 'large'}
           variant='outlined'
           sx={{padding: 3, marginTop: 2, width: '90%'}}
           onClick={handleCreateRace}
