@@ -96,7 +96,8 @@ const Race = () => {
           course={race.race_course}
           raceStartedCb={setRaceStarted}
         />
-        {!raceStarted && <SetRaceCourse />}
+        {/* TODO: figure our this no callback with set race */}
+        {/* {!raceStarted && <SetRaceCourse />} */}
         <Button size="small" fullWidth sx={{padding: 2, borderRadius: 0, bottom: 0, position: 'absolute'}} variant="outlined">
           Start Race
         </Button>

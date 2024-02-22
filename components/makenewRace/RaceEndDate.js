@@ -1,4 +1,4 @@
-import { RACE_FIELDS, clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
+import { clearNewRaceFieldsAct, makeNewRaceFieldAct } from "@/slices/actions/workingRaceActions";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
 import EastIcon from '@mui/icons-material/East';
@@ -7,20 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import dayjs from "dayjs";
 
-const SetRaceEnd = ({ callback }) => {
+const SetRaceEnd = () => {
   const dispatch = useDispatch();
   const startDate = useSelector(state => state.workingRace.startDate);
   const [error, setError] = useState(false);
   const [endDate, setEndDate] = useState(null);    
-  const {IMAGE} = RACE_FIELDS;
+  
   // dispatch(clearNewRaceFieldsAct()); for debugging...
   const editRaceEnd = () => {
-    const compareStart = new Date(startDate).getTime();
-    const compareEnd = new Date(endDate).getTime();
-    if (compareStart > compareEnd) return setError(true);
+    const compareStart = new Date(startDate).getTime()
+    const compareEnd = new Date(endDate).getTime()
+    if (compareStart > compareEnd) return setError(true)
     let dateString = endDate.toString()
-    dispatch(makeNewRaceFieldAct({endDate: dateString}));
-    callback(IMAGE);
+    dispatch(makeNewRaceFieldAct({endDate: dateString}))
   }    
 
   return (

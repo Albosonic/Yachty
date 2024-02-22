@@ -49,6 +49,8 @@ const makeNewRace = () => {
 
   const [currentField, setCurrentField] = useState('');
 
+  console.log('current field ========', currentField)
+
   useEffect(() => {
     let keyFound = false;
     flowOrder.forEach(detail => {
@@ -128,15 +130,14 @@ const makeNewRace = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Stack spacing={2}>
-          <Typography variant="h1">This is a deploy test!!!</Typography>
-          {/* {currentField === SERIES && <SetRaceSeries callback={setCurrentField} />}
-          {currentField === COURSE && <SetRaceCourse callback={setCurrentField} />}
-          {currentField === RACE_NAME && <SetRaceName callback={setCurrentField} />}
-          {currentField === START_DATE && <SetRaceStart callback={setCurrentField} />}
-          {currentField === END_DATE && <SetRaceEnd callback={setCurrentField} />}
-          {currentField === RELEASE && <SetRaceRelease callback={setCurrentField} />}
-          {currentField === IMAGE && <SetRaceImage />} */}
+        <Stack spacing={2}>          
+          {currentField === SERIES && <SetRaceSeries />}
+          {currentField === COURSE && <SetRaceCourse />}
+          {currentField === RACE_NAME && <SetRaceName />}
+          {currentField === START_DATE && <SetRaceStart />}
+          {currentField === END_DATE && <SetRaceEnd />}
+          {currentField === RELEASE && <SetRaceRelease />}
+          {currentField === IMAGE && <SetRaceImage />}
         </Stack>
       </Grid>
     </>

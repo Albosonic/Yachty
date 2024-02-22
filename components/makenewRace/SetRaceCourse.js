@@ -7,7 +7,7 @@ import { GET_RACE_COURSES_BY_YCID } from '@/lib/gqlQueries/racinggql';
 import LoadingYachty from '../LoadingYachty';
 import { useDispatch, useSelector } from 'react-redux';
 import { gql, useMutation, useQuery } from '@apollo/client';
-import {  RACE_FIELDS, makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
+import { makeNewRaceFieldAct } from '@/slices/actions/workingRaceActions';
 import CreateCourseDialog from './dialogs/CreateCourseDialog';
 import { useRouter } from 'next/router';
 import { Alert, Snackbar } from '@mui/material';
@@ -19,7 +19,7 @@ const UPDATE_RACE_COURSE = gql`
   }
 }`;
 
-const SetRaceCourse = ({callback, alternateTitle}) => {
+const SetRaceCourse = ({ alternateTitle }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -32,9 +32,7 @@ const SetRaceCourse = ({callback, alternateTitle}) => {
   const {error, loading, data, refetch: refetchCourses} = useQuery(GET_RACE_COURSES_BY_YCID, {
     variables: { ycId },
     fetchPolicy: 'no-cache'
-  });
-
-  const {COURSE} = RACE_FIELDS;
+  });  
 
   if (loading) return <LoadingYachty isRoot={false} />
 
@@ -45,21 +43,22 @@ const SetRaceCourse = ({callback, alternateTitle}) => {
   }
 
   const menuItemClick = async (course) => {
-    if (callback) {
-      setAnchorEl(null)
-      dispatch(makeNewRaceFieldAct({course: course}));
-      callback(COURSE)
-    } else {
-      const raceId = router.query.raceId
-      const {id: raceCourseId} = course
-      await updateRaceCourse({
-        variables: {
-          raceId,
-          raceCourseId,
-        }
-      })
-      setShowSuccess(true)
-    }
+    setAnchorEl(null)
+    dispatch(makeNewRaceFieldAct({course: course}));
+    // TODO: this is unused, in go to race view. FIX
+    // if (callback) {
+    //   callback(COURSE)
+    // } else {
+    //   const raceId = router.query.raceId
+    //   const {id: raceCourseId} = course
+    //   await updateRaceCourse({
+    //     variables: {
+    //       raceId,
+    //       raceCourseId,
+    //     }
+    //   })
+    //   setShowSuccess(true)
+    // }
   }
 
   const handleClose = (course) => {
