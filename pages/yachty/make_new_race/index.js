@@ -1,3 +1,4 @@
+'use client'
 import NavBar from "@/components/NavBar";
 import SetRaceStart from "@/components/makenewRace/RaceStartDate";
 import { Button, Grid, Stack, Typography } from "@mui/material";
