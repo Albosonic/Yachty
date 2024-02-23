@@ -132,7 +132,9 @@ const makeNewRace = () => {
       >
         <Stack spacing={2}>          
           {currentField === SERIES && <SetRaceSeries />}
-          {currentField === COURSE && <SetRaceCourse />}
+          {
+            currentField === COURSE ? <SetRaceCourse /> : null
+          }
           {currentField === RACE_NAME && <SetRaceName />}
           {currentField === START_DATE && <SetRaceStart />}
           {currentField === END_DATE && <SetRaceEnd />}
