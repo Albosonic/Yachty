@@ -75,9 +75,7 @@ const SetRaceCourse = ({ alternateTitle }) => {
   }
 
   return (
-    <>
-
-      {userIsChair &&
+    <>      
         <>
           <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
@@ -110,8 +108,7 @@ const SetRaceCourse = ({ alternateTitle }) => {
             {courses.map((course, i) => <MenuItem key={course.courseName + i} onClick={() => menuItemClick(course)}>{course.courseName}</MenuItem>)}
             <MenuItem key="create series" onClick={createCourse}>{'...create course'}</MenuItem>
           </Menu>
-        </>
-      }
+        </>      
     </>
   );
 }
