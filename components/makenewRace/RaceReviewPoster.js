@@ -108,7 +108,7 @@ const RaceReviewPoster = ({ race }) => {
 
   if (!inReview || updateRaceLoading || insertRaceLoading) return <LoadingYachty isRoot={false} />
   return (
-    <Card>
+    <Card sx={{maxWidth: '500px'}}>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           All Set!
