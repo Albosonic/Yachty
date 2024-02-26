@@ -2,6 +2,7 @@ import { Alert, Box, Card, CardContent, CardMedia, CircularProgress, Grid, IconB
 import CheckIcon from '@mui/icons-material/Check';
 import {  useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import DoneIcon from '@mui/icons-material/Done';
 import { useMutation } from '@apollo/client';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,10 +11,12 @@ import Fab from '@mui/material/Fab';
 import { INSERT_RACE_TICKET_FOR_PURCHASE, UPDATE_RACE_TICKET_COST, UPDATE_RACE_W_TICKET_ID } from '@/lib/gqlQueries/racinggql';
 import { clearNewRaceFieldsAct } from '@/slices/actions/workingRaceActions';
 import { getFriendlyDateAndTime } from '@/lib/utils/dateStrings';
+import { useRouter } from 'next/router';
 
 
 const RaceTicketForm = ({raceData}) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  const router = useRouter()
   const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
 
   const [createRaceTicket, { loading: raceTicketLoading }] = useMutation(INSERT_RACE_TICKET_FOR_PURCHASE);
@@ -73,10 +76,19 @@ const RaceTicketForm = ({raceData}) => {
 
   const handleClose = () => setShowSuccess(false);
 
+  const done = () => {
+    router.replace({
+      pathname: '/yachty/racing',
+    })
+  }
+
   const dateAndTime = getFriendlyDateAndTime(startDate, endDate, startTime, endTime)
 
   return (
     <Stack sx={{margin: 5}}>
+      <Fab disabled={editing} size="small" onClick={done} variant="extended" sx={{ marginBottom: 3, alignSelf: 'flex-start' }} color="primary">
+        <DoneIcon /> Done
+      </Fab>
       <Snackbar open={showSuccess} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Success!
