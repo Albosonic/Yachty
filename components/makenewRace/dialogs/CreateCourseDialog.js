@@ -15,11 +15,11 @@ const CreateCourseDialog = ({open, setOpen, refetch}) => {
 
   return (
     <Dialog
-      fullWidth={true}    
+      fullWidth={true}
       open={open}
     >
       <UploadRaceCourse closeDialog={closeDialog} />
-    </Dialog>   
+    </Dialog>
   )
 }
 
