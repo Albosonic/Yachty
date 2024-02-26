@@ -7,9 +7,6 @@ import { useMutation } from "@apollo/client";
 import UploadRaceCourse from "@/components/UploadRaceCourse";
 
 const CreateCourseDialog = ({open, setOpen, refetch}) => {
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id)
-  const [seriesName, setSeriesName] = useState('');  
-//   const [insertSeries, {loading: insertSeriesLoading}] = useMutation(INSERT_RACE_SERIES);
 
   const closeDialog = () => {
     refetch();
