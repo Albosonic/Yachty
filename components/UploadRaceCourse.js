@@ -22,7 +22,7 @@ const UploadRaceCourse = ({ closeDialog }) => {
 
   const addCourseLeg = () => {
     setCourse([...course, workingLeg]);
-    setWorkingLeg({side: null, marker: null});
+    setWorkingLeg({...workingLeg, marker: null});
     setUserInput('');
   };
 
@@ -69,18 +69,19 @@ const UploadRaceCourse = ({ closeDialog }) => {
           size="small"
           sx={{
             alignSelf: 'flex-end',
+            padding: 2
           }}
           onClick={uploadRaceCourse}
           color="success"
           variant="extended"
         >
           <AddIcon />
-          upload
+          upload course
         </Fab>
         {!titleSet &&
         <TextField
-          placeholder="Enter course name"
           multiline
+          placeholder="Enter course name"
           onChange={(e) => setCourseNameInfo({...courseNameInfo, name: e.target.value})}
           value={courseTitle}
           variant="standard"
@@ -100,8 +101,7 @@ const UploadRaceCourse = ({ closeDialog }) => {
                 disablePadding
               >
               <ListItemText primaryTypographyProps={{variant: 'h4'}} id={courseTitle} primary={courseTitle} />
-            </ListItem>
-            {startFrom && <Typography> start from: { startFrom}</Typography>}
+            </ListItem>            
             <FormControl sx={{width: '100%'}}>
               <FormLabel id="demo-form-control-label-placement">Choose Start Direction</FormLabel>
               <RadioGroup
@@ -111,13 +111,16 @@ const UploadRaceCourse = ({ closeDialog }) => {
                 sx={{justifyContent: 'space-around'}}
                 onChange={(e) => setCourseNameInfo({ ...courseNameInfo, startFrom: e.target.value })}
               >
-                <Stack>
+                <Grid container>
                   <FormControlLabel labelPlacement="top" value="North" control={<Radio />} label="North" />
                   <FormControlLabel labelPlacement="top" value="East" control={<Radio />} label="East" />
+                </Grid>
+                <Grid container>
                   <FormControlLabel labelPlacement="top" value="South" control={<Radio />} label="South" />
                   <FormControlLabel labelPlacement="top" value="West" control={<Radio />} label="West" />
-                </Stack>
+                </Grid>
               </RadioGroup>
+              {startFrom && <Typography fontWeight="bold" > Start Direction: {startFrom}</Typography>}
             </FormControl>
           </>}
 
@@ -146,13 +149,13 @@ const UploadRaceCourse = ({ closeDialog }) => {
           </Grid>
         </Paper>}
         <TextField
-          placeholder="enter marker/bouy"
+          placeholder="Enter marker/bouy"
           multiline
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}
           variant="standard"
           sx={{width: '100%'}}
-          InputProps={{endAdornment: <Button onClick={() => setWorkingLeg({...workingLeg, marker: userInput})}>Set</Button>}}
+          InputProps={{endAdornment: <Button disabled={userInput === ''} onClick={() => setWorkingLeg({...workingLeg, marker: userInput})}>Set</Button>}}
         />
         <FormControl sx={{width: '100%'}}>
           <RadioGroup
@@ -166,7 +169,7 @@ const UploadRaceCourse = ({ closeDialog }) => {
             <FormControlLabel value="Starboard" control={<Radio />} label="To Starboard" />
           </RadioGroup>
         </FormControl>
-        <Button onClick={addCourseLeg}>
+        <Button disabled={marker === null} onClick={addCourseLeg}>
           Add Course Leg
         </Button>
       </Stack>
