@@ -10,13 +10,12 @@ import SetRaceCourse from "@/components/makenewRace/SetRaceCourse";
 import { getCountDown } from "@/lib/utils/getters";
 import Checkbox from '@mui/material/Checkbox';
 import { useSelector } from "react-redux";
-
-
+// TODO: move cown into it's own file.
 const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
   const [countDown, setCountDown] = useState(null)
   const [showCourse, setShowCourse] = useState(false)
+
   useEffect(() => {
-    // if (!startDate || !startTime) return setCountDown(<LoadingYachty isRoot={false} />)
     const {diff, seconds, minutes, hours, days } = getCountDown(startDate, startTime)
     if (minutes < 5) {
       raceStartedCb(true)
@@ -81,8 +80,8 @@ const Race = () => {
     router.back()
   }
 
-  if (loading || !race) return <LoadingYachty />;  
-  const { raceName, startDate, startTime, race_course } = race  
+  if (loading || !race) return <LoadingYachty />;
+  const { raceName, startDate, startTime, race_course } = race
 
   return (
     <>
@@ -91,7 +90,7 @@ const Race = () => {
         <ArrowBackIcon /> Back
       </Fab>
       <Stack spacing={4} alignItems="center">
-        <Typography variant="h4">{ raceName } Race</Typography>
+        <Typography variant="h4">{ raceName }</Typography>
         <CourseCountDown
           startDate={startDate}
           startTime={startTime}
@@ -103,19 +102,17 @@ const Race = () => {
         {raceStarted || userIsCommodore &&
           <Stack>
             <Typography variant="h5" >{ race_course?.courseName }</Typography>
-            { race_course?.instructions.map((leg, i) => {
+            {race_course?.instructions.map((leg, i) => {
               return (
                 <Grid key={`${race_course?.courseName}${i}`} container>
-                  <Typography variant="body1">1. {leg.marker}&nbsp; </Typography>
-                  <Typography variant="body1"> To: {leg.side}</Typography>
+                  <Typography sx={{alignSelf: 'center'}} variant="body1">{i + 1}. {leg.marker}&nbsp; </Typography>
+                  <Typography sx={{alignSelf: 'center'}} variant="body1"> To: {leg.side}</Typography>
+                  <Checkbox color="success" />
                 </Grid>
               )
             })}
           </Stack>
         }
-        {/* <Button size="small" fullWidth sx={{padding: 2, borderRadius: 0, bottom: 0, position: 'absolute'}} variant="outlined">
-          Start Race
-        </Button> */}
       </Stack>
     </>
   )

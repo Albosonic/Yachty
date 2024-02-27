@@ -34,7 +34,6 @@ const DmRoom = ({dmRoom}) => {
   if (loading) return <LoadingYachty isRoot={false} />
 
   const {profilePic, firstName} = data.yc_members[0];
-  console.log('data.yc_members[0]', data.yc_members[0])
 
   return (
     <Grid container justifyContent="space-around">    
