@@ -19,7 +19,7 @@ const UPDATE_RACE_COURSE = gql`
   }
 }`;
 
-const SetRaceCourse = ({ alternateTitle }) => {
+const SetRaceCourse = ({ switchingCourse=false, refetchRace }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -43,26 +43,25 @@ const SetRaceCourse = ({ alternateTitle }) => {
   }
 
   const menuItemClick = async (course) => {
-    setAnchorEl(null)
-    dispatch(makeNewRaceFieldAct({course: course}));
-    // TODO: this is unused, in go to race view. FIX
-    // if (callback) {
-    //   callback(COURSE)
-    // } else {
-    //   const raceId = router.query.raceId
-    //   const {id: raceCourseId} = course
-    //   await updateRaceCourse({
-    //     variables: {
-    //       raceId,
-    //       raceCourseId,
-    //     }
-    //   })
-    //   setShowSuccess(true)
-    // }
+    if (switchingCourse) {
+      const raceId = router.query.raceId
+      const {id: raceCourseId} = course
+      await updateRaceCourse({
+        variables: {
+          raceId,
+          raceCourseId,
+        }
+      })
+      setShowSuccess(true)
+      await refetchRace()
+    } else {
+      setAnchorEl(null)
+      dispatch(makeNewRaceFieldAct({course: course}));
+    }
   }
 
   const handleClose = (course) => {
-    setAnchorEl(null)
+    setAnchorEl(null)    
   };
 
   const createCourse = () => {
@@ -77,7 +76,7 @@ const SetRaceCourse = ({ alternateTitle }) => {
   return (
     <>      
         <>
-          <Snackbar open={showSuccess} autoHideDuration={2000} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
+          <Snackbar open={showSuccess} autoHideDuration={700} onClose={snackBarClose} anchorOrigin={{vertical: 'top', horizontal: 'center'}} key={'top'+'center'} >
             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
               Success!
             </Alert>
@@ -94,7 +93,7 @@ const SetRaceCourse = ({ alternateTitle }) => {
             endIcon={<ArrowDropDownIcon />}
             sx={{minWidth: 223}}
           >
-            {alternateTitle || 'choose a course'}
+            {switchingCourse ? 'switch course' : 'choose a course'}
           </Button>
           <Menu
             id="course-selector"

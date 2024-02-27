@@ -48,9 +48,7 @@ const makeNewRace = () => {
     {IMAGE: imageObj || existingImg},    
   ];
 
-  const [currentField, setCurrentField] = useState('');
-
-  console.log('current field ========', currentField)
+  const [currentField, setCurrentField] = useState('')
 
   useEffect(() => {
     let keyFound = false;
