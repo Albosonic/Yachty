@@ -131,15 +131,17 @@ const Yachty = () => {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
         const resp = await upsertMember({
-        variables: {
-          email,
-          firstName,
-          lastName,
-          name,
-          profilePic,
-          lasrLogin: getIsoDate(),
-          yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
-        }});
+          fetchPolicy: 'no-cache',
+          variables: {
+            email,
+            firstName,
+            lastName,
+            name,
+            profilePic,
+            lasrLogin: getIsoDate(),
+            yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
+          }
+        });
         const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
         dispatch(addMember(userData));
       }
@@ -178,7 +180,8 @@ const Yachty = () => {
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
         <div className={styles.titleSection}>
-          <Typography variant="h4">Welcome to {yachtClubName}</Typography>
+          <Typography variant="h4">Welcome to Your Club</Typography>
+          {/* <Typography variant="h4">Welcome to {yachtClubName}</Typography> */}
           {logo && <img src={logo} />}
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
             This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.

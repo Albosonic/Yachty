@@ -22,7 +22,7 @@ const RaceTicketReservations = () => {
 
   const done = () => {
     router.replace({
-      pathname: '/yachty',
+      pathname: '/yachty/racing',
     })
   }
 

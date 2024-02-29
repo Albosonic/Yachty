@@ -72,6 +72,10 @@ const RaceTicketsForPurchase = ({ raceData }) => {
 
   const {cost, id: ticketForPurchaseId} = ticketData.race_tickets_for_purchase[0];
 
+  // const launchReleaseDialog = () => {
+
+  // }
+
   const reserveTicket = async () => {
     await insertTickets({variables: { memberId, ticketForPurchaseId, raceId, ycId }});
     setTicketCount(0);
@@ -102,6 +106,11 @@ const RaceTicketsForPurchase = ({ raceData }) => {
           Success!
         </Alert>
       </Snackbar>
+      {/* <ReleaseFormDialog 
+        setOpenDialog={setOpenReleaseDialog} 
+        open={openReleaseDialog} 
+        releaseFormId={releaseFormId}
+      /> */}
       <Card
         elevation={4}
         sx={{
