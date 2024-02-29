@@ -179,8 +179,7 @@ const Yachty = () => {
       <NavBar/>
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
-        <div className={styles.titleSection}>
-          {/* <Typography variant="h4">Yacht  Club</Typography> */}
+        <div className={styles.titleSection}>          
           <Typography sx={{margin: 2}} variant="h3">{yachtClubName}</Typography>
           {logo && 
             <Box
@@ -193,8 +192,7 @@ const Yachty = () => {
               alt="race chair photo"
               src={logo}
             />
-          }
-          {/* {logo && <img src={logo} />} */}
+          }          
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
             This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
           </Typography>}
