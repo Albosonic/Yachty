@@ -131,15 +131,17 @@ const Yachty = () => {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
       const upsertUser = async () => {
         const resp = await upsertMember({
-        variables: {
-          email,
-          firstName,
-          lastName,
-          name,
-          profilePic,
-          lasrLogin: getIsoDate(),
-          yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
-        }});
+          fetchPolicy: 'no-cache',
+          variables: {
+            email,
+            firstName,
+            lastName,
+            name,
+            profilePic,
+            lasrLogin: getIsoDate(),
+            yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
+          }
+        });
         const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
         dispatch(addMember(userData));
       }
