@@ -3,7 +3,7 @@ import NavBar from '@/components/NavBar';
 import styles from '@/styles/yachty.module.css'
 import { gql, useMutation } from '@apollo/client';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
@@ -179,10 +179,20 @@ const Yachty = () => {
       <NavBar/>
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
-        <div className={styles.titleSection}>
-          <Typography variant="h4">Welcome to Your Club</Typography>
-          {/* <Typography variant="h4">Welcome to {yachtClubName}</Typography> */}
-          {logo && <img src={logo} />}
+        <div className={styles.titleSection}>          
+          <Typography sx={{margin: 2}} variant="h3">{yachtClubName}</Typography>
+          {logo && 
+            <Box
+              component="img"
+              sx={{
+                borderRadius: '50%',
+                width: 200,
+                height: 200,                
+              }}
+              alt="race chair photo"
+              src={logo}
+            />
+          }          
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
             This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
           </Typography>}
