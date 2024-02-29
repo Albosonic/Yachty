@@ -178,7 +178,8 @@ const Yachty = () => {
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
         <div className={styles.titleSection}>
-          <Typography variant="h4">Welcome to {yachtClubName}</Typography>
+          <Typography variant="h4">Welcome to Your Club</Typography>
+          {/* <Typography variant="h4">Welcome to {yachtClubName}</Typography> */}
           {logo && <img src={logo} />}
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
             This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
