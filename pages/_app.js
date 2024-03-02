@@ -1,7 +1,6 @@
-import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { ApolloProvider } from '@apollo/client';
 import client from '@/lib/clients/apollo-client';
-
+import { SessionProvider } from "next-auth/react"
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -13,19 +12,19 @@ import { theme } from '@/lib/theme/mui-theme';
 import store from '@/lib/store';
 
 let persistor = persistStore(store);
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }) => {
   
   return (
     <ApolloProvider client={client} >
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <UserProvider>
+          <SessionProvider session={session}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
                 <Component {...pageProps} />
               </ThemeProvider>
             </LocalizationProvider>
-          </UserProvider>
+          </SessionProvider>
         </PersistGate>
       </Provider>
     </ApolloProvider>
