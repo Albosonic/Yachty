@@ -28,8 +28,9 @@ const options = {
           type: "password" 
         }
       },
-      async aithorize({credentials}) {
+      async authorize({credentials}) {
         console.log('credentials ========', credentials)
+
         const user = {id: 1, name: 'albosonic', password: 'nextauth'}
         return user
       },
