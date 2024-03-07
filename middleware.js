@@ -7,7 +7,10 @@ export default withAuth(
     },
     {
       callbacks: {
-        authorized: ({token}) =>  token?.role === 'admin',        
+        authorized: ({token}) =>  {
+          console.log('token ==== middleware', token)
+          return token?.role === 'awesome'
+        },        
       }
     }
 )

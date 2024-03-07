@@ -109,6 +109,7 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
+  return <LoadingYachty />
   const { user, isLoading } = useUser();
   const dispatch = useDispatch();
   const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
@@ -125,7 +126,7 @@ const Yachty = () => {
   const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
-
+  
   useEffect(() => {
     if (user?.email && !memberData?.id) {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
@@ -161,7 +162,6 @@ const Yachty = () => {
     const resp = await betaGiveCommodoreStatus({variables: {name, memberId, ycId: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"}});
     dispatch(betaUpdateUserIsCommodoreAct(true));
   };
-
   // if (user === undefined) {
   //   router.push('/login');
   //   return null;

@@ -1,6 +1,8 @@
 import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials";
+import client from "@/lib/clients/apollo-client";
+import { GET_YC_MEMBER } from "@/lib/gqlQueries/yachtygql";
 
 const options = {
   // Configure one or more authentication providers
@@ -9,7 +11,7 @@ const options = {
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
       profile(profile) {
-        // console.log('profile ======', profile)
+        console.log('profile =======', profile)
         return {
           ...profile
         }
@@ -24,13 +26,12 @@ const options = {
           placeholder:'username'
         },
         password: {
-          label: "Password", 
-          type: "password" 
+          label: "Password",
+          type: "password"
         }
       },
-      async authorize({credentials}) {
-        console.log('credentials ========', credentials)
-
+      async authorize(credentials) {
+        // todo: integrate with hasura
         const user = {id: 1, name: 'albosonic', password: 'nextauth'}
         return user
       },
@@ -39,13 +40,15 @@ const options = {
   ],
   callbacks: {
     async jwt({token, user}) {
-      if (user) token.role = user.role
+      console.log('user =========', user)
+      // *** token['x-hasura-allowed-roles'] = ["admin", user] *******
+      if (user) token.role = 'awesome'
       return token
     },
     async session({session, token}) {
-      if (session.user) session.user.role = token.role
+      if (session.user) session.user.role = 'awesome'
       return session
-    }  
+    },
   },
 }
 

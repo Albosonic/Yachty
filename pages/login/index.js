@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router';
-import NavBar from '@/components/NavBar';
 import { Box, Button, CircularProgress, Container, Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import styles from '@/styles/Home.module.css'
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -17,15 +16,21 @@ const Login = () => {
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   const memberId = useSelector(state => state?.auth?.member?.id);
   // const {user, isLoading} = useUser();
-  const { data: user } = useSession()
-  console.log('user =========>', user)
+  const { data: user, status } = useSession()
+  if(status === "authenticated") {
+    console.log('status =====', status)
+    // router.replace({pathname: '/yachty'})
+  }
+  // console.log('user =========>', user)
 
   // dispatch(clearState()) //for debugging purposes.
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   // if (isLoading ) return <LoadingYachty />
   // if (user?.email_verified === true) router.push('/yachty', {query: { ycId }});
-
+  // if (user) router.push('/yachty');
+  // if (user) router.replace({pathname: '/yachty'});
+  
 
 // https://yachty-letter-heads.s3.us-west-1.amazonaws.com/a2bb7f71-7b84-4db7-b9cb-306bf54a5af7
 
@@ -70,7 +75,7 @@ const Login = () => {
           }}
         />
       </Grid>
-      <Button
+      {/* <Button
         onClick={() => window.location = `${window.location.origin}/api/auth/login`}
         sx={{
           color: '#FFFFFF',
@@ -80,7 +85,7 @@ const Login = () => {
           bottom: 10
         }}>
           Join The Club
-      </Button>
+      </Button> */}
     </Stack>
   );
 }
