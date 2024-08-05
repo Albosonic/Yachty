@@ -41,6 +41,7 @@ const options = {
   callbacks: {
     async jwt({token, user}) {
       console.log('user =========', user)
+      console.log('token =========', token)
       // *** token['x-hasura-allowed-roles'] = ["admin", user] *******
       if (user) token.role = 'awesome'
       return token

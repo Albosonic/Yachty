@@ -54,6 +54,7 @@ const CreateEventTicket = (props) => {
 
   const handleClose = () => router.push({ pathname: '/yachty', query: { ycId } });
   const contentDirection = moreThan600px ? 'row' : 'column';
+  
   return (
     <>
     <NavBar />
@@ -77,6 +78,8 @@ const CreateEventTicket = (props) => {
           component="img"
           image={image}
           alt="Event Image"
+          height={250}
+          width={250}          
         />
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardContent sx={{ flex: '1 0 auto' }}>
@@ -91,6 +94,7 @@ const CreateEventTicket = (props) => {
           </CardContent>
         </Box>
         <Stack display="flex" alignItems="center" sx={{minWidth: 100, margin: 1}}>
+          
           <Fab disabled={showSpinner} onClick={createYCEventTicket} size="medium" color='success'  aria-label="add">
             <AddIcon />
           </Fab>

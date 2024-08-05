@@ -14,6 +14,7 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
 import { pollUserRooms } from '@/slices/actions/msgActions';
+import { useSession } from 'next-auth/react';
 
 
 // TODO: protect routes like code Bigelow_Rules.
@@ -109,8 +110,12 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
-  return <LoadingYachty />
-  const { user, isLoading } = useUser();
+  const session = useSession()
+  if(!session) return <LoadingYachty />
+  // const { user, isLoading } = useUser();
+  // console.log('user =======', user)
+  console.log('session =======', session?.data?.user)
+  const user = session?.data?.user;
   const dispatch = useDispatch();
   const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
@@ -155,7 +160,7 @@ const Yachty = () => {
     }
   }, [user, userIsCommodore, name, introSeen])
 
-  if (isLoading || upsertMemberLoading) return <LoadingYachty />;
+  if (upsertMemberLoading) return <LoadingYachty />;
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

@@ -57,6 +57,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const {error: forPurchaseError, loading: forPurchaseLoading, data: forPurchaseData} = useQuery(GET_EVENT_TICKET_FOR_PURCHASE, {
     variables: {eventId}
   });
+  // TODO: deal with events that have no tickets
   const purchasedTicketData = data?.yc_event_purchased_tickets;
   const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;
 
@@ -71,6 +72,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
   const dinnerCost = eventForPurchase?.dinnerCost;
+  console.log('event for purchase ======', eventForPurchase)
 
   const handleSendTickets = async () => {
     if (tooManyDinTicketsErr) setFormErrors({...formErrors, tooManyDinTicketsErr: false})
