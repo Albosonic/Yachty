@@ -4,10 +4,12 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton } from '@mui/material';
 import EventAttendeeDialog from './EventAttendeesDialog';
+import { useRouter } from 'next/router';
 
 const EventOptionsMenu = ({ eventId }) => {
-  const [anchorEl, setAnchorEl] = useState(null);  
-  const [buttonText, setButtonText] = useState('Choose Race Series');
+  const router = useRouter()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [buttonText, setButtonText] = useState('Choose Race Series')
   const [attendeesOpen, setAttendeesOpen] = useState(false)
 
   const open = Boolean(anchorEl);
@@ -40,6 +42,7 @@ const EventOptionsMenu = ({ eventId }) => {
         }}
       >
         <MenuItem onClick={openAttendeesDialog} >Event Attendees</MenuItem>
+        <MenuItem onClick={() => router.replace({pathname:'/yachty/seating', query: { eventId }})} >Event Seating</MenuItem>
       </Menu>
     </>
   );

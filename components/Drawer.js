@@ -17,6 +17,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Divider, Grid, useMediaQuery } from '@mui/material';
+import TableBarIcon from '@mui/icons-material/TableBar';
 
 export default function AppDrawer({ open, toggleDrawer }) {
   const router = useRouter();
