@@ -1,3 +1,4 @@
+import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +39,7 @@ const MainProfilePic = () => {
 
   const logout = () => {
     dispatch(clearState());
-    window.location = `${window.location.origin}/api/auth/logout`;
+    signOut()
   };
 
   const editMyProfile = () => {
