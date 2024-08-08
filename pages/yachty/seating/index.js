@@ -236,13 +236,3 @@ const Seating = () => {
 }
 
 export default Seating
-
-// As a mission driven software engineer I am a team player who always strives to make a meaningful impact. Although I have many years of experience as a Frontend Engineer. I make continuous learning a habit in my daily life. Time management and team work are key skills that I have honed over the years and continue to build on. Even though It is important in software development to be autonomous at times and focus on precise details, I feel that one must also keep the team in mind, and remember to circle back and communicate intent and progress, and to make sure that the teams mission remains on track, and that other members of the team are supported where they need it. We must leave our ego at the door and move together towards our common goals. As a father and family man I appreciate work life balance and company culture that supports those values.
-
-// Having 8+ years of experience collaborating with Designers, Product Managers and Backend Engineers to  develop complex user interfaces in various technologies such as React, Typescript, various css frameworks, AWS, and several other technologies, I feel that I am a good fit for this position. I have also build Software  for medical devices in the past at Penumbra inc. Which makes me uniquely qualified for this role. Since I know that I am passionate about helping people through the application of my technical skills in the healthcare field. I hope very much to be considered for this role, and would love the opportunity to meet the team, and talk about the work that I have done, and my eagerness to join.
-
-// Thank you for your time in reading this,
-
-// Alberto Madueno
-
-// Experienced Software Engineer
