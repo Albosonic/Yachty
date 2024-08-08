@@ -7,10 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const ClaimSeatDialog = ({open, setOpen}) => {  
+const ClaimSeatDialog = ({open, reserveSeat}) => {  
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (open, name) => {
+    reserveSeat(open, name)
   };
 
   return (
@@ -24,9 +24,9 @@ const ClaimSeatDialog = ({open, setOpen}) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
+            const name = formJson.name;
+            console.log(name);
+            handleClose(open, name);  
           },
         }}
       >

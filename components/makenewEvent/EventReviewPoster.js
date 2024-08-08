@@ -16,7 +16,7 @@ import { Alert, Grid, Snackbar } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getNormalCalanderDate, getNormalDateFromDaysjsString } from '@/lib/utils/getters';
 import { useMutation } from '@apollo/client';
-import { INSERT_YC_EVENT, UPDATE_EVENT } from '@/lib/gqlQueries/createYCEventgql';
+import { INSERT_EVENT_SEATING, INSERT_YC_EVENT, UPDATE_EVENT } from '@/lib/gqlQueries/createYCEventgql';
 import { getHasuraDate } from '@/lib/utils/dateStrings';
 import dayjs from 'dayjs';
 import LoadingYachty from '../LoadingYachty';
@@ -41,6 +41,7 @@ const EventReviewPoster = ({ race }) => {
   const image = useSelector(state => state.workingEvent.image)
 
   const [insertEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT)
+  const [insertSeating, {loading: seatingLoading}] = useMutation(INSERT_EVENT_SEATING)
   const [updateEvent, { loading: updateEventLoading }] = useMutation(UPDATE_EVENT)
 
   const handleClose = () => {
@@ -104,7 +105,10 @@ const EventReviewPoster = ({ race }) => {
         ycId,
       };
       const resp = await insertEvent({variables})
-      createTickets(resp.data.insert_yc_events.returning[0].id)
+      const eventId = resp.data.insert_yc_events.returning[0].id
+      await insertSeating({variables: { eventId }})      
+
+      createTickets(eventId)
     }
   }
   // const { posterWidth } = posterStyles;

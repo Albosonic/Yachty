@@ -78,8 +78,7 @@ const CreateEventTicket = (props) => {
             component="img"
             image={image}
             alt="Event Image"
-            height={250}
-            width={250}          
+            sx={{width: "250px", height: "250px"}}                     
           />
           <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ flex: '1 0 auto' }}>
