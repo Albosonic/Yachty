@@ -72,7 +72,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
   const dinnerCost = eventForPurchase?.dinnerCost;
-  console.log('event for purchase ======', eventForPurchase)
 
   const handleSendTickets = async () => {
     if (tooManyDinTicketsErr) setFormErrors({...formErrors, tooManyDinTicketsErr: false})
@@ -186,6 +185,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         <CardMedia
           component="img"
           image={image}
+          className="sm:w-56 sm:h-56 w-full h-full self-center"
+          // sx={{maxWidth: "250px"}}
           alt="Event Image"
         />
         <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
