@@ -227,7 +227,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                   </Typography>
                 </Grid>
                   <Grid>
-                  <IconButton onClick={() => setTicketCount(ticketCount - 1)}>
+                  <IconButton onClick={() => {
+                    if (dinnerTicketCount === ticketCount) return setFormErrors({...formErrors, tooManyDinTicketsErr: true})
+                    setTicketCount(ticketCount - 1)
+                  }}>
                     <RemoveIcon color='error' />
                   </IconButton>
                   <IconButton onClick={() => setTicketCount(ticketCount + 1)}>
