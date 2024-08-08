@@ -18,21 +18,9 @@ const Login = () => {
   // const {user, isLoading} = useUser();
   const { data: user, status } = useSession()
   if(status === "authenticated") {
-    console.log('status =====', status)
-    // router.replace({pathname: '/yachty'})
+    console.log('status =====', status)    
   }
-  // console.log('user =========>', user)
-
-  // dispatch(clearState()) //for debugging purposes.
   const moreThan600px = useMediaQuery('(min-width:600px)');
-
-  // if (isLoading ) return <LoadingYachty />
-  // if (user?.email_verified === true) router.push('/yachty', {query: { ycId }});
-  // if (user) router.push('/yachty');
-  // if (user) router.replace({pathname: '/yachty'});
-  
-
-// https://yachty-letter-heads.s3.us-west-1.amazonaws.com/a2bb7f71-7b84-4db7-b9cb-306bf54a5af7
 
   return (
     <Stack
@@ -64,8 +52,6 @@ const Login = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        // flexGrow={1}
-        // sx={{ minHeight: '100vh' }}
       >
         <AuthButton />
         <AnchorIcon
@@ -75,17 +61,6 @@ const Login = () => {
           }}
         />
       </Grid>
-      {/* <Button
-        onClick={() => window.location = `${window.location.origin}/api/auth/login`}
-        sx={{
-          color: '#FFFFFF',
-          fontFamily: 'Bradley Hand, cursive',
-          fontSize: 40,
-          position: 'absolute',
-          bottom: 10
-        }}>
-          Join The Club
-      </Button> */}
     </Stack>
   );
 }
