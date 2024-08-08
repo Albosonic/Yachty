@@ -24,8 +24,7 @@ const ClaimSeatDialog = ({open, reserveSeat}) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            const name = formJson.name;
-            console.log(name);
+            const name = formJson.name;            
             handleClose(open, name);  
           },
         }}

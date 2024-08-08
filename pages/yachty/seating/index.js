@@ -2,14 +2,14 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
-import { Button, Container, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import uuid4 from 'uuid4';
 import ClaimSeatDialog from '@/components/dialogsYachty/ClaimSeatDialog';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
+import NavBar from '@/components/NavBar';
 
 const GET_CURRENT_EVENT_SEATING = gql`
   query getEventSeating($eventId: uuid) {
@@ -42,10 +42,7 @@ const Seating = () => {
 
   const [tablesLeft, setTablesLeft] = useState([])
   const [tablesRight, setTablesRight] = useState([])
-  const [danceFloor, setDancefloor] = useState(0)
-  const [savedSeating, setSavedSeating] = useState({})
   const [open, setOpen] = useState({open: false, seat: { left: null, tableNumber: null, seatNumber: null }})
-  const [stage, setStage] = useState(0)
   const {data: currentSeating, error, loading, refetch} = useQuery(GET_CURRENT_EVENT_SEATING, {variables: {eventId}})
   const [updateTables, {loading: loadingTables }] = useMutation(UPDATE_SEATING)
 
@@ -93,39 +90,58 @@ const Seating = () => {
     }
   }
 
-  const saveTables = async (newArrangement) => {
-    if (newArrangement.length === 0) return
-    const resp = await updateTables({variables: {eventId, tables: newArrangement }})
+  const saveTables = async () => {
+    const resp = await updateTables({variables: {eventId, tables: [...tablesLeft, ...tablesRight] }})
+    await refetch()
+  }
+
+  const saveSeat = async (newArrangement, side) => {
+    if (side === "left") {
+      await updateTables({variables: {eventId, tables: [...newArrangement, ...tablesRight] }})
+    } else {
+      await updateTables({variables: {eventId, tables: [...tablesLeft, ...newArrangement] }})
+    }
     await refetch()
   }
 
   const reserveSeat = (seat, name) => {
-    const { seat: { side, tableNumber, seatNumber }} = seat
-    let tablesLeftCopy = structuredClone(tablesLeft)
-    if (side === 'left') {      
+    const { seat: { tableNumber, seatNumber, side }} = seat    
+    if (side === 'left') {
+      let tablesLeftCopy = structuredClone(tablesLeft)
       tablesLeftCopy.forEach(table => {
         if (tableNumber === table.tableNumber) {          
-          table.seats[seatNumber - 1] = name          
-        }
+          table.seats[seatNumber - 1] = name
+        }        
       })      
-    }    
-    setOpen({open: false, tableNumber: null, seatNumber: null, side: null })
-    saveTables(tablesLeftCopy)
-  }  
+      saveSeat(tablesLeftCopy, "left")
+      setOpen({open: false, tableNumber: null, seatNumber: null, side: null })
+    } else {
+      let tablesRightCopy = structuredClone(tablesRight)
+      tablesRightCopy.forEach(table => {
+        if (tableNumber === table.tableNumber) {
+          table.seats[seatNumber - 1] = name
+        }
+      })
+      saveSeat(tablesRightCopy, "right")
+      setOpen({open: false, tableNumber: null, seatNumber: null, side: null })
+    }
+  }
+
   return (
     <Stack>
+      <NavBar />
       <Stack direction="row" justifyContent="space-between" sx={{width: "100%"}} >
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("left")}>
               Add Table
             </Button>
-            <Button onClick={async ()  => await saveTables(tablesLeft)}>
+            <Button onClick={async ()  => await saveTables()}>
               Save
             </Button>
           </Stack>
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
-          <Stack className='border' direction="row" flexWrap="wrap" width={550} padding={2}>
+          <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesLeft.map((table, tableIndex) => {
               const seatClasses = [
                 "relative top-36 left-[180px] rotate-180",
@@ -139,17 +155,19 @@ const Seating = () => {
                 "relative top-[110px] right-[70px] rotate-[120deg]",
                 "relative top-[140px] right-[140px] rotate-[140deg]",
               ]
+
               return (
                 <Stack
                   alignItems="center"
-                  className="border border-blue-600 w-[250px] h-[220px]"
+                  className="w-[250px] h-[220px]"
                   key={tableIndex + uuid4()}
                 >
                   <Stack direction="row" >
                     {seatClasses.map((classes, i) => {
+                      const seatName = table.seats[i] ?? ""
                       return (
-                        <Tooltip key={classes} title={`seat no. ${i + 1} ${table.seats[i]}`}>
-                          <IconButton onClick={() => setOpen({open: true, seat: { tableNumber: tableIndex + 1, seatNumber: 1, side: "left" }})} color='primary' className={classes} >
+                        <Tooltip key={classes} title={`seat no. ${i + 1} ${seatName}`}>
+                          <IconButton onClick={() => setOpen({open: true, seat: { tableNumber: tableIndex + 1, seatNumber: i + 1, side: "left" }})} color='primary' className={classes} >
                             <EventSeatIcon />
                           </IconButton>
                         </Tooltip>
@@ -164,19 +182,19 @@ const Seating = () => {
             })}
           </Stack>
         </Stack>
-        <Stack spacing={2} className='mt-5' alignItems="center">
-          <Box className="border flex items-center justify-center" width={200} height={100} >
+        <Stack spacing={6} className='mt-5' alignItems="center">
+          <Box className="border-2 rounded-sm flex items-center justify-center" width={200} height={100} >
             <Typography className='self-center'>
               Stage
             </Typography>
           </Box>
-          <Box className="border flex items-center justify-center" width={300} height={300} >
+          <Box className="border-2 rounded-sm flex items-center justify-center" width={300} height={300} >
             <Typography className='self-center'>
               Dance Floor
             </Typography>
           </Box>
-          <Box className="border flex items-center justify-center" width={300} height={100} >
-            <Typography className='self-center'>
+          <Box className="border-2 rounded-sm flex items-center justify-center" width={300} height={100} >
+            <Typography className='self-center '>
               Bar
             </Typography>
           </Box>
@@ -186,12 +204,12 @@ const Seating = () => {
             <Button  onClick={() => addTable("right")}>
               Add Table
             </Button>
-            <Button onClick={async ()  => await saveTables(tablesLeft)}>
+            <Button onClick={async ()  => await saveTables()}>
               Save
             </Button>
           </Stack>
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
-          <Stack className='border' direction="row" flexWrap="wrap" width={550} padding={2}>
+          <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesRight.map((table, tableIndex) => {
               const seatClasses = [
                 "relative top-36 left-[180px] rotate-180",
@@ -208,14 +226,15 @@ const Seating = () => {
               return (
                 <Stack
                   alignItems="center"
-                  className="border border-blue-600 w-[250px] h-[220px]"
+                  className="w-[250px] h-[220px]"
                   key={tableIndex + uuid4()}
                 >
                   <Stack direction="row" >
                     {seatClasses.map((classes, i) => {
+                      const seatName = table.seats[i] ?? ""
                       return (
-                        <Tooltip key={classes} title={`seat no. ${i + 1} ${table.seats[i]}`}>
-                          <IconButton onClick={() => setOpen({open: true, seat: { tableNumber: tableIndex + 1, seatNumber: 1, side: "left" }})} color='primary' className={classes} >
+                        <Tooltip key={classes} title={`seat no. ${i + 1} ${seatName}`}>
+                          <IconButton onClick={() => setOpen({open: true, seat: { tableNumber: tableIndex + 1, seatNumber: i + 1, side: "right" }})} color='primary' className={classes} >
                             <EventSeatIcon />
                           </IconButton>
                         </Tooltip>
