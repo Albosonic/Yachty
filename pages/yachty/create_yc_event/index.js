@@ -2,7 +2,7 @@ import { Box, Button, Fab, Grid, Paper, Stack, TextField, Typography } from '@mu
 import { DateTimeField } from '@mui/x-date-pickers/DateTimeField';
 import dayjs from 'dayjs';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_YC_EVENT, INSERT_YC_EVENT, UPDATE_YC_EVENT } from '@/lib/gqlQueries/createYCEventgql';
+import { GET_YC_EVENT, INSERT_EVENT_SEATING, INSERT_YC_EVENT, UPDATE_YC_EVENT } from '@/lib/gqlQueries/createYCEventgql';
 import ImageUploadField from '@/components/ImageUploadField';
 import NavBar from '@/components/NavBar';
 import { useEffect, useState } from 'react';
@@ -21,13 +21,14 @@ const CreateYCEvent = () => {
   const router = useRouter();
   const existingEventId = router.query.eventId;
   const [editingImg, setEditingImg] = useState(true); 
-  const ycId = useSelector((state) => state.auth.member.yachtClubByYachtClub.id);
-  const workingDate = useSelector(state => state.scheduler.workingRaceDate);
+  const ycId = useSelector((state) => state.auth.member.yachtClubByYachtClub.id)
+  const workingDate = useSelector(state => state.scheduler.workingRaceDate)
 
-  const [showSpecialHours, setShowSpecialHours] = useState(false);
-  const [imageObj, setImageObj] = useState(null);
+  const [showSpecialHours, setShowSpecialHours] = useState(false)
+  const [imageObj, setImageObj] = useState(null)
 
-  const [createYCEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT);
+  const [createYCEvent, { loading: createEventLoading }] = useMutation(INSERT_YC_EVENT)
+  const [insertEventSeating, {loading: seatingLoading}] = useMutation(INSERT_EVENT_SEATING)
   const [updateEvent, { loading: updateLoading, data: updateData, error: updateError }] = useMutation(UPDATE_YC_EVENT);
   const {error, loading, data: existingEventData} = useQuery(GET_YC_EVENT, { variables: { id: existingEventId } })
 
@@ -139,6 +140,7 @@ const CreateYCEvent = () => {
     } else {
       const resp = await createYCEvent({ variables });
       const eventId = resp.data.insert_yc_events.returning[0].id;
+      await insertEventSeating({variables: { eventId }})
       setEventData({
         ...eventData,
         newEventId: eventId,

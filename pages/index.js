@@ -16,16 +16,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.center}>
-          <div className={inter.className}>
-            Yachty Home
-            <br></br>
-            <br></br>
-            <Link href="/Login">Home</Link>
-          </div>
-        </div>
-      </main>
+      <div className='bg-gray-10 to-100%'>                            
+        <div className='px-8 py-10'>
+          <h1 className="text-5xl font-bold">Yachty!</h1>   
+          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
+          <h1 className="text-2xl mt-6 font-thin">More sailing less planning...</h1>          
+          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
+          <h1 className="text-2xl mt-6 font-thin">More socializing less spread sheets...</h1>          
+        </div>                       
+      </div>
     </>
   )
 }

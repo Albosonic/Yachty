@@ -14,6 +14,7 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
 import { pollUserRooms } from '@/slices/actions/msgActions';
+import { useSession } from 'next-auth/react';
 
 
 // TODO: protect routes like code Bigelow_Rules.
@@ -109,7 +110,12 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
-  const { user, isLoading } = useUser();
+  const session = useSession()
+  if(!session) return <LoadingYachty />
+  // const { user, isLoading } = useUser();
+  // console.log('user =======', user)
+  console.log('session =======', session?.data?.user)
+  const user = session?.data?.user;
   const dispatch = useDispatch();
   const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
@@ -125,7 +131,7 @@ const Yachty = () => {
   const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
-
+  
   useEffect(() => {
     if (user?.email && !memberData?.id) {
       const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
@@ -154,14 +160,13 @@ const Yachty = () => {
     }
   }, [user, userIsCommodore, name, introSeen])
 
-  if (isLoading || upsertMemberLoading) return <LoadingYachty />;
+  if (upsertMemberLoading) return <LoadingYachty />;
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;
     const resp = await betaGiveCommodoreStatus({variables: {name, memberId, ycId: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"}});
     dispatch(betaUpdateUserIsCommodoreAct(true));
   };
-
   // if (user === undefined) {
   //   router.push('/login');
   //   return null;
