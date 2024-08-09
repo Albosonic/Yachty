@@ -185,8 +185,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         <CardMedia
           component="img"
           image={image}
-          className="xs:w-96 xs:h-56 sm:w-40 sm:h-56 md:w-[250px] md:h-[350px] self-center"
-          // className="w-[250px] h-[250px]"
+          className="xs:w-96 xs:h-56 sm:w-40 sm:h-56 md:w-[250px] md:h-[350px] self-center"          
           alt="Event Image"
         />
         <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
