@@ -93,10 +93,12 @@ const makeAttendeesFacade = (data) => {
 }
 
 const EventAttendeeDialog = ({open, setOpenDialog, eventId}) => {
-  const { error, loading,  data } = useQuery(GET_EVENT_ATTENDEES, { variables: { eventId, fetchPolicy: 'no-cache' } });
+  const { error, loading,  data, refetch } = useQuery(GET_EVENT_ATTENDEES, { variables: { eventId, fetchPolicy: 'no-cache' } });
   const [membersFacade, setMembersFacade] = useState({});
+  
   useEffect(() => {
     if (loading) return;
+    refetch()
     setMembersFacade(makeAttendeesFacade(data.yc_members))
   }, [data])
 

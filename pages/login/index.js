@@ -17,9 +17,7 @@ const Login = () => {
   const memberId = useSelector(state => state?.auth?.member?.id);
   // const {user, isLoading} = useUser();
   const { data: user, status } = useSession()
-  if(status === "authenticated") {
-    console.log('status =====', status)    
-  }
+  if(status === "authenticated") router.replace({pathname: '/yachty'})
   const moreThan600px = useMediaQuery('(min-width:600px)');
 
   return (

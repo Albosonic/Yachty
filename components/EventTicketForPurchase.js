@@ -62,7 +62,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;
 
   useEffect(() => {
-    if (loading || dinnersLoading) return;    
+    if (loading || dinnersLoading) return;
     setTicketCount(purchasedTicketData.length)
     setDinnerTicketCount(purchasedDinnersData.length)
   }, [data, dinnersData]);
@@ -72,7 +72,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const eventForPurchase = forPurchaseData?.yc_event_tickets_for_purchase[0];
   const cost = eventForPurchase?.cost;
   const dinnerCost = eventForPurchase?.dinnerCost;
-  console.log('event for purchase ======', eventForPurchase)
 
   const handleSendTickets = async () => {
     if (tooManyDinTicketsErr) setFormErrors({...formErrors, tooManyDinTicketsErr: false})
@@ -186,6 +185,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         <CardMedia
           component="img"
           image={image}
+          className="xs:w-96 xs:h-56 sm:w-40 sm:h-56 md:w-[250px] md:h-[350px] self-center"          
           alt="Event Image"
         />
         <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -226,7 +226,10 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
                   </Typography>
                 </Grid>
                   <Grid>
-                  <IconButton onClick={() => setTicketCount(ticketCount - 1)}>
+                  <IconButton onClick={() => {
+                    if (dinnerTicketCount === ticketCount) return setFormErrors({...formErrors, tooManyDinTicketsErr: true})
+                    setTicketCount(ticketCount - 1)
+                  }}>
                     <RemoveIcon color='error' />
                   </IconButton>
                   <IconButton onClick={() => setTicketCount(ticketCount + 1)}>
