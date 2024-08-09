@@ -62,7 +62,7 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
   const purchasedDinnersData = dinnersData?.yc_event_dinner_tickets;
 
   useEffect(() => {
-    if (loading || dinnersLoading) return;    
+    if (loading || dinnersLoading) return;
     setTicketCount(purchasedTicketData.length)
     setDinnerTicketCount(purchasedDinnersData.length)
   }, [data, dinnersData]);
@@ -185,8 +185,8 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         <CardMedia
           component="img"
           image={image}
-          className="sm:w-56 sm:h-56 w-full h-full self-center"
-          // sx={{maxWidth: "250px"}}
+          className="xs:w-96 xs:h-56 sm:w-40 sm:h-56 md:w-[250px] md:h-[350px] self-center"
+          // className="w-[250px] h-[250px]"
           alt="Event Image"
         />
         <Stack sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
