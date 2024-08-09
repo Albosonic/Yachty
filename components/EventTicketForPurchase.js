@@ -103,12 +103,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
         }
       })
     }
-    await refetch({
-      variables: {
-        eventId,
-        memberId
-      }
-    })
     setShowSuccess(true);
   }
 
@@ -147,12 +141,6 @@ const EventTicketForPurchase = ({ eventData, linkToRace }) => {
       })
 
     }
-    await refetchDinners({
-      variables: {
-        eventId,
-        memberId
-      }
-    })
     setShowSuccess(true);
   }
 
