@@ -167,17 +167,6 @@ const Yachty = () => {
     const resp = await betaGiveCommodoreStatus({variables: {name, memberId, ycId: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919"}});
     dispatch(betaUpdateUserIsCommodoreAct(true));
   };
-  // if (user === undefined) {
-  //   router.push('/login');
-  //   return null;
-  // }
-
-  // if (data.yc_members.length === 0) {
-  //   dispatch(addNonMember(user))
-  //   router.push('/yc_regions');
-  //   return null;
-  // }
-  // if (error) router.push('/login');
 
   return (
     <div>

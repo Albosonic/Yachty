@@ -10,6 +10,7 @@ import ClaimSeatDialog from '@/components/dialogsYachty/ClaimSeatDialog';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/NavBar';
+import { useSelector } from 'react-redux';
 
 const GET_CURRENT_EVENT_SEATING = gql`
   query getEventSeating($eventId: uuid) {
@@ -39,7 +40,8 @@ const Item = styled(Paper)(({ theme }) => ({
 const Seating = () => {
   const router = useRouter()
   const eventId = router.query.eventId
-
+  const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const [tablesLeft, setTablesLeft] = useState([])
   const [tablesRight, setTablesRight] = useState([])
   const [open, setOpen] = useState({open: false, seat: { left: null, tableNumber: null, seatNumber: null }})
@@ -91,7 +93,7 @@ const Seating = () => {
   }
 
   const saveTables = async () => {
-    const resp = await updateTables({variables: {eventId, tables: [...tablesLeft, ...tablesRight] }})
+    await updateTables({variables: {eventId, tables: [...tablesLeft, ...tablesRight]}})
     await refetch()
   }
 
@@ -105,14 +107,14 @@ const Seating = () => {
   }
 
   const reserveSeat = (seat, name) => {
-    const { seat: { tableNumber, seatNumber, side }} = seat    
+    const { seat: { tableNumber, seatNumber, side }} = seat
     if (side === 'left') {
       let tablesLeftCopy = structuredClone(tablesLeft)
       tablesLeftCopy.forEach(table => {
-        if (tableNumber === table.tableNumber) {          
+        if (tableNumber === table.tableNumber) {
           table.seats[seatNumber - 1] = name
-        }        
-      })      
+        }
+      })
       saveSeat(tablesLeftCopy, "left")
       setOpen({open: false, tableNumber: null, seatNumber: null, side: null })
     } else {
@@ -130,16 +132,24 @@ const Seating = () => {
   return (
     <Stack>
       <NavBar />
-      <Stack direction="row" justifyContent="space-between" sx={{width: "100%"}} >
+      <Button
+        variant="contained"
+        sx={{margin: 2}}
+        className="self-start"
+        onClick={() => router.replace({pathname: '/yachty/yc_feed', query: {ycId}})}
+      >
+        Back
+      </Button>
+      <Stack direction="row" justifyContent="space-between" sx={{width: "100%", overflow: "scroll"}}>
         <Stack spacing={2}>
-          <Stack direction="row" justifyContent="center" padding={2}>
+          {userIsCommodore && <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("left")}>
               Add Table
             </Button>
             <Button onClick={async ()  => await saveTables()}>
-              Save
+              Save Tables
             </Button>
-          </Stack>
+          </Stack>}
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
           <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesLeft.map((table, tableIndex) => {
@@ -155,7 +165,6 @@ const Seating = () => {
                 "relative top-[110px] right-[70px] rotate-[120deg]",
                 "relative top-[140px] right-[140px] rotate-[140deg]",
               ]
-
               return (
                 <Stack
                   alignItems="center"
@@ -200,14 +209,14 @@ const Seating = () => {
           </Box>
         </Stack>
         <Stack spacing={2}>
-          <Stack direction="row" justifyContent="center" padding={2}>
+          {userIsCommodore && <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("right")}>
               Add Table
             </Button>
             <Button onClick={async ()  => await saveTables()}>
-              Save
+              Save Tables
             </Button>
-          </Stack>
+          </Stack>}
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
           <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesRight.map((table, tableIndex) => {
