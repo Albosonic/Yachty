@@ -1,8 +1,7 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import Link from 'next/link'
+import { Button, Stack, Typography } from '@mui/material'
+
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,15 +15,22 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='bg-gray-10 to-100%'>                            
-        <div className='px-8 py-10'>
-          <h1 className="text-5xl font-bold">Yachty!</h1>   
-          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
-          <h1 className="text-2xl mt-6 font-thin">More sailing less planning...</h1>          
-          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
-          <h1 className="text-2xl mt-6 font-thin">More socializing less spread sheets...</h1>          
-        </div>                       
-      </div>
+      <Stack padding={2} spacing={2}>
+        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">
+          <Typography
+            variant='h1'            
+          >
+            Yachteee
+          </Typography>
+          <Button
+            color='primary'
+            variant='contained'
+            sx={{margin: 2}}
+          >
+          Enter App
+        </Button>       
+        </div>
+      </Stack>
     </>
   )
 }
