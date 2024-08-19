@@ -10,6 +10,7 @@ import ClaimSeatDialog from '@/components/dialogsYachty/ClaimSeatDialog';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/NavBar';
+import { useSelector } from 'react-redux';
 
 const GET_CURRENT_EVENT_SEATING = gql`
   query getEventSeating($eventId: uuid) {
@@ -39,13 +40,13 @@ const Item = styled(Paper)(({ theme }) => ({
 const Seating = () => {
   const router = useRouter()
   const eventId = router.query.eventId
-
+  const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const [tablesLeft, setTablesLeft] = useState([])
   const [tablesRight, setTablesRight] = useState([])
   const [open, setOpen] = useState({open: false, seat: { left: null, tableNumber: null, seatNumber: null }})
   const {data: currentSeating, error, loading, refetch} = useQuery(GET_CURRENT_EVENT_SEATING, {variables: {eventId}})
   const [updateTables, {loading: loadingTables }] = useMutation(UPDATE_SEATING)
-
+  console.log('userIs commodore ===============', userIsCommodore)
   useEffect(() => {
     let tablesLeft = []
     let tablesRight = []
@@ -130,16 +131,16 @@ const Seating = () => {
   return (
     <Stack>
       <NavBar />
-      <Stack direction="row" justifyContent="space-between" sx={{width: "100%"}} >
+      <Stack direction="row" justifyContent="space-between" sx={{width: "100%", overflow: "scroll"}} >
         <Stack spacing={2}>
-          <Stack direction="row" justifyContent="center" padding={2}>
+          {userIsCommodore && <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("left")}>
               Add Table
             </Button>
             <Button onClick={async ()  => await saveTables()}>
-              Save
+              Save Tables
             </Button>
-          </Stack>
+          </Stack>}
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
           <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesLeft.map((table, tableIndex) => {
@@ -200,14 +201,14 @@ const Seating = () => {
           </Box>
         </Stack>
         <Stack spacing={2}>
-          <Stack direction="row" justifyContent="center" padding={2}>
+          {userIsCommodore && <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("right")}>
               Add Table
             </Button>
             <Button onClick={async ()  => await saveTables()}>
-              Save
+              Save Tables
             </Button>
-          </Stack>
+          </Stack>}
           <ClaimSeatDialog open={open} reserveSeat={reserveSeat} />
           <Stack direction="row" flexWrap="wrap" width={550} padding={2}>
             {tablesRight.map((table, tableIndex) => {
