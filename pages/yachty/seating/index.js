@@ -41,12 +41,13 @@ const Seating = () => {
   const router = useRouter()
   const eventId = router.query.eventId
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
   const [tablesLeft, setTablesLeft] = useState([])
   const [tablesRight, setTablesRight] = useState([])
   const [open, setOpen] = useState({open: false, seat: { left: null, tableNumber: null, seatNumber: null }})
   const {data: currentSeating, error, loading, refetch} = useQuery(GET_CURRENT_EVENT_SEATING, {variables: {eventId}})
   const [updateTables, {loading: loadingTables }] = useMutation(UPDATE_SEATING)
-  console.log('userIs commodore ===============', userIsCommodore)
+
   useEffect(() => {
     let tablesLeft = []
     let tablesRight = []
@@ -92,7 +93,7 @@ const Seating = () => {
   }
 
   const saveTables = async () => {
-    const resp = await updateTables({variables: {eventId, tables: [...tablesLeft, ...tablesRight] }})
+    await updateTables({variables: {eventId, tables: [...tablesLeft, ...tablesRight]}})
     await refetch()
   }
 
@@ -106,14 +107,14 @@ const Seating = () => {
   }
 
   const reserveSeat = (seat, name) => {
-    const { seat: { tableNumber, seatNumber, side }} = seat    
+    const { seat: { tableNumber, seatNumber, side }} = seat
     if (side === 'left') {
       let tablesLeftCopy = structuredClone(tablesLeft)
       tablesLeftCopy.forEach(table => {
-        if (tableNumber === table.tableNumber) {          
+        if (tableNumber === table.tableNumber) {
           table.seats[seatNumber - 1] = name
-        }        
-      })      
+        }
+      })
       saveSeat(tablesLeftCopy, "left")
       setOpen({open: false, tableNumber: null, seatNumber: null, side: null })
     } else {
@@ -131,7 +132,15 @@ const Seating = () => {
   return (
     <Stack>
       <NavBar />
-      <Stack direction="row" justifyContent="space-between" sx={{width: "100%", overflow: "scroll"}} >
+      <Button
+        variant="contained"
+        sx={{margin: 2}}
+        className="self-start"
+        onClick={() => router.replace({pathname: '/yachty/yc_feed', query: {ycId}})}
+      >
+        Back
+      </Button>
+      <Stack direction="row" justifyContent="space-between" sx={{width: "100%", overflow: "scroll"}}>
         <Stack spacing={2}>
           {userIsCommodore && <Stack direction="row" justifyContent="center" padding={2}>
             <Button  onClick={() => addTable("left")}>
@@ -156,7 +165,6 @@ const Seating = () => {
                 "relative top-[110px] right-[70px] rotate-[120deg]",
                 "relative top-[140px] right-[140px] rotate-[140deg]",
               ]
-
               return (
                 <Stack
                   alignItems="center"
