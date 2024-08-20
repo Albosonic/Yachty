@@ -1,12 +1,17 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-import { Button, Stack, Typography } from '@mui/material'
-
-
+import { Button, Stack, Typography, useMediaQuery } from '@mui/material'
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const router = useRouter()
+  const { data: user, status } = useSession()
+  if(status === "authenticated") router.replace({pathname: '/yachty'})
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+  const hval = moreThan600px ? "h2" : "h3"
   return (
     <>
       <Head>
@@ -18,17 +23,30 @@ export default function Home() {
       <Stack padding={2} spacing={2}>
         <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">
           <Typography
-            variant='h1'            
+            variant={hval}
+            className='bottom-32 relative'            
           >
-            Yachteee
+            Yachteee.com
           </Typography>
+          <Typography variant='h6' color='primary' className='bottom-32 relative'>
+            All things yacht club in your pocket.
+          </Typography>          
           <Button
             color='primary'
             variant='contained'
             sx={{margin: 2}}
+            onClick={signIn}
           >
-          Enter App
-        </Button>       
+            Enter App
+          </Button>
+          <Button
+            color='primary'
+            variant='contained'
+            sx={{margin: 2}}
+            onClick={signOut}
+          >
+            Sign Out
+          </Button>
         </div>
       </Stack>
     </>

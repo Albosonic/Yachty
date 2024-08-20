@@ -14,8 +14,7 @@ const Login = () => {
   const router = useRouter()
   const theme = useTheme()
   const ycId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
-  const memberId = useSelector(state => state?.auth?.member?.id);
-  // const {user, isLoading} = useUser();
+  const memberId = useSelector(state => state?.auth?.member?.id);  
   const { data: user, status } = useSession()
   if(status === "authenticated") router.replace({pathname: '/yachty'})
   const moreThan600px = useMediaQuery('(min-width:600px)');
@@ -30,8 +29,7 @@ const Login = () => {
         borderTop: `10px solid ${theme.custom.trimColor}`,
         borderBottom: `10px solid ${theme.custom.trimColor}`,
         overflow: "hidden",
-        overflowY: "scroll",
-        // border: '10px solid #461F00',
+        overflowY: "scroll",        
       }}
       alignItems="center"
     >
