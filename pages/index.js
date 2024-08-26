@@ -7,32 +7,34 @@ import { useQuery } from '@apollo/client';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { useDispatch } from 'react-redux';
 import { addMember } from '@/slices/actions/authActions';
+import LoadingYachty from '@/components/LoadingYachty';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { data: user, status } = useSession()
-
+  const { data, status } = useSession()
+  const user = data?.user
   const {error, loading, data: memberResp} = useQuery(GET_YC_MEMBER, {
     variables: {
-      email: user?.user?.email
+      email: user?.email
     }
   })
-  
-  if(status === "authenticated") {
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+  const authenticated = status === "authenticated"
+  if(authenticated && !loading && user !== undefined) {
     const userData = memberResp?.yc_members[0]
-    const noClub = user?.user?.noClub
+    const noClub = user?.noClub    
     if (noClub) {
       router.replace({pathname: '/yc_regions'})
     } else {
       dispatch(addMember(userData));
       router.replace({pathname: '/yachty'})
     }    
-  }
-  const moreThan600px = useMediaQuery('(min-width:600px)');
+  } 
   const hval = moreThan600px ? "h2" : "h3"
+  
   return (
     <>
       <Head>
@@ -41,8 +43,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Stack padding={2} spacing={2}>
-        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">
+      <Stack padding={2} spacing={2}>        
+        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">          
           <Typography
             variant={hval}
             className='bottom-32 relative'            

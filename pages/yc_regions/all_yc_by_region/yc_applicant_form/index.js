@@ -22,7 +22,7 @@ const YCApplicantForm = () => {
   const dispatch = useDispatch();
   const yacht_club = router.query.ycId;
   const session = useSession()
-  console.log('data.user ==========', session?.data?.user.email)
+  console.log('data.user ==========', session)
   
   const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);
   // const applicant = useSelector(state => state.auth);
