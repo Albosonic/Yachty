@@ -111,25 +111,11 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
-  
   const session = useSession()
-
-  // console.log('session =======>>>>', session?.data?.user)
-  // console.log('session =======>>>>', session)
-
-  const user = session?.data?.user;
   const dispatch = useDispatch();
+  const user = session?.data?.user;
 
-
-  // const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
-  console.log('user.email ============>', user?.email)
-  const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER, {
-    variables: { email: user?.email },
-    fetchPolicy: "no-cache"
-  });
-  console.log('data =======>>>>>>', data)
-  // let memberData = data?.yc_members[0];
 
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const yachtClubName = useSelector(state => state?.auth?.member?.yachtClubByYachtClub.name);

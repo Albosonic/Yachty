@@ -20,13 +20,16 @@ export default function Home() {
       email: user?.user?.email
     }
   })
-  const userData = memberResp?.yc_members[0]
-  console.log('uaeerdata ===============>', userData)
+  
   if(status === "authenticated") {
     const userData = memberResp?.yc_members[0]
-    console.log('userData ================>', userData)
-    dispatch(addMember(userData));
-    user?.user?.noClub === true ? router.replace({pathname: '/yc_regions'}) : router.replace({pathname: '/yachty'})
+    const noClub = user?.user?.noClub
+    if (noClub) {
+      router.replace({pathname: '/yc_regions'})
+    } else {
+      dispatch(addMember(userData));
+      router.replace({pathname: '/yachty'})
+    }    
   }
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const hval = moreThan600px ? "h2" : "h3"
