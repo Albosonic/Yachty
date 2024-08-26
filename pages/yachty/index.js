@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import styles from '@/styles/yachty.module.css'
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
@@ -15,6 +15,7 @@ import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
 import { pollUserRooms } from '@/slices/actions/msgActions';
 import { useSession } from 'next-auth/react';
+import { GET_YC_MEMBER_AND_VESSEL } from '@/lib/gqlQueries/editMemberProfilegql';
 
 
 // TODO: protect routes like code Bigelow_Rules.
@@ -110,17 +111,24 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
+  
   const session = useSession()
-  if(!session) return <LoadingYachty />
-  // const { user, isLoading } = useUser();
-  // console.log('user =======', user)
-  console.log('session =======', session?.data?.user)
+
+  // console.log('session =======>>>>', session?.data?.user)
+  // console.log('session =======>>>>', session)
+
   const user = session?.data?.user;
   const dispatch = useDispatch();
-  const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
-  const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
 
-  // const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER,{fetchPolicy: "no-cache",variables: { email: user?.email }});
+
+  // const [upsertMember, {loading: upsertMemberLoading}] = useMutation(UPSERT_MEMBER)
+  const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
+  console.log('user.email ============>', user?.email)
+  const { loading, error, data, refetch } = useQuery(GET_YC_MEMBER, {
+    variables: { email: user?.email },
+    fetchPolicy: "no-cache"
+  });
+  console.log('data =======>>>>>>', data)
   // let memberData = data?.yc_members[0];
 
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
@@ -132,35 +140,42 @@ const Yachty = () => {
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
   
-  useEffect(() => {
-    if (user?.email && !memberData?.id) {
-      const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
-      const upsertUser = async () => {
-        const resp = await upsertMember({
-          fetchPolicy: 'no-cache',
-          variables: {
-            email,
-            firstName,
-            lastName,
-            name,
-            profilePic,
-            lasrLogin: getIsoDate(),
-            yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
-          }
-        });
-        const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
-        dispatch(addMember(userData));
-      }
+  if(!session?.data?.user) return <LoadingYachty />
 
-      upsertUser();
-    }
-    dispatch(pollUserRooms())
-    if (name.includes('.com')) {
-      setNewUserOpen(!introSeen)
-    }
-  }, [user, userIsCommodore, name, introSeen])
+  // poll for messages, need to mgrate to Web Sockets
+  // useEffect(() => {
+  //   dispatch(pollUserRooms())
+  // })
 
-  if (upsertMemberLoading) return <LoadingYachty />;
+  // useEffect(() => {
+  //   if (user?.email && !memberData?.id) {
+  //     const {email, given_name: firstName, family_name: lastName, name, picture: profilePic} = user;
+  //     const upsertUser = async () => {
+  //       const resp = await upsertMember({
+  //         fetchPolicy: 'no-cache',
+  //         variables: {
+  //           email,
+  //           firstName,
+  //           lastName,
+  //           name,
+  //           profilePic,
+  //           lasrLogin: getIsoDate(),
+  //           yachtClub: "97ead1a2-9702-4a18-bf2d-6c1f3be3a919", // TEMP hard code for beta testing deploy.
+  //         }
+  //       });
+  //       const userData = { member: resp.data.insert_yc_members.returning[0], user: user };
+  //       dispatch(addMember(userData));
+  //     }
+
+  //     upsertUser();
+  //   }
+  //   dispatch(pollUserRooms())
+  //   if (name.includes('.com')) {
+  //     setNewUserOpen(!introSeen)
+  //   }
+  // }, [user, userIsCommodore, name, introSeen])
+
+  // if (upsertMemberLoading) return <LoadingYachty />;  
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;

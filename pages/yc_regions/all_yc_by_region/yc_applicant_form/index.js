@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_NEW_MEMBER_APPLICATIONS, GET_YACHT_CLUB_BY_ID, INSERT_NEW_YC_APPLICANT } from '@/lib/gqlQueries/ycApplicantgql';
 import NavBar from '@/components/NavBar';
 import { clearState } from '@/slices/actions/authActions';
+import { signOut, useSession } from 'next-auth/react';
 
 const YCApplicantForm = () => {
   const cleanForm = {
@@ -19,25 +20,28 @@ const YCApplicantForm = () => {
   }
   const router =  useRouter();
   const dispatch = useDispatch();
-  const yacht_club = router.query.ycid;
+  const yacht_club = router.query.ycId;
+  const session = useSession()
+  console.log('data.user ==========', session?.data?.user.email)
+  
   const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);
-  const applicant = useSelector(state => state.auth);
-  const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: applicant.email } });
+  // const applicant = useSelector(state => state.auth);
+  const userEmail = session?.data?.user.email
+  const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: userEmail } });
   const {loading: ycLoading, error: ycError, data: ycData} = useQuery(GET_YACHT_CLUB_BY_ID, { variables: { ycId: yacht_club } });
   const [formData, setFormData] = useState({...cleanForm});
   const [showSuccess, setShowSuccess] = useState(false);
   
+  // todo maybe revisit this down the line
   useEffect(() => {
     setFormData({
-      ...formData,
-      firstName: applicant?.given_name || '',
-      lastName: applicant?.family_name || '',
-      primaryEmail: applicant?.email || '',
+      ...formData,      
+      primaryEmail: userEmail || '',
     });
-  }, [applicant])
+  }, [session])
   if (memAppsLoading || ycLoading) return <CircularProgress />;
   
-  const memberApp = memAppsData.potential_members;
+  const memberApp = memAppsData?.potential_members;
   const { name: ycName, logo: ycLogo } = ycData.yacht_clubs[0];
 
   if (memberApp.length > 0) {
@@ -64,10 +68,10 @@ const YCApplicantForm = () => {
   const handleReferredBy = (event) => setFormData({...formData, referredBy: event.target.value})
 
   const handleClose = () => {
-    setShowSuccess(false);
-    setFormData({...cleanForm});
-    dispatch(clearState());
-    window.location = `${window.location.origin}/api/auth/logout`;
+    setShowSuccess(false)
+    setFormData({...cleanForm})
+    dispatch(clearState())
+    signOut()    
   }
 
   const handleSubmit = async () => {
@@ -83,7 +87,7 @@ const YCApplicantForm = () => {
         yacht_club
       }
     });
-    setShowSuccess(true);
+    setShowSuccess(true)
   }
   
   return (

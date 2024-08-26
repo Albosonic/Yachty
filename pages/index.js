@@ -3,13 +3,31 @@ import { Inter } from 'next/font/google'
 import { Button, Stack, Typography, useMediaQuery } from '@mui/material'
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
+import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
+import { useDispatch } from 'react-redux';
+import { addMember } from '@/slices/actions/authActions';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const router = useRouter()
+  const dispatch = useDispatch()
   const { data: user, status } = useSession()
-  if(status === "authenticated") router.replace({pathname: '/yachty'})
+
+  const {error, loading, data: memberResp} = useQuery(GET_YC_MEMBER, {
+    variables: {
+      email: user?.user?.email
+    }
+  })
+  const userData = memberResp?.yc_members[0]
+  console.log('uaeerdata ===============>', userData)
+  if(status === "authenticated") {
+    const userData = memberResp?.yc_members[0]
+    console.log('userData ================>', userData)
+    dispatch(addMember(userData));
+    user?.user?.noClub === true ? router.replace({pathname: '/yc_regions'}) : router.replace({pathname: '/yachty'})
+  }
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const hval = moreThan600px ? "h2" : "h3"
   return (
@@ -35,7 +53,10 @@ export default function Home() {
             color='primary'
             variant='contained'
             sx={{margin: 2}}
-            onClick={signIn}
+            onClick={(e) => {
+              e.preventDefault()  
+              signIn()
+            }}
           >
             Enter App
           </Button>
