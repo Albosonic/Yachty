@@ -71,7 +71,7 @@ const YCApplicantForm = () => {
     setShowSuccess(false)
     setFormData({...cleanForm})
     dispatch(clearState())
-    signOut()    
+    signOut({ callbackUrl: '/', redirect:true })    
   }
 
   const handleSubmit = async () => {
