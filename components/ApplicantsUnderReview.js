@@ -102,9 +102,9 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
                 <Typography gutterBottom variant="h5" component="div">
                   {email}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                {/* <Typography variant="body2" color="text.secondary">
                   {bio || "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                </Typography>
+                </Typography> */}
               </CardContent>                      
               <CardActions>
                 <Grid container justifyContent="flex-end" sx={{width: '100%'}}>
