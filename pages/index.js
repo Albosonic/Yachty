@@ -58,6 +58,7 @@ export default function Home() {
             color='primary'
             variant='contained'
             sx={{margin: 2}}
+            disabled={authenticated}
             onClick={(e) => {
               e.preventDefault()  
               signIn()
