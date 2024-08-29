@@ -55,7 +55,8 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
     <Box>
       <Stack spacing={2} alignItems="center" divider={<Divider orientation="horizontal" flexItem />}>
         {applicants.map((applicant, index) => {
-          const { firstName, lastName, email, secondFirstName, secondLastName, secondEmail, profilePic, bio, referredBy } = applicant;
+          const { firstName, lastName, email, secondFirstName, secondLastName, secondEmail, profilePic, bio, referredBy, hash } = applicant;
+          console.log('hash ===============', hash)
           const name = `${firstName} ${lastName}`;
           const secondName = `${secondFirstName} ${secondLastName}`;
           return (
@@ -81,6 +82,7 @@ const ApplicantsUnderReview = ({ applicants, refetch }) => {
                         ycId,
                         profilePic,
                         bio,
+                        hash,
                       }
                     })}}
                     size="medium" color='success'  aria-label="add"
