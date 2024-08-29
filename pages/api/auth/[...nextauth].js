@@ -3,15 +3,12 @@ import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials";
 import client from "@/lib/clients/apollo-client";
 import { gql } from "@apollo/client";
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { GET_YC_MEMBER } from "@/lib/gqlQueries/yachtygql";
-
+import bcrypt from "bcrypt";
 
 const GET_USER = gql`
   query getUser($email: String) {
   yc_members(where: {email: {_eq: $email}}) {
-    email    
+    email
     firstName
     id
     active
@@ -27,6 +24,7 @@ const GET_USER = gql`
     secondFirstName
     secondLastName
     secondName
+    hash
   }
 }`
 
@@ -59,17 +57,28 @@ const options = {
       async authorize(credentials) {
         const resp = await client.query({
           query: GET_USER,
-          variables: {email: credentials.email},
+          variables: {
+            email: credentials.email
+          },
         })
-
         const memberData = resp.data.yc_members[0]
-        // console.log('memberdata =========>>', memberData)
         if (memberData === undefined) {
+          const salt = bcrypt.genSaltSync(10);
+          const hash = bcrypt.hashSync(credentials.password, salt);
           return {
             email: credentials.email,
+            hash: hash,
             noClub: true,
           }
         }
+
+        const comapreHash = async () => {
+          const result = await bcrypt.compare(credentials.password, memberData.hash)
+          return result
+        }
+        const result = await comapreHash()
+
+        if (!result && process.env.NEXT_PUBLIC_ENV !== 'TEST') return null
 
         return {
           id: 1,
@@ -85,20 +94,20 @@ const options = {
   callbacks: {
     async jwt({token, user}) {
       // *** token['x-hasura-allowed-roles'] = ["admin", user] *******
-      console.log('user ======>>>', user)
-      
       if (user) {
         token.role = 'awesome'
         token.noClub = user.noClub
         token.memberInfo = user
+        token.hash = user.hash
       }
       return token
     },
-    async session({session, token}) {            
+    async session({session, token}) {
       if (session.user) {
         session.user.role = 'awesome'
         session.user.noClub = token.noClub
         session.user.memberInfo = token.memberInfo
+        session.user.hash = token.hash
         // console.log('token ===== in session', token)
         // console.log('session ===========', session)
       }

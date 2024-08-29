@@ -22,12 +22,11 @@ const YCApplicantForm = () => {
   const dispatch = useDispatch();
   const yacht_club = router.query.ycId;
   const session = useSession()
-  console.log('data.user ==========', session)
+  const user = session?.data?.user
+  const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);  
   
-  const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);
-  // const applicant = useSelector(state => state.auth);
-  const userEmail = session?.data?.user.email
-  const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: userEmail } });
+  console.log('user ==========', user)  
+  const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: user?.email } });
   const {loading: ycLoading, error: ycError, data: ycData} = useQuery(GET_YACHT_CLUB_BY_ID, { variables: { ycId: yacht_club } });
   const [formData, setFormData] = useState({...cleanForm});
   const [showSuccess, setShowSuccess] = useState(false);
@@ -36,7 +35,7 @@ const YCApplicantForm = () => {
   useEffect(() => {
     setFormData({
       ...formData,      
-      primaryEmail: userEmail || '',
+      primaryEmail: user?.email || '',
     });
   }, [session])
   if (memAppsLoading || ycLoading) return <CircularProgress />;
@@ -73,7 +72,7 @@ const YCApplicantForm = () => {
     dispatch(clearState())
     signOut({ callbackUrl: '/', redirect:true })    
   }
-
+  
   const handleSubmit = async () => {
     const resp = await insertNewApplicant({
       variables: {
@@ -84,7 +83,8 @@ const YCApplicantForm = () => {
         secondFirstName, 
         secondLastName, 
         referredBy, 
-        yacht_club
+        yacht_club,
+        hash: user.hash,
       }
     });
     setShowSuccess(true)

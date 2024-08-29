@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { addMember } from '@/slices/actions/authActions';
 import LoadingYachty from '@/components/LoadingYachty';
 
+
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {

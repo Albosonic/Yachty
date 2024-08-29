@@ -17,7 +17,6 @@ import { pollUserRooms } from '@/slices/actions/msgActions';
 import { useSession } from 'next-auth/react';
 import { GET_YC_MEMBER_AND_VESSEL } from '@/lib/gqlQueries/editMemberProfilegql';
 
-
 // TODO: protect routes like code Bigelow_Rules.
 // // pages/profile.js
 // import { withPageAuthRequired } from '@auth0/nextjs-auth0';
@@ -116,7 +115,6 @@ const Yachty = () => {
   const user = session?.data?.user;
 
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
-
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
   const yachtClubName = useSelector(state => state?.auth?.member?.yachtClubByYachtClub.name);
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
@@ -124,8 +122,10 @@ const Yachty = () => {
   const name = useSelector(state => state?.auth?.member?.name);
   const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
-  const [newUserOpen, setNewUserOpen] = useState(false)
+  const [newUserOpen, setNewUserOpen] = useState(false)  
   
+// $2b$10$FgW9bZfv6uJ68VFAG9rgI.y1tpL6b9q4aKMUw.mMqHVQ0IYRBYIau
+
   if(!session?.data?.user) return <LoadingYachty />
 
   // poll for messages, need to mgrate to Web Sockets
