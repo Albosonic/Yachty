@@ -1,13 +1,41 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import Link from 'next/link'
+import { Button, Stack, Typography, useMediaQuery } from '@mui/material'
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
+import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
+import { useDispatch } from 'react-redux';
+import { addMember } from '@/slices/actions/authActions';
+import LoadingYachty from '@/components/LoadingYachty';
 
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { data, status } = useSession()
+  const user = data?.user
+  const {error, loading, data: memberResp} = useQuery(GET_YC_MEMBER, {
+    variables: {
+      email: user?.email
+    }
+  })
+  const moreThan600px = useMediaQuery('(min-width:600px)');
+  const authenticated = status === "authenticated"
+  if(authenticated && !loading && user !== undefined) {
+    const userData = memberResp?.yc_members[0]
+    const noClub = user?.noClub    
+    if (noClub) {
+      router.replace({pathname: '/yc_regions'})
+    } else {
+      dispatch(addMember(userData));
+      router.replace({pathname: '/yachty'})
+    }    
+  } 
+  const hval = moreThan600px ? "h2" : "h3"
+  
   return (
     <>
       <Head>
@@ -16,15 +44,39 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='bg-gray-10 to-100%'>                            
-        <div className='px-8 py-10'>
-          <h1 className="text-5xl font-bold">Yachty!</h1>   
-          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
-          <h1 className="text-2xl mt-6 font-thin">More sailing less planning...</h1>          
-          <img className='mt-6 rounded-lg shadow-xl' src="https://yachty-letter-heads.s3.us-west-1.amazonaws.com/eb57b4eb-5a56-43d6-b4a4-7e347e713475" />         
-          <h1 className="text-2xl mt-6 font-thin">More socializing less spread sheets...</h1>          
-        </div>                       
-      </div>
+      <Stack padding={2} spacing={2}>        
+        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">          
+          <Typography
+            variant={hval}
+            className='bottom-32 relative'            
+          >
+            Yachteee.com
+          </Typography>
+          <Typography variant='h6' color='primary' className='bottom-32 relative'>
+            All things yacht club in your pocket.
+          </Typography>          
+          <Button
+            color='primary'
+            variant='contained'
+            sx={{margin: 2}}
+            disabled={authenticated}
+            onClick={(e) => {
+              e.preventDefault()  
+              signIn()
+            }}
+          >
+            Enter App
+          </Button>
+          <Button
+            color='primary'
+            variant='contained'
+            sx={{margin: 2}}
+            onClick={signOut}
+          >
+            Sign Out
+          </Button>
+        </div>
+      </Stack>
     </>
   )
 }

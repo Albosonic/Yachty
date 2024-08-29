@@ -72,18 +72,16 @@ export default function authReducer(state = initialState, action) {
     }
     case MEMBER_OBJECT: {
       let userIsCommodore = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.commodore?.member_id && payload?.member?.id !== undefined)
-      let userIsRaceChair = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.race_chairs[0]?.memberId && payload?.member?.id !== undefined)      
-      payload.ycId = payload?.member?.yachtClubByYachtClub?.id;
+      let userIsRaceChair = (payload?.member?.id === payload?.member?.yachtClubByYachtClub?.race_chairs[0]?.memberId && payload?.member?.id !== undefined)
       return {
         ...state,
-        user: {
-          ...payload.user,
+        // ycId: payload?.yachtClubByYachtClub?.id,
+        user: {          
           userIsCommodore: userIsCommodore,
           userIsRaceChair: userIsRaceChair
         },
         member: {
-          ...payload.member,
-          profilePic: payload.member?.profilePic || payload.user?.picture,
+          ...payload
         },
       };
     }

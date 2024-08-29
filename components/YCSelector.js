@@ -8,6 +8,7 @@ import styles from '@/styles/applicants.module.css'
 const YCSelector = ({ routerPath }) => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_ALL_YC_BY_REGION, { variables: { regionId: router.query.regionId } });
+  console.log('data ======', data)
   const homeYcId = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.id);
   // do this in a useEffect
   if (loading) return <CircularProgress />

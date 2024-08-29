@@ -11,17 +11,13 @@ import AppDrawer from './Drawer';
 import { useSelector } from 'react-redux';
 import MainProfilePic from './MainProfilePic';
 import { useTheme } from '@emotion/react';
+import { useSession } from 'next-auth/react';
 
 export default function NavBar() {  
   const theme = useTheme();  
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const emailVerrified = useSelector(state => state.auth?.user?.email_verified);
-  const email = useSelector(state => state.auth?.user?.email);
-  
-  useEffect(() => {    
-    setUserLoggedIn(!!email || emailVerrified);
-  }, [emailVerrified, email]);
+  const [openDrawer, setOpenDrawer] = useState(false);  
+  const session = useSession()  
+  const authenticated = session.status === 'authenticated' 
 
   const toggleDrawer = () => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -35,7 +31,7 @@ export default function NavBar() {
       <AppBar position="static">
         <Toolbar >
           {
-          userLoggedIn && 
+          authenticated && 
           <IconButton
             size="large"
             edge="start"
@@ -57,7 +53,7 @@ export default function NavBar() {
           </Fab>
           <MainProfilePic 
             size="small" 
-            loggedIn={userLoggedIn}            
+            loggedIn={authenticated}            
           />          
         </Toolbar>
       </AppBar>

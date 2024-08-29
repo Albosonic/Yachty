@@ -39,7 +39,7 @@ const MainProfilePic = () => {
 
   const logout = () => {
     dispatch(clearState());
-    signOut()
+    signOut({ callbackUrl: '/', redirect:true })
   };
 
   const editMyProfile = () => {

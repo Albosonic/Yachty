@@ -2,7 +2,31 @@ import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials";
 import client from "@/lib/clients/apollo-client";
-import { GET_YC_MEMBER } from "@/lib/gqlQueries/yachtygql";
+import { gql } from "@apollo/client";
+import bcrypt from "bcrypt";
+
+const GET_USER = gql`
+  query getUser($email: String) {
+  yc_members(where: {email: {_eq: $email}}) {
+    email
+    firstName
+    id
+    active
+    bio
+    duesOwed
+    isRacer
+    lastLogin
+    lastName
+    name
+    profilePic
+    yacht_club
+    secondEmail
+    secondFirstName
+    secondLastName
+    secondName
+    hash
+  }
+}`
 
 const options = {
   // Configure one or more authentication providers
@@ -11,7 +35,7 @@ const options = {
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
       profile(profile) {
-        console.log('profile =======', profile)
+        // console.log('profile =======', profile)
         return {
           ...profile
         }
@@ -20,10 +44,10 @@ const options = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: {
-          label: 'Username:',
-          type: 'text',
-          placeholder:'username'
+        email: {
+          label: "email",
+          type: "email",
+          placeholder: "example@gmail.com"
         },
         password: {
           label: "Password",
@@ -31,23 +55,63 @@ const options = {
         }
       },
       async authorize(credentials) {
-        // todo: integrate with hasura
-        const user = {id: 1, name: 'albosonic', password: 'nextauth'}
-        return user
+        const resp = await client.query({
+          query: GET_USER,
+          variables: {
+            email: credentials.email
+          },
+        })
+        const memberData = resp.data.yc_members[0]
+        if (memberData === undefined) {
+          const salt = bcrypt.genSaltSync(10);
+          const hash = bcrypt.hashSync(credentials.password, salt);
+          return {
+            email: credentials.email,
+            hash: hash,
+            noClub: true,
+          }
+        }
+
+        const comapreHash = async () => {
+          const result = await bcrypt.compare(credentials.password, memberData.hash)
+          return result
+        }
+        const result = await comapreHash()
+
+        if (!result && process.env.NEXT_PUBLIC_ENV !== 'TEST') return null
+
+        return {
+          id: 1,
+          email: credentials.email,
+          noClub: false,
+          ...memberData,
+        }
+
       },
     })
     // ...add more providers here
   ],
   callbacks: {
     async jwt({token, user}) {
-      console.log('user =========', user)
-      console.log('token =========', token)
       // *** token['x-hasura-allowed-roles'] = ["admin", user] *******
-      if (user) token.role = 'awesome'
+      if (user) {
+        token.role = 'awesome'
+        token.noClub = user.noClub
+        token.memberInfo = user
+        token.hash = user.hash
+      }
       return token
     },
     async session({session, token}) {
-      if (session.user) session.user.role = 'awesome'
+      if (session.user) {
+        session.user.role = 'awesome'
+        session.user.noClub = token.noClub
+        session.user.memberInfo = token.memberInfo
+        session.user.hash = token.hash
+        // console.log('token ===== in session', token)
+        // console.log('session ===========', session)
+      }
+
       return session
     },
   },

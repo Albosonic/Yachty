@@ -7,7 +7,7 @@ const AuthButton = () => {
       <>
         Signed in as {session.user.email} <br />
         <Button
-          onClick={() => signOut()}
+          onClick={() => signOut({ callbackUrl: '/', redirect:true })}
           variant='standard'
           color="secondary"
           sx={{
