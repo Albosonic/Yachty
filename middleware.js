@@ -2,13 +2,11 @@ import { withAuth } from "next-auth/middleware"
 
 export default withAuth(
     function middleware(request) {
-        // console.log('path =======', request.nextUrl)
-        // console.log('token =======', request.nextauth.token)
+        // request available here
     },
     {
       callbacks: {
-        authorized: ({token}) =>  {
-          // console.log('token ==== middleware', token)
+        authorized: ({token}) =>  {          
           return token?.role === 'awesome'
         },        
       }
