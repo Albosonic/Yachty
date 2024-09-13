@@ -2,32 +2,14 @@ import { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
 import styles from '@/styles/yachty.module.css'
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { addMember, addNonMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
-import { useRouter } from 'next/router';
-import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
-import { getIsoDate } from '@/lib/utils/getters';
+import { betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
 import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
-import { pollUserRooms } from '@/slices/actions/msgActions';
 import { useSession } from 'next-auth/react';
-import { GET_YC_MEMBER_AND_VESSEL } from '@/lib/gqlQueries/editMemberProfilegql';
-
-// TODO: protect routes like code Bigelow_Rules.
-// // pages/profile.js
-// import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-
-// export default function Profile({ user }) {
-//   return <div>Hello {user.name}</div>;
-// }
-
-// // You can optionally pass your own `getServerSideProps` function into
-// // `withPageAuthRequired` and the props will be merged with the `user` prop
-// export const getServerSideProps = withPageAuthRequired();
 
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
@@ -123,8 +105,6 @@ const Yachty = () => {
   const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)  
-  
-// $2b$10$FgW9bZfv6uJ68VFAG9rgI.y1tpL6b9q4aKMUw.mMqHVQ0IYRBYIau
 
   if(!session?.data?.user) return <LoadingYachty />
 
