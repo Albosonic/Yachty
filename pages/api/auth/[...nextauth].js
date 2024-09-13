@@ -34,8 +34,7 @@ const options = {
     GithubProvider({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
-      profile(profile) {
-        // console.log('profile =======', profile)
+      profile(profile) {        
         return {
           ...profile
         }
@@ -108,8 +107,6 @@ const options = {
         session.user.noClub = token.noClub
         session.user.memberInfo = token.memberInfo
         session.user.hash = token.hash
-        // console.log('token ===== in session', token)
-        // console.log('session ===========', session)
       }
 
       return session

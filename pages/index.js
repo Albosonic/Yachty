@@ -7,8 +7,6 @@ import { useQuery } from '@apollo/client';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { useDispatch } from 'react-redux';
 import { addMember } from '@/slices/actions/authActions';
-import LoadingYachty from '@/components/LoadingYachty';
-
 
 const inter = Inter({ subsets: ['latin'] });
 
