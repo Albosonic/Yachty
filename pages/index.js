@@ -11,29 +11,8 @@ import { addMember } from '@/slices/actions/authActions';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const router = useRouter()
-  const dispatch = useDispatch()
-  const { data, status } = useSession()
-  const user = data?.user
-  const {error, loading, data: memberResp} = useQuery(GET_YC_MEMBER, {
-    variables: {
-      email: user?.email
-    }
-  })
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  const authenticated = status === "authenticated"
-  if(authenticated && !loading && user !== undefined) {
-    const userData = memberResp?.yc_members[0]
-    const noClub = user?.noClub    
-    if (noClub) {
-      router.replace({pathname: '/yc_regions'})
-    } else {
-      dispatch(addMember(userData));
-      router.replace({pathname: '/yachty'})
-    }    
-  } 
   const hval = moreThan600px ? "h2" : "h3"
-  
   return (
     <>
       <Head>
@@ -57,10 +36,10 @@ export default function Home() {
             color='primary'
             variant='contained'
             sx={{margin: 2}}
-            disabled={authenticated}
+            // disabled={authenticated}
             onClick={(e) => {
               e.preventDefault()  
-              signIn()
+              signIn(undefined, {callbackUrl: '/yachty'})
             }}
           >
             Enter App

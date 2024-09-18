@@ -10,6 +10,8 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
 import { useSession } from 'next-auth/react';
+import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
+import { useRouter } from 'next/router';
 
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
@@ -92,9 +94,17 @@ mutation insertCommodore($name: String!, $ycId: uuid!, $memberId: uuid!) {
 }`;
 
 const Yachty = () => {
-  const session = useSession()
   const dispatch = useDispatch();
-  const user = session?.data?.user;
+  const router = useRouter()
+  const session = useSession()
+  const { data, status } = session
+  const user = data?.user
+
+  const {error, loading: loadingMemberData, data: memberResp} = useQuery(GET_YC_MEMBER, {
+    variables: {
+      email: user?.email
+    }
+  })
 
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
@@ -106,7 +116,22 @@ const Yachty = () => {
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)  
 
-  if(!session?.data?.user) return <LoadingYachty />
+  useEffect(() => {
+    console.log('session ========', session)
+    const authenticated = status === "authenticated"
+    if(authenticated && !loadingMemberData) {
+      const userData = memberResp?.yc_members[0]
+      const noClub = user?.noClub  
+      console.log('noclub ============', noClub)  
+      if (noClub) {
+        router.replace({pathname: '/yc_regions'})
+      } else {        
+        dispatch(addMember(userData));        
+      }    
+    } 
+  },[status, loadingMemberData])
+
+  if(loadingMemberData) return <LoadingYachty />
 
   // poll for messages, need to mgrate to Web Sockets
   // useEffect(() => {
