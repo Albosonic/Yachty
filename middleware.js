@@ -7,7 +7,8 @@ export default withAuth(
     {
       callbacks: {
         authorized: ({token}) =>  {          
-          return token?.role === 'awesome'
+          // return token?.role === 'awesome'
+          if (token) return true
         },        
       }
     }
