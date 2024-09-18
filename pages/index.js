@@ -12,6 +12,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const moreThan600px = useMediaQuery('(min-width:600px)');
+  const session = useSession()
+  console.log('session =============', session)
   const hval = moreThan600px ? "h2" : "h3"
   return (
     <>
@@ -21,25 +23,25 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Stack padding={2} spacing={2}>        
-        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">          
+      <Stack padding={2} spacing={2}>
+        <div className="flex flex-col items-center justify-center rounded-sm bg-cover bg-[url('../public/blue-water.jpg')] md:sm:bg-[url('../public/starboard-tack.jpg')] h-screen">
           <Typography
             variant={hval}
-            className='bottom-32 relative'            
+            className='bottom-32 relative'
           >
             Yachteee.com
           </Typography>
           <Typography variant='h6' color='primary' className='bottom-32 relative'>
             All things yacht club in your pocket.
-          </Typography>          
+          </Typography>
           <Button
             color='primary'
             variant='contained'
             sx={{margin: 2}}
             // disabled={authenticated}
             onClick={(e) => {
-              e.preventDefault()  
-              signIn(undefined, {callbackUrl: '/yachty'})
+              e.preventDefault()
+              signIn('Credentials', {callbackUrl: '/yachty'})
             }}
           >
             Enter App

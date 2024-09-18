@@ -122,7 +122,7 @@ const Yachty = () => {
     if(authenticated && !loadingMemberData) {
       const userData = memberResp?.yc_members[0]
       const noClub = user?.noClub  
-      console.log('noclub ============', noClub)  
+      console.log('noclub ============', noClub)
       if (noClub) {
         router.replace({pathname: '/yc_regions'})
       } else {        

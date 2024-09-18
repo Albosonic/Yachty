@@ -76,16 +76,15 @@ const options = {
           return result
         }
         const result = await comapreHash()
-
-        if (!result && process.env.NEXT_PUBLIC_ENV !== 'TEST') return null
-
-        return {
-          id: 1,
-          email: credentials.email,
-          noClub: false,
-          ...memberData,
+        console.log('result ============')
+        // if (!result && process.env.NEXT_PUBLIC_ENV !== 'TEST') return null
+        if (result) {
+          return {          
+            email: credentials.email,
+            noClub: false,
+            ...memberData,
+          }
         }
-
       },
     })
     // ...add more providers here
@@ -111,20 +110,6 @@ const options = {
 
       return session
     },
-    // async redirect({ url, baseUrl }) {
-    //   // Allows relative callback URLs
-    //   if (url.startsWith("/")) {
-    //     console.log('base + url =========>', `${baseUrl}${url}`)
-    //     return `${baseUrl}${url}`
-    //   } else if (new URL(url).origin === baseUrl) {
-    //     // Allows callback URLs on the same origin
-
-    //     console.log('here url ===========', `${url}yachty`)
-    //     return `${url}yachty`
-    //   }
-    //   console.log('default =========== base ==>', baseUrl)
-    //   return baseUrl
-    // }
   },
 }
 
