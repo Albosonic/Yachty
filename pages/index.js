@@ -7,14 +7,42 @@ import { useQuery } from '@apollo/client';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { useDispatch } from 'react-redux';
 import { addMember } from '@/slices/actions/authActions';
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const router = useRouter()
   const moreThan600px = useMediaQuery('(min-width:600px)');
-  const session = useSession()
-  console.log('session =============', session)
+  const session = useSession()  
+  const { data, status } = session
+  const user = data?.user
+
+  const {error, loading: loadingMemberData, data: memberResp} = useQuery(GET_YC_MEMBER, {
+    variables: {
+      email: user?.email
+    }
+  })
+
+  useEffect(() => {
+    console.log('session ========', session)
+    const authenticated = status === "authenticated"
+    if(authenticated && !loadingMemberData) {
+      const userData = memberResp?.yc_members[0]
+      const noClub = user?.noClub  
+      console.log('noclub ============', noClub)
+      if (noClub) {
+        router.replace({pathname: '/yc_regions'})
+      } else {        
+        dispatch(addMember(userData));
+        router.replace({pathname: '/yachty'})
+      }    
+    } 
+  },[status, loadingMemberData])
+
   const hval = moreThan600px ? "h2" : "h3"
+
+
   return (
     <>
       <Head>
