@@ -24,17 +24,14 @@ export default function Home() {
     }
   })
 
-  useEffect(() => {
-    console.log('session ========', session)
+  useEffect(() => {    
     const authenticated = status === "authenticated"
     if(authenticated && !loadingMemberData) {
       const userData = memberResp?.yc_members[0]
-      const noClub = user?.noClub  
-      console.log('noclub ============', noClub)
+      const noClub = user?.noClub        
       if (noClub) {
         router.replace({pathname: '/yc_regions'})
-      } else {        
-        dispatch(addMember(userData));
+      } else {                
         router.replace({pathname: '/yachty'})
       }    
     } 

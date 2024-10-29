@@ -114,21 +114,15 @@ const Yachty = () => {
   const name = useSelector(state => state?.auth?.member?.name);
   const email = useSelector(state => state?.auth?.member?.email);
   const introSeen = useSelector(state => state?.auth?.introSeen);
-  const [newUserOpen, setNewUserOpen] = useState(false)  
+  const [newUserOpen, setNewUserOpen] = useState(false)
 
   useEffect(() => {
     console.log('session ========', session)
     const authenticated = status === "authenticated"
     const userData = memberResp?.yc_members[0]
     if(authenticated && !loadingMemberData) {
-      const noClub = user?.noClub  
-      console.log('noclub ============', noClub)
-      if (noClub) {
-        router.replace({pathname: '/yc_regions'})
-      } else {        
-        dispatch(addMember(userData));        
-      }    
-    } 
+      dispatch(addMember(userData));
+    }
   },[status, loadingMemberData])
 
   // if(loadingMemberData) return <LoadingYachty />
@@ -166,7 +160,7 @@ const Yachty = () => {
   //   }
   // }, [user, userIsCommodore, name, introSeen])
 
-  // if (upsertMemberLoading) return <LoadingYachty />;  
+  // if (upsertMemberLoading) return <LoadingYachty />;
 
   const betaMakeCommodore = async () => {
     const {name, id: memberId} = memberData;
@@ -179,20 +173,20 @@ const Yachty = () => {
       <NavBar/>
       <NewUserDialog open={newUserOpen} setOpen={setNewUserOpen} />
       <div className={styles.center}>
-        <div className={styles.titleSection}>          
+        <div className={styles.titleSection}>
           <Typography sx={{margin: 2}} variant="h3">{yachtClubName}</Typography>
-          {logo && 
+          {logo &&
             <Box
               component="img"
               sx={{
                 borderRadius: '50%',
                 width: 200,
-                height: 200,                
+                height: 200,
               }}
               alt="race chair photo"
               src={logo}
             />
-          }          
+          }
           {!userIsCommodore && <Typography sx={{margin: 2}} variant="body1">
             This App is currently in Alpha testing mode. You are currently logged in as a BYC member. Click below to give yourself full permissions as commodore and race chair. Or look around a bit first.
           </Typography>}
