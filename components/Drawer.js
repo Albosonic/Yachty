@@ -35,7 +35,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
     >
       <List>
       <ListItem sx={itemStyles} disablePadding>
-        <ListItemButton onClick={() => router.replace({pathname:'/yachty', query: { ycId: ycId }})}>
+        <ListItemButton onClick={() => router.push({pathname:'/yachty', query: { ycId: ycId }})}>
         <ListItemIcon>
             <HomeIcon color="primary" />
         </ListItemIcon>
@@ -44,7 +44,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
       </ListItem>
       <Divider />
       <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => { router.replace({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
+          <ListItemButton onClick={() => { router.push({pathname:'/yachty/yc_feed', query: { ycId: ycId }})}}>
           <ListItemIcon>
             <BroadcastOnPersonalIcon color="primary" />
           </ListItemIcon>
@@ -53,7 +53,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
         <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/view_all_members', query: { ycId: ycId }})}>
+          <ListItemButton onClick={() => router.push({pathname:'/yachty/view_all_members', query: { ycId: ycId }})}>
             <ListItemIcon>
               <PersonSearchIcon color="primary" />
             </ListItemIcon>
@@ -62,7 +62,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
         <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname: '/yachty/racing' })}>
+          <ListItemButton onClick={() => router.push({pathname: '/yachty/racing' })}>
             <ListItemIcon>
               <SailingIcon color="primary" />
             </ListItemIcon>
@@ -71,7 +71,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
         <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname: '/yachty/calendar' })}>
+          <ListItemButton onClick={() => router.push({pathname: '/yachty/calendar' })}>
             <ListItemIcon>
               <CalendarMonthIcon color="primary" />
             </ListItemIcon>
@@ -81,7 +81,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         <Divider />
         {/* TODO: this is stupid!!!!!!! mover responsive behavior to one component. */}
         <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => moreThan600px ? router.replace({pathname:'/yachty/direct_messages'}) : router.replace({pathname:'/yachty/mobile_dm_rooms'}) }>
+          <ListItemButton onClick={() => moreThan600px ? router.push({pathname:'/yachty/direct_messages'}) : router.push({pathname:'/yachty/mobile_dm_rooms'}) }>
               <ListItemIcon>
                 <Grid justifyContent="center">
                   <ChatIcon color="primary"/>
@@ -101,7 +101,7 @@ export default function AppDrawer({ open, toggleDrawer }) {
         </ListItem>
         <Divider />
         <ListItem sx={itemStyles} disablePadding>
-          <ListItemButton onClick={() => router.replace({pathname:'/yachty/request_reciprocity', query: { memberId }})}>
+          <ListItemButton onClick={() => router.push({pathname:'/yachty/request_reciprocity', query: { memberId }})}>
           <ListItemIcon>
             <DirectionsBoatFilledIcon color="primary" />
             </ListItemIcon>
