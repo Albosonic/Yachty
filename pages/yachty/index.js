@@ -5,7 +5,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
+import { addMember, betaUpdateUserIsCommodoreAct } from '@/slices/actions/authActions';
 import SailingIcon from '@mui/icons-material/Sailing';
 import LoadingYachty from '@/components/LoadingYachty';
 import NewUserDialog from '@/components/NewUserDialog';
@@ -119,8 +119,8 @@ const Yachty = () => {
   useEffect(() => {
     console.log('session ========', session)
     const authenticated = status === "authenticated"
+    const userData = memberResp?.yc_members[0]
     if(authenticated && !loadingMemberData) {
-      const userData = memberResp?.yc_members[0]
       const noClub = user?.noClub  
       console.log('noclub ============', noClub)
       if (noClub) {
@@ -131,7 +131,7 @@ const Yachty = () => {
     } 
   },[status, loadingMemberData])
 
-  if(loadingMemberData) return <LoadingYachty />
+  // if(loadingMemberData) return <LoadingYachty />
 
   // poll for messages, need to mgrate to Web Sockets
   // useEffect(() => {
