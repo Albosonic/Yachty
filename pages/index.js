@@ -26,8 +26,7 @@ export default function Home() {
 
   useEffect(() => {    
     const authenticated = status === "authenticated"
-    if(authenticated && !loadingMemberData) {
-      const userData = memberResp?.yc_members[0]
+    if(authenticated && !loadingMemberData) {      
       const noClub = user?.noClub        
       if (noClub) {
         router.replace({pathname: '/yc_regions'})
