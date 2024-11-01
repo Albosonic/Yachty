@@ -21,7 +21,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
           <PersistGate persistor={persistor}>
             <SessionProvider session={session}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <ThemeProvider theme={theme}>
+                <ThemeProvider theme={theme}>                  
                   <Component {...pageProps} />
                 </ThemeProvider>
               </LocalizationProvider>

@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import YcEventPoster from "@/components/YcEventPoster";
 import { useSelector } from "react-redux";
 import LoadingYachty from "@/components/LoadingYachty";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const YachtClubFeed = () => {
   const router = useRouter();
@@ -48,4 +49,4 @@ const YachtClubFeed = () => {
   )
 };
 
-export default YachtClubFeed;
+export default withAuthGaurd(YachtClubFeed);

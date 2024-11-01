@@ -12,7 +12,8 @@ import NewUserDialog from '@/components/NewUserDialog';
 import { useSession } from 'next-auth/react';
 import { GET_YC_MEMBER } from '@/lib/gqlQueries/yachtygql';
 import { useRouter } from 'next/router';
-
+import withAuthGaurd from '@/hocees/withAuthCusom';
+// aristotle socratesse
 const UPSERT_MEMBER = gql`
   mutation upsertMember(
     $email: String,
@@ -116,8 +117,7 @@ const Yachty = () => {
   const introSeen = useSelector(state => state?.auth?.introSeen);
   const [newUserOpen, setNewUserOpen] = useState(false)
 
-  useEffect(() => {
-    console.log('session ========', session)
+  useEffect(() => {    
     const authenticated = status === "authenticated"
     const userData = memberResp?.yc_members[0]
     if(authenticated && !loadingMemberData) {
@@ -215,4 +215,4 @@ const Yachty = () => {
   );
 }
 
-export default Yachty;
+export default withAuthGaurd(Yachty)
