@@ -1,18 +1,13 @@
 import { withAuth } from "next-auth/middleware"
 
-export default withAuth(
-    function middleware(request) {
-        // request available here
-    },
-    {
-      callbacks: {
-        authorized: ({token}) =>  {          
-          // return token?.role === 'awesome'
-          if (token) return true
-        },        
-      }
-    }
-)
+// export default withAuth({
+//   callbacks: {
+//     authorized: ({token}) =>  {          
+//       // return token?.role === 'awesome'
+//       if (token) return true
+//     },        
+//   }
+// })
 
 export const config = {
   matcher: [
