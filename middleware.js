@@ -15,5 +15,12 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ["/((?!api|login|$|_next/static|_next/image|favicon.ico).*)"],  
+  matcher: [
+    '/yachty/:path*',
+    '/yc_regions/:path*'
+  ]
 }
+
+// export const config = {
+//   matcher: ["/((?!api|login|$|_next/static|_next/image|favicon.ico).*)"],  
+// }
