@@ -8,6 +8,7 @@ import { getIsoDate } from "@/lib/utils/getters";
 import RacePoster from "@/components/RacePoster";
 import LoadingYachty from "@/components/LoadingYachty";
 import RacerProfileCard from "@/components/RacerProfileCard";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const VIEWS = {
   RACES_GONE_BY: 'RACES_GONE_BY',
@@ -97,4 +98,4 @@ const Racing = () => {
   )
 }
 
-export default Racing;
+export default withAuthGaurd(Racing);

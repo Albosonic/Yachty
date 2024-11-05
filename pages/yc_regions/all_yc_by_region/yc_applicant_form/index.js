@@ -7,6 +7,7 @@ import { GET_NEW_MEMBER_APPLICATIONS, GET_YACHT_CLUB_BY_ID, INSERT_NEW_YC_APPLIC
 import NavBar from '@/components/NavBar';
 import { clearState } from '@/slices/actions/authActions';
 import { signOut, useSession } from 'next-auth/react';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const YCApplicantForm = () => {
   const cleanForm = {
@@ -207,4 +208,4 @@ const YCApplicantForm = () => {
   );
 }
 
-export default YCApplicantForm;
+export default withAuthGaurd(YCApplicantForm);

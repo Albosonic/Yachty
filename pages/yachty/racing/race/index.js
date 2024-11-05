@@ -10,6 +10,7 @@ import SetRaceCourse from "@/components/makenewRace/SetRaceCourse";
 import { getCountDown } from "@/lib/utils/getters";
 import Checkbox from '@mui/material/Checkbox';
 import { useSelector } from "react-redux";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 // TODO: move cown into it's own file.
 const CourseCountDown = ({ startDate, startTime, course, raceStartedCb }) => {
   const [countDown, setCountDown] = useState(null)
@@ -118,5 +119,5 @@ const Race = () => {
   )
 }
 
-export default Race;
+export default withAuthGaurd(Race);
 

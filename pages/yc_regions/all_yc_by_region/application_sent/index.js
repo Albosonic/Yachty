@@ -1,3 +1,4 @@
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { useQuery } from "@apollo/client";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Typography } from "@mui/material";
@@ -12,4 +13,4 @@ const ApplicationSent = () => {
   )
 }
 
-export default ApplicationSent;
+export default withAuthGaurd(ApplicationSent);

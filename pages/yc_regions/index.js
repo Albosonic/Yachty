@@ -1,5 +1,6 @@
 import NavBar from '@/components/NavBar';
 import YCRegions from '@/components/Regions';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 YCRegions
 
 const YCApplicants = () => {
@@ -12,4 +13,4 @@ const YCApplicants = () => {
   );
 }
 
-export default YCApplicants;
+export default withAuthGaurd(YCApplicants);

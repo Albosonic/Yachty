@@ -6,6 +6,7 @@ import { GET_ALL_MEMBER_APPLICANTS } from '@/lib/gqlQueries/addMemberGQL';
 import NavBar from '@/components/NavBar';
 import ApplicantsUnderReview from '@/components/ApplicantsUnderReview';
 import LoadingYachty from '@/components/LoadingYachty';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const AddMember = () => {
   const router = useRouter();
@@ -34,4 +35,4 @@ const AddMember = () => {
   );
 }
 
-export default AddMember;
+export default withAuthGaurd(AddMember);

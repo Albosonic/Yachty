@@ -13,6 +13,7 @@ import SetEventEntertainment from "@/components/makenewEvent/SetEntertainment";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import EventDetail from "@/components/makenewEvent/EventDetail";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const makeNewRace = () => {
   const dispatch = useDispatch();
@@ -139,4 +140,4 @@ const makeNewRace = () => {
   )
 }
 
-export default makeNewRace;
+export default withAuthGaurd(makeNewRace);

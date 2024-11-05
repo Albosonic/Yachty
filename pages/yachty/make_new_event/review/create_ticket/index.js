@@ -10,6 +10,7 @@ import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEven
 import LoadingYachty from '@/components/LoadingYachty';
 import NavBar from '@/components/NavBar';
 import { clearNewEventFieldsAct } from '@/slices/actions/workingEventActions';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
@@ -138,4 +139,4 @@ const CreateEventTicket = (props) => {
   );
 }
 
-export default CreateEventTicket;
+export default withAuthGaurd(CreateEventTicket);

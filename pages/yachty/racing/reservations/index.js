@@ -9,6 +9,7 @@ import { GET_RACE_BY_ID } from "@/lib/gqlQueries/racinggql";
 import { EVENT_TICKET_FOR_PURCHASE } from "@/lib/gqlQueries/ycFeedgql";
 import EventTicketForPurchase from "@/components/EventTicketForPurchase";
 import LoadingYachty from "@/components/LoadingYachty";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const RaceTicketReservations = () => {
   const router = useRouter();
@@ -47,4 +48,4 @@ const RaceTicketReservations = () => {
   )
 }
 
-export default RaceTicketReservations;
+export default withAuthGaurd(RaceTicketReservations);

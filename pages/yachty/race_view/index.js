@@ -1,6 +1,7 @@
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
 import RacePoster from "@/components/RacePoster";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { useRaceData } from "@/lib/gqlQueries/racinggql";
 import { Stack,  } from "@mui/material";
 
@@ -18,4 +19,4 @@ const EventView = () => {
   )
 }
 
-export default EventView;
+export default withAuthGaurd(EventView);

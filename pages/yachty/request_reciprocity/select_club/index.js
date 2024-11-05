@@ -1,5 +1,6 @@
 import NavBar from '@/components/NavBar';
 import YCSelector from '@/components/YCSelector';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 
 const RequestReciprocalClub = () => {
@@ -12,4 +13,4 @@ const RequestReciprocalClub = () => {
   )
 }
 
-export default RequestReciprocalClub;
+export default withAuthGaurd(RequestReciprocalClub);

@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import EventReviewPoster from "@/components/makenewEvent/EventReviewPoster";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { Grid } from "@mui/material";
 
 const EventPreviewReview = () => {
@@ -19,4 +20,4 @@ const EventPreviewReview = () => {
   )
 }
 
-export default EventPreviewReview;
+export default withAuthGaurd(EventPreviewReview);

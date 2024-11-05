@@ -11,6 +11,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/NavBar';
 import { useSelector } from 'react-redux';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const GET_CURRENT_EVENT_SEATING = gql`
   query getEventSeating($eventId: uuid) {
@@ -263,4 +264,4 @@ const Seating = () => {
   );
 }
 
-export default Seating
+export default withAuthGaurd(Seating)

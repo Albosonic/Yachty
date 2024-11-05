@@ -3,6 +3,7 @@
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
 import RacerProfileCard from "@/components/RacerProfileCard";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { gql, useQuery } from "@apollo/client";
 import { CircularProgress, Stack } from "@mui/material";
 import { useRouter } from "next/router";
@@ -63,4 +64,4 @@ const RacerView = () => {
   )  
 }
 
-export default RacerView;
+export default withAuthGaurd(RacerView);

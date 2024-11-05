@@ -11,6 +11,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import CheckIcon from '@mui/icons-material/Check';
 import NavBar from "@/components/NavBar";
 import { useState } from "react";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const GET_EVENT_RESERVATIONS = gql`
   query getYcEventReservations($eventId: uuid!){
@@ -101,4 +102,4 @@ const SeeEventReservations = (props) => {
   )
 }
 
-export default SeeEventReservations;
+export default withAuthGaurd(SeeEventReservations);

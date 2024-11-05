@@ -1,6 +1,7 @@
 import EventTicketForPurchase from "@/components/EventTicketForPurchase"
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { EVENT_TICKET_FOR_PURCHASE } from "@/lib/gqlQueries/ycFeedgql";
 import { useQuery } from "@apollo/client";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -29,4 +30,4 @@ const YcEventTicketForPurchase = () => {
   )
 }
 
-export default YcEventTicketForPurchase;
+export default withAuthGaurd(YcEventTicketForPurchase);

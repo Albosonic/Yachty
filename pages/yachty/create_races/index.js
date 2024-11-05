@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import UploadRaceCourse from "@/components/UploadRaceCourse";
 import UploadRaceEvent from "@/components/UploadRaceEvent";
 import { useRouter } from "next/router";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const CreateRaces = () => {
   const router = useRouter();
@@ -42,4 +43,4 @@ const CreateRaces = () => {
   )
 }
 
-export default CreateRaces;
+export default withAuthGaurd(CreateRaces);

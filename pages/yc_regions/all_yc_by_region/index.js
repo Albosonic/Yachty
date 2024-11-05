@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import YCSelector from "@/components/YCSelector";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const AllYCByRegion = () => {
   return (
@@ -10,4 +11,4 @@ const AllYCByRegion = () => {
   );
 };
 
-export default AllYCByRegion;
+export default withAuthGaurd(AllYCByRegion);
