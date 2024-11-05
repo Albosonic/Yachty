@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import { GET_ALL_YC_MEMBERS } from "@/lib/gqlQueries/allMembersgql";
 import { useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const columns = [
   { id: 'profilePic', label: 'pic', minWidth: 170 },
@@ -25,4 +26,4 @@ const ViewAllMembers = () => {
   )
 };
 
-export default ViewAllMembers;
+export default withAuthGaurd(ViewAllMembers);

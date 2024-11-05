@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import ImageUploadField from "@/components/ImageUploadField";
 import NavBar from "@/components/NavBar";
 import { UPDATE_LOGO } from "@/slices/actions/authActions";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 
 const EditClubProfile = () => {
@@ -15,4 +16,4 @@ const EditClubProfile = () => {
   )
 }
 
-export default EditClubProfile;
+export default withAuthGaurd(EditClubProfile);

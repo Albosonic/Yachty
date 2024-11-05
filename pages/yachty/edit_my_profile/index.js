@@ -14,6 +14,7 @@ import VesselSpecsForm from "@/components/VesselSpecsForm";
 import RadioVesselType from "@/components/RadioVesselType";
 import UpdateName from "@/components/UpdateName";
 import EditProfilePic from "@/components/EditProfilePic";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const vessel = {
   vesselName: '',
@@ -86,5 +87,5 @@ const EditMemberProfile = ({props}) => {
   )
 }
 
-export default EditMemberProfile;
+export default withAuthGaurd(EditMemberProfile);
 

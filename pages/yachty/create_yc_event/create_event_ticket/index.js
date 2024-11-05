@@ -9,6 +9,7 @@ import Fab from '@mui/material/Fab';
 import NavBar from '@/components/NavBar';
 import { GET_YC_EVENT, UPSERT_EVENT_TICKET } from '@/lib/gqlQueries/createYCEventgql';
 import LoadingYachty from '@/components/LoadingYachty';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const CreateEventTicket = (props) => {
   const router = useRouter();
@@ -132,4 +133,4 @@ const CreateEventTicket = (props) => {
   );
 }
 
-export default CreateEventTicket;
+export default withAuthGaurd(CreateEventTicket);

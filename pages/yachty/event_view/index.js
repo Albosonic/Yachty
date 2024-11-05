@@ -1,6 +1,7 @@
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
 import YcEventPoster from "@/components/YcEventPoster";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { useEventData } from "@/lib/gqlQueries/createYCEventgql";
 import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -21,4 +22,4 @@ const EventView = () => {
   )
 }
 
-export default EventView;
+export default withAuthGaurd(EventView);

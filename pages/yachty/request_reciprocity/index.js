@@ -1,5 +1,6 @@
 import NavBar from '@/components/NavBar';
 import YCRegions from '@/components/Regions';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const RequestReciprocity = () => {
   return (
@@ -10,4 +11,4 @@ const RequestReciprocity = () => {
   )
 }
 
-export default RequestReciprocity;
+export default withAuthGaurd(RequestReciprocity);

@@ -1,6 +1,7 @@
 import CalendarDayClickMenu from "@/components/CalendarDayClickMenu";
 import LoadingYachty from "@/components/LoadingYachty";
 import NavBar from "@/components/NavBar";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { PARTY, RACE } from "@/lib/strings";
 import { Scheduler } from "@aldabil/react-scheduler";
 import { gql, useQuery } from "@apollo/client";
@@ -83,4 +84,4 @@ const Calendar = () => {
   )
 }
 
-export default Calendar;
+export default withAuthGaurd(Calendar);

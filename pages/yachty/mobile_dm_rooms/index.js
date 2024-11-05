@@ -6,6 +6,7 @@ import NavBar from "@/components/NavBar";
 import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
 import { useEffect } from "react";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const mobileDmRooms = () => {
   const router = useRouter()
@@ -65,4 +66,4 @@ const mobileDmRooms = () => {
   )
 }
 
-export default mobileDmRooms;
+export default withAuthGaurd(mobileDmRooms);

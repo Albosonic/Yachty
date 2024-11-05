@@ -15,6 +15,7 @@ import YcEvent from '@/components/YcEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { workingRaceDateAct } from '@/slices/actions/schedulerActions';
+import withAuthGaurd from '@/hocees/withAuthCusom';
 
 const CreateYCEvent = () => {
   const dispatch = useDispatch();
@@ -303,4 +304,4 @@ const CreateYCEvent = () => {
   );
 };
 
-export default CreateYCEvent;
+export default withAuthGaurd(CreateYCEvent);

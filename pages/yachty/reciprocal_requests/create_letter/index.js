@@ -1,5 +1,6 @@
 import LetterOfReciprocity from "@/components/LetterOfReciprocity";
 import NavBar from "@/components/NavBar";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { Stack } from "@mui/material";
 import { useRouter } from "next/router";
 
@@ -19,4 +20,4 @@ const CreateLetterOfReciprocity = () => {
     )
   };
 
-  export default CreateLetterOfReciprocity;
+  export default withAuthGaurd(CreateLetterOfReciprocity);

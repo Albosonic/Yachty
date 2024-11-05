@@ -11,6 +11,7 @@ import RaceTicketForm from "@/components/RaceTIcketForm";
 import { GET_RACE_BY_ID, LINK_EVENT_TO_RACE } from "@/lib/gqlQueries/racinggql";
 import { GET_YC_EVENTS_FEED } from "@/lib/gqlQueries/ycFeedgql";
 import { getIsoDate } from "@/lib/utils/getters";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const CreateRaceEventTickets = () => {
   const router = useRouter()
@@ -50,4 +51,4 @@ const CreateRaceEventTickets = () => {
   )
 }
 
-export default CreateRaceEventTickets;
+export default withAuthGaurd(CreateRaceEventTickets);

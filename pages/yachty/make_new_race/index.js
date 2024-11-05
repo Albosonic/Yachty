@@ -16,6 +16,7 @@ import { useMutation } from "@apollo/client";
 import SetRaceRelease from "@/components/makenewRace/SetRaceRelease";
 import SetRaceImage from "@/components/makenewRace/SetRaceImage";
 import dayjs from "dayjs";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const makeNewRace = () => {
   const dispatch = useDispatch()
@@ -144,4 +145,4 @@ const makeNewRace = () => {
   )
 }
 
-export default makeNewRace;
+export default withAuthGaurd(makeNewRace);

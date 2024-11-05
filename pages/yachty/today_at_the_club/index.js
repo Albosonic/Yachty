@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -14,4 +15,4 @@ const TodayAtTheClub = (props) => {
   )
 }
 
-export default TodayAtTheClub;
+export default withAuthGaurd(TodayAtTheClub);

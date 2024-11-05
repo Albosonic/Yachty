@@ -1,5 +1,6 @@
 import NavBar from "@/components/NavBar";
 import RaceReviewPoster from "@/components/makenewRace/RaceReviewPoster"
+import withAuthGaurd from "@/hocees/withAuthCusom";
 import { Grid, Stack } from "@mui/material";
 
 const RacePreviewReview = () => {
@@ -19,4 +20,4 @@ const RacePreviewReview = () => {
   )
 }
 
-export default RacePreviewReview;
+export default withAuthGaurd(RacePreviewReview);

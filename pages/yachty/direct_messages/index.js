@@ -5,6 +5,7 @@ import DmRoom from "@/components/DmRoom";
 import DmMsgFeed from "@/components/DmMsgFeed";
 import { useRouter } from "next/router";
 import { use, useEffect } from "react";
+import withAuthGaurd from "@/hocees/withAuthCusom";
 
 const directMessageFeed = () => {  
   const router = useRouter()
@@ -68,5 +69,5 @@ const directMessageFeed = () => {
   )
 };
 
-export default directMessageFeed;
+export default withAuthGaurd(directMessageFeed);
 
