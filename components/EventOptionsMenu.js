@@ -43,7 +43,7 @@ const EventOptionsMenu = ({ eventId }) => {
       >
         <MenuItem onClick={openAttendeesDialog} >Event Attendees</MenuItem>
         <MenuItem onClick={() => router.replace({pathname:'/yachty/seating', query: { eventId }})} >Event Seating</MenuItem>
-        <MenuItem onClick={() => router.replace({pathname:'/yachty/event_gallery', query: { eventId }})} >Photo Gallery</MenuItem>
+        <MenuItem onClick={() => router.replace({pathname:'/yachty/event_view/event_gallery', query: { eventId }})} >Photo Gallery</MenuItem>
       </Menu>
     </>
   );
