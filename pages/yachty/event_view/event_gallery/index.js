@@ -1,9 +1,29 @@
 "use client"
+import { useEffect, useState } from "react";
 import NavBar from "@/components/NavBar"
-import withAuthGaurd from "@/hocees/withAuthCusom"
-import { useState } from "react";
-import { Gallery } from "react-grid-gallery";
 import { Button, Divider, Grid, ImageList, ImageListItem, Stack, Typography } from "@mui/material";
+import withAuthGaurd from "@/hocees/withAuthCusom"
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import ImageUploadV2 from "@/components/ImageUploadV2";
+
+const GET_EVENT_GALLERY = gql`
+  query getGallery($id: uuid!) {
+  yc_events(where: {id: {_eq: $id}}) {
+    images
+  }
+}
+`
+
+const UPDATE_EVENT_GALLERY = gql`
+  mutation updateGallery($id: uuid!, $images: jsonb!) {
+  update_yc_events(where: {id: {_eq: $id}}, _set: {images: $images}) {
+    returning {
+      images
+    }
+  }
+}
+`
 
 const images = [
   {
@@ -31,14 +51,24 @@ const images = [
 ];
 
 const EventImageGallery = () => {
-  const [stateFulImages, setImages] = useState(images)
-  const selectImage = (i, image) => {
-    const temp = structuredClone(stateFulImages)
-    temp[i].isSelcted = true
-    console.log('tempi :', temp[i])
-    setImages(temp)
+  const router = useRouter()
+  const eventId = router.query.eventId
+  const { error, loading, data, refetch } = useQuery(GET_EVENT_GALLERY, { variables: { id: eventId } })
+  const [updateEventGallery] = useMutation(UPDATE_EVENT_GALLERY)
+  // const [stateFulImages, setImages] = useState(images)
+  const [addPhoto, setAddPhoto] = useState(false)
+
+  const selectImage = (item) => {
 
   }
+  // console.log('========', data?.yc_events[0]?.images)
+
+  const images = data?.yc_events[0]?.images || []
+
+  useEffect(() => {
+    if (images.length === 0) setAddPhoto(true)
+  }, [images])
+
   return (
     <>
       <NavBar />
@@ -49,25 +79,31 @@ const EventImageGallery = () => {
         justifyContent="space-around"
         width="100%"
       >
-        <Button sx={{ borderRadius: 0 }} fullWidth>gallery</Button>
+        <Button onClick={() => setAddPhoto(!addPhoto)} sx={{ borderRadius: 0 }} fullWidth>gallery</Button>
         <Divider orientation="vertical" flexItem></Divider>
-        <Button sx={{ borderRadius: 0 }} fullWidth>add photo</Button>
+        <Button onClick={() => setAddPhoto(!addPhoto)} sx={{ borderRadius: 0 }} fullWidth>add photo</Button>
         <Divider orientation="vertical" flexItem></Divider>
-      </Grid>      
-      <div className="flex justify-center" >
-        <ImageList sx={{ width: 500, height: 450 }} cols={4} rowHeight={150}>
-          {images.map((item) => (
-            <ImageListItem key={item.src}>
-              <img        
-                srcSet={`${item.src}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                src={`${item.src}?w=164&h=164&fit=crop&auto=format`}
-                alt={item.alt}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>      
-      </div>
+      </Grid>
+      {!addPhoto && (
+        <div className="flex justify-center" >
+          <ImageList sx={{ width: 500, height: 450 }} cols={4} rowHeight={150}>
+            {images.map((item) => (
+              <ImageListItem key={item.src}>
+                <img
+                  onClick={() => selectImage(item)}
+                  srcSet={`${item.src}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${item.src}?w=164&h=164&fit=crop&auto=format`}
+                  alt={item.alt}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </div>
+      )}
+      {addPhoto && (
+        <ImageUploadV2 update={updateEventGallery} variables={{id: eventId, images}} refetch={refetch} />
+      )}
     </>
   )
 }
