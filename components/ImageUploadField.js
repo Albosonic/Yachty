@@ -27,6 +27,7 @@ const ImageUploadField = ({ type, setImageObjToParent, img, title="Upload Burgee
   const handleChange = async (e) => {
     const {files} = e.target;
     const file = files[0];
+    console.log('old file :', file)
     let imageObject = {
       fileDatum: file,
       imgKey: uuid4(),

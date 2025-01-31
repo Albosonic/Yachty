@@ -25,6 +25,7 @@ const SetEventImage = () => {
   }, [image, existingImg])
 
   const handleChange = async (e) => {
+    console.log('change ===========')
     const {files} = e.target;    
     const file = files[0];
     const reader = new FileReader()
