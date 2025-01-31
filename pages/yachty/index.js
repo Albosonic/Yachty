@@ -108,24 +108,29 @@ const Yachty = () => {
   })
 
   const [betaGiveCommodoreStatus, {loading: betaLoading}] = useMutation(BETA_GIVE_COMMODORE_STATUS)
+
+
   const logo = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.logo);
-  const yachtClubName = useSelector(state => state?.auth?.member?.yachtClubByYachtClub.name);
+  const yachtClubName = useSelector(state => state?.auth?.member?.yachtClubByYachtClub?.name);
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const memberData = useSelector(state => state?.auth?.member);
   const name = useSelector(state => state?.auth?.member?.name);
   const email = useSelector(state => state?.auth?.member?.email);
-  const introSeen = useSelector(state => state?.auth?.introSeen);
+  const introSeen = useSelector(state => state?.auth?.introSeen);  
   const [newUserOpen, setNewUserOpen] = useState(false)
 
   useEffect(() => {    
     const authenticated = status === "authenticated"
     const userData = memberResp?.yc_members[0]
-    if(authenticated && !loadingMemberData) {
-      dispatch(addMember(userData));
-    }
+    if (memberResp) {
+      if (!userData) router.replace({pathname: '/yc_regions'})
+      if(authenticated) {
+        dispatch(addMember(userData));
+      }            
+    }    
   },[status, loadingMemberData])
 
-  // if(loadingMemberData) return <LoadingYachty />
+  if(loadingMemberData) return <LoadingYachty />
 
   // poll for messages, need to mgrate to Web Sockets
   // useEffect(() => {

@@ -76,3 +76,4 @@ const ImageUploadV2 = ({ update, variables, refetch }) => {
 }
 
 export default ImageUploadV2;
+

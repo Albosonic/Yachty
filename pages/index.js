@@ -12,8 +12,7 @@ import { useEffect } from 'react';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const router = useRouter()
-  console.log('router path ===', router.pathname)
+  const router = useRouter()  
   const moreThan600px = useMediaQuery('(min-width:600px)');
   const session = useSession()  
   const { data, status } = session
@@ -26,16 +25,16 @@ export default function Home() {
   })
 
   useEffect(() => {    
-    const authenticated = status === "authenticated"
-    if(authenticated && !loadingMemberData) {      
-      const noClub = user?.noClub        
+    const authenticated = status === "authenticated"    
+    if(authenticated && !loadingMemberData && user) {      
+      const noClub = user?.noClub      
       if (noClub) {
         router.replace({pathname: '/yc_regions'})
       } else {                
         router.replace({pathname: '/yachty'})
       }    
-    } 
-  },[status, loadingMemberData])
+    }     
+  },[status, loadingMemberData, user])
 
   const hval = moreThan600px ? "h2" : "h3"
 

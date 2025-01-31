@@ -20,7 +20,7 @@ const MainProfilePic = () => {
   const userIsCommodore = useSelector(state => state?.auth?.user?.userIsCommodore);
   const profilePic = useSelector(state => state.auth.member.profilePic);
   const memberId = useSelector(state => state.auth.member.id);
-  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub.id);
+  const ycId = useSelector(state => state.auth.member.yachtClubByYachtClub?.id);
 
   useEffect(() => {
     if (demoEditProfileOption) {      

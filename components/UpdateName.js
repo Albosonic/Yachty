@@ -26,6 +26,7 @@ const UpdateName = () => {
   const [updateMemberName, {memberNameLoading}] = useMutation(UPDATE_MEMBER_NAME);
 
   useEffect(() => {
+    if (!name) return
     const isNewUser = name.includes('.com');
     if (!isNewUser) {
       setFirstName(first)
