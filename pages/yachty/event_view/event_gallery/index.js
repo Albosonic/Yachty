@@ -92,7 +92,7 @@ const EventImageGallery = () => {
         <Divider orientation="vertical" flexItem></Divider>
       </Grid>
       {!addPhoto && (
-        <div className="flex justify-center" >
+        <div className="flex justify-center p-4" >
           <ImageList sx={{ width: 500, height: 450 }} cols={4} rowHeight={150}>
             { images && images.map((item) => {
               console.log('item :', item)

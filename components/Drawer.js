@@ -17,6 +17,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { Divider, Grid, useMediaQuery } from '@mui/material';
+import Groups3Icon from '@mui/icons-material/Groups3';
 import TableBarIcon from '@mui/icons-material/TableBar';
 
 export default function AppDrawer({ open, toggleDrawer }) {
@@ -106,6 +107,16 @@ export default function AppDrawer({ open, toggleDrawer }) {
             <DirectionsBoatFilledIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Request Reciprocity" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        
+        <ListItem sx={itemStyles} disablePadding>
+          <ListItemButton onClick={() => router.push({pathname:'/yachty/teams'})}>
+          <ListItemIcon>
+            <Groups3Icon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Teams" />
           </ListItemButton>
         </ListItem>
         <Divider />
