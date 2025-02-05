@@ -24,6 +24,7 @@ const GET_RACE_VESSELS = gql`
       lastName
       firstName
       profilePic
+      id
     }
   }
 }`;

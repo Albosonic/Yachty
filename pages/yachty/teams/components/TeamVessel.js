@@ -31,15 +31,19 @@ const TeamVessel = () => {
     fetchPolicy: 'no-cache'
   })
   const [insertTeamAsk, {loading: loadingInsertAsk, data: insertAskData }] = useMutation(INSERT_TEAM_MEMBER)
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState()
 
   if (!vessel) return <CircularProgress />
-  const { img, id: vesselId } = vessel  
+  
+  const { img, id: vesselId, yc_member: { id: ownerId } } = vessel  
+  const myBoat = memberId === ownerId
+  
   useEffect(() => {
     if (asksData?.team_memberships.length > 0) {      
       const askDataVesselId = asksData.team_memberships[0].vesselId
       askDataVesselId === vesselId ? setDisabled(true) : setDisabled(false)      
     }
+    if (myBoat) setDisabled(true)
   }, [asksData, vesselId])
 
   const requestTeamMembership = async () => {
@@ -65,9 +69,11 @@ const TeamVessel = () => {
         <Typography className="max-w-96 flex-1">
           Lorem ipsum in paris is the way. Go down the road and turn left onto the the side, then get some impsu lorem to do Lorem ipsum in paris is the way. Go down the road and turn left onto the the side, then get some impsu lorem to do
         </Typography>
-        <Button disabled={disabled} onClick={async () => await requestTeamMembership() } variant="outlined" >
-          { buttonText }
-        </Button>
+        {!myBoat && (
+          <Button disabled={disabled} onClick={async () => await requestTeamMembership() } variant="outlined" >
+            { buttonText }
+          </Button>
+        )}
       </Stack>
     </Stack>
   )
