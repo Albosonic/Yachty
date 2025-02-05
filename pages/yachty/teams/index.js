@@ -31,8 +31,7 @@ const GET_RACE_VESSELS = gql`
 export const CurrentVesselContext = createContext(null)
 const Teams = () => {
   const moreThan600px = useMediaQuery('(min-width:600px)')
-  const { error, loading, data } = useQuery(GET_RACE_VESSELS)
-  console.log('data :', data)
+  const { error, loading, data } = useQuery(GET_RACE_VESSELS)  
   const vessels = data?.vessels
   const [vessel, setVessel] = useState({ vessel: null })
   useEffect(() => {if (vessels) setVessel(vessels[0])}, [vessels])

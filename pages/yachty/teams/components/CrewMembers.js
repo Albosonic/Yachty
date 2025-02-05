@@ -14,12 +14,13 @@ const GET_CREW_MEMBERS = gql`
 
 const CrewMembers = ({ vesselId }) => {
   const vessel = useContext(CurrentVesselContext)
+  
   const {error, loading, data} = useQuery(GET_CREW_MEMBERS, {
     variables: { vesselId }
   })
-  if (loading) return <CircularProgress />
+  if (loading || !data) return <CircularProgress />
   const crew = data?.team_memberships
-  console.log('=================>', data.team_memberships)
+  console.log('data', data.team_memberships)
   return (
     <div className="flex flex-col" >
       <Typography  variant="h6" fontWeight="bold">crew</Typography>
