@@ -21,12 +21,10 @@ const YCApplicantForm = () => {
   }
   const router =  useRouter();
   const dispatch = useDispatch();
-  const yacht_club = router.query.ycId;
+  const yacht_club = router.query.ycId;   
   const session = useSession()
   const user = session?.data?.user
-  const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);  
-  
-  console.log('user ==========', user)  
+  const [insertNewApplicant, { loading }] = useMutation(INSERT_NEW_YC_APPLICANT);    
   const {loading: memAppsLoading, error: memAppsError, data: memAppsData} = useQuery(GET_NEW_MEMBER_APPLICATIONS, { variables: { email: user?.email } });
   const {loading: ycLoading, error: ycError, data: ycData} = useQuery(GET_YACHT_CLUB_BY_ID, { variables: { ycId: yacht_club } });
   const [formData, setFormData] = useState({...cleanForm});
@@ -100,13 +98,10 @@ const YCApplicantForm = () => {
               Success!!
             </Alert>
           </Snackbar>   
+          <Typography variant='h5'>Apply for membership to { ycName }</Typography>
           <Box
             component="img"
-            sx={{
-              height: 90,
-              width: 120,
-              margin: 20
-            }}
+            className='rounded-md'
             alt="yacht club burgee"
             src={ycLogo}
           />   
@@ -117,8 +112,7 @@ const YCApplicantForm = () => {
               overflowY: "scroll",
             }}
           >
-            <Stack spacing={3} alignItems="center" sx={{marginBottom: 5}}>              
-              <Typography variant='h5'>Apply for membership to { ycName }</Typography>
+            <Stack spacing={3} alignItems="center" sx={{marginBottom: 5}}>                            
               <Typography alignSelf="flex-start" variant='h4'>
                 Primary Member
               </Typography>
